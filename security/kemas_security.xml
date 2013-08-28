@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+  	<!-- 
+    ====================
+    KEMAS MANAGER
+    ====================
+    -->
+    <record id="group_kemas_manager" model="res.groups">
+      <field name="name">Kemas / Manager</field>
+    </record>
+    <!-- 
+    ====================
+    KEMAS COLLABORATOR
+    ====================
+    -->
+    <record id="group_kemas_collaborator" model="res.groups">
+      <field name="name">Kemas / Collaborator</field>
+    </record>
+    <!-- 
+    ====================
+    KEMAS REGISTER ATTENDANCE
+    ====================
+    -->
+    <record id="group_kemas_register_attedance" model="res.groups">
+      <field name="name">Kemas / Register Attendance</field>
+    </record>
+    <!-- 
+    ====================
+    KEMAS CONSULTANT
+    ====================
+    -->
+    <record id="group_kemas_register_consultant" model="res.groups">
+      <field name="name">Kemas / Consultant</field>
+    </record>
+    <!-- 
+    ====================
+    KEMAS LIBRARIAN	
+    ====================
+    -->
+    <record id="group_kemas_librarian" model="res.groups">
+      <field name="name">Kemas / Librarian</field>
+    </record>
+    <!-- 
+    ====================
+    KEMAS ADMIN
+    ====================
+    -->
+    <record id="group_kemas_admin" model="res.groups">
+      <field name="name">Kemas / Admin</field>
+    </record>
+  </data>
+</openerp>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <!-- 
+    ====================
+    WIZARD LINE
+    ====================
+    -->
+    <!--____________________________________________________Vista de Formulario-->
+    <record model="ir.ui.view" id="kemas_collaborator_send_notifications_line_wizard_form_view">
+    	<field name="name">kemas.collaborator.send.notifications.line.wizard.form</field>
+    	<field name="model">kemas.collaborator.send.notifications.line.wizard</field>
+    	<field name="type">form</field>
+    	<field name="priority" eval="1"/>
+     	<field name="arch" type="xml">
+	       	<form string="Send notification">
+	       		<group colspan="4" expand="1" col="10">
+		       		<field name="date_create" colspan="3"/>
+	          		<field name="collaborator_id" colspan="7"/>
+	       		</group>
+	       	</form>
+     	</field>
+     </record>
+     <!--____________________________________________________Vista de Arbol-->
+     <record model="ir.ui.view" id="kemas_collaborator_send_notifications_line_wizard_tree_view">
+    	<field name="name">kemas.collaborator.send.notifications.line.wizard.tree</field>
+      	<field name="model">kemas.collaborator.send.notifications.line.wizard</field>
+        <field name="type">tree</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+     		<tree string="">
+          		<field name="date_create"/>
+          		<field name="collaborator_id"/>
+         	</tree>
+     	</field>
+     </record>
+  </data>
+</openerp>

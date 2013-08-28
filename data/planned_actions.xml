@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <!-- 
+    ====================
+    CERRAR LOS EVENTOS PASADOS
+    ====================
+    -->
+    <record id="close_past_events_cron" model="ir.cron">
+      <field name="name">kemas - Close Past Events</field>
+      <field name="user_id">1</field>
+      <field name="interval_type">hours</field>
+      <field name="interval_number">1</field>
+      <field name="numbercall">-1</field>
+      <field name="model">kemas.event</field>
+      <field name="function">close_past_events</field>
+      <field name="args">()</field>
+    </record>
+    <!-- 
+    ====================
+    ACTUALIZAR LOS NIVELES
+    ====================
+    -->
+    <record id="update_collaborator_level_cron" model="ir.cron">
+      <field name="name">Kemas - Update collaborator's level</field>
+      <field name="user_id">1</field>
+      <field name="interval_type">days</field>
+      <field name="interval_number">1</field>
+      <field name="numbercall">-1</field>
+      <field name="model">kemas.collaborator</field>
+      <field name="function">update_collaborators_level</field>
+      <field name="args">()</field>
+    </record>
+    <!-- 
+    ====================
+    ENVIAR CORREOS DE BIENVENIDA
+    ====================
+    -->
+    <record id="send_join_notications_cron" model="ir.cron">
+      <field name="name">Kemas - Send join notifications</field>
+      <field name="user_id">1</field>
+      <field name="interval_type">days</field>
+      <field name="interval_number">1</field>
+      <field name="numbercall">-1</field>
+      <field name="model">kemas.collaborator</field>
+      <field name="function">send_join_notification</field>
+      <field name="args">()</field>
+    </record>
+    <!-- 
+    ====================
+    LEVANTAR SUSPENCIONES CADUCADAS
+    ====================
+    -->
+    <record id="lift_suspensions_expired_cron" model="ir.cron">
+      <field name="name">Kemas - Lift suspensions expired</field>
+      <field name="user_id">1</field>
+      <field name="interval_type">hours</field>
+      <field name="interval_number">1</field>
+      <field name="numbercall">-1</field>
+      <field name="model">kemas.suspension</field>
+      <field name="function">lift_suspensions_expired</field>
+      <field name="args">()</field>
+    </record>
+  </data>
+</openerp>
+

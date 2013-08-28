@@ -1,0 +1,25 @@
+id,country_id:id,name,code
+state_ec_1,base.ec,Azuay,AZU
+state_ec_2,base.ec,Bolívar,BOL
+state_ec_3,base.ec,Cañar,CAÑ
+state_ec_4,base.ec,Carchi,CAR
+state_ec_5,base.ec,Chimborazo,CHI
+state_ec_6,base.ec,Cotopaxi,COT
+state_ec_7,base.ec,El Oro,ORO
+state_ec_8,base.ec,Esmeraldas,ESM
+state_ec_9,base.ec,Galápagos,GAL
+state_ec_10,base.ec,Guayas,GUA
+state_ec_11,base.ec,Imbabura,IMB
+state_ec_12,base.ec,Loja,LOJ
+state_ec_13,base.ec,Los Ríos,LRI
+state_ec_14,base.ec,Manabí,MAN
+state_ec_15,base.ec,Morona-Santiago,MOR
+state_ec_16,base.ec,Napo,NAP
+state_ec_17,base.ec,Orellana,ORE
+state_ec_18,base.ec,Pastaza,PAS
+state_ec_19,base.ec,Pichincha,PIC
+state_ec_20,base.ec,Santa Elena,SAN
+state_ec_21,base.ec,Santo Domingo de los Tsáchilas,SAN
+state_ec_22,base.ec,Sucumbíos,SUC
+state_ec_23,base.ec,Tungurahua,TUN
+state_ec_24,base.ec,Zamora-Chinchipe,ZAM

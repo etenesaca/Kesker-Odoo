@@ -1,0 +1,154 @@
+.box_plain {
+   border: 1px solid #000000;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	padding: 10px;
+	box-shadow: #666 0px 2px 3px;
+	background: #EEFF99;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#EEFF99), to(#66EE33));
+	background: -webkit-linear-gradient(#EEFF99, #66EE33);
+	background: -moz-linear-gradient(#EEFF99, #66EE33);
+	background: -ms-linear-gradient(#EEFF99, #66EE33);
+	background: -o-linear-gradient(#EEFF99, #66EE33);
+	background: linear-gradient(#EEFF99, #66EE33);
+}
+
+.box_blue {
+  	border: 1px solid #696;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	padding: 10px;
+	-moz-box-shadow: #666 0px 2px 3px;
+	box-shadow: #666 0px 2px 3px;
+	background: #D8E6FD;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#D8E6FD), to(#AECDEA));
+	background: -webkit-linear-gradient(#D8E6FD, #AECDEA);
+	background: -moz-linear-gradient(#D8E6FD, #AECDEA);
+	background: -ms-linear-gradient(#D8E6FD, #AECDEA);
+	background: -o-linear-gradient(#D8E6FD, #AECDEA);
+	background: linear-gradient(#D8E6FD, #AECDEA);
+}
+
+.box_green {
+	border: 1px solid #696;
+	padding: 60px 0;
+	text-align: center; 
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: #666 0px 2px 3px;
+	-moz-box-shadow: #666 0px 2px 3px;
+	box-shadow: #666 0px 2px 3px;
+	background: #EEFF99;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#EEFF99), to(#66EE33));
+	background: -webkit-linear-gradient(#EEFF99, #66EE33);
+	background: -moz-linear-gradient(#EEFF99, #66EE33);
+	background: -ms-linear-gradient(#EEFF99, #66EE33);
+	background: -o-linear-gradient(#EEFF99, #66EE33);
+	background: linear-gradient(#EEFF99, #66EE33);
+	-pie-background: linear-gradient(#EEFF99, #66EE33);
+	behavior: url(/pie/PIE.htc);
+}
+.box {
+	background-color: #A9BCF5;
+	padding: 10px;
+	/*para Firefox*/
+	-moz-border-radius: 15px 15px 15px 15px;
+	/*para Safari y Chrome*/
+	-webkit-border-radius: 15px 15px 15px 15px;
+	/* para Opera */
+	border-radius: 15px 15px 15px 15px;
+	/* para IE */
+	behavior:url(border.htc);
+}
+
+.box_tip {
+	background-color: #CEF6E3;
+	padding: 10px;
+	/*para Firefox*/
+	-moz-border-radius: 8px 8px 8px 8px;
+	/*para Safari y Chrome*/
+	-webkit-border-radius: 8px 8px 8px 8px;
+	/* para Opera */
+	border-radius: 8px 8px 8px 8px;
+	/* para IE */
+	behavior:url(border.htc);
+}
+
+.box_warning {
+	background-color: #F6CECE;
+	padding: 10px;
+	/*para Firefox*/
+	-moz-border-radius: 1px 1px 1px 1px;
+	/*para Safari y Chrome*/
+	-webkit-border-radius: 1px 1px 1px 1px;
+	/* para Opera */
+	border-radius: 1px 1px 1px 1px;
+	/* para IE */
+	behavior:url(border.htc);
+}
+
+.box_yellow {
+	background-color: #EEFF99;
+	padding: 10px;
+	/*para Firefox*/
+	-moz-border-radius: 15px 15px 15px 15px;
+	/*para Safari y Chrome*/
+	-webkit-border-radius: 15px 15px 15px 15px;
+	/* para Opera */
+	border-radius: 15px 15px 15px 15px;
+	/* para IE */
+	behavior:url(border.htc);
+}
+
+
+.box_red {
+	background-color: #F5A9BC;
+	padding: 5px;
+	/*para Firefox*/
+	-moz-border-radius: 5px 5px 5px 5px;
+	/*para Safari y Chrome*/
+	-webkit-border-radius: 5px 5px 5px 5px;
+	/* para Opera */
+	border-radius: 5px 5px 5px 5px;
+	/* para IE */
+	behavior:url(border.htc);
+}
+
+.box_gray {
+	background-color: #CED8F6;
+	padding: 5px;
+	/*para Firefox*/
+	-moz-border-radius: 5px 5px 5px 5px;
+	/*para Safari y Chrome*/
+	-webkit-border-radius: 5px 5px 5px 5px;
+	/* para Opera */
+	border-radius: 5px 5px 5px 5px;
+	/* para IE */
+	behavior:url(border.htc);
+}
+
+.gradientBoxesWithOuterShadows { 
+	/*height: 200px;
+	width: 400px; */
+	padding: 5px;
+	background-color: white; 
+	
+	/* outer shadows  (note the rgba is red, green, blue, alpha) */
+	-webkit-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.4); 
+	-moz-box-shadow: 0px 1px 6px rgba(23, 69, 88, .5);
+	
+	/* rounded corners */
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 7px; 
+	border-radius: 7px;
+	
+	/* gradients */
+	background: -webkit-gradient(linear, left top, left bottom, 
+	color-stop(0%, white), color-stop(15%, white), color-stop(100%, #D7E9F5)); 
+	background: -moz-linear-gradient(top, white 0%, white 55%, #D5E4F3 130%); 
+}
+
+.div_kemas {
+  border: 6px solid #ccc;
+}

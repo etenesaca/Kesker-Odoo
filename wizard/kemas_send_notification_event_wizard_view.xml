@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <!-- 
+    ====================
+    WIZARD SEND NOTIFICATION EVENT
+    ====================
+    -->
+    <!--____________________________________________________Vista de Formulario-->
+    <record model="ir.ui.view" id="kemas_send_notification_event_wizard_form_view">
+    	<field name="name">kemas.send.notification.event.wizard.form</field>
+    	<field name="model">kemas.send.notification.event.wizard</field>
+    	<field name="type">form</field>
+    	<field name="priority" eval="1"/>
+     	<field name="arch" type="xml">
+	       	<form string="Notify" version="7.0">
+	       		<div align="right" attrs="{'invisible':[('sending_emails','!=',True)]}">
+	       			<img src="/web/static/src/img/throbber.gif"/>
+	       			<b>  Enviando Notificaciones...  </b>
+	       			<button name="stop" type="object" string="Stop sending" confirm="Are you sure you want to stop sending emails?" icon="terp-gtk-stop" class="oe_highlight"/>
+	       		</div>
+				<field name="state" invisible="1"/>
+                <field name="sending_emails" invisible="1"/>
+	           	<group states="load" colspan="4">
+	           		<separator string="Collaborators will receive e-mails" colspan="4"/>				        
+					<field name="send_notification_event_line_wizard_ids" colspan="4" nolabel="1" attrs="{'readonly':[('sending_emails','=',True)]}"/>			 
+	           	</group>
+	           	<footer>
+                    <group states="load">
+                    	<group attrs="{'invisible':[('sending_emails','!=',False)]}">
+                    		<div>
+                    			<button name="reset" type="object" string="Reset notifications" help="Back to prepare to receive e-mail again." class="oe_highlight"/>
+	                    		<button name="send_email" type="object" string="Send Emails" attrs="{'invisible':[('send_notification_event_line_wizard_ids','=',False)]}"  confirm="Are you sure you send the emails now? This may take some time." class="oe_highlight"/>
+			                    <label string="or"/>
+			                    <button string="Cancel" class="oe_link" special="cancel" />
+		                    </div>
+                    	</group>
+                    	<group attrs="{'invisible':[('sending_emails','=',False)]}">
+                    		<button string="Ok" class="oe_link" special="cancel" />
+                    	</group>
+                    </group>
+                </footer>
+	       	</form>
+     	</field>
+     </record>
+    <!-- 
+    ====================
+    WIZARD SEND NOTIFICATION EVENT LINE
+    ====================
+    -->
+    <record model="ir.ui.view" id="kemas_send_notification_event_line_wizard_form_view">
+    	<field name="name">kemas.send.notification.event.line.wizard.form</field>
+    	<field name="model">kemas.send.notification.event.line.wizard</field>
+    	<field name="type">form</field>
+    	<field name="priority" eval="1"/>
+     	<field name="arch" type="xml">
+	       	<form string="Notify">
+	       		<group colspan="4" col="10">
+		       		<field name="collaborator_id" readonly="1" colspan="10"/>
+		       		<field name="state" readonly="1" colspan="2"/>
+		       		<field name="email" readonly="1" colspan="8"/>
+	       		</group>
+	       	</form>
+     	</field>
+     </record>
+     <!--____________________________________________________Vista de Arbol-->
+     <record model="ir.ui.view" id="kemas_send_notification_event_line_wizard_tree_view">
+    	<field name="name">kemas.send.notification.event.line.wizard.tree</field>
+      	<field name="model">kemas.send.notification.event.line.wizard</field>
+        <field name="type">tree</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+     		<tree string="" create="0" delete="0" editable="bottom" colors="gray:state in ['Sent','Ignored'];
+					     												  	blue:state=='Waiting';
+					     												  	red:state=='Error';
+					     												  	green:state=='Successful';
+					     												  	purple:state=='Timeout'">
+          		<field name="collaborator_id" readonly="1"/>
+          		<field name="email" widget="email" on_change="on_change_email(email)"/>
+          		<field name="send_email" on_change="on_change_send_email(event_line_id,send_email)"/>
+          		<field name="state" readonly="1"/>
+          		<field name="event_line_id" invisible="1"/>
+         	</tree>
+     	</field>
+  	</record>	
+  </data>
+</openerp>

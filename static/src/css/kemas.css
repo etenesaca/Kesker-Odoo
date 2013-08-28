@@ -1,0 +1,101 @@
+.oe_employee_vignette {
+  padding: 8px 0;
+  min-height: 100px;
+}
+
+.oe_employee_image, .oe_employee_details {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.oe_employee_image {
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  overflow: hidden;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -o-border-radius: 3px;
+  -ms-border-radius: 3px;
+  border-radius: 3px;
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  -o-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  -box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.oe_employee_picture {
+  width: 100px;
+  height: auto;
+  clip: rect(10px, 100px, 110px, 0px);
+}
+
+.oe_employee_picture_wide {
+  height: 100px;
+  width: auto;
+  clip: rect(0px, 115px, 100px, 15px);
+}
+
+.oe_employee_details {
+  width: 220px;
+  font-size: 13px;
+  padding: 2px 5px;
+  color: #4c4c4c;
+  min-height: 120px;
+}
+
+.oe_employee_details h4 {
+  margin: 0;
+  font-size: 13px;
+}
+
+.oe_employee_details h4 a {
+  color: #4c4c4c;
+}
+
+.oe_employee_details h4 a:hover {
+  text-decoration: underline;
+}
+
+.oe_employee_details ul {
+  margin: 3px 0 5px;
+  padding: 0;
+  list-style: none;
+}
+
+.oe_employee_details li {
+  margin: 2px 0;
+}
+
+.div_kemas {
+   width: 100px;
+   height: 100px;
+   margin: 10px;
+   padding: 0;
+   background: #6fb2e5;
+   box-shadow: 0 1px 5px #0061aa, inset 0 10px 20px #b6f9ff;
+   -o-box-shadow: 0 1px 5px #0061aa, inset 0 10px 20px #b6f9ff;
+   -webkit-box-shadow: 0 1px 5px #0061aa, inset 0 10px 20px #b6f9ff;
+   -moz-box-shadow: 0 1px 5px #0061aa, inset 0 10px 20px #b6f9ff;
+}
+
+.box {
+	border: 1px solid #696;
+	padding: 60px 0;
+	text-align: center; width: 200px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: #666 0px 2px 3px;
+	-moz-box-shadow: #666 0px 2px 3px;
+	box-shadow: #666 0px 2px 3px;
+	background: #EEFF99;
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#EEFF99), to(#66EE33));
+	background: -webkit-linear-gradient(#EEFF99, #66EE33);
+	background: -moz-linear-gradient(#EEFF99, #66EE33);
+	background: -ms-linear-gradient(#EEFF99, #66EE33);
+	background: -o-linear-gradient(#EEFF99, #66EE33);
+	background: linear-gradient(#EEFF99, #66EE33);
+	-pie-background: linear-gradient(#EEFF99, #66EE33);
+	behavior: url(/pie/PIE.htc);
+}
