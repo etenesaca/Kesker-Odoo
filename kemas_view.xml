@@ -836,6 +836,7 @@
 			    		<page string="Massive email">
 			    			<group colspan="4" col="4">
 			    				<field name="send_IM_massive_email" colspan="4"/>
+                                <field name="massive_mail_use_header" colspan="4"/>
 			    			</group>
 			    			<separator string="Legend of variables you can use" colspan="4" attrs="{'invisible':[('send_IM_massive_email','=',False)]}"/>
 		    				<table border="0" width="100%%" colspan="4" attrs="{'invisible':[('send_IM_massive_email','=',False)]}">
@@ -857,9 +858,12 @@
 					    	</table>
 					    	<group colspan="4" col="4" expand="1" attrs="{'invisible':[('send_IM_massive_email','=',False)]}">
 					    		<notebook colspan="4">
-								    <page string="Message">	
+								    <page string="Mensaje que se envia por chat">	
 										<field name="Message_information_massive_email" colspan="4"  widget="html" nolabel="1" attrs="{'required':[('send_IM_massive_email','=',True)],}"/>		 
 								    </page>
+                                    <page string="Cuenta de Correo por defecto">
+                                      <field name="massive_mail_body_default" colspan="4"  widget="html" nolabel="1" attrs="{'required':[('send_IM_massive_email','=',True)],}"/>
+                                    </page>
 								</notebook>
 					    	</group> 
 			    		</page>

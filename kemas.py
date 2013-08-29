@@ -347,7 +347,17 @@ class kemas_massive_email(osv.osv):
     
     def draft(self,cr,uid,ids,context={}):
         self.write(cr, uid, ids, {'state': 'draft'})
-        
+
+    def fields_get(self, cr, uid, fields={}, context={}, write_access=True): 
+        result = super(kemas_massive_email, self).fields_get(cr, uid,fields, context, write_access)
+        def_dic = {}
+        config_obj = self.pool.get('kemas.config')
+        config_id = config_obj.get_correct_config(cr, uid)
+        preferences = config_obj.read(cr, uid, config_id, [])
+        def_dic['use_header_message'] = preferences['massive_mail_use_header']
+        def_dic['message'] = preferences['massive_mail_body_default']
+        self._defaults = def_dic
+        return result
     _order='date_sent'
     _rec_name = 'subject'
     _name='kemas.massive.email'
@@ -369,131 +379,6 @@ class kemas_massive_email(osv.osv):
         }
     _defaults = {
         'state' : 'creating',
-        'message' : '''
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<!-- saved from url=(0056)http://www.themefuse.com/demo/html/TechOffers/index.html -->
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title></title> 
-  </head>
-  <body style="margin: 0; padding: 0; background-color: #464c58;" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/components/dots.jpg">
-    <table cellpadding="0" cellspacing="0" width="100%" height="100%" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/components/dots.jpg" bgcolor="#464c58">
-      <tbody>
-        <tr>
-          <td>
-            <table align="center" cellpadding="0" cellspacing="0" width="720">
-              <tbody>
-                <tr>
-                  <br/>
-                  <!-- 
-                  <td>
-                    <table cellpadding="0" cellspacing="0" style="width: 720px; height: 105px;" align="center">
-                      <tbody>
-                        <tr>
-                          <td width="58px"></td>
-                          <td style="font-family: Georgia, &#39;Times New Roman&#39;, Times, serif; font-size: 32px; letter-spacing:-1px; color: #ffffff; padding-top:18px;">Bienvenido</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </td>
-                  -->
-                </tr>
-              
-                <tr>
-                  <td>
-                    <table align="center" cellpadding="0" cellspacing="0">
-                      <tbody>
-                        <tr>
-                          <td width="10px" height="100%"></td>
-                          <td width="700px" height="16px" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/components/top.gif"></td> 
-                          <td style="width: 10px; height: 100%;"></td>
-                        </tr>
-                      </tbody>
-                    </table>  
-                    <!-- top -->
-                  </td>
-                </tr>
-              
-                <tr>
-                  <td>
-                    <table cellpadding="0" cellspacing="0" style="width: 720px; height: 87px;" align="center">
-                      <tbody>
-                        <tr>
-                          <td width="10px" height="87px"></td>
-                          <td width="700px" height="87px" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/correo_masivo.jpg"></td>
-                          <td width="10px" height="87px"></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <!-- ribon -->
-                  </td>
-                </tr>
-              
-                <tr>
-                  <td>
-                    <table align="center" cellpadding="0" cellspacing="0">
-                      <tbody>
-                        <tr>
-                          <td width="10px" height="100%"/>
-                          <td width="640px" height="100%" bgcolor="#FFFFFF" style="padding-left: 33px; padding-right: 27px;">
-                            <table cellpadding="0" cellspacing="0" style="margin-top:19px;">
-                              <tbody>
-                                <tr>
-                                  <td width="640px" height="100%" bgcolor="#FFFFFF" style="padding-left: 33px; padding-right: 27px;">
-                                    <h1 style="font-family:Georgia, &#39;Times New Roman&#39;, Times, serif; font-size:20px; letter-spacing:-1px; font-weight:normal; color:#202125; line-height:35px;">
-                                      Saludos,
-                                    </h1>
-                                    <p style="font-family: georgia, serif; font-weight: normal; font-size: 15px; line-height: 20px; color: #595959; margin-top: 0; margin-left: 0; margin-bottom: 20px; margin-right: 0; padding: 0;" align="justify">
-                                      [Cuepo del Correo]
-                                    </p>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                            <!-- third set of offers -->  
-                          </td>
-                          <td style="width: 10px; height: 100%;"/>  
-                        </tr>
-                      </tbody>
-                    </table>  
-                <!-- third set of offers -->
-              </td>
-            </tr>
-              
-                <tr>
-              <td>
-                <table align="center" cellpadding="0" cellspacing="0">
-                  <tbody>
-                        <tr>
-                      <td width="10px" height="100%"></td>
-                      <td width="700px" height="16px" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/components/bottom.gif"></td>  
-                      <td style="width: 10px; height: 100%;"></td>
-                        </tr>
-                        <tr>
-                          <td width="10px" height="100%"></td>
-                          <td align="justify" style="padding-top:11px; padding-bottom:32px;">
-                            <p style="font-family:Arial, Helvetica, sans-serif; font-size:11px; color:#ffffff; line-height:16px; text-align:center;">
-                              Has recibido este mensaje del equipo de comunicaciones ke+.
-                            </p>
-                          </td> 
-                          <td style="width: 10px; height: 100%;"></td>
-                        </tr>
-                  </tbody>
-                    </table>  
-                <!-- bottom and copyrights -->
-              </td>
-            </tr>
-              </tbody>
-            </table>
-            <!-- newsletter -->
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </body>
-</html>
-        '''
         }
     
 class kemas_config(osv.osv):
@@ -1164,6 +1049,8 @@ class kemas_config(osv.osv):
         'use_im_event_completion_canceled' : fields.boolean('Use IM notification?', required=True),
         'message_im_event_completon_canceled': fields.text('Message'),
         #---Massive email----------------------------------
+        'massive_mail_body_default': fields.text('Cuerpo del Correo massivo por defecto'),
+        'massive_mail_use_header' : fields.boolean('¿Marcar por defector el uso de cabeceras y pies de correo establecidas en el sistema?',  help='La opcion que este marcado aparecera por defecto cada vez que se cree un nuevo correo massivo'),
         'send_IM_massive_email' : fields.boolean('Send an IM?', required=True, help='Send instant message to notify that was mailed?'),
         'Message_information_massive_email': fields.text('Message'),
         #---Add / Remove Points----------------------------
@@ -1419,6 +1306,132 @@ Te informamos que ha finalizado el servicio: %sr, programado para el día %dy a 
         'Message_information_massive_email':"""Hola %nk, 
 Acabamos de enviarte un correo a (%em), no olvides revisarlo.
         """,
+        'massive_mail_use_header' : False,
+        'massive_mail_body_default' : '''
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!-- saved from url=(0056)http://www.themefuse.com/demo/html/TechOffers/index.html -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title> 
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #464c58;" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/components/dots.jpg">
+    <table cellpadding="0" cellspacing="0" width="100%" height="100%" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/components/dots.jpg" bgcolor="#464c58">
+      <tbody>
+        <tr>
+          <td>
+            <table align="center" cellpadding="0" cellspacing="0" width="720">
+              <tbody>
+                <tr>
+                  <br/>
+                  <!-- 
+                  <td>
+                    <table cellpadding="0" cellspacing="0" style="width: 720px; height: 105px;" align="center">
+                      <tbody>
+                        <tr>
+                          <td width="58px"></td>
+                          <td style="font-family: Georgia, &#39;Times New Roman&#39;, Times, serif; font-size: 32px; letter-spacing:-1px; color: #ffffff; padding-top:18px;">Bienvenido</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                  -->
+                </tr>
+              
+                <tr>
+                  <td>
+                    <table align="center" cellpadding="0" cellspacing="0">
+                      <tbody>
+                        <tr>
+                          <td width="10px" height="100%"></td>
+                          <td width="700px" height="16px" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/components/top.gif"></td> 
+                          <td style="width: 10px; height: 100%;"></td>
+                        </tr>
+                      </tbody>
+                    </table>  
+                    <!-- top -->
+                  </td>
+                </tr>
+              
+                <tr>
+                  <td>
+                    <table cellpadding="0" cellspacing="0" style="width: 720px; height: 87px;" align="center">
+                      <tbody>
+                        <tr>
+                          <td width="10px" height="87px"></td>
+                          <td width="700px" height="87px" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/correo_masivo.jpg"></td>
+                          <td width="10px" height="87px"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- ribon -->
+                  </td>
+                </tr>
+              
+                <tr>
+                  <td>
+                    <table align="center" cellpadding="0" cellspacing="0">
+                      <tbody>
+                        <tr>
+                          <td width="10px" height="100%"/>
+                          <td width="640px" height="100%" bgcolor="#FFFFFF" style="padding-left: 33px; padding-right: 27px;">
+                            <table cellpadding="0" cellspacing="0" style="margin-top:19px;">
+                              <tbody>
+                                <tr>
+                                  <td width="640px" height="100%" bgcolor="#FFFFFF" style="padding-left: 33px; padding-right: 27px;">
+                                    <h1 style="font-family:Georgia, &#39;Times New Roman&#39;, Times, serif; font-size:20px; letter-spacing:-1px; font-weight:normal; color:#202125; line-height:35px;">
+                                      Saludos,
+                                    </h1>
+                                    <p style="font-family: georgia, serif; font-weight: normal; font-size: 15px; line-height: 20px; color: #595959; margin-top: 0; margin-left: 0; margin-bottom: 20px; margin-right: 0; padding: 0;" align="justify">
+                                      [Cuepo del Correo]
+                                    </p>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <!-- third set of offers -->  
+                          </td>
+                          <td style="width: 10px; height: 100%;"/>  
+                        </tr>
+                      </tbody>
+                    </table>  
+                <!-- third set of offers -->
+              </td>
+            </tr>
+              
+                <tr>
+              <td>
+                <table align="center" cellpadding="0" cellspacing="0">
+                  <tbody>
+                        <tr>
+                      <td width="10px" height="100%"></td>
+                      <td width="700px" height="16px" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/components/bottom.gif"></td>  
+                      <td style="width: 10px; height: 100%;"></td>
+                        </tr>
+                        <tr>
+                          <td width="10px" height="100%"></td>
+                          <td align="justify" style="padding-top:11px; padding-bottom:32px;">
+                            <p style="font-family:Arial, Helvetica, sans-serif; font-size:11px; color:#ffffff; line-height:16px; text-align:center;">
+                              Has recibido este mensaje del equipo de comunicaciones ke+.
+                            </p>
+                          </td> 
+                          <td style="width: 10px; height: 100%;"></td>
+                        </tr>
+                  </tbody>
+                    </table>  
+                <!-- bottom and copyrights -->
+              </td>
+            </tr>
+              </tbody>
+            </table>
+            <!-- newsletter -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
+        ''',
         #---Modificacion manual de puntos------------------------------------------------------------------------------
         'use_message_add_remove_points':True,
         'use_message_im_add_points':True,
