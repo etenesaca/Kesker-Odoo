@@ -370,71 +370,129 @@ class kemas_massive_email(osv.osv):
     _defaults = {
         'state' : 'creating',
         'message' : '''
-    <table style="width: 100%;" bgcolor="#e6e6e6" border="0" cellpadding="0" cellspacing="0">
-        <tbody>
-            <tr>
-            <td bgcolor="#e6e6e6" width="100%">
-            <table style="width: 584px;" class="table" align="center" border="0" cellpadding="0" cellspacing="0">
-                <tbody>
-                    <tr>
-                        <td class="cell" width="584">
-                            <br>
-                            <table class="table" style="background-color: #7cbss48; background-image: url('https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/Varios%20mail.jpg'); background-position: 0pt 0pt; background-repeat: no-repeat; width: 584px; height: 140px;" border="0" cellpadding="0" cellspacing="0">
-                            <tbody>
-                                <tr>
-                                    <td class="logocell" style="padding: 20px 40px;" width="504">
-                                        <img src="https://launchpadlibrarian.net/145996962/spacer.gif" class="hide" height="15" border="0" width="1">
-                                    </td>
-                                </tr>
-                            </tbody>
-                            </table>
-                            <table style="width: 584px;" class="table" border="0" cellpadding="0" cellspacing="0">
-                                <tbody>
-                                    <tr>
-                                        <td class="innercell" style="background-color: #fff; background-image: url('https://launchpadlibrarian.net/145997806/background_body.gif'); background-position: 0 0; background-repeat: repeat-y; padding-left: 2px; padding-right: 2px;" width="580">
-                                            <table style="width: 580px;" class="innertable" border="0" cellpadding="0" cellspacing="0">
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="content" style="background-color: #ffffff; background-image: url('https://launchpadlibrarian.net/145997931/background_body-top.gif'); background-position: 0 0; background-repeat: repeat-x; padding: 38px 40px 0 40px;" width="500">
-                                                        <p style="font-family: georgia, serif; font-weight: normal; font-size: 15px; line-height: 20px; color: #595959; margin-top: 0; margin-left: 0; margin-bottom: 20px; margin-right: 0; padding: 0;">Saludos,    
-                                                        </p>
-                                                        <p style="font-family: georgia, serif; font-weight: normal; font-size: 15px; line-height: 20px; color: #595959; margin-top: 0; margin-left: 0; margin-bottom: 20px; margin-right: 0; padding: 0;">[Cuepo del Correo]</p>
-                                                    </td></tr>
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="footer" style="background-image: url('https://launchpadlibrarian.net/145997650/background_footer.gif'); background-position: 0 0; background-repeat: no-repeat; background-color: #e4e4e4; padding: 0; margin: 0; height: 15px; font-size: 1px;" height="15"><img src="https://launchpadlibrarian.net/145996962/spacer.gif" class="footer" height="15" border="0" width="1"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <img src="./spacer.gif" height="15" border="0" width="1">
-                        </td>
-                    </tr>
-                </tbody>
-                <tbody>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!-- saved from url=(0056)http://www.themefuse.com/demo/html/TechOffers/index.html -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title> 
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #464c58;" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/components/dots.jpg">
+    <table cellpadding="0" cellspacing="0" width="100%" height="100%" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/components/dots.jpg" bgcolor="#464c58">
+      <tbody>
+        <tr>
+          <td>
+            <table align="center" cellpadding="0" cellspacing="0" width="720">
+              <tbody>
                 <tr>
-                <td>
-                <table border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
-                    <tbody>
+                  <br/>
+                  <!-- 
+                  <td>
+                    <table cellpadding="0" cellspacing="0" style="width: 720px; height: 105px;" align="center">
+                      <tbody>
                         <tr>
-                            <td>
-                                <p align="center" style="font-family: helvetica, arial, sans-serif; font-size: 11px; line-height: 16px; color: #7e7d7e; margin-top: 0; margin-bottom: 8px; margin-left: 0; margin-right: 0; padding: 0;">
-                                Has recibido este mensaje del equipo de comunicaciones ke+. <br></p>
-                            </td>
-                            <td>&nbsp;</td>
-                            <td><a href="https://www.facebook.com/AtahbeChartanu?footer"><img title="facebook" src="https://launchpadlibrarian.net/145996746/icon_grey_facebook.gif" alt="Facebook" style="-ms-interpolation-mode: bicubic;" border="0" height="25" width="24"></a></td>
-                            <td><a href="http://twitter.com/evernote?footer"><img title="twitter" src="https://launchpadlibrarian.net/145996886/icon_grey_twitter.gif" alt="twitter" style="-ms-interpolation-mode: bicubic;" border="0" height="25" width="24"></a></td>
+                          <td width="58px"></td>
+                          <td style="font-family: Georgia, &#39;Times New Roman&#39;, Times, serif; font-size: 32px; letter-spacing:-1px; color: #ffffff; padding-top:18px;">Bienvenido</td>
                         </tr>
-                    </tbody>
-                </table>
-                <img src="https://launchpadlibrarian.net/145996962/spacer.gif" height="10" border="0" width="1"></td>
+                      </tbody>
+                    </table>
+                  </td>
+                  -->
+                </tr>
+              
+                <tr>
+                  <td>
+                    <table align="center" cellpadding="0" cellspacing="0">
+                      <tbody>
+                        <tr>
+                          <td width="10px" height="100%"></td>
+                          <td width="700px" height="16px" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/components/top.gif"></td> 
+                          <td style="width: 10px; height: 100%;"></td>
+                        </tr>
+                      </tbody>
+                    </table>  
+                    <!-- top -->
+                  </td>
+                </tr>
+              
+                <tr>
+                  <td>
+                    <table cellpadding="0" cellspacing="0" style="width: 720px; height: 87px;" align="center">
+                      <tbody>
+                        <tr>
+                          <td width="10px" height="87px"></td>
+                          <td width="700px" height="87px" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/correo_masivo.jpg"></td>
+                          <td width="10px" height="87px"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- ribon -->
+                  </td>
+                </tr>
+              
+                <tr>
+                  <td>
+                    <table align="center" cellpadding="0" cellspacing="0">
+                      <tbody>
+                        <tr>
+                          <td width="10px" height="100%"/>
+                          <td width="640px" height="100%" bgcolor="#FFFFFF" style="padding-left: 33px; padding-right: 27px;">
+                            <table cellpadding="0" cellspacing="0" style="margin-top:19px;">
+                              <tbody>
+                                <tr>
+                                  <td width="640px" height="100%" bgcolor="#FFFFFF" style="padding-left: 33px; padding-right: 27px;">
+                                    <h1 style="font-family:Georgia, &#39;Times New Roman&#39;, Times, serif; font-size:20px; letter-spacing:-1px; font-weight:normal; color:#202125; line-height:35px;">
+                                      Saludos,
+                                    </h1>
+                                    <p style="font-family: georgia, serif; font-weight: normal; font-size: 15px; line-height: 20px; color: #595959; margin-top: 0; margin-left: 0; margin-bottom: 20px; margin-right: 0; padding: 0;" align="justify">
+                                      [Cuepo del Correo]
+                                    </p>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <!-- third set of offers -->  
+                          </td>
+                          <td style="width: 10px; height: 100%;"/>  
+                        </tr>
+                      </tbody>
+                    </table>  
+                <!-- third set of offers -->
+              </td>
             </tr>
-        </tbody>
+              
+                <tr>
+              <td>
+                <table align="center" cellpadding="0" cellspacing="0">
+                  <tbody>
+                        <tr>
+                      <td width="10px" height="100%"></td>
+                      <td width="700px" height="16px" background="https://dl.dropboxusercontent.com/u/96556423/kemas/mail_backgrounds/components/bottom.gif"></td>  
+                      <td style="width: 10px; height: 100%;"></td>
+                        </tr>
+                        <tr>
+                          <td width="10px" height="100%"></td>
+                          <td align="justify" style="padding-top:11px; padding-bottom:32px;">
+                            <p style="font-family:Arial, Helvetica, sans-serif; font-size:11px; color:#ffffff; line-height:16px; text-align:center;">
+                              Has recibido este mensaje del equipo de comunicaciones ke+.
+                            </p>
+                          </td> 
+                          <td style="width: 10px; height: 100%;"></td>
+                        </tr>
+                  </tbody>
+                    </table>  
+                <!-- bottom and copyrights -->
+              </td>
+            </tr>
+              </tbody>
+            </table>
+            <!-- newsletter -->
+          </td>
+        </tr>
+      </tbody>
     </table>
-
-</td></tr></tbody></table>
+  </body>
+</html>
         '''
         }
     
