@@ -831,12 +831,16 @@ class kemas_config(osv.osv):
         detail_ids = line['activity_ids']
         activities=''
         if detail_ids:
-            activities=unicode(u'''<div><b>La actividades que se te han asignado para este servicio son:</b>''')
+            activities=unicode(u'''
+            <p style="font-family: georgia, serif; font-weight: normal; font-size: 15px; line-height: 20px; color: #595959; margin-top: 0; margin-left: 0; margin-bottom: 20px; margin-right: 0; padding: 0;" align="justify">
+                <b>La actividades que se te han asignado para este servicio son:</b>
+            </p>
+            <ul style="font-family: georgia, serif; font-weight: normal; font-size: 15px; line-height: 20px; color: #595959; margin-top: 0; margin-left: 0; margin-bottom: 20px; margin-right: 0; padding: 1;" align="justify">
+            ''')
             details = activity_obj.read(cr, uid, detail_ids,['name'])
             for detail in details:
-                activity = detail['name']
-                activities+=unicode(u'''<br/>&nbsp;&nbsp;&nbsp;&nbsp;• %s''')%unicode(activity)
-            activities+=unicode(u'''<div>''')
+                activities+=unicode(u'''<li>%s</li>''')%unicode(detail['name'])
+            activities+=unicode(u'''</ul>''')
         message = message.replace('%ac', unicode(activities))
         
         return message
@@ -4173,7 +4177,7 @@ class kemas_event(osv.osv):
         values['line_ids'] = unicode(line_ids)
         return {'value':values}
                 
-    def search(self, cr, uid, args, offset = 0, limit = None, order = None, context={}, count = False):
+    def search(self, cr, uid, args, offset = 0, limit = None, order = None, context={}, count = False):    
         collaborator_obj = self.pool.get('kemas.collaborator')
         event_line_obj = self.pool.get('kemas.event.collaborator.line')
         user_obj = self.pool.get('res.users')
@@ -4224,8 +4228,14 @@ class kemas_event(osv.osv):
             range_dates = kemas_extras.get_dates_range_today(context['tz'])
             args.append(('date_start','>=',range_dates['date_start']))
             args.append(('date_start','<=',range_dates['date_stop']))  
-
-        return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
+        
+        res_ids = super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
+        for arg in args:
+            if str(arg) in ["['message_unread', '=', True]", "('message_unread', '=', True)"]:
+                res_ids += super(osv.osv,self).search(cr,uid,[('message_unread', '=', True)])
+                res_ids = list(set(res_ids))
+                continue
+        return res_ids
     
     def name_get(self,cr,uid,ids,context={}):    
         if type(ids).__name__=='int':
