@@ -1063,7 +1063,7 @@ class kemas_config(osv.osv):
         'message_im_event_completon_canceled': fields.text('Message'),
         #---Massive email----------------------------------
         'massive_mail_body_default': fields.text('Cuerpo del Correo massivo por defecto'),
-        'massive_mail_use_header' : fields.boolean('¿Marcar por defector el uso de cabeceras y pies de correo establecidas en el sistema?',  help='La opcion que este marcado aparecera por defecto cada vez que se cree un nuevo correo massivo'),
+        'massive_mail_use_header' : fields.boolean('Marcar por defector el uso de cabeceras y pies de correo establecidas en el sistema?',  help='La opcion que este marcado aparecera por defecto cada vez que se cree un nuevo correo massivo'),
         'send_IM_massive_email' : fields.boolean('Send an IM?', required=True, help='Send instant message to notify that was mailed?'),
         'Message_information_massive_email': fields.text('Message'),
         #---Add / Remove Points----------------------------
