@@ -669,7 +669,7 @@
 										<tr>
 											<td width="5%%"><b>%%sp</b></td><td width="28.33%%">Service Place</td>
 											<td width="5%%"><b>%%st</b></td><td width="28.33%%">Time Start</td>
-											<td width="5%%"><b>%%se</b></td><td width="28.33%%">Time End</td>
+											<td width="5%%"><b>%%fn</b></td><td width="28.33%%">Time End</td>
 										</tr>
 										<tr>
 											<td width="5%%"><b>%%te</b></td><td width="28.33%%">Time of entry</td>
@@ -740,7 +740,7 @@
 										<tr>
 											<td width="5%%"><b>%%sp</b></td><td width="28.33%%">Service Place</td>
 											<td width="5%%"><b>%%st</b></td><td width="28.33%%">Time Start</td>
-											<td width="5%%"><b>%%se</b></td><td width="28.33%%">Time End</td>
+											<td width="5%%"><b>%%te</b></td><td width="28.33%%">Time End</td>
 										</tr>
 										<tr>
 											<td width="5%%"><b>%%te</b></td><td width="28.33%%">Time of entry</td>
@@ -762,11 +762,16 @@
 											<td width="5%%"><b>%%pl</b></td><td width="28.33%%">Lost points</td>
 											<td width="5%%"><b>%%na</b></td><td width="28.33%%">Name System</td>
 										</tr>
-										<tr>
-											<td width="5%%"><b>%%da</b></td><td width="28.33%%">Date</td>
-											<td width="5%%"><b>%%tm</b></td><td width="28.33%%">Time</td>
-											<td width="5%%"><b>%%dt</b></td><td width="28.33%%">Date and Time</td>
-										</tr>
+                                        <tr>
+                                          <td width="5%%"><b>%%da</b></td><td width="28.33%%">Date</td>
+                                          <td width="5%%"><b>%%tm</b></td><td width="28.33%%">Time</td>
+                                          <td width="5%%"><b>%%dt</b></td><td width="28.33%%">Date and Time</td>
+                                        </tr>
+                                        <tr>
+                                          <td width="5%%"><b>%%hs</b></td><td width="28.33%%">Dirección del Sistema</td>
+                                          <td width="5%%"><b></b></td><td width="28.33%%"></td>
+                                          <td width="5%%"><b></b></td><td width="28.33%%"></td>
+                                        </tr>
 				    				</table>
 				    				<group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_event_completion','=',False)]}">
 							      		<field name="message_event_completon_subject" colspan="4" attrs="{'required':[('use_event_completion','=',True)],}"/>
@@ -885,10 +890,15 @@
 									<td width="5%%"><b>%%lv</b></td><td width="28.33%%">Collaborator's Level</td>
 								</tr>
 								<tr>
-									<td width="5%%"><b>%%ds</b></td><td width="28.33%%">Descripction</td>
+									<td width="5%%"><b>%%ds</b></td><td width="28.33%%">Descripción</td>
 									<td width="5%%"><b>%%mp</b></td><td width="28.33%%">Modified points</td>
-									<td width="5%%"><b></b></td><td width="28.33%%"></td>
+									<td width="5%%"><b>%%se</b></td><td width="28.33%%">Correo del Sistema</td>
 								</tr>
+                                <tr>
+                                  <td width="5%%"><b>%%na</b></td><td width="28.33%%">Nombre del Sistema</td>
+                                  <td width="5%%"><b>%%hs</b></td><td width="28.33%%">Dirección del Sistema</td>
+                                  <td width="5%%"><b></b></td><td width="28.33%%"></td>
+                                </tr>
 			    			</table>
 			    			<group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}">
 			    				<field name="Message_add_remove_points_subject" colspan="4" attrs="{'required':[('use_message_add_remove_points','=',True)],}"/>

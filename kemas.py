@@ -351,11 +351,15 @@ class kemas_massive_email(osv.osv):
     def fields_get(self, cr, uid, fields={}, context={}, write_access=True): 
         result = super(kemas_massive_email, self).fields_get(cr, uid,fields, context, write_access)
         def_dic = {}
-        config_obj = self.pool.get('kemas.config')
-        config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, [])
-        def_dic['use_header_message'] = preferences['massive_mail_use_header']
-        def_dic['message'] = preferences['massive_mail_body_default']
+        try:
+            config_obj = self.pool.get('kemas.config')
+            config_id = config_obj.get_correct_config(cr, uid)
+            preferences = config_obj.read(cr, uid, config_id, [])
+            def_dic['use_header_message'] = preferences['massive_mail_use_header']
+            def_dic['message'] = preferences['massive_mail_body_default']
+        except:
+            raise osv.except_osv(_('Error!'), _('No hay ninguna configuracion del Sistema definida.'))
+        def_dic['state'] = 'draft'
         self._defaults = def_dic
         return result
     _order='date_sent'
@@ -377,9 +381,6 @@ class kemas_massive_email(osv.osv):
         #Many to Many Relations----------------------------------------------------------------------------------------------
         'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_collaborator_massive_email_rel',  'email_id',  'collaborator_id', 'Recipients',help='Collaborators who will receive this email', states={'sent':[('readonly',True)]}),
         }
-    _defaults = {
-        'state' : 'creating',
-        }
     
 class kemas_config(osv.osv):
     def build_header_footer_string(self, cr, uid, string):
@@ -390,7 +391,7 @@ class kemas_config(osv.osv):
         #------------------------------------------------------------------------------------
         string = string.replace('%hs', unicode(preferences['url_system']))
         string = string.replace('%re', unicode(preferences['reply_email']))
-        string = string.replace('%se', unicode(preferences['system_email']))
+        string = string.replace('%se', unicode(preferences['system_email']).lower())
         string = string.replace('%ns', unicode(preferences['name_submitting']))
         
         now = kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"),self.pool.get('kemas.func').get_tz_by_uid(cr,uid))
@@ -403,11 +404,19 @@ class kemas_config(osv.osv):
     def build_add_remove_points_string(self, cr, uid, message, collaborator_id, description, points):
         collaborator_obj = self.pool.get('kemas.collaborator')
         collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email','name','nick_name','genre','points','level_name'])
+        config_obj = self.pool.get('kemas.config')
+        config_id = config_obj.get_correct_config(cr, uid)
+        preferences = config_obj.read(cr, uid, config_id, [])
         message = message.replace('%nk', unicode(collaborator['nick_name']).title())
         message = message.replace('%cl', unicode(kemas_extras.get_standard_names(collaborator['name'])))
         message = message.replace('%pt', unicode(collaborator['points']))
         message = message.replace('%lv', unicode(collaborator['level_name']))
         message = message.replace('%em', unicode(collaborator['email']).lower())
+        
+        message = message.replace('%na', unicode(preferences['name_system']))
+        message = message.replace('%se', unicode(preferences['system_email']).lower())
+        message = message.replace('%hs', unicode(preferences['url_system']))
+        message = message.replace('%na', unicode(preferences['name_submitting']))
         if collaborator['genre'].lower()=='male':
             message = message.replace('%gn', 'o')
         else:
@@ -527,7 +536,7 @@ class kemas_config(osv.osv):
         message = message.replace('%em', unicode(collaborator['email']).lower())
         message = message.replace('%hs', unicode(preferences['url_system']))
         message = message.replace('%re', unicode(preferences['reply_email']))
-        message = message.replace('%se', unicode(preferences['system_email']))
+        message = message.replace('%se', unicode(preferences['system_email']).lower())
         message = message.replace('%sd', unicode(cr.dbname))
         message = message.replace('%ns', unicode(preferences['name_submitting']))
         message = message.replace('%na', unicode(preferences['name_system']))
@@ -636,7 +645,7 @@ class kemas_config(osv.osv):
         %%sr - Service's name
         %%sp - Service Place
         %%st - Time Start
-        %%se - Time End
+        %%fn - Time End
         %%te - Time of entry
         %%tl - Time Limit
         %%tr - Time register
@@ -652,6 +661,10 @@ class kemas_config(osv.osv):
         %%dt - Date and Time
         """
         message = message.replace('%na', unicode(preferences['name_system']))
+        message = message.replace('%se', unicode(preferences['system_email']))
+        message = message.replace('%hs', unicode(preferences['url_system']))
+        message = message.replace('%na', unicode(preferences['name_submitting']))
+        
         message = message.replace('%cl', unicode(kemas_extras.get_standard_names(collaborator['name'])))
         message = message.replace('%nk', unicode(collaborator['nick_name']).title())
         message = message.replace('%pt', unicode(collaborator['points']))
@@ -673,7 +686,7 @@ class kemas_config(osv.osv):
         message = message.replace('%sr', unicode(event['service_id'][1]).title())
         message = message.replace('%sp', unicode(event['place_id'][1]))
         message = message.replace('%st', unicode(kemas_extras.convert_float_to_hour_format(service['time_start'])))
-        message = message.replace('%se', unicode(kemas_extras.convert_float_to_hour_format(service['time_end'])))
+        message = message.replace('%fn', unicode(kemas_extras.convert_float_to_hour_format(service['time_end'])))
         message = message.replace('%te', unicode(kemas_extras.convert_float_to_hour_format(service['time_entry'])))
         message = message.replace('%tl', unicode(kemas_extras.convert_float_to_hour_format(service['time_limit'])))
         message = message.replace('%tr', unicode(kemas_extras.convert_float_to_hour_format(service['time_register'])))
@@ -732,7 +745,7 @@ class kemas_config(osv.osv):
         message = message.replace('%em', unicode(collaborator['email']).lower())
         message = message.replace('%hs', unicode(preferences['url_system']))
         message = message.replace('%re', unicode(preferences['reply_email']))
-        message = message.replace('%se', unicode(preferences['system_email']))
+        message = message.replace('%se', unicode(preferences['system_email']).lower())
         message = message.replace('%sd', unicode(cr.dbname))
         message = message.replace('%ns', unicode(preferences['name_submitting']))
         message = message.replace('%na', unicode(preferences['name_system']))
@@ -5372,7 +5385,7 @@ class kemas_event(osv.osv):
         'priority': '2',
         'stage_id': 1,
         'color':6,
-        'collaborators_loaded': False,
+        'collaborators_loaded': True,
         'min_points':1,
         }
     def validate_date(self,cr,uid,ids):
