@@ -61,8 +61,8 @@
 	       		</group>
 		        <footer>
                    	<button string="Print report" name="call_report" type="object" class="oe_highlight" icon="STOCK_PRINT" confirm="Are you sure you print the report now?"/>
-         			<label string="or"/>
-        			<button string="Ok" class="oe_link" special="cancel"/>
+         			<label string="o"/>
+        			<button string="Cancelar" class="oe_link" special="cancel"/>
                	</footer>
 	       	</form>
      	</field>

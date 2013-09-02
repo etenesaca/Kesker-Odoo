@@ -2060,8 +2060,8 @@
 					       			</group>
 					       			<group colspan="4" col="4">
 										<separator string="Born Information" colspan="4"/>
-										<field name="born_country" colspan="2" required="1" string="Country" placeholder="Born Country"/>
-										<field name="born_state" colspan="2" required="1" placeholder="Born State" domain="[('country_id','=',born_country)]"/>
+										<field name="born_country" colspan="2" required="1" string="Country" placeholder="Born Country" options='{"no_open": True}'/>
+										<field name="born_state" colspan="2" required="1" placeholder="Born State" domain="[('country_id','=',born_country)]" options='{"no_open": True}'/>
 										<field name="born_city" colspan="2" required="1" ired="1" placeholder="Born City"/>
 							      	</group>
 							      	<group colspan="6" attrs="{'invisible':[('type','=','Others')]}" col="6">
@@ -2229,8 +2229,8 @@
 					       			</group>
 					       			<group colspan="4" col="4">
 										<separator string="Born Information" colspan="4"/>
-										<field name="born_country" colspan="2" required="1" string="Country" placeholder="Born Country"/>
-										<field name="born_state" colspan="2" required="1" placeholder="Born State" domain="[('country_id','=',born_country)]"/>
+										<field name="born_country" colspan="2" required="1" string="Country" placeholder="Born Country" options='{"no_open": True}'/>
+										<field name="born_state" colspan="2" required="1" placeholder="Born State" domain="[('country_id','=',born_country)]" options='{"no_open": True}'/>
 										<field name="born_city" colspan="2" required="1" ired="1" placeholder="Born City"/>
 							      	</group>
 							      	<group colspan="6" attrs="{'invisible':[('type','=','Others')]}" col="6">
