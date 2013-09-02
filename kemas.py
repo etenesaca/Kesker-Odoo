@@ -1539,9 +1539,9 @@ class kemas_activity(osv.osv):
                 if context['no_name_get']:   
                     name=(record.name)
                 else:
-                    name=(record.name + ' (' + str(record.area_id.name) + ')')
+                    name=(record.name + ' (' + unicode(record.area_id.name) + ')')
             else:
-                name=(record.name + ' (' + str(record.area_id.name) + ')')
+                name=(record.name + ' (' + unicode(record.area_id.name) + ')')
             res.append((record.id, name))
         return res
     
@@ -3510,7 +3510,7 @@ class kemas_task_assigned(osv.osv):
         records = self.read(cr,uid,ids,['id','task_id','collaborator_id'])
         res = []
         for record in records:
-            name = "%s - %s"%(record['task_id'][1],record['collaborator_id'][1])
+            name = "%s - %s"%(unicode(record['task_id'][1]),unicode(record['collaborator_id'][1]))
             res.append((record['id'], name))  
         return res
         
@@ -3810,7 +3810,7 @@ class kemas_history_points(osv.osv):
         'date':fields.datetime('Date',required=True,help="Date you performed the modification of the points."),
         'reg_uid':fields.many2one('res.users','Changed by', readonly=True, help='User who made ​​the points change.'),
         'collaborator_id':fields.many2one('kemas.collaborator','Collaborator',required=True, ondelete="cascade"),
-        'event_id':fields.many2one('kemas.event','Event', ondelete="cascade"),
+        'attendance_id':fields.many2one('kemas.attendance','Registro de asistencia', ondelete="cascade"),
         'type':fields.selection([
             ('init','Init'),
             ('increase','Increase'),
@@ -4338,10 +4338,10 @@ class kemas_event(osv.osv):
         for record in reads:   
             if record.state in ['on_going','draft']:
                 date = str(kemas_extras.convert_to_tz(record.date_start,tz))[:16]
-                name=(record.service_id.name + ' | ' + date + '-' + str(kemas_extras.convert_float_to_hour_format(record.service_id.time_end)))
+                name=(unicode(record.service_id.name) + ' | ' + date + '-' + str(kemas_extras.convert_float_to_hour_format(record.service_id.time_end)))
             elif record.state in ['creating']:
                 date = str(kemas_extras.convert_to_tz(record.date_start,tz))[:16]
-                name = name=(record.service_id.name + ' | ' + str(date))
+                name = name=(unicode(record.service_id.name) + ' | ' + str(date))
             else:                
                 date = str(kemas_extras.convert_to_tz(record.rm_date,tz))[:16]
                 name=(record.rm_service + ' | ' + str(date) + ' - ' + str(kemas_extras.convert_float_to_hour_format(record.rm_time_end)))
@@ -4964,13 +4964,15 @@ class kemas_event(osv.osv):
             vals['event_id'] = event_id
             vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
             vals['summary'] = summary
-            super(osv.osv,attendance_obj).create(cr, uid, vals)
+            attendance_id = super(osv.osv,attendance_obj).create(cr, uid, vals)
             
             collaborator = collaborator_obj.read(cr, uid, inasistente, ['points'])
             current_points = str(collaborator['points'])
             
             nombre_del_evento = unicode(event['service_id'][1])
-            description = "Inasistencia al Servicio:'" + nombre_del_evento + "' del " + kemas_extras.convert_date_format_long_str(event['date_start']) + " segun el registro de asistencia con codigo:'" + str(vals['code'])  + "'."
+            time_start = self.pool.get('kemas.service').read(cr,uid,event['service_id'][0],['time_start'])['time_start']
+            time_start = kemas_extras.convert_float_to_hour_format(time_start)
+            description = "Inasistencia al Servicio: '%s' del %s, programado para las %s."%(nombre_del_evento,kemas_extras.convert_date_format_long_str(event['date_start']),time_start)
             new_points = int(current_points) - int(event['not_attend_points'])
             change_points = str(event['not_attend_points'])
             
@@ -4983,11 +4985,12 @@ class kemas_event(osv.osv):
             history_points_obj.create(cr, uid, {
                 'date': str(time.strftime("%Y-%m-%d %H:%M:%S")), 
                 'event_id': event_id,
+                'attendance_id': attendance_id,
                 'collaborator_id': inasistente,
                 'type': 'decrease',
                 'description': description,
                 'summary': history_summary,
-                'points': change_points,
+                'points': abs(int(change_points)) * -1,
                 })
             #---Agregar un colaborador a la lista de notificationes (Inasistente)
             collaborator = {
@@ -5421,7 +5424,15 @@ class kemas_event(osv.osv):
         'stage_id': _read_group_stage_id
     }
     
-class kemas_attendance(osv.osv):       
+class kemas_attendance(osv.osv):    
+    def name_get(self, cr, uid, ids,context={}):
+        records = self.read(cr,uid,ids,['code','event_id'])
+        res = []
+        for record in records:
+            name = "%s | Evento: %s"%(record['code'],unicode(record['event_id'][1]))
+            res.append((record['id'], name))  
+        return res
+       
     def search(self, cr, uid, args, offset = 0, limit = None, order = None, context={}, count = False):
         collaborator_obj = self.pool.get('kemas.collaborator')
         user_obj = self.pool.get('res.users')
@@ -5555,15 +5566,19 @@ class kemas_attendance(osv.osv):
         history_type = 'increase'
         operator = '+'
         
-        description = "Asistencia Puntual al Servicio:'" + event['service_id'][1] + "' del " + kemas_extras.convert_date_format_long_str(event['date_start']) + " segun el registro de asistencia con codigo:'" + str(vals['code'])  + "'."
+        nombre_del_evento = unicode(event['service_id'][1])
+        time_start = self.pool.get('kemas.service').read(cr,uid,event['service_id'][0],['time_start'])['time_start']
+        time_start = kemas_extras.convert_float_to_hour_format(time_start)
+        description = "Asistencia Puntual al Servicio: '%s' del %s, programado para las %s."%(nombre_del_evento,kemas_extras.convert_date_format_long_str(event['date_start']),time_start)
+                    
         new_points = int(current_points) + int(event['attend_on_time_points'])
-        change_points = str(event['attend_on_time_points'])
+        change_points = abs(int(event['attend_on_time_points']))
         if type != 'just_time':
             history_type = 'decrease'
             operator = '-'
-            description = unicode("""Asistencia Inpuntual,%s minutos tarde al Servicio:'%s' del %s según el registro de asistencia con código:%s'.""", 'utf-8')%(tiempo_de_atraso, unicode(event['service_id'][1]), kemas_extras.convert_date_format_long_str(event['date_start']), unicode(vals['code']))
+            description = unicode("""Asistencia Inpuntual,%s minutos tarde al Servicio:'%s' del %s.""", 'utf-8')%(tiempo_de_atraso, unicode(event['service_id'][1]), kemas_extras.convert_date_format_long_str(event['date_start']))
             new_points = int(current_points) - int(event['late_points'])
-            change_points = str(event['late_points'])
+            change_points = abs(int(event['late_points'])) * -1
             
         #---Escribir puntaje-----
         current_level_id = collaborator_obj.get_corresponding_level(cr, uid, int(new_points))
@@ -5571,18 +5586,21 @@ class kemas_attendance(osv.osv):
                             'points':int(new_points),
                             'level_id':current_level_id,
                             })
+        
+        res_id = super(osv.osv,self).create(cr, uid, vals, *args, **kwargs)
         #------------------------
         history_summary = str(operator) + str(change_points) + " Puntos. Antes " + str(current_points) + " ahora " + str(new_points) + " Puntos."
         history_points_obj.create(cr, uid, {
             'date': str(time.strftime("%Y-%m-%d %H:%M:%S")), 
             'event_id': event['id'],
             'collaborator_id': vals['collaborator_id'],
+            'attendance_id' : res_id,
             'type': history_type,
             'description': description,
             'summary': history_summary,
             'points': change_points,
-            })
-        return super(osv.osv,self).create(cr, uid, vals, *args, **kwargs)
+            })        
+        return res_id
     
     _name='kemas.attendance'
     _order = 'date DESC'
@@ -5661,7 +5679,7 @@ class kemas_event_replacement(osv.osv):
         records = self.read(cr,uid,ids,['id','collaborator_id','collaborator_replacement_id'])
         res=[]        
         for record in records:
-            collaborator = record['collaborator_id'][1]
+            collaborator = unicode(record['collaborator_id'][1])
             if context.get('replacemente_long_name', False):
                 replacement = record['collaborator_replacement_id'][1]
                 name = "%s %s %s"%(collaborator,_('by'),replacement)

@@ -2742,9 +2742,9 @@
 	       			<group>
 		           		<field name="collaborator_id"/>
 						<field name="description"/>
-						<field name="event_id" attrs="{'invisible':[('event_id','=',False)]}"/>		 
-		           		<field name="summary"/>
+                        <field name="attendance_id" attrs="{'invisible':[('attendance_id','=',False)]}"/>
 		           		<field name="points"/>
+                        <field name="summary"/>
 		           		<field name="date"/>
 		           		<field name="reg_uid"/>
 	       			</group>
@@ -2766,9 +2766,9 @@
 	       		<sheet>
 	       			<group>
 						<field name="description"/>			 
-		           		<field name="summary"/>
-		           		<field name="event_id" attrs="{'invisible':[('event_id','=',False)]}"/>
-		           		<field name="points"/>
+		           		<field name="attendance_id" attrs="{'invisible':[('attendance_id','=',False)]}"/>
+                        <field name="points"/>
+                        <field name="summary"/>
 		           		<field name="date"/>
 		           		<field name="reg_uid"/>
 	       			</group>
@@ -2976,34 +2976,30 @@
     </record>
     <!--____________________________________________________Vista de Formulario-->
     <record model="ir.ui.view" id="kemas_place_form_view">
-    	<field name="name">kemas.place.form</field>
-    	<field name="model">kemas.place</field>
-    	<field name="type">form</field>
-    	<field name="priority" eval="1"/>
-     	<field name="arch" type="xml">
-     		<form string="Place" version="7.0">
-	       		<sheet string="Level">
-	       			<field name="photo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' on_change="on_change_photo(photo)"/>
-	       			<div class="oe_title">
-	       				<div class="oe_edit_only">
-                            <label for="name"/>
-                        </div>
-                        <h1>
-                            <field name="name" default_focus="1" placeholder="Name" />
-                        </h1>
-	       			</div>
-	       			<group colspan="4" expand="1">
-	       				<field name="is_active" colspan="4"/>		       		
-		          		<notebook colspan="4">
-					    	<page string="Address">	
-								<field name="address" colspan="4" nolabel="1" placeholder="The exact direction of the place.."/>			 
-						    </page>
-					  	</notebook>
-				  	</group>
-	       		</sheet>
-	       	</form>
-     	</field>
-     </record>
+      <field name="name">kemas.place.form</field>
+      <field name="model">kemas.place</field>
+      <field name="type">form</field>
+      <field name="priority" eval="1"/>
+      <field name="arch" type="xml">
+        <form string="Place" version="7.0">
+	      <sheet string="Level">
+	        <field name="photo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' on_change="on_change_photo(photo)"/>
+            <div class="oe_title">
+       	      <div class="oe_edit_only">
+                <label for="name"/>
+              </div>
+              <h1>
+                <field name="name" default_focus="1" placeholder="Name" />
+              </h1>
+	        </div>
+            <group>
+              <field name="is_active"/>
+              <field name="address" placeholder="The exact direction of the place.."/>
+            </group>
+	      </sheet>
+	    </form>
+      </field>
+   </record>
      <!--____________________________________________________Vista de Arbol-->
      <record model="ir.ui.view" id="kemas_place_tree_view">
     	<field name="name">kemas.place.tree</field>
