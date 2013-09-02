@@ -2151,7 +2151,7 @@
 	       			<field name="state" widget="statusbar" statusbar_visible="Active" statusbar_colors='{"Active":"green","Inactive":"Orange","Locked":"Red","Suspended":"Yellow"}' readonly="1"/>
 	       		</header>
 	       		<sheet string="Collaborator">
-	       			<div align="center" class="box_tip">
+	       			<div align="center" class="box_tip oe_edit_only">
 		       			<img src="/web/static/src/img/icons/gtk-info.png"/>
 	       				<i>
 	       					<label string="If you decide to change the data points out that the information should be entered responsibly."/>

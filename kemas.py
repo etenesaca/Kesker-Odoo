@@ -2909,18 +2909,19 @@ class kemas_collaborator(osv.osv):
         res = super(osv.osv,self).write(cr, uid, ids, vals, context)
         
         #Escribir una linea en la bitacora del Colaborador
-        modify = ''
-        func_obj = self.pool.get('kemas.func')
-        for field in vals.keys():
-            field = func_obj.get_translate(cr, uid, field)[0]
-            field = func_obj.get_translate(cr, uid, field)[0]
-            modify += field + ', '
-        vals_logbook = {
-                'collaborator_id' : collaborator['id'],
-                'description' : 'Modificacion de Datos: %s'%modify,
-                'type' : 'low_importance',
-                }
-        self.pool.get('kemas.collaborator.logbook').create(cr,uid,vals_logbook)
+        if not vals is None and not vals.has_key('level_id') and not vals.has_key('points') and vals.keys().__len__() != 2: 
+            modify = ''
+            func_obj = self.pool.get('kemas.func')
+            for field in vals.keys():
+                field = func_obj.get_translate(cr, uid, field)[0]
+                field = func_obj.get_translate(cr, uid, field)[0]
+                modify += field + ', '
+            vals_logbook = {
+                    'collaborator_id' : collaborator['id'],
+                    'description' : 'Modificacion de Datos: %s'%modify,
+                    'type' : 'low_importance',
+                    }
+            self.pool.get('kemas.collaborator.logbook').create(cr,uid,vals_logbook)
         #----Cambiar el nombre al usuario----------------------------------------------------------------
         collaborator = self.read(cr,uid,ids[0],['born_country','email','born_state','born_city','photo','user_id'])
         if not collaborator['user_id']:
