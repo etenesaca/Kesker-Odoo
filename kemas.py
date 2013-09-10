@@ -5706,8 +5706,5 @@ class kemas_event_replacement(osv.osv):
         'description': fields.text('Description'),
         }
     
-    
-    
-    
-    
+#Codigo de Prueba
 # vim:expandtab:smartind:tabstop=4:softtabstop=4:shiftwidth=4:
