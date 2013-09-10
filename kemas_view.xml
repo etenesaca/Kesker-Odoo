@@ -5103,7 +5103,7 @@
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">kemas.event.collaborator.line</field>
       <field name="context">{'search_filter': 1}</field>
-      <field name="view_mode">graph</field>
+      <field name="view_mode">tree,graph</field>
       <field name="help">Here you can check the times that collaborators are assigned to events.</field>
     </record>
     <!--____________________________________________________Attendance-->
