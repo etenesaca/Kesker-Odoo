@@ -1,3 +1,7 @@
+.openerp .without_border > img {
+  border: none;
+}
+
 .box_plain {
    border: 1px solid #000000;
 	-moz-border-radius: 7px;
