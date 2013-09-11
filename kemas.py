@@ -1532,10 +1532,10 @@ Fecha de Ingreso al ministerio: %jd
         'qr_width':150,
         'qr_height':150,
         #---Bar Code----------------------------------------------------------------------------
-        'bc_text':"%id",
+        'bc_text':"%id + 3456",
         'bc_text':"%id",
         'bc_type':"Code128",
-        'bc_width':150,
+        'bc_width':170,
         'bc_height':50,
     }
     _sql_constraints= [
