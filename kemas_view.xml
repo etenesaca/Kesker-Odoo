@@ -530,10 +530,9 @@
 				      		<group>
 		                    	<field name="qr_text"/>
 		                    </group> 
-							<group colspan="4" string="Image size">
-								<field name="qr_width" colspan="2"/>
-								<newline/>
-								<field name="qr_height" colspan="2"/>
+							<group string="Image size">
+								<field name="qr_width"/>
+								<field name="qr_height"/>
 							</group>
 					    </page>
                         <page string="Código de barras del colaborador">
@@ -548,10 +547,10 @@
                           <group>
                             <field name="bc_text" string="Número codigo de barras"/>
                           </group> 
-                          <group colspan="4" string="Tamaño de imagen">
-                            <field name="bc_width" colspan="2"/>
-                            <newline/>
-                            <field name="bc_height" colspan="2"/>
+                          <group string="Tamaño de imagen" colspan="4" col="10">
+                            <field name="bc_type" colspan="4"/><group colspan="6"/>
+                            <field name="bc_width" colspan="4"/><group colspan="6"/>
+                            <field name="bc_height" colspan="4"/><group colspan="6"/>
                           </group>
                         </page>
 					    <page string="Reports logo">

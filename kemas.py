@@ -1083,6 +1083,22 @@ class kemas_config(osv.osv):
         'qr_width':fields.integer('Width', required=True),
         'qr_height':fields.integer('height',required=True),
         #---Bar Code - Collaborator Form-------------------
+        'bc_type':fields.selection([
+            ('Standard39','Standard39'),
+            ('QR','QR'),
+            ('EAN13','EAN13'),
+            ('FIM','FIM'),
+            ('UPCA','UPCA'),
+            ('EAN8','EAN8'),
+            ('Extended93','Extended93'),
+            ('USPS_4State','USPS_4State'),
+            ('Codabar','Codabar'),
+            ('MSI','POSTNET'),
+            ('Code11','Code11'),
+            ('Standard93','Standard93'),
+            ('I2of5','I2of5'),
+            ('Code128','Code128'),
+             ],    'Typo de Codigo de Barras', required=True),
         'bc_text': fields.text('Numero del codigo de barras', required=True),
         'bc_width':fields.integer('Ancho', required=True),
         'bc_height':fields.integer('Alto',required=True),
@@ -1516,8 +1532,9 @@ Fecha de Ingreso al ministerio: %jd
         'qr_height':150,
         #---Bar Code----------------------------------------------------------------------------
         'bc_text':"%id",
-        'bc_width':80,
-        'bc_height':250,
+        'bc_type':"Standard39",
+        'bc_width':150,
+        'bc_height':50,
     }
     _sql_constraints= [
         ('config_name', 'unique (name_system)', 'This system name already exist!'),
@@ -3164,13 +3181,14 @@ class kemas_collaborator(osv.osv):
     def _get_barcode_image(self, cr, uid, ids, name, arg, context={}):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, ['bc_text','bc_width','bc_height'])
+        preferences = config_obj.read(cr, uid, config_id, ['bc_text','bc_width','bc_height','bc_type'])
         width = preferences['bc_width']
         height = preferences['bc_height']
+        image_type = preferences['bc_type']
         
         def get_barcode_image(collaborator_id):
-            value = eval(unicode(preferences['qr_text']).replace('%id', collaborator_id))
-            return kemas_extras.get_image_code(value, width, height, False, "BR")
+            value = eval(preferences['bc_text'].replace('%id', unicode(collaborator_id)))
+            return kemas_extras.get_image_code(value, width, height, False, image_type)
 
         result = {}
         for collaborator_id in ids:
