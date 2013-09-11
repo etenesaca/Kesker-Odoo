@@ -1514,6 +1514,10 @@ Fecha de Ingreso al ministerio: %jd
         """,
         'qr_width':150,
         'qr_height':150,
+        #---Bar Code----------------------------------------------------------------------------
+        'bc_text':"%id",
+        'bc_width':80,
+        'bc_height':250,
     }
     _sql_constraints= [
         ('config_name', 'unique (name_system)', 'This system name already exist!'),

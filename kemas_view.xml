@@ -536,6 +536,24 @@
 								<field name="qr_height" colspan="2"/>
 							</group>
 					    </page>
+                        <page string="Código de barras del colaborador">
+                        <separator string="Legend of variables you can use" colspan="4"/>
+                              <table border="0" width="100%%" colspan="4">
+                              <tr>
+                                <td width="5%%"><b>%%id</b></td><td width="28.33%%">Número del colaborador</td>
+                                <td width="5%%"><b></b></td><td width="28.33%%"></td>
+                                <td width="5%%"><b></b></td><td width="28.33%%"></td>
+                              </tr>
+                            </table>
+                          <group>
+                            <field name="bc_text" string="Número codigo de barras"/>
+                          </group> 
+                          <group colspan="4" string="Tamaño de imagen">
+                            <field name="bc_width" colspan="2"/>
+                            <newline/>
+                            <field name="bc_height" colspan="2"/>
+                          </group>
+                        </page>
 					    <page string="Reports logo">
 						    <group colspan="4" string="Reports logo">
 								<field name="logo" align="10.10" class="oe_left oe_avatar" widget='image' options='{"size": [180, 180]}' nolabel="1" required='True'/>
