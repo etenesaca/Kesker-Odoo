@@ -2579,6 +2579,7 @@
           		<field name="born_city" invisible="1"/>
           		<field name="state" invisible="1"/>
           		<field name="type" invisible="1"/>
+                <field name="team_id" invisible="1"/>
          	</tree>
      	</field>
   	</record>
@@ -2645,9 +2646,9 @@
        			<separator orientation="vertical"/>
 	   			<field name="name" default_focus="1"/>
 	   			<field name="code"/>
-	   			<field name="level_id" widget="selection"/>
-	   			<field name="team_id" widget="selection"/>
-          		<group expand="0" string="Group by...">
+	   			<field name="level_id"/>
+	   			<field name="team_id"/>
+          		<group string="Group by...">
             		<filter string="Genre" icon="terp-face-plain" domain="[]" context="{'group_by':'genre'}"/>
             		<filter string="Marital Status" icon="terp-partner" domain="[]" context="{'group_by':'marital_status'}"/>
             		<separator orientation="vertical"/>
@@ -2673,9 +2674,9 @@
 			<search string="search collaborator">
     			<field name="name" default_focus="1"/>
     			<field name="code"/>
-    			<field name="level_id" widget="selection"/>
-    			<field name="team_id" widget="selection"/>
-          		<group expand="0" string="Group by...">
+    			<field name="level_id"/>
+    			<field name="team_id"/>
+          		<group string="Group by...">
             		<filter string="Genre" icon="terp-personal" domain="[]" context="{'group_by':'genre'}"/>
             		<filter string="Marital Status" icon="terp-partner" domain="[]" context="{'group_by':'marital_status'}"/>
             		<separator orientation="vertical"/>
