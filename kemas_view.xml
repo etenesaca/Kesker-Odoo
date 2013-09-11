@@ -3544,7 +3544,7 @@
 		       		</group>
 		       		<separator string="File"/>
 		       		<group colspan="4" col="6">
-		       			<field name="type" colspan="2"/><group colspan="4"/>
+		       			<field name="type" colspan="2" class="oe_edit_only"/><group colspan="4" class="oe_edit_only"/>
 		       			<field name="url" widget="url" attrs="{'invisible':['|',('type','=','binary'),('type','=',False)],'required':[('type','=','url')]}" colspan="6" placeholder="URL de la dirección donde esta almacenado este archivo..."/>
 		       			<field name="file" filename="file_name" attrs="{'invisible':['|',('type','=','url'),('type','=',False)],'required':[('type','=','binary')]}" colspan="6"/>
 		       		</group>

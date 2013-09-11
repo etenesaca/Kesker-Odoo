@@ -3272,7 +3272,7 @@ class kemas_collaborator(osv.osv):
         'code' : fields.char('Code',size=32,help="Code that is assigned to each collaborator"),
         'photo': fields.binary('Photo',help='The photo of the person'),
         'qr_code':fields.function(_get_QR_image, type='binary', string='QR code data'),
-        'bar_code':fields.function(_get_bar_code_image, type='binary', string='Bar Code data'),    
+        'bar_code':fields.function(_get_barcode_image, type='binary', string='Bar Code data'),    
         'name' : fields.char('Name',size=128,required=True,help="Full names of collaborator. Example: Rios Abad Juan David"),
         'nick_name' : fields.char('Nick name',size=32,required=True,help="Name you want to use the collaborator."),
         'name_with_nick_name':fields.function(_get_nick_name, type='char', string='Name'),
