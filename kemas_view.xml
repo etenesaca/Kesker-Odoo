@@ -549,6 +549,7 @@
                           </group> 
                           <group string="Tamaño de imagen" colspan="4" col="10">
                             <field name="bc_type" colspan="4"/><group colspan="6"/>
+                            <field name="bc_hr_form" colspan="4" string="¿Legible para lectura?"/><group colspan="6"/>
                             <field name="bc_width" colspan="4"/><group colspan="6"/>
                             <field name="bc_height" colspan="4"/><group colspan="6"/>
                           </group>
@@ -5757,6 +5758,19 @@
     ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::LANZADORES:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     -->	
+    <!-- 
+    ====================
+    VER CODIGO DE BARRAS
+    ====================
+    -->    
+    <act_window name="Ver Código de Barras"
+      res_model="kemas.show.barcode.wizard"
+      src_model="kemas.collaborator"
+      view_mode="form"
+      target="new"
+      key2="client_action_multi"
+      context="{'collaborator_id':context['active_id']}"
+      id="kemas_show_bar_code_act_window"/>
     <!-- 
     ====================
     REEMPLAZAR COLABORADOR

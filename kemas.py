@@ -1102,6 +1102,7 @@ class kemas_config(osv.osv):
         'bc_text': fields.text('Numero del codigo de barras', required=True),
         'bc_width':fields.integer('Ancho', required=True),
         'bc_height':fields.integer('Alto',required=True),
+        'bc_hr_form':fields.boolean("Human Readable",help="Legible para lectura?"),
         }
     def _get_logo(self, cr, uid, context={}):
         photo_path = addons.get_module_resource('kemas','images','logo.png')
@@ -1532,7 +1533,8 @@ Fecha de Ingreso al ministerio: %jd
         'qr_height':150,
         #---Bar Code----------------------------------------------------------------------------
         'bc_text':"%id",
-        'bc_type':"Standard39",
+        'bc_text':"%id",
+        'bc_type':"Code128",
         'bc_width':150,
         'bc_height':50,
     }
@@ -3181,14 +3183,15 @@ class kemas_collaborator(osv.osv):
     def _get_barcode_image(self, cr, uid, ids, name, arg, context={}):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, ['bc_text','bc_width','bc_height','bc_type'])
-        width = preferences['bc_width']
+        preferences = config_obj.read(cr, uid, config_id, ['bc_text','bc_width','bc_height','bc_type','bc_hr_form'])
+        width = preferences['bc_width']        
         height = preferences['bc_height']
         image_type = preferences['bc_type']
+        hr_form = preferences['bc_hr_form']
         
         def get_barcode_image(collaborator_id):
             value = eval(preferences['bc_text'].replace('%id', unicode(collaborator_id)))
-            return kemas_extras.get_image_code(value, width, height, False, image_type)
+            return kemas_extras.get_image_code(value, width, height, hr_form, image_type)
 
         result = {}
         for collaborator_id in ids:

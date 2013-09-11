@@ -34,6 +34,7 @@ import kemas_collaborator_assing_code_wizard
 import kemas_collaborator_assing_user_account_wizard
 import kemas_collaborator_notify_incorporation_wizard
 import kemas_replace_collaborator_wizard
+import kemas_show_barcode_wizard
 #Reports
 import kemas_report_collaborators_list_wizard
 import kemas_report_events_list_wizard
