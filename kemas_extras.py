@@ -586,7 +586,7 @@ def timeout(func, args=(), kwargs={}, timeout_duration=10, default=None):
         return it.result
 
 def get_image_code(value, width, height, hr=False, code='QR'):
-    """ genrating image for barcode """
+    """ generating image for barcode """
     options = {}
     if width:options['width'] = width
     if height:options['height'] = height

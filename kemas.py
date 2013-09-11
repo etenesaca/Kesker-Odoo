@@ -1082,6 +1082,10 @@ class kemas_config(osv.osv):
         'qr_text': fields.text('QR code text', required=True),
         'qr_width':fields.integer('Width', required=True),
         'qr_height':fields.integer('height',required=True),
+        #---Bar Code - Collaborator Form-------------------
+        'bc_text': fields.text('Numero del codigo de barras', required=True),
+        'bc_width':fields.integer('Ancho', required=True),
+        'bc_height':fields.integer('Alto',required=True),
         }
     def _get_logo(self, cr, uid, context={}):
         photo_path = addons.get_module_resource('kemas','images','logo.png')
@@ -3153,13 +3157,30 @@ class kemas_collaborator(osv.osv):
         message = message.replace('%dt', unicode(now.strftime("%Y-%m-%d %H:%M:%S")))
         return unicode(message)
     
+    def _get_barcode_image(self, cr, uid, ids, name, arg, context={}):
+        config_obj = self.pool.get('kemas.config')
+        config_id = config_obj.get_correct_config(cr, uid)
+        preferences = config_obj.read(cr, uid, config_id, ['bc_text','bc_width','bc_height'])
+        width = preferences['bc_width']
+        height = preferences['bc_height']
+        
+        def get_barcode_image(collaborator_id):
+            value = eval(unicode(preferences['qr_text']).replace('%id', collaborator_id))
+            return kemas_extras.get_image_code(value, width, height, False, "BR")
+
+        result = {}
+        for collaborator_id in ids:
+            result[collaborator_id] = get_barcode_image(collaborator_id)
+        return result
+    
     def _get_QR_image(self, cr, uid, ids, name, arg, context={}):
+        config_obj = self.pool.get('kemas.config')
+        config_id = config_obj.get_correct_config(cr, uid)
+        preferences = config_obj.read(cr, uid, config_id, ['qr_text','qr_width','qr_height'])
+        width = preferences['qr_width']
+        height = preferences['qr_height']
+        
         def get_QR_image(collaborator_id):
-            config_obj = self.pool.get('kemas.config')
-            config_id = config_obj.get_correct_config(cr, uid)
-            preferences = config_obj.read(cr, uid, config_id, ['qr_text','qr_width','qr_height'])
-            width = preferences['qr_width']
-            height = preferences['qr_height']
             value = self.build_QR_text(cr, uid, preferences['qr_text'], collaborator_id)
             return kemas_extras.get_image_code(value, width, height, False, "QR")
 
@@ -3250,7 +3271,8 @@ class kemas_collaborator(osv.osv):
         'mailing':fields.function(mailing, type='boolean', string='Mailing'),
         'code' : fields.char('Code',size=32,help="Code that is assigned to each collaborator"),
         'photo': fields.binary('Photo',help='The photo of the person'),
-        'qr_code':fields.function(_get_QR_image, type='binary', string='QR code data'),    
+        'qr_code':fields.function(_get_QR_image, type='binary', string='QR code data'),
+        'bar_code':fields.function(_get_bar_code_image, type='binary', string='Bar Code data'),    
         'name' : fields.char('Name',size=128,required=True,help="Full names of collaborator. Example: Rios Abad Juan David"),
         'nick_name' : fields.char('Nick name',size=32,required=True,help="Name you want to use the collaborator."),
         'name_with_nick_name':fields.function(_get_nick_name, type='char', string='Name'),
