@@ -1005,6 +1005,7 @@ class kemas_config(osv.osv):
         'use_attachments_in_im' : fields.boolean('Use attachments in IM?', required=True, help='Do you want that the attachments to emails are also sent to the IM messages?'),
         'use_subject_in_im' : fields.boolean('Use Subject in IM?', required=True, help='Do you want to include the matter in IM?'),
         'number_replacements': fields.integer('Number replacements'),
+        'size_collaborator_gravatar': fields.integer('Avatar size', required=True),
         #---Images and logos------------------------
         'logo':fields.binary('Logo', help='The reports Logo.'),
         'system_logo':fields.binary('System Logo', help='The System Logo.'),
@@ -1537,6 +1538,7 @@ Fecha de Ingreso al ministerio: %jd
         'bc_type':"Code128",
         'bc_width':170,
         'bc_height':50,
+        'size_collaborator_gravatar':90,
     }
     _sql_constraints= [
         ('config_name', 'unique (name_system)', 'This system name already exist!'),
@@ -3253,6 +3255,26 @@ class kemas_collaborator(osv.osv):
             result[event_id] = mailing
         return result
     
+    def get_avatar(self,cr,uid,email):
+        import urllib, hashlib
+        
+        preferences = self.pool.get('kemas.config').read(cr, uid, self.pool.get('kemas.config').get_correct_config(cr, uid), ['size_collaborator_gravatar'])
+        default = "http://www.example.com/default.jpg"
+        gravatar_url = "http://www.gravatar.com/avatar/ " + hashlib.md5(email.lower()).hexdigest() + "?"
+        gravatar_url += urllib.urlencode({'d':default, 's':str(preferences['size_collaborator_gravatar'])})
+        gravatar_url = unicode(gravatar_url).replace(' ', '')
+        
+        import urllib2
+        source = urllib2.urlopen(gravatar_url).read()
+        avatar = base64.b64encode(source)
+        return avatar
+    
+    def reload_avatar(self,cr,uid,ids,context={}):
+        email = super(osv.osv, self).read(cr,uid,ids[0],['email'])['email']
+        avatar = self.get_avatar(cr,uid,email)
+        self.write(cr, uid, ids, {'photo' : avatar}, context)
+        return True
+    
     def _replacements(self, cr, uid, ids, name, arg, context={}):
         from datetime import datetime
         #Calcular el numero suspensiones disponibles en este mes 
@@ -3296,6 +3318,7 @@ class kemas_collaborator(osv.osv):
         'mailing':fields.function(mailing, type='boolean', string='Mailing'),
         'code' : fields.char('Code',size=32,help="Code that is assigned to each collaborator"),
         'photo': fields.binary('Photo',help='The photo of the person'),
+        'use_gravatar':fields.boolean('Cargar foto desde gravatar'),
         'qr_code':fields.function(_get_QR_image, type='binary', string='QR code data'),
         'bar_code':fields.function(_get_barcode_image, type='binary', string='Bar Code data'),    
         'name' : fields.char('Name',size=128,required=True,help="Full names of collaborator. Example: Rios Abad Juan David"),

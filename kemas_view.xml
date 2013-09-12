@@ -563,6 +563,8 @@
 				    </page>
 				    <page string="Collaborators">	
 				    	<group colspan="4" col="6">
+                            <field name="size_collaborator_gravatar" string="Tamaño del avatar" placeholder="tamaño del Avatar" help="Tamaño del avatar que se cargar en el caso de que el colaborador elija cargar su foto desde gravatar.com con el correo ingresado."/>
+                            <newline/>
 					    	<field name="default_points" colspan="2"/>
 					    	<field name="number_replacements" colspan="2"/>
 							<group colspan="2"/>
@@ -2073,7 +2075,10 @@
 						       			<field name="mobile" colspan="2" attrs="{'required':[('telef1','=',False)]}" placeholder="ex: 0985146325"/><group colspan="4"/>
 						       			<field name="telef1" colspan="2" attrs="{'required':[('mobile','=',False),('telef1','=',False)]}" placeholder="ex: 072561374"/>
 					       				<field name="telef2" colspan="2" placeholder="ex: 072561374"/><group colspan="4"/><group colspan="2"/>
-					       				<field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..."/><group colspan="2"/>
+                                        <field name="use_gravatar" help="¿Usar foto desde Gravatar?" colspan="2"/>
+                                        <button name="reload_avatar" icon="STOCK_REFRESH" type="object" string="Recargar Avatar" colspan="2" attrs="{'invisible':[('use_gravatar','=',False)]}" class="oe_link oe_edit_only"/>
+                                        <newline/>
+                                        <field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..."/><group colspan="2"/>
 						       			<field name="im_account" colspan="4" widget="email" on_change="on_change_im_account(im_account)" placeholder="Puedes usar una cuenta de facebook: jperez@facebook.com"/><group colspan="2"/>					       				
 					       			</group>
 					       			<group colspan="4" col="4">
@@ -2242,6 +2247,9 @@
 						       			<field name="mobile" colspan="2" attrs="{'required':[('telef1','=',False)]}" placeholder="ex: 0985146325"/><group colspan="4"/>
 						       			<field name="telef1" colspan="2" attrs="{'required':[('mobile','=',False),('telef1','=',False)]}" placeholder="ex: 072561374"/>
 					       				<field name="telef2" colspan="2" placeholder="ex: 072561374"/><group colspan="4"/><group colspan="2"/>
+                                        <field name="use_gravatar" help="¿Usar foto desde Gravatar?" colspan="2"/>
+                                        <button name="reload_avatar" icon="STOCK_REFRESH" type="object" string="Recargar Avatar" colspan="2" attrs="{'invisible':[('use_gravatar','=',False)]}" class="oe_link oe_edit_only"/>
+                                        <newline/>
                                         <field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..."/><group colspan="2"/>
 						       			<field name="im_account" colspan="4" widget="email" on_change="on_change_im_account(im_account)" placeholder="Puedes usar una cuenta de facebook: jperez@facebook.com"/><group colspan="2"/>					       				
 					       			</group>
