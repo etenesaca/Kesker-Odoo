@@ -31,7 +31,7 @@ class kemas_show_barcode_wizard(osv.osv_memory):
             <div align="center">
                 <field name="barcode" widget="image" readonly="1" class="without_border"/>
                 <br/><br/>
-                <field name="barcode_download" filename="barcode_file_name" readonly="1"/>
+                <field name="barcode_download" readonly="1" filename="barcode_file_name"/>
             </div>
             <footer>
                 <button string="Cerrar" class="oe_link" special="cancel"/>
