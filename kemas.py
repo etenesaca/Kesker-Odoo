@@ -799,6 +799,7 @@ class kemas_config(osv.osv):
             activities+=unicode(u'''</ul>''')
         message = message.replace('%ac', unicode(activities))
         
+        message = kemas_extras.cambiar_meses_a_espaniol(message)
         return message
  
     def send_email_event_completed(self,cr,uid, service_id, event_id, collaborator_id, type_attend,context={}):        
