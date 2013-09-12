@@ -3944,13 +3944,21 @@
         <field name="type">tree</field>
         <field name="priority" eval="1"/>
         <field name="arch" type="xml">
-     		<tree string="" colors="blue:replacement_id != False">
-          		<field name="collaborator_id" domain="[
+     		<tree string="" colors="blue:replacement_id != False" editable="bottom">
+          		
+                <field name="collaborator_id" domain="[
 										  			  ('state','=','Active'),
 										  			  ('type','=','Collaborator'),
 										  			  ]"/>
-				<field name="activity_ids"/>
-				<field name="replacement_id"/>
+                <field name="activity_ids"  context="{
+                                                      'event_collaborator_line_id': active_id,
+                                                      'collaborator_id':collaborator_id,
+                                                    }" string="Actividades asignadas para este evento" placeholder="Agrega aqui las actividades">
+                  <tree>
+                    <field name="name"/>
+                  </tree>
+                </field>
+                <field name="replacement_id" string="Reemplazado" readonly="1"/>
          	</tree>
      	</field>
   	</record>
