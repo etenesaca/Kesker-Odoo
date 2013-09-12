@@ -7,7 +7,7 @@
     ====================
     -->
     <record id="close_past_events_cron" model="ir.cron">
-      <field name="name">kemas - Close Past Events</field>
+      <field name="name">kemas - Cerrar eventos pasados</field>
       <field name="user_id">1</field>
       <field name="interval_type">hours</field>
       <field name="interval_number">1</field>
@@ -22,7 +22,7 @@
     ====================
     -->
     <record id="update_collaborator_level_cron" model="ir.cron">
-      <field name="name">Kemas - Update collaborator's level</field>
+      <field name="name">Kemas - Actualizar nivel de los calaboradores</field>
       <field name="user_id">1</field>
       <field name="interval_type">days</field>
       <field name="interval_number">1</field>
@@ -37,7 +37,7 @@
     ====================
     -->
     <record id="send_join_notications_cron" model="ir.cron">
-      <field name="name">Kemas - Send join notifications</field>
+      <field name="name">Kemas - Enviar mensajes de bienvenida pendientes</field>
       <field name="user_id">1</field>
       <field name="interval_type">days</field>
       <field name="interval_number">1</field>
@@ -52,13 +52,28 @@
     ====================
     -->
     <record id="lift_suspensions_expired_cron" model="ir.cron">
-      <field name="name">Kemas - Lift suspensions expired</field>
+      <field name="name">Kemas - Levantar suspensiones terminadas</field>
       <field name="user_id">1</field>
       <field name="interval_type">hours</field>
       <field name="interval_number">1</field>
       <field name="numbercall">-1</field>
       <field name="model">kemas.suspension</field>
       <field name="function">lift_suspensions_expired</field>
+      <field name="args">()</field>
+    </record>
+    <!-- 
+    ====================
+    ACTUALIZAR AVATARS DE LOS COLABORADORES
+    ====================
+    -->
+    <record id="update_avatars_cron" model="ir.cron">
+      <field name="name">Kemas - Actualizar Avatars</field>
+      <field name="user_id">1</field>
+      <field name="interval_type">days</field>
+      <field name="interval_number">1</field>
+      <field name="numbercall">-1</field>
+      <field name="model">kemas.collaborator</field>
+      <field name="function">update_avatars</field>
       <field name="args">()</field>
     </record>
   </data>

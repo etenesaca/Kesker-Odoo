@@ -2937,20 +2937,21 @@ class kemas_collaborator(osv.osv):
             vals['level_id'] =self.get_corresponding_level(cr, uid, vals['points'])
         res = super(osv.osv,self).write(cr, uid, ids, vals, context)
         
-        #Escribir una linea en la bitacora del Colaborador
-        if not vals is None and not vals.has_key('level_id') and not vals.has_key('points') and vals.keys().__len__() != 2: 
-            modify = ''
-            func_obj = self.pool.get('kemas.func')
-            for field in vals.keys():
-                field = func_obj.get_translate(cr, uid, field)[0]
-                field = func_obj.get_translate(cr, uid, field)[0]
-                modify += field + ', '
-            vals_logbook = {
-                    'collaborator_id' : collaborator['id'],
-                    'description' : 'Modificacion de Datos: %s'%modify,
-                    'type' : 'low_importance',
-                    }
-            self.pool.get('kemas.collaborator.logbook').create(cr,uid,vals_logbook)
+        if not context is None and context and type(context).__name__=="dict" and not context.get('on_update_logbook',False):
+            #Escribir una linea en la bitacora del Colaborador
+            if not vals is None and not vals.has_key('level_id') and not vals.has_key('points') and vals.keys().__len__() != 2: 
+                modify = ''
+                func_obj = self.pool.get('kemas.func')
+                for field in vals.keys():
+                    field = func_obj.get_translate(cr, uid, field)[0]
+                    field = func_obj.get_translate(cr, uid, field)[0]
+                    modify += field + ', '
+                vals_logbook = {
+                        'collaborator_id' : collaborator['id'],
+                        'description' : 'Modificacion de Datos: %s'%modify,
+                        'type' : 'low_importance',
+                        }
+                self.pool.get('kemas.collaborator.logbook').create(cr,uid,vals_logbook)
         #----Cambiar el nombre al usuario----------------------------------------------------------------
         collaborator = self.read(cr,uid,ids[0],['born_country','email','born_state','born_city','photo','user_id'])
         if not collaborator['user_id']:
@@ -3270,10 +3271,17 @@ class kemas_collaborator(osv.osv):
         return avatar
     
     def reload_avatar(self,cr,uid,ids,context={}):
-        email = super(osv.osv, self).read(cr,uid,ids[0],['email'])['email']
-        avatar = self.get_avatar(cr,uid,email)
-        self.write(cr, uid, ids, {'photo' : avatar}, context)
+        collaborators = super(osv.osv, self).read(cr,uid,ids,['email','use_gravatar'])
+        context['on_update_logbook'] = True
+        for collaborator in collaborators:
+            if collaborator['use_gravatar']:
+                avatar = self.get_avatar(cr,uid,collaborator['email'])
+                self.write(cr, uid, [collaborator['id']], {'photo' : avatar}, context)
         return True
+    
+    def update_avatars(self,cr, uid, context={}):
+        collaborator_ids = super(osv.osv, self).search(cr,uid,[('use_gravatar','=',True)])
+        return self.reload_avatar(cr, uid, collaborator_ids, context)
     
     def _replacements(self, cr, uid, ids, name, arg, context={}):
         from datetime import datetime
