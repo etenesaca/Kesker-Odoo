@@ -3262,14 +3262,17 @@ class kemas_collaborator(osv.osv):
         
         preferences = self.pool.get('kemas.config').read(cr, uid, self.pool.get('kemas.config').get_correct_config(cr, uid), ['size_collaborator_gravatar'])
         default = "http://www.example.com/default.jpg"
-        gravatar_url = "http://www.gravatar.com/avatar/ " + hashlib.md5(email.lower()).hexdigest() + "?"
-        gravatar_url += urllib.urlencode({'d':default, 's':str(preferences['size_collaborator_gravatar'])})
-        gravatar_url = unicode(gravatar_url).replace(' ', '')
-        
-        import urllib2
-        source = urllib2.urlopen(gravatar_url).read()
-        avatar = base64.b64encode(source)
-        return avatar
+        try:
+            gravatar_url = "http://www.gravatar.com/avatar/ " + hashlib.md5(email.lower()).hexdigest() + "?"
+            gravatar_url += urllib.urlencode({'d':default, 's':str(preferences['size_collaborator_gravatar'])})
+            gravatar_url = unicode(gravatar_url).replace(' ', '')
+            
+            import urllib2
+            source = urllib2.urlopen(gravatar_url).read()
+            avatar = base64.b64encode(source)
+            return avatar
+        except:
+            return False
     
     def reload_avatar(self,cr,uid,ids,context={}):
         collaborators = super(osv.osv, self).read(cr,uid,ids,['email','use_gravatar'])
@@ -3277,7 +3280,8 @@ class kemas_collaborator(osv.osv):
         for collaborator in collaborators:
             if collaborator['use_gravatar']:
                 avatar = self.get_avatar(cr,uid,collaborator['email'])
-                self.write(cr, uid, [collaborator['id']], {'photo' : avatar}, context)
+                if avatar:
+                    self.write(cr, uid, [collaborator['id']], {'photo' : avatar}, context)
         return True
     
     def update_avatars(self,cr, uid, context={}):
