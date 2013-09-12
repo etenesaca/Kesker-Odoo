@@ -2100,7 +2100,7 @@
 						    		<group colspan="4" expand="1" col="4">
 						    			<field name="web_site_ids" colspan="4" nolabel="1" >
 						    				<form>
-						    					<field name="web_site_id" on_change="on_change_web_site_id(web_site_id)" default_focus="1"/>
+						    					<field name="web_site_id" on_change="on_change_web_site_id(web_site_id)" default_focus="1" options='{"no_open": True}'/>
 						    					<field name="url" widget="url"/>
 						    				</form>
 						    				<tree>
