@@ -2496,7 +2496,7 @@
 	                        <div class="oe_kanban_details">
 	                        	<h4 class="oe_partner_heading"><field name="name_with_nick_name"/></h4>
 	                        	<ul>
-                                	<li t-if="record.type.raw_value == 'Collaborator'"><i><b>Points: <field name="points"/></b></i></li>
+                                	<li t-if="record.type.raw_value == 'Collaborator'"><i><b><field name="team_id"/></b></i></li>
                                     <li t-if="record.email.raw_value"><a t-attf-href="mailto:#{record.email.value}"><field name="email"/></a></li>
                                 </ul>
 	                        </div>
@@ -4933,6 +4933,7 @@
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">kemas.collaborator</field>
       <field name="view_mode">kanban,tree,form</field>
+      <field name="domain">[('state','=','Active'),('type','=','Collaborator')]</field>
       <field name="context">{'all_collaborators':1,'search_default_active': 1,'search_default_collaborator': 1,'no_name_get':True,'search_view_ref':'kemas.kemas_collaborator_search_view3','kanban_view_ref':'kemas.kemas_collaborator_kanban_view3',}</field>
       <field name="help">All collaborators who are actively involved in ministry.</field>
     </record>
