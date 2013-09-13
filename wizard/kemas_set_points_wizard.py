@@ -79,13 +79,15 @@ class kemas_set_points_step2_wizard(osv.osv_memory):
         
     def fields_get(self, cr, uid, fields=None, context={}, write_access=True):   
         result = super(kemas_set_points_step2_wizard, self).fields_get(cr, uid,fields, context, write_access)
-        if context == {}:return result
+        if context is None or not context or type(context).__name__!="dict" or not context.has_key('dict_header'):
+            return result
+        
         dict_def={}
         dict_def.update(context['dict_header'])
-        dict_def['type']=dict_def['type']
-        dict_def['state']='step2'
-        dict_def['collaborator_ids']=dict_def['collaborator_ids']
-        self._defaults=dict_def
+        dict_def['type'] = dict_def['type']
+        dict_def['state'] = 'step2'
+        dict_def['collaborator_ids'] = dict_def['collaborator_ids']
+        self._defaults = dict_def
         return result
     
     _name='kemas.set.points.step2.wizard'

@@ -707,9 +707,9 @@ def cambiar_meses_a_espaniol(text):
     text = text.replace(unicode('Thursday'),unicode('Jueves'))
     text = text.replace(unicode('Friday'),unicode('Viernes'))
     try:
-        text = text.replace(unicode('Wednesday'),unicode('Sábado','utf-8'))
+        text = text.replace(unicode('Saturday'),unicode('Sábado','utf-8'))
     except:
-        text = text.replace(unicode('Wednesday'),unicode('Sabado','utf-8'))
+        text = text.replace(unicode('Saturday'),unicode('Sabado','utf-8'))
     text = text.replace(unicode('Sunday'),unicode('Domingo'))
     
     #LOWER
@@ -729,16 +729,16 @@ def cambiar_meses_a_espaniol(text):
     text = text.replace(unicode('Monday').lower(),unicode('Lunes').lower())
     text = text.replace(unicode('Tuesday').lower(),unicode('Martes').lower())
     try:
-        text = text.replace(unicode('Wednesday').lower(),unicode('Miércoles').lower())
+        text = text.replace(unicode('Wednesday').lower(),unicode('Miércoles','utf-8').lower())
     except:
-        text = text.replace(unicode('Wednesday').lower(),unicode('Miercoles').lower())
+        text = text.replace(unicode('Wednesday').lower(),unicode('Miercoles','utf-8').lower())
         
     text = text.replace(unicode('Thursday').lower(),unicode('Jueves').lower())
     text = text.replace(unicode('Friday').lower(),unicode('Viernes').lower())
     try:
-        text = text.replace(unicode('Wednesday').lower(),unicode('Sábado').lower())
+        text = text.replace(unicode('Saturday').lower(),unicode('Sábado','utf-8').lower())
     except:
-        text = text.replace(unicode('Wednesday').lower(),unicode('Sabado').lower())
+        text = text.replace(unicode('Saturday').lower(),unicode('Sabado','utf-8').lower())
     text = text.replace(unicode('Sunday').lower(),unicode('Domingo').lower())
     
     #UPPER
@@ -758,16 +758,16 @@ def cambiar_meses_a_espaniol(text):
     text = text.replace(unicode('Monday').upper(),unicode('Lunes').upper())
     text = text.replace(unicode('Tuesday').upper(),unicode('Martes').upper())
     try:
-        text = text.replace(unicode('Wednesday').upper(),unicode('Miércoles').upper())
+        text = text.replace(unicode('Wednesday').upper(),unicode('Miércoles','utf-8').upper())
     except:
-        text = text.replace(unicode('Wednesday').upper(),unicode('Miercoles').upper())
+        text = text.replace(unicode('Wednesday').upper(),unicode('Miercoles','utf-8').upper())
     
     text = text.replace(unicode('Thursday').upper(),unicode('Jueves').upper())
     text = text.replace(unicode('Friday').upper(),unicode('Viernes').upper())
     try:
-        text = text.replace(unicode('Wednesday').upper(),unicode('Sábado').upper())
+        text = text.replace(unicode('Saturday').upper(),unicode('Sábado','utf-8').upper())
     except:
-        text = text.replace(unicode('Wednesday').upper(),unicode('Sábado').upper())
+        text = text.replace(unicode('Saturday').upper(),unicode('Sábado','utf-8').upper())
     
     text = text.replace(unicode('Sunday').upper(),unicode('Domingo').upper())
     return text
