@@ -2771,6 +2771,10 @@ class kemas_collaborator(osv.osv):
         threaded_sending.start()
             
     def create(self, cr, uid, vals, *args, **kwargs):
+        vals['email'] = unicode(vals['email']).lower()
+        if vals.get('use_gravatar',False):
+            vals['photo'] = self.get_avatar(cr, uid, vals['email'])
+            
         if vals.has_key('points'):
             return super(osv.osv,self).create(cr, uid, vals, *args, **kwargs)
         

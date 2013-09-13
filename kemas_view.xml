@@ -2074,9 +2074,10 @@
 					       				<separator string="Contact" colspan="6"/>
 						       			<field name="mobile" colspan="2" attrs="{'required':[('telef1','=',False)]}" placeholder="ex: 0985146325"/><group colspan="4"/>
 						       			<field name="telef1" colspan="2" attrs="{'required':[('mobile','=',False),('telef1','=',False)]}" placeholder="ex: 072561374"/>
-					       				<field name="telef2" colspan="2" placeholder="ex: 072561374"/><group colspan="4"/><group colspan="2"/>
+					       				<field name="telef2" colspan="2" placeholder="ex: 072561374" attrs="{'invisible':[('telef1','=',False)]}"/><group colspan="4"/><group colspan="2"/>
+                                        <newline/>
                                         <field name="use_gravatar" help="¿Usar foto desde Gravatar?" colspan="2"/>
-                                        <button name="reload_avatar" icon="STOCK_REFRESH" type="object" string="Recargar Avatar" colspan="2" attrs="{'invisible':[('use_gravatar','=',False)]}" class="oe_link oe_edit_only"/>
+                                        <button name="reload_avatar" icon="STOCK_REFRESH" type="object" string="Recargar Avatar" colspan="2" attrs="{'invisible':['|',('use_gravatar','=',False),('state','=','creating')]}" class="oe_link oe_edit_only"/>
                                         <newline/>
                                         <field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..."/><group colspan="2"/>
 						       			<field name="im_account" colspan="4" widget="email" on_change="on_change_im_account(im_account)" placeholder="Puedes usar una cuenta de facebook: jperez@facebook.com"/><group colspan="2"/>					       				
@@ -2092,7 +2093,7 @@
 										<field name="team_id" colspan="2"/>
 										<field name="join_date" colspan="2" on_change="on_change_join_date(join_date)" attrs="{'required':[('type','=','Collaborator')]}"/>
 										<field name="end_service" readonly="1" widget="char" states="Inactive" colspan="2"/>
-										<field name="age_in_ministry" string="Time in the ministry" colspan="2" attrs="{'required':[('type','=','Collaborator')],'invisible':[('join_date','=',False)]}"/>
+										<field name="age_in_ministry" string="Time in the ministry" colspan="2" attrs="{'required':[('type','=','Collaborator')],'invisible':[('join_date','=',False)]}" readonly="1"/>
 										<newline/>
 										<field name="points" colspan="2" readonly="1" states="Active,Inactive"/>
 										<field name="level_id" colspan="2" readonly="1" states="Active,Inactive"/>
@@ -2246,9 +2247,9 @@
 					       				<separator string="Contact" colspan="6"/>
 						       			<field name="mobile" colspan="2" attrs="{'required':[('telef1','=',False)]}" placeholder="ex: 0985146325"/><group colspan="4"/>
 						       			<field name="telef1" colspan="2" attrs="{'required':[('mobile','=',False),('telef1','=',False)]}" placeholder="ex: 072561374"/>
-					       				<field name="telef2" colspan="2" placeholder="ex: 072561374"/><group colspan="4"/><group colspan="2"/>
-                                        <field name="use_gravatar" help="¿Usar foto desde Gravatar?" colspan="2"/>
-                                        <button name="reload_avatar" icon="STOCK_REFRESH" type="object" string="Recargar Avatar" colspan="2" attrs="{'invisible':[('use_gravatar','=',False)]}" class="oe_link oe_edit_only"/>
+					       				<field name="telef2" colspan="2" placeholder="ex: 072561374" attrs="{'invisible':[('telef1','=',False)]}"/><group colspan="4"/><group colspan="2"/>
+                                        <newline/>                                        <field name="use_gravatar" help="¿Usar foto desde Gravatar?" colspan="2"/>
+                                        <button name="reload_avatar" icon="STOCK_REFRESH" type="object" string="Recargar Avatar" colspan="2" attrs="{'invisible':['|',('use_gravatar','=',False),('state','=','creating')]}" class="oe_link oe_edit_only"/>
                                         <newline/>
                                         <field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..."/><group colspan="2"/>
 						       			<field name="im_account" colspan="4" widget="email" on_change="on_change_im_account(im_account)" placeholder="Puedes usar una cuenta de facebook: jperez@facebook.com"/><group colspan="2"/>					       				
@@ -2264,7 +2265,7 @@
 										<field name="team_id" colspan="2" readonly="1"/>
 										<field name="join_date" colspan="2" readonly="1" on_change="on_change_join_date(join_date)" required="1"/>
 										<field name="end_service" readonly="1" widget="char" states="Inactive" colspan="2"/>
-										<field name="age_in_ministry" string="Time in the ministry" colspan="2" required="1" readonly="1" attrs="{'invisible':[('join_date','=',False)]}"/>
+										<field name="age_in_ministry" string="Time in the ministry" colspan="2" attrs="{'invisible':[('join_date','=',False)]}" readonly="1"/>
 										<newline/>
 										<field name="points" colspan="2" readonly="1" states="Active,Inactive"/>
 										<field name="level_id" colspan="2" readonly="1" states="Active,Inactive" options='{"no_open": True}'/>
