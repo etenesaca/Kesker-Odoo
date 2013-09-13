@@ -5479,6 +5479,14 @@
       <field name="context">{'search_this_month' : 1}</field>
       <field name="view_mode">graph</field>
     </record>
+    <record model="ir.actions.act_window" id="kemas_attendace_statistics_collaborator_action">
+      <field name="name">Attendace Statistics</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">kemas.attendance</field>
+      <field name="domain">[('collaborator_id.user_id','=',uid)]</field>
+      <field name="context">{'search_this_month' : 1}</field>
+      <field name="view_mode">graph</field>
+    </record>
     <!--____________________________________________________Progress-->
     <record model="ir.actions.act_window" id="kemas_collaborator_progress_level_form_action">
       <field name="name">Progress</field>
@@ -5506,7 +5514,7 @@
 		    	<action name="%(kemas.kemas_event_calendar_collaborator_dashboard_action)d" string="Events"/> 
 		    </column>
 		    <column>
-		    	<action name="%(kemas.kemas_attendace_statistics_action)d" string="Attedance Statistics"/>
+		    	<action name="%(kemas.kemas_attendace_statistics_collaborator_action)d" string="Attedance Statistics"/>
 		    </column>
 		  </board>
 		</form>
