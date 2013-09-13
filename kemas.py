@@ -1557,7 +1557,7 @@ Fecha de Ingreso al ministerio: %jd
         (validate_points,'You can not enter values ​​less than 1 or leave the field empty.',['default_points']),
         ]
 class kemas_activity(osv.osv):
-    def name_get(self,cr,uid,ids,context={}):     
+    def __name_get(self,cr,uid,ids,context={}):     
         if not len(ids):
             return[]
         reads = self.browse(cr,uid,ids,context)

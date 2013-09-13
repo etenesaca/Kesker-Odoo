@@ -4103,7 +4103,7 @@
 					    	<group colspan="4" col="4">
 							  	<field name="line_ids" invisible="1"/>
 								<field name="collaborators_loaded" invisible="1"/>
-								<group colspan="4" col="8">
+								<group colspan="4" col="8" attrs="{'invisible':[('team_id','=',False),('state','not in',['draft'])]}">
 									<field name="team_id" colspan="2" widget="selection" on_change="on_change_team(team_id)"/>
 									<button name="load_collaborators" icon="STOCK_REFRESH" type="object" string="Load collaborators" colspan="4" states="draft" class="oe_link oe_edit_only"/>
 								</group>
