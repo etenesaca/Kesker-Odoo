@@ -31,13 +31,11 @@ import kemas_extras
 import addons
 import unicodedata
 import random
-import base64
 import logging
 import calendar
 import pooler
 import threading
 from mx import DateTime
-from tools.translate import _
 from compiler.pycodegen import EXCEPT
 import base64
 import openerp
