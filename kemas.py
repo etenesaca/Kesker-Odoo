@@ -2477,6 +2477,38 @@ class kemas_collaborator(osv.osv):
                         res['photo']=self.get_photo_male(cr,uid)
                     else:
                         res['photo']=self.get_photo_female(cr,uid)
+        
+        #--------FOTO Para la VISTA DE KANBAN----------------------------
+        if 'photo_small' in fields:
+            if type(res).__name__=='list':
+                for read_dict in res:
+                    collaborator = super(osv.osv,self).read(cr, uid, read_dict['id'], ['genre'])
+                    if read_dict.has_key('photo_small'):
+                        if read_dict['photo_small']==False:
+                            if collaborator['genre']=='Male':
+                                read_dict['photo_small']=self.get_photo_small_male(cr,uid)
+                            else:
+                                read_dict['photo_small']=self.get_photo_small_female(cr,uid)
+                        else:
+                            continue
+                    else:
+                        if collaborator['genre']=='Male':
+                            read_dict['photo_small']=self.get_photo_small_male(cr,uid)
+                        else:
+                            read_dict['photo_small']=self.get_photo_small_female(cr,uid)
+            else:
+                collaborator = super(osv.osv,self).read(cr, uid, ids, ['genre'])
+                if res.has_key('photo_small'):
+                    if res['photo_small']==False:
+                        if collaborator['genre']=='Male':
+                            res['photo_small']=self.get_photo_small_male(cr,uid)
+                        else:
+                            res['photo_small']=self.get_photo_small_female(cr,uid)               
+                else:
+                    if collaborator['genre']=='Male':
+                        res['photo_small']=self.get_photo_small_male(cr,uid)
+                    else:
+                        res['photo_small']=self.get_photo_small_female(cr,uid)
         return res 
 
     def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):
@@ -2826,7 +2858,12 @@ class kemas_collaborator(osv.osv):
         else:
             vals['points'] = 0
         vals['state'] = 'Active'
- 
+        
+        #Crear una imagen pequeña de la foto del colaborador
+        if vals.get('photo',False):
+            photo_path =  addons.__path__[0] + '/web/static/src/img/avatar'
+            vals['photo_small'] = kemas_extras.resize_image(vals['photo'], photo_path, 64)
+
         res_id = super(osv.osv,self).create(cr, uid, vals, *args, **kwargs)
         #----Escribir el historial de puntos-----------------------------------------------------------------
         if vals['type']=='Collaborator':
@@ -2851,6 +2888,7 @@ class kemas_collaborator(osv.osv):
                 'description' : 'Creacion del Colaborador.',
                 'type' : 'important',
                 }
+        
         self.pool.get('kemas.collaborator.logbook').create(cr,uid,vals)
         return res_id
     
@@ -2938,6 +2976,11 @@ class kemas_collaborator(osv.osv):
         #----Cambiar el Puntaje y establecer Nivel-------------------------------------------------------
         if vals.has_key('points'):
             vals['level_id'] =self.get_corresponding_level(cr, uid, vals['points'])
+            
+        #Crear una imagen pequeña de la foto del colaborador
+        if vals.get('photo',False):
+            photo_path =  addons.__path__[0] + '/web/static/src/img/avatar'
+            vals['photo_small'] = kemas_extras.resize_image(vals['photo'], photo_path, 64)
         res = super(osv.osv,self).write(cr, uid, ids, vals, context)
         
         if not context is None and context and type(context).__name__=="dict" and not context.get('on_update_logbook',False):
@@ -2981,7 +3024,7 @@ class kemas_collaborator(osv.osv):
                         }
         vals_partner.update(vals_user)
         partner_obj.write(cr,uid,[partner_id],vals_partner)
-        
+                    
         #Enviar correo de Notificacion de Creacion de Cuenta
         if res and send_email:
             cr.commit()
@@ -3320,7 +3363,7 @@ class kemas_collaborator(osv.osv):
             if result < 1 :
                 result = 0
             return result
-         
+        
         result = {}
         records = super(osv.osv,self).read(cr,uid,ids,['id'])
         for record in records:
@@ -3333,6 +3376,7 @@ class kemas_collaborator(osv.osv):
         'mailing':fields.function(mailing, type='boolean', string='Mailing'),
         'code' : fields.char('Code',size=32,help="Code that is assigned to each collaborator"),
         'photo': fields.binary('Photo',help='The photo of the person'),
+        'photo_small': fields.binary('Small Photo'),
         'use_gravatar':fields.boolean('Cargar foto desde gravatar'),
         'qr_code':fields.function(_get_QR_image, type='binary', string='QR code data'),
         'bar_code':fields.function(_get_barcode_image, type='binary', string='Bar Code data'),    
@@ -3402,8 +3446,16 @@ class kemas_collaborator(osv.osv):
         photo_path = addons.get_module_resource('kemas','images','male.png')
         return open(photo_path, 'rb').read().encode('base64')
     
+    def get_photo_small_male(self, cr, uid, context={}):
+        photo_path = addons.get_module_resource('kemas','images','male_small.jpg')
+        return open(photo_path, 'rb').read().encode('base64')
+    
     def get_photo_female(self, cr, uid, context={}):
         photo_path = addons.get_module_resource('kemas','images','female.png')
+        return open(photo_path, 'rb').read().encode('base64')
+    
+    def get_photo_small_female(self, cr, uid, context={}):
+        photo_path = addons.get_module_resource('kemas','images','female_small.jpg')
         return open(photo_path, 'rb').read().encode('base64')
     
     def get_first_level(self, cr, uid, context={}):
