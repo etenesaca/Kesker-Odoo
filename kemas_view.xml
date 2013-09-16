@@ -4019,6 +4019,11 @@
     			<field name="level_id"/>
     			<separator orientation="vertical"/>
     			<filter name="all_collaborators" string="All collaborators" context="{'all_collaborators':True}" icon="kanban-apply"/>
+                <group string="Agrupar por...">
+                  <filter string="Colaborador" domain="[]" context="{'group_by':'collaborator_id'}"/>
+                  <filter string="Servicio" domain="[]" context="{'group_by':'service_id'}"/>
+                  <filter string="Equipo" domain="[]" context="{'group_by':'team_id'}"/>
+                </group>
 			</search>
       </field>
     </record>
@@ -5140,7 +5145,7 @@
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">kemas.event.collaborator.line</field>
       <field name="context">{'search_filter': 1}</field>
-      <field name="view_mode">tree,graph</field>
+      <field name="view_mode">graph,tree</field>
       <field name="help">Here you can check the times that collaborators are assigned to events.</field>
     </record>
     <!--____________________________________________________Attendance-->
