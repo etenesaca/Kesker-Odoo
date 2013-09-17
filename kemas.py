@@ -2420,7 +2420,7 @@ class kemas_collaborator(osv.osv):
         def_dic['points'] = 0
         def_dic['type'] = 'Collaborator'
         def_dic['state'] = 'creating'
-        def_dic['photo'] = self.get_photo_male(cr, uid)
+        def_dic['photo'] = self.get_photo_male()
         def_dic['level_id'] = self.get_first_level(cr, uid)
         
         self._defaults = def_dic
@@ -2454,29 +2454,29 @@ class kemas_collaborator(osv.osv):
                     if read_dict.has_key('photo'):
                         if read_dict['photo']==False:
                             if collaborator['genre']=='Male':
-                                read_dict['photo']=self.get_photo_male(cr,uid)
+                                read_dict['photo']=self.get_photo_male()
                             else:
-                                read_dict['photo']=self.get_photo_female(cr,uid)
+                                read_dict['photo']=self.get_photo_female()
                         else:
                             continue
                     else:
                         if collaborator['genre']=='Male':
-                            read_dict['photo']=self.get_photo_male(cr,uid)
+                            read_dict['photo']=self.get_photo_male()
                         else:
-                            read_dict['photo']=self.get_photo_female(cr,uid)
+                            read_dict['photo']=self.get_photo_female()
             else:
                 collaborator = super(osv.osv,self).read(cr, uid, ids, ['genre'])
                 if res.has_key('photo'):
                     if res['photo']==False:
                         if collaborator['genre']=='Male':
-                            res['photo']=self.get_photo_male(cr,uid)
+                            res['photo']=self.get_photo_male()
                         else:
-                            res['photo']=self.get_photo_female(cr,uid)               
+                            res['photo']=self.get_photo_female()               
                 else:
                     if collaborator['genre']=='Male':
-                        res['photo']=self.get_photo_male(cr,uid)
+                        res['photo']=self.get_photo_male()
                     else:
-                        res['photo']=self.get_photo_female(cr,uid)
+                        res['photo']=self.get_photo_female()
         
         #--------FOTO Para la VISTA DE KANBAN----------------------------
         if 'photo_small' in fields:
@@ -2486,29 +2486,29 @@ class kemas_collaborator(osv.osv):
                     if read_dict.has_key('photo_small'):
                         if read_dict['photo_small']==False:
                             if collaborator['genre']=='Male':
-                                read_dict['photo_small']=self.get_photo_small_male(cr,uid)
+                                read_dict['photo_small']=self.get_photo_small_male()
                             else:
-                                read_dict['photo_small']=self.get_photo_small_female(cr,uid)
+                                read_dict['photo_small']=self.get_photo_small_female()
                         else:
                             continue
                     else:
                         if collaborator['genre']=='Male':
-                            read_dict['photo_small']=self.get_photo_small_male(cr,uid)
+                            read_dict['photo_small']=self.get_photo_small_male()
                         else:
-                            read_dict['photo_small']=self.get_photo_small_female(cr,uid)
+                            read_dict['photo_small']=self.get_photo_small_female()
             else:
                 collaborator = super(osv.osv,self).read(cr, uid, ids, ['genre'])
                 if res.has_key('photo_small'):
                     if res['photo_small']==False:
                         if collaborator['genre']=='Male':
-                            res['photo_small']=self.get_photo_small_male(cr,uid)
+                            res['photo_small']=self.get_photo_small_male()
                         else:
-                            res['photo_small']=self.get_photo_small_female(cr,uid)               
+                            res['photo_small']=self.get_photo_small_female()               
                 else:
                     if collaborator['genre']=='Male':
-                        res['photo_small']=self.get_photo_small_male(cr,uid)
+                        res['photo_small']=self.get_photo_small_male()
                     else:
-                        res['photo_small']=self.get_photo_small_female(cr,uid)
+                        res['photo_small']=self.get_photo_small_female()
         return res 
 
     def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):
@@ -3442,19 +3442,19 @@ class kemas_collaborator(osv.osv):
         'password': fields.related('user_id', 'password', type='char', string='Password', readonly=1, store=False),
         }
     
-    def get_photo_male(self, cr, uid, context={}):
+    def get_photo_male(self):
         photo_path = addons.get_module_resource('kemas','images','male.png')
         return open(photo_path, 'rb').read().encode('base64')
     
-    def get_photo_small_male(self, cr, uid, context={}):
+    def get_photo_small_male(self):
         photo_path = addons.get_module_resource('kemas','images','male_small.jpg')
         return open(photo_path, 'rb').read().encode('base64')
     
-    def get_photo_female(self, cr, uid, context={}):
+    def get_photo_female(self):
         photo_path = addons.get_module_resource('kemas','images','female.png')
         return open(photo_path, 'rb').read().encode('base64')
     
-    def get_photo_small_female(self, cr, uid, context={}):
+    def get_photo_small_female(self):
         photo_path = addons.get_module_resource('kemas','images','female_small.jpg')
         return open(photo_path, 'rb').read().encode('base64')
     
@@ -5765,6 +5765,7 @@ class kemas_attendance(osv.osv):
     _defaults = {  
         'count': 1
         }
+    
 class kemas_event_replacement(osv.osv):
     def search(self, cr, uid, args, offset = 0, limit = None, order = None, context={}, count = False):
         if context.get('is_collaborator',False):
