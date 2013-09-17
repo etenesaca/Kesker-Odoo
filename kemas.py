@@ -1099,7 +1099,7 @@ class kemas_config(osv.osv):
             ('I2of5','I2of5'),
             ('Code128','Code128'),
              ],    'Typo de Codigo de Barras', required=True),
-        'bc_text': fields.text('Numero del codigo de barras', required=True),
+        'bc_text':fields.char('Texto de Codigo de barras', size=32, required=True),
         'bc_width':fields.integer('Ancho', required=True),
         'bc_height':fields.integer('Alto',required=True),
         'bc_hr_form':fields.boolean("Human Readable",help="Legible para lectura?"),
@@ -1532,10 +1532,9 @@ Fecha de Ingreso al ministerio: %jd
         'qr_width':150,
         'qr_height':150,
         #---Bar Code----------------------------------------------------------------------------
-        'bc_text':"%id + 3456",
-        'bc_text':"%id",
+        'bc_text':"%cd",
         'bc_type':"Code128",
-        'bc_width':170,
+        'bc_width':200,
         'bc_height':50,
         'size_collaborator_gravatar':90,
     }
@@ -3238,13 +3237,15 @@ class kemas_collaborator(osv.osv):
         image_type = preferences['bc_type']
         hr_form = preferences['bc_hr_form']
         
-        def get_barcode_image(collaborator_id):
-            value = eval(preferences['bc_text'].replace('%id', unicode(collaborator_id)))
-            return kemas_extras.get_image_code(value, width, height, hr_form, image_type)
+        def get_barcode_image(collaborator):
+            bc_text = preferences['bc_text'].replace('%id', unicode(collaborator['id']))
+            bc_text = preferences['bc_text'].replace('%cd', unicode(collaborator['code']))
+            return kemas_extras.get_image_code(bc_text, width, height, hr_form, image_type)
 
         result = {}
-        for collaborator_id in ids:
-            result[collaborator_id] = get_barcode_image(collaborator_id)
+        collaborators = super(osv.osv, self).read(cr,uid,ids,['id','code'])
+        for collaborator in collaborators:
+            result[collaborator['id']] = get_barcode_image(collaborator)
         return result
     
     def _get_QR_image(self, cr, uid, ids, name, arg, context={}):
