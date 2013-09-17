@@ -540,12 +540,12 @@
                               <table border="0" width="100%%" colspan="4">
                               <tr>
                                 <td width="5%%"><b>%%id</b></td><td width="28.33%%">Número del colaborador</td>
-                                <td width="5%%"><b>%%cd</b></td><td width="28.33%%">Código del Colaborador</td>
+                                <td width="5%%"><b></b></td><td width="28.33%%"></td>
                                 <td width="5%%"><b></b></td><td width="28.33%%"></td>
                               </tr>
                             </table>
                           <group>
-                            <field name="bc_text" string="Texto del Codigo de Barras"/>
+                            <field name="bc_text" string="Número codigo de barras"/>
                           </group> 
                           <group string="Tamaño de imagen" colspan="4" col="10">
                             <field name="bc_type" colspan="4"/><group colspan="6"/>
