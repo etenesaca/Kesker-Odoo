@@ -2058,12 +2058,28 @@
             <group>
               <field name="active"/>
               <field name="level_ids">
-                <tree editable="bottom">
+                <tree>
                   <field name="name"/>
                   <field name="line_ids" readonly="1"/>
                 </tree>
+                <form>
+                  <div class="oe_title">
+                    <div class="oe_edit_only">
+                      <label for="name"/>
+                    </div>
+                    <h1>
+                      <field name="name" default_focus="1" placeholder="Nombre del nivel.." />
+                    </h1>
+                  </div>
+                  <newline/>
+                  <field name="line_ids" readonly="1" nolabel="1">
+                    <tree>
+                      <field name="collaborator_id" options='{"no_open": True}'/>
+                    </tree>
+                  </field>
+                </form>
               </field>
-              <field name="description" placeholder="Aguregue una descripción.."/>
+              <field name="description" placeholder="Aguegue una descripción.."/>
             </group>
 	      </sheet>
         </form>
