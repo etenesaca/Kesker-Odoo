@@ -1864,6 +1864,7 @@ class kemas_area(osv.osv):
     _defaults = {
         'logo': _get_logo,
     }
+    
 class kemas_level(osv.osv):
     def on_change_logo(self, cr, uid, ids, photo):
         config_obj = self.pool.get('kemas.config')
@@ -2215,6 +2216,76 @@ class kemas_collaborator_web_site(osv.osv):
     _defaults = {  
         'url': 'http://www.'
         }
+    
+class kemas_ministry(osv.osv):
+    _order='name'
+    _name='kemas.ministry'
+    _columns={
+        'logo':fields.binary('Logo', help='Logo del Ministerio.'),
+        'active':fields.boolean('Activo?', required=False),
+        'name': fields.char('Nombre',size=64,required=True,help='Nombre del minsterio'),
+        'description': fields.text('Description',help='Una descripcion breve'),
+        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_ministry_collaborator_rel',  'ministry_id',  'collaborator_id', 'Colaboradores'),
+        }
+    _sql_constraints= [
+        ('uname', 'unique(name)', "Este Ministerio ya existe!"),
+        ]
+    
+    def _get_logo(self, cr, uid, context={}):
+        photo_path = addons.get_module_resource('kemas','images','ministry.png')
+        return open(photo_path, 'rb').read().encode('base64')
+
+    _defaults = {
+        'logo': _get_logo,
+        'active': True
+    }
+    
+class kemas_specialization_course(osv.osv):
+    _order='name'
+    _name='kemas.specialization.course'
+    _columns={
+        'logo':fields.binary('Logo', help='Logo del Curso.'),
+        'active':fields.boolean('Activo?', required=False),
+        'name': fields.char('Name',size=64,required=True,help='Nombre del curso'),
+        'description': fields.text('Description',help='Una descripcion breve'),
+        'level_ids': fields.one2many('kemas.specialization.course.level', 'course_id', 'Niveles'),
+        }
+    _sql_constraints= [
+        ('uname', 'unique(name)', "Este Curso ya existe!"),
+        ]
+    
+    def _get_logo(self, cr, uid, context={}):
+        photo_path = addons.get_module_resource('kemas','images','ministry.png')
+        return open(photo_path, 'rb').read().encode('base64')
+
+    _defaults = {
+        'logo': _get_logo,
+        'active': True
+    }
+    
+class kemas_specialization_course_level(osv.osv):
+    _order='name'
+    _name='kemas.specialization.course.level'
+    _columns={
+        'name': fields.char('Nombre',size=64,required=True,help='Nombre del Nivel'),
+        'course_id':fields.many2one('kemas.specialization.course','Curso', required=True),
+        'line_ids': fields.one2many('kemas.specialization.course.line', 'course_id', 'Colaboradores'),
+        }
+    _sql_constraints= [
+        ('ulevel', 'unique(name,course_id)', "ya agregaste este nivel a este curso!"),
+        ]
+    
+class kemas_specialization_course_line(osv.osv):
+    _name='kemas.specialization.course.line'
+    _columns={
+        'collaborator_id':fields.many2one('kemas.collaborator','Colaborador', required=True),
+        'course_id':fields.many2one('kemas.specialization.course','Curso', required=True),
+        'level_id':fields.many2one('kemas.specialization.course.level','Nivel', required=True),
+        }
+    _sql_constraints= [
+        ('ucourse', 'unique(collaborator_id,course_id)', "Este colaborador ya esta registrado en este curso!"),
+        ]
+    
 class kemas_collaborator_logbook(osv.osv):
     def create(self, cr, uid, vals, *args, **kwargs):
         vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -3427,6 +3498,8 @@ class kemas_collaborator(osv.osv):
         'progress':fields.function(get_percentage, type='float', string='Progress'),
         'create_date':fields.function(_create_date, type='char', string='Created date'),
         'replacements':fields.function(_replacements, type='integer', string='Replacements avaliable', help="Number of replacements available events this month"),
+        'ministry_ids': fields.many2many('kemas.ministry', 'kemas_ministry_collaborator_rel',  'collaborator_id',  'ministry_id', 'Ministerios'),
+        'specialization_course_ids': fields.one2many('kemas.specialization.course.line', 'collaborator_id', 'Coursos de especializacion'),
         #Suspensions----------------------------------------------------------------------------------------------------------
         'suspension_ids': fields.one2many('kemas.suspension', 'collaborator_id', 'Suspensions'),
         'day_remaining_suspension':fields.function(_get_days_remaining, type='char', string='Days remaining'),
