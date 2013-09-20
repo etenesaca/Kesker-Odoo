@@ -3633,16 +3633,24 @@
 					    	</group>
 					    </page>
 					    <page string="Contributors who participated">	
-					      <group colspan="4" expand="1">	
-					      	<field name="collaborator_ids" colspan="4" nolabel="1" domain="[
-					      														  			('state','=','Active'),
-					      														  			('type','=','Collaborator'),
-					      														  			]"
-					      														   context="{
-					      																	'search_view_ref' : 'kemas.kemas_collaborator_search_view2',
-					      																	'tree_view_ref' : 'kemas.kemas_collaborator_tree_view4',
-					      																	}"/>	 
-					      </group>
+					      <field name="collaborator_ids" widget="many2many_kanban">
+                            <kanban quick_create="false" create="true">
+                                <field name="name_with_nick_name"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div style="position: relative">
+                                            <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block"><img src="/kemas/static/src/img/icons/delete_red.png" alt="Eliminar"/></a>
+                                            <div class="oe_module_vignette">
+                                                <div class="oe_module_desc">
+                                                  <img t-att-src="kanban_image('kemas.collaborator', 'photo_small', record.id.value)" class="oe_kanban_image_32"/>
+                                                  <field name="name_with_nick_name"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                          </field>
 					    </page>
 					</notebook>
 					<group colspan="4" col="9">
