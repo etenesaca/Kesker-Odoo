@@ -28,7 +28,26 @@
 	       				<field name="responsible" required="1"/>
 	       			</group>
 	       			<notebook colspan="4">
-			           <page string="Collaborators">	
+			           <page string="Collaborators">
+                        <field name="collaborator_ids" widget="many2many_kanban">
+                            <kanban quick_create="false" create="true">
+                                <field name="name_with_nick_name"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div style="position: relative">
+                                            <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block"><img src="/kemas/static/src/img/icons/delete_red.png" alt="Eliminar"/></a>
+                                            <div class="oe_module_vignette">
+                                                <div class="oe_module_desc">
+                                                  <img t-att-src="kanban_image('kemas.collaborator', 'photo_small', record.id.value)" class="oe_kanban_image_32"/>
+                                                  <field name="name_with_nick_name"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                          </field>	
+                         <!-- 
 		      	         <group colspan="4" expand="1">
 				           <field name="collaborator_ids" colspan="4" nolabel="1" domain="[
 					      														  			('state','=','Active'),
@@ -43,6 +62,7 @@
 				           	</tree>
 				           </field>		 
 		      	         </group>
+                        -->
 			           </page>
 			           <page string="Description">	
 		      	         <group colspan="4" expand="1">
@@ -145,7 +165,25 @@
 		      	         </group>
 			           </page>
 			           <page string="Collaborators">	
-		      	         <group colspan="4" expand="1">
+                          <field name="collaborator_ids" widget="many2many_kanban">
+                              <kanban quick_create="false" create="true">
+                                  <field name="name_with_nick_name"/>
+                                  <templates>
+                                      <t t-name="kanban-box">
+                                          <div style="position: relative">
+                                              <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block"><img src="/kemas/static/src/img/icons/delete_red.png" alt="Eliminar"/></a>
+                                              <div class="oe_module_vignette">
+                                                  <div class="oe_module_desc">
+                                                    <img t-att-src="kanban_image('kemas.collaborator', 'photo_small', record.id.value)" class="oe_kanban_image_32"/>
+                                                    <field name="name_with_nick_name"/>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </t>
+                                  </templates>
+                              </kanban>
+                          </field>
+                           <!-- 
 				           <field name="collaborator_ids" colspan="4" nolabel="1" domain="[
 					      														  			('state','=','Active'),
 					      														  			('type','=','Collaborator'),
@@ -157,8 +195,8 @@
 				           	<tree string="">
 				           		<field name="name_with_nick_name"/>
 				           	</tree>
-				           </field>		 
-		      	         </group>
+				           </field>
+                      -->		 
 			           </page>
 			           <page string="Extra information">
 				           <group expand="1">
@@ -1968,10 +2006,23 @@
               </group>
               </page>
               <page string="Colabordores">
-                <field name="collaborator_ids">
-                  <tree>
-                    <field name="name_with_nick_name" options='{"no_open": True}'/>
-                  </tree>
+                <field name="collaborator_ids" widget="many2many_kanban">
+                  <kanban quick_create="false" create="true">
+                      <field name="name_with_nick_name"/>
+                      <templates>
+                          <t t-name="kanban-box">
+                              <div style="position: relative">
+                                  <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block"><img src="/kemas/static/src/img/icons/delete_red.png" alt="Eliminar"/></a>
+                                  <div class="oe_module_vignette">
+                                      <div class="oe_module_desc">
+                                        <img t-att-src="kanban_image('kemas.collaborator', 'photo_small', record.id.value)" class="oe_kanban_image_32"/>
+                                        <field name="name_with_nick_name"/>
+                                      </div>
+                                  </div>
+                              </div>
+                          </t>
+                      </templates>
+                  </kanban>
                 </field>
               </page>
             </notebook>
@@ -2074,7 +2125,7 @@
                   <newline/>
                   <field name="line_ids" readonly="1" nolabel="1">
                     <tree>
-                      <field name="collaborator_id" options='{"no_open": True}'/>
+                      <field name="collaborator_id"/>
                     </tree>
                   </field>
                 </form>
@@ -3255,6 +3306,7 @@
             <group>
               <field name="is_active"/>
               <field name="address" placeholder="The exact direction of the place.."/>
+              <img t-att-src="get_edgar_url(record.id.value)"/>
             </group>
 	      </sheet>
 	    </form>
