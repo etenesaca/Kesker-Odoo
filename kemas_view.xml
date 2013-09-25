@@ -1979,6 +1979,10 @@
       <field name="priority" eval="1"/>
       <field name="arch" type="xml">
         <form string="Ministerio" version="7.0">
+          <header>
+            <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('active','=',True)]}" groups="kemas.group_kemas_manager"/>
+            <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('active','=',False)]}" groups="kemas.group_kemas_manager"/>
+          </header>
           <sheet string="Ministerio">
 	        <field name="logo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}'/>
             <div class="oe_title">
@@ -2098,6 +2102,10 @@
       <field name="priority" eval="1"/>
       <field name="arch" type="xml">
         <form string="Curso" version="7.0">
+          <header>
+            <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('active','=',True)]}" groups="kemas.group_kemas_manager"/>
+            <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('active','=',False)]}" groups="kemas.group_kemas_manager"/>
+          </header>
           <sheet string="Curso">
 	        <field name="logo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}'/>
             <div class="oe_title">
@@ -2309,7 +2317,7 @@
 			       				<b> <label string="Este colaborador no fue notificado son sus credenciales de Usuario"/> </b>
 			       			</font>
 			       		</div>
-		       			<group colspan="4" expand="1" col="4">
+		       			<group colspan="10" expand="1" col="4">
 			       			<notebook colspan="4">
 						    	<page string="Personal Information">	
 						      		<group colspan="4" expand="1" col="4">
@@ -2495,7 +2503,7 @@
 			       				<b> <label string="Este colaborador no fue notificado son sus credenciales de Usuario"/> </b>
 			       			</font>
 			       		</div>
-		       			<group colspan="4" expand="1" col="4">
+		       			<group colspan="10" expand="1" col="4">
 			       			<notebook colspan="4">
 						    	<page string="Personal Information">	
 						      		<group colspan="4" expand="1" col="4">
@@ -3295,6 +3303,10 @@
       <field name="priority" eval="1"/>
       <field name="arch" type="xml">
         <form string="Place" version="7.0">
+          <header>
+            <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('is_active','=',True)]}" groups="kemas.group_kemas_manager"/>
+            <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('is_active','=',False)]}" groups="kemas.group_kemas_manager"/>
+          </header>
 	      <sheet string="Level">
 	        <field name="photo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' on_change="on_change_photo(photo)"/>
             <div class="oe_title">
@@ -3308,12 +3320,6 @@
             <group>
               <field name="is_active"/>
               <field name="address" placeholder="The exact direction of the place.."/>
-              <div colspan="4">
-                <!-- mapa -->
-              </div>
-              <template>
-                <img t-att-src='_s + "/base/static/src/img/avatar.png"' class="oe_kanban_image"/>
-              </template>
             </group>
 	      </sheet>
 	    </form>
@@ -4030,6 +4036,10 @@
     	<field name="priority" eval="1"/>
      	<field name="arch" type="xml">
 	       	<form string="Service" version="7.0">
+                <header>
+                  <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('is_active','=',True)]}" groups="kemas.group_kemas_manager"/>
+                  <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('is_active','=',False)]}" groups="kemas.group_kemas_manager"/>
+                </header>
 	       		<sheet string="Service">
 	       			<label for="name" class="oe_edit_only"/>
                     <h1>

@@ -2218,6 +2218,14 @@ class kemas_collaborator_web_site(osv.osv):
         }
     
 class kemas_ministry(osv.osv):
+    def do_activate(self,cr,uid,ids,context={}):
+        super(osv.osv,self).write(cr,uid,ids,{'active' : True})
+        return True
+    
+    def do_inactivate(self,cr,uid,ids,context={}):
+        super(osv.osv,self).write(cr,uid,ids,{'active' : False})
+        return True
+    
     _order='name'
     _name='kemas.ministry'
     _columns={
@@ -2241,6 +2249,14 @@ class kemas_ministry(osv.osv):
     }
     
 class kemas_specialization_course(osv.osv):
+    def do_activate(self,cr,uid,ids,context={}):
+        super(osv.osv,self).write(cr,uid,ids,{'active' : True})
+        return True
+    
+    def do_inactivate(self,cr,uid,ids,context={}):
+        super(osv.osv,self).write(cr,uid,ids,{'active' : False})
+        return True
+    
     _order='name'
     _name='kemas.specialization.course'
     _columns={
@@ -4036,6 +4052,14 @@ class kemas_history_points(osv.osv):
         ]
     
 class kemas_place(osv.osv):
+    def do_activate(self,cr,uid,ids,context={}):
+        super(osv.osv,self).write(cr,uid,ids,{'is_active' : True})
+        return True
+    
+    def do_inactivate(self,cr,uid,ids,context={}):
+        super(osv.osv,self).write(cr,uid,ids,{'is_active' : False})
+        return True
+    
     def __fields_view_get(self, cr, uid, view_id=None, view_type='form', context={}, toolbar=True, submenu=False):       
         from lxml import etree
         res = super(kemas_place, self).fields_view_get(cr, uid, view_id=view_id, view_type=view_type,context=context, toolbar=False,submenu=False)
@@ -4319,6 +4343,14 @@ class kemas_repository(osv.osv):
         ]
 
 class kemas_service(osv.osv):
+    def do_activate(self,cr,uid,ids,context={}):
+        super(osv.osv,self).write(cr,uid,ids,{'is_active' : True})
+        return True
+    
+    def do_inactivate(self,cr,uid,ids,context={}):
+        super(osv.osv,self).write(cr,uid,ids,{'is_active' : False})
+        return True
+    
     def name_search(self, cr, uid, name, args=None, operator='ilike', context={}, limit=100):
         if not args:
             args = []
