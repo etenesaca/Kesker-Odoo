@@ -4036,6 +4036,19 @@ class kemas_history_points(osv.osv):
         ]
     
 class kemas_place(osv.osv):
+    def __fields_view_get(self, cr, uid, view_id=None, view_type='form', context={}, toolbar=True, submenu=False):       
+        from lxml import etree
+        res = super(kemas_place, self).fields_view_get(cr, uid, view_id=view_id, view_type=view_type,context=context, toolbar=False,submenu=False)
+        if res['type'] == 'form':
+            url_map = "https://www.google.com.ec/maps?t=m&amp;ie=UTF8&amp;ll=-2.897671,-78.997305&amp;spn=0.001559,0.002511&amp;z=19&amp;output=embed" 
+            map="""
+            <iframe width="100%%" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="%s"></iframe>
+            <br /><small><a href="%s" style="color:#0000FF;text-align:left" target="blank">Ver mapa más grande</a></small>
+            """%(url_map,url_map)
+            import pdb;pdb.set_trace()
+            res['arch'] = res['arch'].replace('<!-- mapa -->', map.encode('utf-8'))
+        return res
+    
     def name_search(self, cr, uid, name, args=None, operator='ilike', context={}, limit=100):
         if not args:
             args = []
@@ -4067,6 +4080,7 @@ class kemas_place(osv.osv):
     _columns={
         'name': fields.char('Name',size=64,required=True,help='The name of the place'),
         'address': fields.text('Address'),
+        'Map': fields.text('Mapa'),
         'photo': fields.binary('Photo',help='the photo of the place'),
         'is_active':fields.boolean('Active', required=False, help='Indicates whether this place is active or not'),
         }
