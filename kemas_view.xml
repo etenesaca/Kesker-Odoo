@@ -46,6 +46,9 @@
                                                   <tr>
                                                     <td class="oe_kanban_title1" align="left" valign="middle">
                                                       <h4><a type="open"><field name="name_with_nick_name"/></a></h4>
+                                                      <div><a t-if="record.email.raw_value" title="Mail" t-att-href="'mailto:'+record.email.value">
+                                                          <i><field name="email"/></i>
+                                                      </a></div>
                                                     </td>
                                                   </tr>
                                                 </table>
