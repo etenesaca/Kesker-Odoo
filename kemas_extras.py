@@ -22,6 +22,9 @@ import re
 import threading
 import os
 import base64
+from SOAPpy import WSDL
+import warnings
+import SOAPpy
 
 try:
     from reportlab.graphics.barcode import createBarcodeDrawing, \
@@ -771,3 +774,46 @@ def cambiar_meses_a_espaniol(text):
     
     text = text.replace(unicode('Sunday').upper(),unicode('Domingo').upper())
     return text
+
+
+#Implementar la misma funcionalidad pero con suds de python
+# from suds.client import Client
+# WSDL_URL = 'http://www.webservicex.net/geoipservice.asmx?WSDL'
+# client = Client(WSDL_URL)
+# res = client.service.GetGeoIP('201.238.172.135')
+
+def get_name_ci(ci):
+    #Para estos datos se realiza una conexion con el registro civil
+    def _get_name_ci():
+        try:
+            warnings.simplefilter('ignore',DeprecationWarning)
+            wsdlFile = 'http://merlyna.com/merlyna/abc/webserviceSRI-RegistroCivil.php?wsdl'
+            server = WSDL.Proxy(wsdlFile)
+            #server.soapproxy.config.dumpSOAPOut = 1
+            #server.soapproxy.config.dumpSOAPIn = 1
+            return server.nombreCedulaRegistroCivil(ci,0,0,'','','','',[1,2],99)
+        except:
+            return False
+    res = timeout(_get_name_ci,timeout_duration=10,default=False)
+    if res is None or not res:
+        return False
+    else:
+        return res
+
+def get_name_ruc(ruc): 
+     #Para estos datos se realiza una conexion con el SRI
+    def _get_name_ruc():
+        try:
+            warnings.simplefilter('ignore',DeprecationWarning)
+            wsdlFile = 'http://merlyna.com/merlyna/abc/webserviceSRI-RegistroCivil.php?wsdl'
+            server = WSDL.Proxy(wsdlFile)
+            #server.soapproxy.config.dumpSOAPOut = 1
+            #server.soapproxy.config.dumpSOAPIn = 1
+            return server.nombreRUCSRI(ruc,0,0,'','','','',[1,2],99)
+        except:
+            return False
+    res = timeout(_get_name_ruc,timeout_duration=10,default=False)
+    if res is None or not res:
+        return False
+    else:
+        return res
