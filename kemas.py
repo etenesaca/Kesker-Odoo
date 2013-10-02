@@ -74,6 +74,14 @@ class res_users(osv.osv):
     _inherit = 'res.users'
     
 class kemas_collaborator_logbook_login(osv.osv):
+    def name_get(self, cr, uid, ids,context={}):
+        records = self.read(cr,uid,ids,['id','collaborator_id','datetime'])
+        res = []
+        for record in records:
+            name = "%s - %s"%(record['collaborator_id'][1],record['datetime'])
+            res.append((record['id'], name))  
+        return res
+    
     def search(self, cr, uid, args, offset = 0, limit = None, order = None, context={}, count = False):
         if context.get('search_this_month',False):
             range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
