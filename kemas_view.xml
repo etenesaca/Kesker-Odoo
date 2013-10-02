@@ -2214,6 +2214,85 @@
          	</tree>
      	</field>
   	</record>
+    <!-- 
+    ====================
+    COLLABORATOR LOGBOOK LOGIN
+    ====================
+    -->
+    <!--____________________________________________________Vista de Formulario-->
+    <record model="ir.ui.view" id="kemas_collaborator_logbook_login_form_view">
+      <field name="name">kemas.collaborator.logbook.login.form</field>
+      <field name="model">kemas.collaborator.logbook.login</field>
+      <field name="type">form</field>
+      <field name="priority" eval="1"/>
+      <field name="arch" type="xml">
+        <form string="Inicio de Sesión" version="7.0" create="0" edit="0" delete="0">
+          <sheet string="Inicio de Sesión">
+            <group>
+              <field name="collaborator_id"/>
+              <field name="datetime"/>
+              <field name="remote_address"/>
+              <field name="base_location"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+    <!--____________________________________________________Vista de Arbol-->
+    <record model="ir.ui.view" id="kemas_collaborator_logbook_login_tree_view">
+      <field name="name">kemas.collaborator.logbook.login.tree</field>
+      <field name="model">kemas.collaborator.logbook.login</field>
+      <field name="type">tree</field>
+      <field name="priority" eval="1"/>
+      <field name="arch" type="xml">
+        <tree string="Inicios de Sesión" create="0" edit="0" delete="0">
+          <field name="collaborator_id"/>
+              <field name="datetime"/>
+              <field name="remote_address"/>
+              <field name="base_location"/>
+        </tree>
+      </field>
+    </record>
+    <!--____________________________________________________Vista de Busqueda-->
+    <record model="ir.ui.view" id="kemas_collaborator_logbook_login_search_view">
+      <field name="name">kemas.collaborator.logbook.login.search</field>
+      <field name="model">kemas.collaborator.logbook.login</field>
+      <field name="type">search</field>
+      <field name="arch" type="xml">
+        <search string="Search Inicio de Sesión">
+          <filter name="actives" string="Actives" domain="[('active','=',True),]"/>
+          <group>
+            <field name="collaborator_id" default_focus="1"/>
+            <field name="datetime"/>
+            <field name="remote_address"/>
+            <field name="base_location"/>
+          </group>
+          <separator/>
+            <filter icon="terp-go-today" name="today" string="Hoy" context="{'search_today':True}" help="Search saved records today"/>
+            <filter icon="terp-go-week" name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Search the records saved this week"/>
+            <filter icon="terp-go-month" name="this_month" string="Este mes" context="{'search_this_month':True}" help="Search saved records this month"/>
+          <separator/>
+          <group string="Agrupar por...">
+            <filter string="Colaborador" icon="terp-partner" domain="[]" context="{'group_by':'collaborator_id'}"/>
+            <filter string="Fecha" icon="terp-partner" domain="[]" context="{'group_by':'datetime'}"/>
+            <filter string="Conexiónes desde" icon="terp-partner" domain="[]" context="{'group_by':'remote_address'}"/>
+            <filter string="Conexiónes a" icon="terp-partner" domain="[]" context="{'group_by':'base_location'}"/>
+          </group>
+        </search>
+      </field>
+    </record>
+    <!--____________________________________________________Vista de Grafico-->
+    <record model="ir.ui.view" id="kemas_collaborator_logbook_login_search_graph_view">
+      <field name="name">kemas.collaborator.logbook.login.graph</field>
+      <field name="model">kemas.collaborator.logbook.login</field>
+      <field name="type">graph</field>
+      <field name="arch" type="xml">
+      <graph string="Collaborators" type="radar">
+        <field name="collaborator_id"/>
+        <field name="count" operator="+"/>
+      </graph>
+      </field>
+    </record>
    	<!-- 
     ====================
     COLLABORATOR
@@ -2226,7 +2305,7 @@
         <field name="context">{'search_view_ref':'kemas.kemas_history_points_search_view','search_default_collaborator_id': [active_id], 'default_collaborator_id': active_id}</field>
         <field name="help" type="html">
           <p>
-            No history log points..!!
+            No hay ningún registro de puntos
           </p>
         </field>
     </record>
@@ -2237,7 +2316,7 @@
         <field name="context">{'search_view_ref':'kemas.kemas_attendance_search_view','search_default_collaborator_id': [active_id], 'default_collaborator_id': active_id}</field>
         <field name="help" type="html">
           <p>
-            No attendace record..!!
+            No hay ningún registro de asistencia
           </p>
         </field>
     </record>
@@ -2249,6 +2328,17 @@
         <field name="help" type="html">
           <p>
             No suspensions record..!!
+          </p>
+        </field>
+    </record>
+    <record id="action_kemas_collaborator_logbook_login" model="ir.actions.act_window">
+        <field name="name">Inicios de Sesión</field>
+        <field name="res_model">kemas.collaborator.logbook.login</field>
+        <field name="view_mode">tree,form,graph</field>
+        <field name="context">{'search_view_ref':'kemas.kemas_collaborator_logbook_login_search_view','search_default_collaborator_id': [active_id], 'default_collaborator_id': active_id}</field>
+        <field name="help" type="html">
+          <p>
+            No hay ningún inicio de sesión registrado.
           </p>
         </field>
     </record>
@@ -2297,6 +2387,7 @@
                         <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_history_points_collaborator)d" string="Points"/>
                         <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_attendance_collaborator)d" string="Attendances"/>                        
                         <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_suspension_collaborator)d" string="Suspensions"/>
+                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_collaborator_logbook_login)d" string="Inicios de sesión"/>
                     </div>
 		       		<group colspan="4" expand="1" col="10">
 		       			<field name="notified" invisible="1"/>
@@ -4311,7 +4402,7 @@
   	</record>
   	<!--____________________________________________________Vista de Grafico-->
   	<record model="ir.ui.view" id="kemas_event_collaborator_line_graph_view">
-      <field name="name">kkemas.event.collaborator.line.graph</field>
+      <field name="name">kemas.event.collaborator.line.graph</field>
       <field name="model">kemas.event.collaborator.line</field>
       <field name="type">graph</field>
       <field name="arch" type="xml">
@@ -4997,6 +5088,20 @@
     ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::ACTIONS::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     -->
+    <!--____________________________________________________Inicios de Sesión-->
+    <record model="ir.actions.act_window" id="kemas_collaborator_logbook_login_action">
+      <field name="name">Registro de Inicios de Sesión</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">kemas.collaborator.logbook.login</field>
+      <field name="view_mode">tree,form,graph</field>
+      <field name="help" type="html">
+        <p class="oe_view_nocontent_create">
+          No hay ningún inicio de sesión registrado.
+        </p><p>
+            
+        </p>
+      </field>
+    </record>
     <!--____________________________________________________Cursos-->
     <record model="ir.actions.act_window" id="kemas_specialization_course_action">
       <field name="name">Cursos de especialización</field>
@@ -6106,6 +6211,8 @@
     -->
     <!--_____________Masive Mail -->
     <menuitem action="kemas_massive_email_form_action" name="Massive e-mail" id="menu_kemas_massive_email" parent="menu_kemas_extras_menu" sequence="2"/>
+    <!-- Inicios de Sesión -->
+    <menuitem action="kemas_collaborator_logbook_login_action" id="menu_kemas_collaborator_logbook_login" parent="menu_kemas_extras_menu" sequence="3"/>
     <!-- 
     >>>>>>>>>>>>>>>>>>>>>>>>>>Configuration
     -->    

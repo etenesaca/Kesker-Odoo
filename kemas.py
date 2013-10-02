@@ -46,6 +46,67 @@ from dateutil.parser import  *
     
 _logger = logging.getLogger(__name__)
 
+class res_users(osv.osv):
+    def register_login(self,db_name, user_id, user_agent_env):
+        threaded_sending = threading.Thread(target=self._register_login, args=(db_name,user_id,user_agent_env))
+        threaded_sending.start()
+    
+    def _register_login(self,db_name, user_id, user_agent_env):
+        db, pool = pooler.get_db_and_pool(db_name)
+        cr = db.cursor()
+        if user_id:
+            collaborator_obj = self.pool.get('kemas.collaborator')
+            collaborator_ids = collaborator_obj.search(cr,user_id,[('user_id','=',user_id)])
+            if collaborator_ids:
+                vals_login = {
+                              'collaborator_id' : collaborator_ids[0],
+                              'base_location' : user_agent_env['base_location'],
+                              'remote_address' : user_agent_env['REMOTE_ADDR'],
+                              }
+                self.pool.get('kemas.collaborator.logbook.login').create(cr,1,vals_login)
+        cr.commit()
+                
+    def authenticate(self, db, login, password, user_agent_env):
+        uid = super(res_users, self).authenticate(db, login, password, user_agent_env)
+        self.register_login(db, uid, user_agent_env)
+        return uid
+
+    _inherit = 'res.users'
+    
+class kemas_collaborator_logbook_login(osv.osv):
+    def search(self, cr, uid, args, offset = 0, limit = None, order = None, context={}, count = False):
+        if context.get('search_this_month',False):
+            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            args.append(('datetime','>=',range_dates['date_start']))
+            args.append(('datetime','<=',range_dates['date_stop']))    
+        elif context.get('search_this_week',False):
+            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            args.append(('datetime','>=',range_dates['date_start']))
+            args.append(('datetime','<=',range_dates['date_stop']))
+        elif context.get('search_today',False):
+            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            args.append(('datetime','>=',range_dates['date_start']))
+            args.append(('datetime','<=',range_dates['date_stop']))         
+        return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
+    
+    def create(self, cr, uid, vals, context={}):
+        vals['datetime'] = time.strftime("%Y-%m-%d %H:%M:%S")
+        return super(osv.osv,self).create(cr, uid, vals, context)
+    
+    _order = 'datetime DESC'
+    _name='kemas.collaborator.logbook.login'
+    _columns={
+        'collaborator_id':fields.many2one('kemas.collaborator','Colaborador'),
+        'datetime': fields.datetime('Fecha y hora'),
+        'remote_address':fields.char('Conectado desde', size=255, required=False, readonly=False),
+        'base_location':fields.char('Conectado a', size=255, required=False, readonly=False),
+        'count': fields.integer('count', required=True)
+        }
+    
+    _defaults = {  
+        'count': 1, 
+        }
+    
 class kemas_func(osv.osv):
     def mailing(self,cr,uid):
         config_obj = self.pool.get('kemas.config')

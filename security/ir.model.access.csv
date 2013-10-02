@@ -46,6 +46,7 @@ access_kemas_specialization_course_kemas_manager,kemas.specialization.course,kem
 access_kemas_specialization_course_level_kemas_manager,kemas.specialization.course.level,kemas.model_kemas_specialization_course_level,group_kemas_manager,1,1,1,1
 access_kemas_specialization_course_line_kemas_manager,kemas.specialization.course.line,kemas.model_kemas_specialization_course_line,group_kemas_manager,1,1,1,1
 access_kemas_team_kemas_manager,kemas.team,kemas.model_kemas_team,group_kemas_manager,1,1,1,1
+access_kemas_collaborator_logbook_login_kemas_manager,kemas.collaborator.logbook.login,kemas.model_kemas_collaborator_logbook_login,group_kemas_manager,1,0,1,0
 ,,,,,,,
 access_base_res_country_kemas_collaborator,base.res.country,base.model_res_country,group_kemas_collaborator,1,0,0,0
 access_base_res_country_state_kemas_collaborator,base.res.country.state,base.model_res_country_state,group_kemas_collaborator,1,0,0,0
@@ -94,6 +95,7 @@ access_kemas_specialization_course_kemas_collaborator,kemas.specialization.cours
 access_kemas_specialization_course_level_kemas_collaborator,kemas.specialization.course.level,kemas.model_kemas_specialization_course_level,group_kemas_collaborator,1,0,0,0
 access_kemas_specialization_course_line_kemas_collaborator,kemas.specialization.course.line,kemas.model_kemas_specialization_course_line,group_kemas_collaborator,1,1,1,1
 access_kemas_team_kemas_collaborator,kemas.team,kemas.model_kemas_team,group_kemas_collaborator,1,0,0,0
+access_kemas_collaborator_logbook_login_kemas_collaborator,kemas.collaborator.logbook.login,kemas.model_kemas_collaborator_logbook_login,group_kemas_collaborator,1,0,1,0
 ,,,,,,,
 access_base_res_country_kemas_register_attedance,base.res.country,base.model_res_country,group_kemas_register_attedance,0,0,0,0
 access_base_res_country_state_kemas_register_attedance,base.res.country.state,base.model_res_country_state,group_kemas_register_attedance,0,0,0,0
@@ -142,6 +144,7 @@ access_kemas_specialization_course_kemas_register_attedance,kemas.specialization
 access_kemas_specialization_course_level_kemas_register_attedance,kemas.specialization.course.level,kemas.model_kemas_specialization_course_level,group_kemas_register_attedance,0,0,0,0
 access_kemas_specialization_course_line_kemas_register_attedance,kemas.specialization.course.line,kemas.model_kemas_specialization_course_line,group_kemas_register_attedance,0,0,0,0
 access_kemas_team_kemas_register_attedance,kemas.team,kemas.model_kemas_team,group_kemas_register_attedance,0,0,0,0
+access_kemas_collaborator_logbook_login_kemas_register_attedance,kemas.collaborator.logbook.login,kemas.model_kemas_collaborator_logbook_login,group_kemas_register_attedance,1,0,1,0
 ,,,,,,,
 access_base_res_country_kemas_register_consultant,base.res.country,base.model_res_country,group_kemas_register_consultant,1,0,0,0
 access_base_res_country_state_kemas_register_consultant,base.res.country.state,base.model_res_country_state,group_kemas_register_consultant,1,0,0,0
@@ -190,6 +193,7 @@ access_kemas_specialization_course_kemas_register_consultant,kemas.specializatio
 access_kemas_specialization_course_level_kemas_register_consultant,kemas.specialization.course.level,kemas.model_kemas_specialization_course_level,group_kemas_register_consultant,1,0,0,0
 access_kemas_specialization_course_line_kemas_register_consultant,kemas.specialization.course.line,kemas.model_kemas_specialization_course_line,group_kemas_register_consultant,1,0,0,0
 access_kemas_team_kemas_register_consultant,kemas.team,kemas.model_kemas_team,group_kemas_register_consultant,1,0,0,0
+access_kemas_collaborator_logbook_login_kemas_register_consultant,kemas.collaborator.logbook.login,kemas.model_kemas_collaborator_logbook_login,group_kemas_register_consultant,1,0,1,0
 ,,,,,,,
 access_base_res_country_kemas_admin,base.res.country,base.model_res_country,group_kemas_admin,1,1,1,1
 access_base_res_country_state_kemas_admin,base.res.country.state,base.model_res_country_state,group_kemas_admin,1,1,1,1
@@ -238,6 +242,7 @@ access_kemas_specialization_course_kemas_admin,kemas.specialization.course,kemas
 access_kemas_specialization_course_level_kemas_admin,kemas.specialization.course.level,kemas.model_kemas_specialization_course_level,group_kemas_admin,1,1,1,1
 access_kemas_specialization_course_line_kemas_admin,kemas.specialization.course.line,kemas.model_kemas_specialization_course_line,group_kemas_admin,1,1,1,1
 access_kemas_team_kemas_admin,kemas.team,kemas.model_kemas_team,group_kemas_admin,1,1,1,1
+access_kemas_collaborator_logbook_login_kemas_admin,kemas.collaborator.logbook.login,kemas.model_kemas_collaborator_logbook_login,group_kemas_admin,1,0,1,0
 ,,,,,,,
 access_base_res_country_kemas_librarian,base.res.country,base.model_res_country,group_kemas_librarian,1,0,0,0
 access_base_res_country_state_kemas_librarian,base.res.country.state,base.model_res_country_state,group_kemas_librarian,1,0,0,0
@@ -286,3 +291,4 @@ access_kemas_specialization_course_kemas_librarian,kemas.specialization.course,k
 access_kemas_specialization_course_level_kemas_librarian,kemas.specialization.course.level,kemas.model_kemas_specialization_course_level,group_kemas_librarian,0,0,0,0
 access_kemas_specialization_course_line_kemas_librarian,kemas.specialization.course.line,kemas.model_kemas_specialization_course_line,group_kemas_librarian,0,0,0,0
 access_kemas_team_kemas_librarian,kemas.team,kemas.model_kemas_team,group_kemas_librarian,0,0,0,0
+access_kemas_collaborator_logbook_login_kemas_librarian,kemas.collaborator.logbook.login,kemas.model_kemas_collaborator_logbook_login,group_kemas_librarian,1,0,1,0
