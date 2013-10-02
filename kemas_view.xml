@@ -2373,6 +2373,7 @@
 						    	-->
 						    	<page string="Datos ke+" attrs="{'invisible':[('type','=','Others')]}">
 						    	  <group colspan="4" col="6">
+                                    <field name="last_connection" string="Última conexión" colspan="6" readonly="1"/>
                                     <separator string="Ministry datas" colspan="6"/>
                                     <field name="team_id" colspan="2"/>
                                     <field name="join_date" colspan="2" on_change="on_change_join_date(join_date)" attrs="{'required':[('type','=','Collaborator')]}"/>

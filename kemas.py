@@ -42,6 +42,7 @@ import openerp
 import tools
 import tools7
 import math
+from dateutil.parser import  *
     
 _logger = logging.getLogger(__name__)
 
@@ -3458,6 +3459,42 @@ class kemas_collaborator(osv.osv):
             result[record['id']] = replacements(record['id'])
         return result
     
+    def _last_connection(self, cr, uid, ids, name, arg, context={}): 
+        def last_connection(user_id):
+            if not user_id:
+                return False
+            
+            sql="""
+                SELECT login_date FROM res_users
+                WHERE id = %d
+                LIMIT 1
+                """%user_id[0]
+            cr.execute(sql)
+            login_date = cr.dictfetchall()[0]['login_date']
+            if login_date is None or not login_date:
+                return 'Nunca Conectado'
+            
+            login_date = parse(login_date)
+            now = kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"),self.pool.get('kemas.func').get_tz_by_uid(cr,uid))
+            now = parse(now)
+            diff = datetime.datetime.now() - login_date
+            days = diff.days
+            
+            if days == 0:
+                res = 'Hoy'
+            elif days == 1:
+                res = 'Ayer'
+            else:
+                res = unicode("%s, hace %d días",'utf-8')%(tools.ustr(login_date.strftime('%A %d de %B de %Y')),days)
+            return res
+        
+        result = {}
+        records = super(osv.osv,self).read(cr,uid,ids,['id','user_id'])
+        for record in records:
+            result[record['id']] = last_connection(record['user_id'])
+        return result
+        
+    
     _order = 'name'
     _name = 'kemas.collaborator'
     _columns={
@@ -3511,6 +3548,7 @@ class kemas_collaborator(osv.osv):
             ('notified','Notified'),
             ('no_notified','No notified'),
             ],    'Notified', select=True, help="Indicates whether the notification email was sent"),
+        'last_connection':fields.function(_last_connection, type='char', string='Ultima Conexion'),
         'progress':fields.function(get_percentage, type='float', string='Progress'),
         'create_date':fields.function(_create_date, type='char', string='Created date'),
         'replacements':fields.function(_replacements, type='integer', string='Replacements avaliable', help="Number of replacements available events this month"),
