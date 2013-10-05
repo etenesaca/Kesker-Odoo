@@ -5632,14 +5632,56 @@ class kemas_event(osv.osv):
             result[record['id']] = "%s | %s - %s"%(record['date_start'][:10],time_start,time_end)
         return result
     
+    def _notification_status(self, cr, uid, ids, name, arg, context={}): 
+            def notification_status(line_ids,sending_emails):
+                if sending_emails:
+                    return unicode('La notificaciones están siendo enviadas','utf-8')
+                lines = line_obj.read(cr,uid,line_ids,['send_email_state','collaborator_id'])
+                
+                collaborators_failed = ''
+                collaborators_failed_num = 0
+                collaborators_pending = ''
+                collaborators_pending_num = 0
+                collaborators_sent = ''
+                collaborators_sent_num = 0
+                
+                for line in lines:
+                    if line['send_email_state'] in ['Timeout','Error']:
+                        collaborators_failed += line['collaborator_id'][1] + ','
+                        collaborators_failed_num += 1
+                    elif line['send_email_state'] in ['Waiting']:
+                        collaborators_pending += line['collaborator_id'][1] + ','
+                        collaborators_pending_num += 1
+                    elif line['send_email_state'] in ['Sent']:
+                        collaborators_sent += line['collaborator_id'][1] + ','
+                        collaborators_sent_num += 1
+                
+                res = ''
+                if collaborators_pending_num == len(line_ids):
+                    res = unicode('Las notificaciones aun estan pedientes de envío','utf-8')
+                elif collaborators_failed != '':
+                    collaborators_failed = collaborators_failed[:len(notifications_failed)-1]
+                    res = unicode('No se ha podido notificar a: %s.'%notifications_failed,'utf-8')
+                else:
+                    res = unicode('Todos los colaboradores fueron notificados','utf-8')
+                    
+                return res
+             
+            result = {}
+            records = super(osv.osv,self).read(cr,uid,ids,['id','event_collaborator_line_ids','sending_emails'])
+            line_obj = self.pool.get('kemas.event.collaborator.line')
+            for record in records:
+                result[record['id']] = notification_status(record['event_collaborator_line_ids'],record['sending_emails'])
+            return result
+    
+    def refresh_notification_status(self,cr,uid,ids,context={}):
+        return True
+    
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _order='date_start,code'
     _name='kemas.event'
     _rec_name = 'service_id'
     _columns={
-        'time_start_str':fields.function(_get_time_start_str, type='char', string='Time Start'),
-        'time_end_str':fields.function(_get_time_end_str, type='char', string='Time end'),
-        'event_date_str':fields.function(_get_event_date_str, type='char', string='Event date'),
         'service_id':fields.many2one('kemas.service','Service', required=True, help='Name of service relating to this event.',states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}),
         'place_id':fields.many2one('kemas.place','Place',required=True, help='Place where the event was done.', states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}, ondelete="restrict"),
         'code' : fields.char('Code',size=32, help="Unique code that is assigned to each event", readonly=True),
@@ -5657,7 +5699,7 @@ class kemas_event(osv.osv):
         'mailing':fields.function(mailing, type='boolean', string='Mailing'),
         'sending_emails' : fields.boolean('Sending emails?'),
         'collaborator_ids_send_email': fields.many2many('kemas.collaborator', 'kemas_event_collaborator_send_email_rel',  'event_id',  'collaborator_id', 'Collaborators to notify',help=''),
-        #Dates------------------------------------------------------------------------------------------
+        #Fechas------------------------------------------------------------------------------------------
         'date_init':fields.datetime('Date Init',help=''),
         'date_start':fields.datetime('Date', required=True,help='Scheduled date', states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}),
         'date_stop':fields.datetime('Date Stop',help=''),
@@ -5680,6 +5722,7 @@ class kemas_event(osv.osv):
         'rm_time_limit' : fields.float('Time Limit', help=""),
         'team_id':fields.many2one('kemas.team','Team', help='Team that will participate in this event.', states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}),
         'collaborators_loaded' : fields.boolean('collaborators loaded?'),
+        'notification_status':fields.function(_notification_status, type='char', string='Estado de notificaciones'),
         #One to Many Relations----------------------------------------------------------------------------
         'event_collaborator_line_ids': fields.one2many('kemas.event.collaborator.line', 'event_id', 'Collaborators',help='Collaborators who participated in this event', states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}),
         #line_ids': fields.one2many('kemas.event.collaborator.line', 'event_id', 'Lines'),
@@ -5699,6 +5742,10 @@ class kemas_event(osv.osv):
         'stage_id': fields.many2one('kemas.event.stage', 'Stage'),
         'photo_place': fields.related('place_id', 'photo',type='binary',store=True,string='photo'),
         'members': fields.many2many('res.users', 'event_user_rel', 'event_id', 'uid', 'Event Members', help=""),
+        #Campos para cuando un evento finalice alamacer los datos que tenia el servicio en ese entoces
+        'time_start_str':fields.function(_get_time_start_str, type='char', string='Time Start'),
+        'time_end_str':fields.function(_get_time_end_str, type='char', string='Time end'),
+        'event_date_str':fields.function(_get_event_date_str, type='char', string='Event date'),
         }
     _sql_constraints= [
         ('event_code', 'unique (code)', 'This Code already exist!'),

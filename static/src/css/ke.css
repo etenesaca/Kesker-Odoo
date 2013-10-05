@@ -17,6 +17,67 @@
   border: none;
 }
 
+#box_pending_send_notifications {
+	text-align: center;
+	color: #DF7401;
+   	background-color: #F3E2A9;
+	padding: 5px;
+	/*para Firefox*/
+	-moz-border-radius: 5px 5px 5px 5px;
+	/*para Safari y Chrome*/
+	-webkit-border-radius: 5px 5px 5px 5px;
+	/* para Opera */
+	border-radius: 5px 5px 5px 5px;
+	/* para IE */
+	behavior:url(border.htc);
+}
+
+#box_ok_send_notifications {
+	text-align: center;
+	color: #088A08;
+   	background-color: #CEF6CE;
+	padding: 5px;
+	/*para Firefox*/
+	-moz-border-radius: 5px 5px 5px 5px;
+	/*para Safari y Chrome*/
+	-webkit-border-radius: 5px 5px 5px 5px;
+	/* para Opera */
+	border-radius: 5px 5px 5px 5px;
+	/* para IE */
+	behavior:url(border.htc);
+}
+
+#box_error_send_notifications {
+	text-align: center;
+	color: #DF0101;
+   	background-color: #F6CECE;
+	padding: 5px;
+	/*para Firefox*/
+	-moz-border-radius: 5px 5px 5px 5px;
+	/*para Safari y Chrome*/
+	-webkit-border-radius: 5px 5px 5px 5px;
+	/* para Opera */
+	border-radius: 5px 5px 5px 5px;
+	/* para IE */
+	behavior:url(border.htc);
+}
+
+#box_sending_send_notifications {
+	text-align: center;
+	color: #045FB4;
+   	background-color: #A9E2F3;
+	padding: 5px;
+	/*para Firefox*/
+	-moz-border-radius: 5px 5px 5px 5px;
+	/*para Safari y Chrome*/
+	-webkit-border-radius: 5px 5px 5px 5px;
+	/* para Opera */
+	border-radius: 5px 5px 5px 5px;
+	/* para IE */
+	behavior:url(border.htc);
+}
+
+
 .box_plain {
    border: 1px solid #000000;
 	-moz-border-radius: 7px;
