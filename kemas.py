@@ -5635,36 +5635,29 @@ class kemas_event(osv.osv):
     def _notification_status(self, cr, uid, ids, name, arg, context={}): 
             def notification_status(line_ids,sending_emails):
                 if sending_emails:
-                    return unicode('La notificaciones están siendo enviadas','utf-8')
+                    return unicode('sending')
                 lines = line_obj.read(cr,uid,line_ids,['send_email_state','collaborator_id'])
                 
                 collaborators_failed = ''
-                collaborators_failed_num = 0
-                collaborators_pending = ''
-                collaborators_pending_num = 0
-                collaborators_sent = ''
-                collaborators_sent_num = 0
-                
+                pendings = 0
+                sents = 0
                 for line in lines:
                     if line['send_email_state'] in ['Timeout','Error']:
                         collaborators_failed += line['collaborator_id'][1] + ','
-                        collaborators_failed_num += 1
                     elif line['send_email_state'] in ['Waiting']:
-                        collaborators_pending += line['collaborator_id'][1] + ','
-                        collaborators_pending_num += 1
+                        pendings += 1
                     elif line['send_email_state'] in ['Sent']:
-                        collaborators_sent += line['collaborator_id'][1] + ','
-                        collaborators_sent_num += 1
-                
-                res = ''
-                if collaborators_pending_num == len(line_ids):
-                    res = unicode('Las notificaciones aun estan pedientes de envío','utf-8')
-                elif collaborators_failed != '':
-                    collaborators_failed = collaborators_failed[:len(notifications_failed)-1]
-                    res = unicode('No se ha podido notificar a: %s.'%notifications_failed,'utf-8')
+                        sents += 1
+
+                if collaborators_failed != '':
+                    collaborators_failed = collaborators_failed[:len(collaborators_failed)-1]
+                    res = 'No se ha podido notificar a: %s.'%collaborators_failed
+                elif sents == len(line_ids):
+                    res = unicode('ok')
+                elif pendings == len(line_ids):
+                    res = unicode('pending')
                 else:
-                    res = unicode('Todos los colaboradores fueron notificados','utf-8')
-                    
+                    res = unicode('pending')
                 return res
              
             result = {}

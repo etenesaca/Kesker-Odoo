@@ -133,12 +133,11 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
             threaded_sending = threading.Thread(target=self._send_email_thr, args=(cr.dbname , uid, ids[0], context))
             threaded_sending.start()
             return{       
-                'res_id' : ids[0],
+                'res_id' : this['event_id'],
                 'view_type': 'form', 
                 'view_mode': 'form', 
-                'res_model': 'kemas.send.notification.event.wizard', 
+                'res_model': 'kemas.event', 
                 'type': 'ir.actions.act_window', 
-                'target':'new',
                 }
         else:
             self._send_email(cr, uid, ids, context)

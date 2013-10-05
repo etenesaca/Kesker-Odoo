@@ -4479,32 +4479,32 @@
 		       		<field name="sending_emails" invisible="1"/>
                     <div states="on_going">
                       <div><br/><br/></div>
-                      <div id="box_pending_send_notifications">
+                      <div id="box_sending_send_notifications" attrs="{'invisible':[('notification_status','not in',['sending'])]}">
+                        <img src="/kemas/static/src/img/sending.gif" class="oe_inline"/>
+                        <strong>
+                          Las notificaciones se están enviando...
+                        </strong>
+                        <button name="refresh_notification_status" icon="STOCK_REFRESH" type="object" string="actualizar" class="oe_link"/>
+                      </div>
+                      <div id="box_pending_send_notifications" attrs="{'invisible':[('notification_status','not in',['pending'])]}">
                         <img src="/kemas/static/src/img/warning.png" class="oe_inline"/>
                         <strong>
                           Las notificaciones aún están pedientes de envío
                         </strong>
                         <button name="refresh_notification_status" icon="STOCK_REFRESH" type="object" string="actualizar" class="oe_link"/>
                       </div> 
-                      <div id="box_ok_send_notifications">
+                      <div id="box_ok_send_notifications" attrs="{'invisible':[('notification_status','not in',['ok'])]}">
                         <img src="/kemas/static/src/img/ok.png" class="oe_inline"/>
                         <strong>
                           Todos los colaboradores fueron notificados
                         </strong>
                       </div>
-                      <div id="box_error_send_notifications">
+                      <div id="box_error_send_notifications" attrs="{'invisible':[('notification_status','in',['sending','pending','ok'])]}">
                         <img src="/kemas/static/src/img/error.png" class="oe_inline"/>
                         <strong>
                           <field name="notification_status" class="oe_inline"/>
                         </strong>
                       </div>
-                      <div id="box_sending_send_notifications">
-                        <img src="/kemas/static/src/img/sending.gif" class="oe_inline"/>
-                        <strong>
-                          Las notificaciones se están enviando...
-                        </strong>
-                        <button name="refresh_notification_status" icon="STOCK_REFRESH" type="object" string="actualizar" class="oe_link"/>
-                    </div>
                     </div>
 					<group colspan="4" expand="1" states="on_going,creating,draft">
 						<div class="oe_title">
