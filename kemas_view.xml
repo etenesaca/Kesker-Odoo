@@ -4477,7 +4477,7 @@
                         <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_attendance_event)d" string="Attendances"/>                        
                     </div>
 		       		<field name="sending_emails" invisible="1"/>
-                    <div states="on_going">
+                    <div states="on_going" groups="kemas.group_kemas_manager">
                       <div><br/><br/></div>
                       <div id="box_sending_send_notifications" attrs="{'invisible':[('notification_status','not in',['sending'])]}">
                         <img src="/kemas/static/src/img/sending.gif" class="oe_inline"/>
@@ -4494,9 +4494,8 @@
                         <button name="refresh_notification_status" icon="STOCK_REFRESH" type="object" string="actualizar" class="oe_link"/>
                       </div> 
                       <div id="box_ok_send_notifications" attrs="{'invisible':[('notification_status','not in',['ok'])]}">
-                        <img src="/kemas/static/src/img/ok.png" class="oe_inline"/>
                         <strong>
-                          Todos los colaboradores fueron notificados
+                          Todos los colaboradores participantes fueron notificados
                         </strong>
                       </div>
                       <div id="box_error_send_notifications" attrs="{'invisible':[('notification_status','in',['sending','pending','ok'])]}">
@@ -4506,16 +4505,14 @@
                         </strong>
                       </div>
                     </div>
-					<group colspan="4" expand="1" states="on_going,creating,draft">
-						<div class="oe_title">
-		       				<div class="oe_edit_only" states="creating,draft">
-	                            <label for="service_id"/>
-	                        </div>
-	                        <h2>
-	                            <field name="service_id" default_focus="1" placeholder="Service Name" />
-	                        </h2>
-		       			</div>
-				    </group>
+					<div class="oe_title" states="on_going,creating,draft">
+	       				<div class="oe_edit_only" states="creating,draft">
+                            <label for="service_id"/>
+                        </div>
+                        <h2>
+                            <field name="service_id" default_focus="1" placeholder="Service Name" />
+                        </h2>
+	       			</div>
 		       		<notebook colspan="4">
 					    <page string="Event Information">	
 					      <group colspan="4" expand="1" states="on_going,creating,draft">
@@ -4561,19 +4558,13 @@
 							<field name="information" colspan="4" widget="html" placeholder="Email that they sent to collaborators"/>			
 					    </page>
 						<page string="Extra information" attrs="{'invisible':[('state','=','creating')]}" groups="kemas.group_kemas_manager">	
-							<notebook>
-								<page string="Comments">	
-									<field name="comments" colspan="4" placeholder="Comments"/>			
-							    </page>
-							    <page string="Summary" attrs="{'invisible':[('state','=','creating')]}">
-								    <group colspan="4" expand="1" col="4">
-										<field name="code" readonly="1" colspan="4"/>
-										<field name="date_create" readonly="1" colspan="4"/>
-										<field name="date_close" readonly="1" states="closed" colspan="4"/>
-										<field name="date_cancel" readonly="1" states="canceled" colspan="4"/>
-									</group>
-							    </page>
-						    </notebook>			
+    					    <group>
+    							<field name="code" readonly="1"/>
+    							<field name="date_create" readonly="1"/>
+    							<field name="date_close" readonly="1" states="closed"/>
+    							<field name="date_cancel" readonly="1" states="canceled"/>
+								<field name="comments" placeholder="Comments"/>			
+    						</group>
 					    </page>
 					</notebook>		
 					<newline/>
