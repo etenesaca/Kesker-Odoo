@@ -3442,7 +3442,7 @@ class kemas_collaborator(osv.osv):
                 FROM kemas_collaborator AS cl
                 INNER JOIN res_users AS us ON (cl.create_uid = us.id)
                 WHERE cl.id in (%s)
-            """%(kemas_extras.convert_to_tuple_str(ids,True))
+            """%(kemas_extras.convert_to_tuple_str(ids))
         cr.execute(sql)
         collaborators = cr.fetchall()
         for collaborator in collaborators:
@@ -4627,15 +4627,25 @@ class kemas_event(osv.osv):
         return {'value':values}
                 
     def search(self, cr, uid, args, offset = 0, limit = None, order = None, context={}, count = False):    
+        collaborator_id = False
+        if context.get('collaborator_id',False):
+            for arg in args:
+                try:
+                    if arg[0] == 'collaborator_id':
+                        collaborator_id = arg[2]
+                        args.remove(arg)
+                        continue
+                except:None
+        
         collaborator_obj = self.pool.get('kemas.collaborator')
         event_line_obj = self.pool.get('kemas.event.collaborator.line')
         user_obj = self.pool.get('res.users')
         group_obj = self.pool.get('res.groups')
         user_id = user_obj.search(cr,uid,[('id','=',uid),])
-        groups_id = user_obj.read(cr,uid,user_id,['groups_id'])[0]['groups_id']
-        if not 1 in groups_id:
+        groups_ids = user_obj.read(cr,uid,user_id,['groups_id'])[0]['groups_id']
+        if not 1 in groups_ids:
             kemas_collaborator_id = group_obj.search(cr, uid, [('name','=', 'Kemas / Collaborator'),])[0]
-            if kemas_collaborator_id in groups_id: 
+            if kemas_collaborator_id in groups_ids: 
                 collaborator_ids = collaborator_obj.search(cr, uid, [('user_id','=',uid)])
                 event_line_ids = event_line_obj.search(cr, uid, [('collaborator_id','in',collaborator_ids)])
                 l1 = super(osv.osv,self).search(cr,uid,args + [('event_collaborator_line_ids','in',event_line_ids)])
@@ -4649,7 +4659,7 @@ class kemas_event(osv.osv):
                 group by c.res_id
                 """%(partner_id)
                 cr.execute(sql)
-                l2 = kemas_extras.convert_result_query_to_list(cr.fetchall(),True)
+                l2 = kemas_extras.convert_result_query_to_list(cr.fetchall())
                 l3 = super(osv.osv,self).search(cr,uid,args + [('message_follower_ids','in',[partner_id])])
                 event_ids = list(set(l1 + l2 + l3))
                 args.append(('id','in',event_ids))
@@ -4663,7 +4673,7 @@ class kemas_event(osv.osv):
                 now = time.strftime("%Y-%m-%d %H:%M:%S")   
                 args.append(('date_init','<=',now))
                 args.append(('date_stop','>=',now))
-                args.append(('state','=','on_going'))    
+                args.append(('state','=','on_going'))
         
         if context.get('search_this_month',False):
             range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
@@ -4679,6 +4689,15 @@ class kemas_event(osv.osv):
             args.append(('date_start','<=',range_dates['date_stop']))  
         
         res_ids = super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
+        if collaborator_id:
+            sql="""
+                select e.id from kemas_event as e
+                join kemas_event_collaborator_line as l on (l.event_id = e.id)
+                where l.collaborator_id = %d and e.id in %s
+                """%(collaborator_id, kemas_extras.convert_to_tuple_str(res_ids))
+            cr.execute(sql)
+            res_ids = list(set(kemas_extras.convert_result_query_to_list(cr.fetchall())))
+        
         for arg in args:
             if str(arg) in ["['message_unread', '=', True]", "('message_unread', '=', True)"]:
                 res_ids += super(osv.osv,self).search(cr,uid,[('message_unread', '=', True)])
@@ -4778,7 +4797,7 @@ class kemas_event(osv.osv):
         """%(event_id)
         cr.execute(sql)
         result_query = cr.fetchall()
-        return kemas_extras.convert_result_query_to_list(result_query,True)
+        return kemas_extras.convert_result_query_to_list(result_query)
     
     def get_collaborators_by_event(self, cr, uid, event_id, min_image_size=64):
         def get_photo_collaborator(collaborator_id):
@@ -4877,7 +4896,7 @@ class kemas_event(osv.osv):
                     ev.id NOT IN %s
                 ORDER BY ev.date_start
                 LIMIT 1
-            """%(date_today, kemas_extras.convert_to_tuple_str(except_list,True))
+            """%(date_today, kemas_extras.convert_to_tuple_str(except_list))
             cr.execute(sql)
             result_query = cr.fetchall()
             res = []
@@ -5688,6 +5707,7 @@ class kemas_event(osv.osv):
             ('canceled','Canceled'),
             ],'State'),
         'count':fields.integer('Count'),
+        'collaborator_id':fields.many2one('kemas.collaborator','Colaborador', help='Colaborador por el cual se va filtrar los eventos'),
         #Envio de Correos-------------------------------------------------------------------------------
         'mailing':fields.function(mailing, type='boolean', string='Mailing'),
         'sending_emails' : fields.boolean('Sending emails?'),
@@ -5722,7 +5742,6 @@ class kemas_event(osv.osv):
         'line_ids': fields.text('Lines'),
         'attendance_ids': fields.one2many('kemas.attendance', 'event_id', 'Attendances',help='Attendance register', readonly=True),
         #Ralated------------------------------------------------------------------------------------------
-        'collaborator_id': fields.related('event_collaborator_line_ids','collaborator_id',type="many2one",relation="kemas.collaborator",string="Collaborator",store=True),
         'time_start': fields.related('service_id', 'time_start', type='char', string='Time start', readonly=True, store=False),
         'time_end': fields.related('service_id', 'time_end', type='char', string='Time end', readonly=True, store=False),
         'time_entry': fields.related('service_id', 'time_entry', type='char', string='Time entry', readonly=True, store=False),

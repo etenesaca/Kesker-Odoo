@@ -2342,6 +2342,17 @@
           </p>
         </field>
     </record>
+    <record id="action_kemas_event_active_events" model="ir.actions.act_window">
+        <field name="name">Eventos</field>
+        <field name="res_model">kemas.event</field>
+        <field name="view_mode">kanban,calendar,tree,form</field>
+        <field name="context">{'search_view_ref':'kemas.kemas_event_search_view','search_default_collaborator_id': [active_id],'search_default_ongoing': 1, 'search_default_draft': 1, 'default_collaborator_id': active_id}</field>
+        <field name="help" type="html">
+          <p>
+            No ha sido incluido en ningún evento.
+          </p>
+        </field>
+    </record>
     <!--____________________________________________________Vista de Formulario-->
     <record model="ir.ui.view" id="kemas_collaborator_form_view">
     	<field name="name">kemas.collaborator.form</field>
@@ -2384,10 +2395,11 @@
                        	<field name="area_ids" widget="many2many_tags" attrs="{'invisible':[('type','=','Others')]}"/>
 	       			</div>
 	       			<div class="oe_right oe_button_box" name="buttons" attrs="{'invisible':['|',('type','=','Others'),('state','=','creating')]}">
-                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_history_points_collaborator)d" string="Points"/>
-                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_attendance_collaborator)d" string="Attendances"/>                        
-                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_suspension_collaborator)d" string="Suspensions"/>
-                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_collaborator_logbook_login)d" string="Inicios de sesión"/>
+                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_history_points_collaborator)d" string="Points" help="Ver el historial de los puntos"/>
+                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_event_active_events)d" string="Eventos" help="Ver los eventos en los que el colaborador ha sido incluido"/>
+                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_attendance_collaborator)d" string="Asistencias" help="Ver el registro de asistencia"/>                        
+                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_suspension_collaborator)d" string="Suspensiones" help="Ver las suspensiones"/>
+                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_collaborator_logbook_login)d" string="Logins" help="Ver el registro de veces que el usuario se ha conectado al sistema"/>
                     </div>
 		       		<group colspan="4" expand="1" col="10">
 		       			<field name="notified" invisible="1"/>
@@ -4724,18 +4736,6 @@
          	</tree>
      	</field>
   	</record>
-  	<!--____________________________________________________Vista de Grafico-->
-  	<record model="ir.ui.view" id="kemas_event_graph_view">
-      <field name="name">kemas.event.graph</field>
-      <field name="model">kemas.event</field>
-      <field name="type">graph</field>
-      <field name="arch" type="xml">
-		<graph string="Collaborators">
-		  <field name="collaborator_id"/>
-		  <field name="count" operator="+"/>
-		</graph>
-      </field>
-    </record>
   	<!--____________________________________________________Vista de Calendario-->
     <record model="ir.ui.view" id="kemas_event_calendar_view">
       <field name="name">kemas.event.calendar</field>
@@ -4832,7 +4832,7 @@
      	<field name="arch" type="xml">
 			<search string="Search Event">
     			<field name="code" default_focus="1"/>
-    			<field name="collaborator_id"/>
+    			<field name="collaborator_id" context="{'collaborator_id':True}"/>
     			<field name="service_id"/>
     			<field name="date_start"/>
     			<separator/>

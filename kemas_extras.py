@@ -547,7 +547,7 @@ def calcular_edad(date_start, format=1, date_end="now"):
             return res.strip()
     except: return "0"
     
-def convert_to_tuple_str(list, cero=False):
+def convert_to_tuple_str(list, cero=True):
     if cero:
         res = '(0)'
     else:
@@ -559,7 +559,7 @@ def convert_to_tuple_str(list, cero=False):
             res = str(tuple(list))
     return res
 
-def convert_result_query_to_list(result_query, sigle_column=False):
+def convert_result_query_to_list(result_query, sigle_column=True):
     res = []
     if sigle_column:
         for tpl in result_query:
