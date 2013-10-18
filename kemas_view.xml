@@ -2395,11 +2395,11 @@
                        	<field name="area_ids" widget="many2many_tags" attrs="{'invisible':[('type','=','Others')]}"/>
 	       			</div>
 	       			<div class="oe_right oe_button_box" name="buttons" attrs="{'invisible':['|',('type','=','Others'),('state','=','creating')]}">
-                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_history_points_collaborator)d" string="Points" help="Ver el historial de los puntos"/>
-                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_event_active_events)d" string="Eventos" help="Ver los eventos en los que el colaborador ha sido incluido"/>
-                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_attendance_collaborator)d" string="Asistencias" help="Ver el registro de asistencia"/>                        
-                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_suspension_collaborator)d" string="Suspensiones" help="Ver las suspensiones"/>
-                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_collaborator_logbook_login)d" string="Logins" help="Ver el registro de veces que el usuario se ha conectado al sistema"/>
+                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_history_points_collaborator)d" string="Points"/>
+                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_event_active_events)d" string="Eventos"/>
+                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_attendance_collaborator)d" string="Asistencias"/>                        
+                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_suspension_collaborator)d" string="Suspensiones"/>
+                        <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_collaborator_logbook_login)d" string="Logins"/>
                     </div>
 		       		<group colspan="4" expand="1" col="10">
 		       			<field name="notified" invisible="1"/>
