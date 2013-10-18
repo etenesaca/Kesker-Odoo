@@ -3072,10 +3072,10 @@
        			<filter name="inactive" string="Inactive" domain="[('state','=','Inactive')]" icon="kanban-stop"/>
        			<separator orientation="vertical"/>
 	   			<field name="name" default_focus="1"/>
-	   			<field name="code"/>
 	   			<field name="level_id"/>
 	   			<field name="team_id"/>
-          		<group string="Group by...">
+	   			<field name="code"/>
+          		<group string="Agrupar por...">
             		<filter string="Genre" icon="terp-face-plain" domain="[]" context="{'group_by':'genre'}"/>
             		<filter string="Marital Status" icon="terp-partner" domain="[]" context="{'group_by':'marital_status'}"/>
             		<separator orientation="vertical"/>
@@ -3100,9 +3100,9 @@
      	<field name="arch" type="xml">
 			<search string="search collaborator">
     			<field name="name" default_focus="1"/>
-    			<field name="code"/>
     			<field name="level_id"/>
     			<field name="team_id"/>
+    			<field name="code"/>
           		<group string="Group by...">
             		<filter string="Genre" icon="terp-personal" domain="[]" context="{'group_by':'genre'}"/>
             		<filter string="Marital Status" icon="terp-partner" domain="[]" context="{'group_by':'marital_status'}"/>
@@ -4830,28 +4830,26 @@
      	<field name="type">search</field>
      	<field name="priority" eval="1"/>
      	<field name="arch" type="xml">
-			<search string="Search Event">
-    			<field name="code" default_focus="1"/>
-    			<field name="collaborator_id" context="{'collaborator_id':True}"/>
-    			<field name="service_id"/>
-    			<field name="date_start"/>
-    			<separator/>
-    			<filter icon="terp-mail-message-new" string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]"/>
-                <separator/>
+			<search string="Buscar Evento">
        			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
        			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
        			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
           		<separator/>
-                <filter icon="terp-personal+" string="Member" domain="['|',('user_id', '=', uid),('members', '=', uid)]" help="Projects in which I am a member."/>
-          		<separator/>
-       			<filter name="ongoing" string="On Going" domain="[('state','=','on_going')]" icon="STOCK_MEDIA_PLAY"/>
-       			<filter name="draft" string="Draft" domain="[('state','=','draft')]" icon="kanban-pause"/>
-       			<filter name="closed" string="Closed" domain="[('state','=','closed')]" icon="kanban-apply"/>
-       			<filter name="canceled" string="Canceled" domain="[('state','=','canceled')]" icon="gtk-cancel"/>
-          		<group expand="0" string="Group by...">
-            		<filter string="Service" icon="terp-rating-rated" domain="[]" context="{'group_by':'service_id'}"/>
-            		<filter string="Date start" icon="terp-go-month" domain="[]" context="{'group_by':'date_start'}"/>
-            		<filter string="State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+    			<field name="collaborator_id" context="{'collaborator_id':True}"/>
+    			<field name="service_id"/>
+    			<field name="date_start"/>
+    			<field name="code" default_focus="1"/>
+    			<separator/>
+       			<filter name="ongoing" string="On Going" domain="[('state','=','on_going')]"/>
+       			<filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+       			<filter name="closed" string="Closed" domain="[('state','=','closed')]"/>
+       			<filter name="canceled" string="Canceled" domain="[('state','=','canceled')]"/>
+                <separator/>
+    			<filter icon="terp-mail-message-new" string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]"/>
+          		<group string="Agrupar por...">
+            		<filter string="Service" domain="[]" context="{'group_by':'service_id'}"/>
+            		<filter string="Date start" domain="[]" context="{'group_by':'date_start'}"/>
+            		<filter string="State" domain="[]" context="{'group_by':'state'}"/>
 	  			</group>
 			</search>
       </field>
@@ -4869,15 +4867,15 @@
          		<separator/>
          		<filter icon="terp-mail-message-new" string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]"/>
                 <separator/>
-       			<filter name="ongoing" string="On Going" domain="[('state','=','on_going')]" icon="STOCK_MEDIA_PLAY"/>
-       			<filter name="closed" string="Closed" domain="[('state','=','closed')]" icon="kanban-apply"/>
+       			<filter name="ongoing" string="On Going" domain="[('state','=','on_going')]"/>
+       			<filter name="closed" string="Closed" domain="[('state','=','closed')]"/>
          		<separator/>
     			<field name="code" default_focus="1"/>
     			<field name="service_id"/>
     			<field name="date_start"/>
-          		<group expand="0" string="Group by...">
-            		<filter string="Service" icon="terp-rating-rated" domain="[]" context="{'group_by':'service_id'}"/>
-            		<filter string="Date" icon="terp-go-month" domain="[]" context="{'group_by':'date_start'}"/>
+          		<group string="Agrupar por...">
+            		<filter string="Service" domain="[]" context="{'group_by':'service_id'}"/>
+            		<filter string="Date start" domain="[]" context="{'group_by':'date_start'}"/>
 	  			</group>
 			</search>
       </field>
