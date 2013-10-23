@@ -1,12 +1,4 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-# Verticalización de Sistema de Gestión Académica
-# OpenAlliance Ecuador
-# Protelcotelsa.
-# 2011-2012
-# ver 2.0
-#
-##############################################################################
 from mx import DateTime
 import unicodedata
 import copy
@@ -25,12 +17,21 @@ import base64
 from SOAPpy import WSDL
 import warnings
 import SOAPpy
+from dateutil.parser import  *
 
 try:
     from reportlab.graphics.barcode import createBarcodeDrawing, \
             getCodes
 except :
     print "ERROR IMPORTING REPORT LAB"
+
+def get_dates_range_yesterday(tz):
+    today = fecha_actual = unicode(convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"),tz,res=1))
+    today = parse(today)
+    yesterday = (today - timedelta(days=1)).date().__str__()
+    date_start = convert_to_UTC_tz(yesterday + ' 00:00:00',tz)
+    date_stop = convert_to_UTC_tz(yesterday + ' 23:59:59',tz)  
+    return {'date_start' : date_start, 'date_stop' : date_stop}
 
 def get_dates_range_today(tz):
     fecha_actual = unicode(convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"),tz,res=1))
@@ -817,3 +818,11 @@ def get_name_ruc(ruc):
         return False
     else:
         return res
+    
+def pd(dict):
+    print '=====================================[Detalles del Diccionario]===='
+    for key in dict.keys():
+        try:
+            print "  * %s \t= %s"%(str(key),str(dict[key]))
+        except:None
+    print '==================================================================='

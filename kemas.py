@@ -4634,7 +4634,7 @@ class kemas_event(osv.osv):
                     if arg[0] == 'collaborator_id':
                         collaborator_id = arg[2]
                         args.remove(arg)
-                        continue
+                        break
                 except:None
         
         collaborator_obj = self.pool.get('kemas.collaborator')
@@ -5708,6 +5708,7 @@ class kemas_event(osv.osv):
             ],'State'),
         'count':fields.integer('Count'),
         'collaborator_id':fields.many2one('kemas.collaborator','Colaborador', help='Colaborador por el cual se va filtrar los eventos'),
+        'close_to_end':fields.boolean('Cerrar al terminar', required=False, help='Inactivar este servicio al terminar este evento'),
         #Envio de Correos-------------------------------------------------------------------------------
         'mailing':fields.function(mailing, type='boolean', string='Mailing'),
         'sending_emails' : fields.boolean('Sending emails?'),
@@ -5883,6 +5884,27 @@ class kemas_attendance(osv.osv):
             range_dates = kemas_extras.get_dates_range_today(context['tz'])
             args.append(('date','>=',range_dates['date_start']))
             args.append(('date','<=',range_dates['date_stop']))  
+        elif context.get('search_yesterday',False):
+            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            args.append(('date','>=',range_dates['date_start']))
+            args.append(('date','<=',range_dates['date_stop']))  
+        
+        if context.get('search_start',False) or context.get('search_end',False):
+            items_to_remove = []
+            for arg in args:
+                try:
+                    if arg[0] == 'search_start':
+                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00',context['tz'])
+                        args.append(('date','>=',start))
+                        items_to_remove.append(arg)
+                    if arg[0] == 'search_end':
+                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59',context['tz'])
+                        args.append(('date','<=',end))
+                        items_to_remove.append(arg)
+                except:None
+            for item in items_to_remove:
+                args.remove(item)
+        print args
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
     
     def register_attendance(self,cr,uid,username,password):
@@ -6040,7 +6062,8 @@ class kemas_attendance(osv.osv):
         'event_id':fields.many2one('kemas.event','event', ondelete="restrict"),
         'date':fields.datetime('Date',help="Date the create"),
         'summary':fields.text('Summary'),
-        
+        'search_start':fields.date('Desde',help='Buscar desde'),
+        'search_end':fields.date('Hasta',help='Buscar hasta'),
         'service_id': fields.related('event_id','service_id',type="many2one",relation="kemas.service",string="Service",store=True),
         'user_id':fields.many2one('res.users','User', help='User who opened the system to record attendance.'),
         }

@@ -340,7 +340,7 @@
 			<search string="Activity">
     			<field name="name"/>
     			<field name="area_id" widget="selection"/>
-          		<group expand="0" string="Group by...">
+          		<group string="Agrupar por...">
             		<filter string="Area" icon="terp-partner" domain="[]" context="{'group_by':'area_id'}"/>
 	  			</group>
 			</search>
@@ -454,17 +454,20 @@
      	<field name="type">search</field>
      	<field name="arch" type="xml">
 			<search string="Search Massive email">
-       			<filter name="draft" string="Draft" domain="[('state','=','draft')]" icon="terp-project"/>
-       			<filter name="sent" string="Sent" domain="[('state','=','sent')]" icon="terp-mail-forward"/>
-       			<separator orientation="vertical"/>
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
-       			<separator orientation="vertical"/>
+       			<filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+       			<filter name="sent" string="Sent" domain="[('state','=','sent')]"/>
+                <separator/>
+       			<field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>  
+                <separator/>
+       			<filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>       			<separator/>
     			<field name="subject" default_focus="1"/>
     			<field name="date_create"/>
     			<field name="date_sent"/>
-          		<group expand="0" string="Group by...">
+          		<group string="Agrupar por...">
             		<filter string="State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
 	  			</group>
 			</search>
@@ -1352,10 +1355,10 @@
        			<filter name="listening" string="Listening" domain="[('state','=','listening')]" icon="STOCK_NO"/>
        			<filter name="believing" string="Believing" domain="[('state','=','believing')]" icon="gtk-yes"/>
        			<filter name="preaching" string="Preaching" domain="[('state','=','preaching')]" icon="kanban-apply"/>
-       			<separator orientation="vertical"/>
+       			<separator/>
     			<field name="collaborator_id" default_focus="1"/>
     			<field name="name" default_focus="1"/>
-          		<group expand="0" string="Group by...">
+          		<group string="Agrupar por...">
             		<filter name="g_collaborator_id" string="Collaborator" icon="terp-personal" domain="[]" context="{'group_by':'collaborator_id'}"/>
             		<filter name="g_state" string="State" icon="terp-stage" domain="[]" context="{'group_by':'state'}"/>
 	  			</group>
@@ -1373,7 +1376,7 @@
           			<filter name="listening" string="Listening" domain="[('state','=','listening')]" icon="STOCK_NO"/>
           			<filter name="believing" string="Believing" domain="[('state','=','believing')]" icon="gtk-yes"/>
           			<filter name="preaching" string="Preaching" domain="[('state','=','preaching')]" icon="kanban-apply"/>
-          			<separator orientation="vertical"/>
+          			<separator/>
 	    			<field name="name" default_focus="1"/>
           		</group>
 			</search>
@@ -1478,16 +1481,20 @@
 			<search string="Search Suspension">
        			<filter name="ended" string="Ended" domain="[('state','=','ended')]" icon="kanban-apply"/>
        			<filter name="on_going" string="On going" domain="[('state','=','on_going')]" icon="STOCK_MEDIA_PLAY"/>
-       			<separator orientation="vertical"/>
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
-       			<separator orientation="vertical"/>
+       			<separator/>
+       			<field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>  
+                <separator/>
+       			<filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
+       			<separator/>
     			<field name="date_create"/>
 	           	<field name="collaborator_id" default_focus="1"/>
 	           	<field name="date_end" widget="date"/>
 	           	<field name="state"/>
-          		<group expand="0" string="Group by...">
+          		<group string="Agrupar por...">
             		<filter string="Collaborator" icon="terp-partner" domain="[]" context="{'group_by':'collaborator_id'}"/>
             		<filter string="Date create" icon="terp-go-month" domain="[]" context="{'group_by':'date_create'}"/>
             		<filter string="Date end" icon="terp-go-month" domain="[]" context="{'group_by':'date_create'}"/>
@@ -1505,15 +1512,19 @@
 			<search string="Search Suspension">
        			<filter name="ended" string="Ended" domain="[('state','=','ended')]" icon="kanban-apply"/>
        			<filter name="on_going" string="On going" domain="[('state','=','on_going')]" icon="STOCK_MEDIA_PLAY"/>
-       			<separator orientation="vertical"/>
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
-       			<separator orientation="vertical"/>
+       			<separator/>
+       			<field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>  
+                <separator/>
+       			<filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
+       			<separator/>
     			<field name="date_create" default_focus="1"/>
 	           	<field name="date_end" widget="date"/>
 	           	<field name="state"/>
-          		<group expand="0" string="Group by...">
+          		<group string="Agrupar por...">
             		<filter string="State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
 	  			</group>
 			</search>
@@ -1845,13 +1856,17 @@
                 <field name="task_id" string="Tasks"/>
                 <field name="collaborator_id" string="Tasks"/>
                 <field name="categ_ids"/>
-                <separator orientation="vertical"/>
+                <separator/>
                 <filter name="active" string="Active" domain="[('is_active','=',True)]" icon="STOCK_YES"/>
           		<filter name="inactive" string="Inactive" domain="[('is_active','=',False)]" icon="STOCK_NO"/>
-                <separator orientation="vertical"/>
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
+                <separator/>
+       			<field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>  
+                <separator/>
+       			<filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
                 <separator/>
                 <filter icon="terp-mail-message-new" string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]"/>
                 <separator/>
@@ -1862,7 +1877,7 @@
                 <filter string="My Tasks" domain="[('user_id','=',uid)]"  help="My Tasks" icon="terp-personal"/>
                 <filter string="Unassigned Tasks" domain="[('user_id','=',False)]"  help="Unassigned Tasks" icon="terp-personal-"/>
                 <field name="user_id"/>
-                <group expand="0" string="Group By...">
+                <group string="Agrupar por...">
                     <filter string="Collaborators" name="group_collaborator_id" icon="terp-personal" domain="[]"  context="{'group_by':'collaborator_id'}"/>
                     <filter string="Stage" name="group_stage_id" icon="terp-stage" domain="[]" context="{'group_by':'stage_id'}"/>
                     <filter string="Create Date" icon="terp-go-month" domain="[]" context="{'group_by':'date_created'}"/>
@@ -1882,9 +1897,9 @@
        			<filter name="waiting_for_confirmation" string="Waiting for confirmation" domain="[('state','=','waiting_for_confirmation')]" icon="terp-project"/>
        			<filter name="confirmed" string="Confirmed" domain="[('state','=','confirmed')]" icon="kanban-apply"/>
        			<filter name="nulled" string="Nulled" domain="[('state','=','nulled')]" icon="STOCK_CANCEL"/>
-       			<separator orientation="vertical"/>
+       			<separator/>
     			<field name="task_id" default_focus="1"/>
-          		<group expand="0" string="Group by...">
+          		<group string="Agrupar por...">
             		<filter string="Task" icon="terp-rating-rated" domain="[]" context="{'group_by':'task_id'}"/>
 	  			</group>
 			</search>
@@ -1942,7 +1957,7 @@
 			<search string="Search Task">
        			<filter name="active" string="Active" domain="[('is_active','=',True)]" icon="STOCK_YES"/>
        			<filter name="inactive" string="Inactive" domain="[('is_active','=',False)]" icon="STOCK_NO"/>
-       			<separator orientation="vertical"/>
+       			<separator/>
     			<field name="name" default_focus="1"/>
 			</search>
       </field>
@@ -2268,9 +2283,13 @@
             <field name="base_location"/>
           </group>
           <separator/>
-            <filter icon="terp-go-today" name="today" string="Hoy" context="{'search_today':True}" help="Search saved records today"/>
-            <filter icon="terp-go-week" name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Search the records saved this week"/>
-            <filter icon="terp-go-month" name="this_month" string="Este mes" context="{'search_this_month':True}" help="Search saved records this month"/>
+  		  <field name="search_start" context="{'search_start':True}"/>
+          <field name="search_end" context="{'search_end':True}"/>  
+          <separator/>
+          <filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+  		  <filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+  		  <filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+  		  <filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
           <separator/>
           <group string="Agrupar por...">
             <filter string="Colaborador" icon="terp-partner" domain="[]" context="{'group_by':'collaborator_id'}"/>
@@ -3066,11 +3085,11 @@
 			<search string="search collaborator">
        			<filter name="collaborator" string="Collaborator" domain="[('type','=','Collaborator')]" icon="terp-personal"/>
        			<filter name="others" string="Others" domain="[('type','=','Others')]" icon="terp-personal"/>
-       			<separator orientation="vertical"/>
+       			<separator/>
        			<filter name="active" string="Active" domain="[('state','=','Active')]" icon="STOCK_YES"/>
        			<filter name="suspended" string="Suspended" domain="[('state','=','Suspended')]" icon="STOCK_NO"/>
        			<filter name="inactive" string="Inactive" domain="[('state','=','Inactive')]" icon="kanban-stop"/>
-       			<separator orientation="vertical"/>
+       			<separator/>
 	   			<field name="name" default_focus="1"/>
 	   			<field name="level_id"/>
 	   			<field name="team_id"/>
@@ -3078,11 +3097,11 @@
           		<group string="Agrupar por...">
             		<filter string="Genre" icon="terp-face-plain" domain="[]" context="{'group_by':'genre'}"/>
             		<filter string="Marital Status" icon="terp-partner" domain="[]" context="{'group_by':'marital_status'}"/>
-            		<separator orientation="vertical"/>
+            		<separator/>
             		<filter string="Country" icon="gtk-home" domain="[]" context="{'group_by':'born_country'}"/>
             		<filter string="Country State" icon="gtk-home" domain="[]" context="{'group_by':'born_state'}"/>
             		<filter string="City" icon="gtk-home" domain="[]" context="{'group_by':'born_city'}"/>
-            		<separator orientation="vertical"/>
+            		<separator/>
             		<filter string="state" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
             		<filter string="Points" icon="star-on" domain="[]" context="{'group_by':'points'}"/>
             		<filter string="Type" icon="terp-personal" domain="[]" context="{'group_by':'type'}"/>
@@ -3106,11 +3125,11 @@
           		<group string="Group by...">
             		<filter string="Genre" icon="terp-personal" domain="[]" context="{'group_by':'genre'}"/>
             		<filter string="Marital Status" icon="terp-partner" domain="[]" context="{'group_by':'marital_status'}"/>
-            		<separator orientation="vertical"/>
+            		<separator/>
             		<filter string="Country" icon="gtk-home" domain="[]" context="{'group_by':'born_country'}"/>
             		<filter string="Country State" icon="gtk-home" domain="[]" context="{'group_by':'born_state'}"/>
             		<filter string="City" icon="gtk-home" domain="[]" context="{'group_by':'born_city'}"/>
-            		<separator orientation="vertical"/>
+            		<separator/>
             		<filter string="state" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
             		<filter string="Points" icon="star-on" domain="[]" context="{'group_by':'points'}"/>
             		<filter string="Type" icon="terp-personal" domain="[]" context="{'group_by':'type'}"/>
@@ -3129,14 +3148,14 @@
 			<search string="search collaborator">
     			<field name="name" default_focus="1"/>
     			<field name="level_id" widget="selection"/>
-          		<group expand="0" string="Group by...">
+          		<group string="Agrupar por...">
             		<filter string="Genre" icon="terp-personal" domain="[]" context="{'group_by':'genre'}"/>
             		<filter string="Marital Status" icon="terp-partner" domain="[]" context="{'group_by':'marital_status'}"/>
-            		<separator orientation="vertical"/>
+            		<separator/>
             		<filter string="Country" icon="gtk-home" domain="[]" context="{'group_by':'born_country'}"/>
             		<filter string="Country State" icon="gtk-home" domain="[]" context="{'group_by':'born_state'}"/>
             		<filter string="City" icon="gtk-home" domain="[]" context="{'group_by':'born_city'}"/>
-            		<separator orientation="vertical"/>
+            		<separator/>
             		<filter string="Points" icon="star-on" domain="[]" context="{'group_by':'points'}"/>
             		<filter string="Level" icon="star-on" domain="[]" context="{'group_by':'level_id'}"/>
 	  			</group>
@@ -3260,9 +3279,13 @@
        			<separator/>
                 <filter icon="terp-mail-message-new" string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]"/>
        			<separator/>
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
+       			<field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>  
+                <separator/>
+       			<filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
 	    		<separator/>
     			<field name="code" default_focus="1"/>
     			<field name="collaborator_id"/>
@@ -3290,13 +3313,17 @@
        			<separator/>
                 <filter icon="terp-mail-message-new" string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]"/>
                 <separator/>
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
+       			<field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>  
+                <separator/>
+       			<filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
     			<separator/>
     			<field name="code" default_focus="1"/>
     			<field name="date"/>
-          		<group expand="0" string="Group by...">
+          		<group string="Agrupar por...">
             		<filter string="Type" icon="color-picker" domain="[]" context="{'group_by':'type'}"/>
 	  			</group>
 			</search>
@@ -3884,10 +3911,14 @@
      	<field name="type">search</field>
      	<field name="arch" type="xml">
 			<search string="Search Recording">
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
-         		<separator orientation="vertical"/>
+                <field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>  
+                <separator/>
+       			<filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
+         		<separator/>
     			<field name="code"/>
     			<field name="theme" default_focus="1"/>
     			<field name="date"/>
@@ -4113,20 +4144,24 @@
      	<field name="type">search</field>
      	<field name="arch" type="xml">
 			<search string="Search File">
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
-       			<separator/>
-       			<filter icon="terp-mail-message-new" string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]"/>
-       			<separator/>
-    			<field name="code"/>
-    			<field name="name" default_focus="1"/>
-    			<field name="tags"/>
-    			<field name="date"/>
-          		<group expand="0" string="Group by...">
-            		<filter string="Category" icon="star-on" domain="[]" context="{'group_by':'repository_category_id'}"/>
-            		<filter string="Date Uploaded" icon="terp-go-month" domain="[]" context="{'group_by':'date'}"/>
-	  			</group>
+              <field name="search_start" context="{'search_start':True}"/>
+              <field name="search_end" context="{'search_end':True}"/>  
+              <separator/>	
+              <filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       	      <filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       	      <filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       	      <filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
+       	      <separator/>
+       	      <filter icon="terp-mail-message-new" string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]"/>
+       	      <separator/>
+    	      <field name="code"/>
+    	      <field name="name" default_focus="1"/>
+    		  <field name="tags"/>
+    		  <field name="date"/>
+          	  <group string="Agrupar por...">
+                <filter string="Category" icon="star-on" domain="[]" context="{'group_by':'repository_category_id'}"/>
+                <filter string="Date Uploaded" icon="terp-go-month" domain="[]" context="{'group_by':'date'}"/>
+	  		  </group>
 			</search>
       </field>
     </record>
@@ -4199,7 +4234,7 @@
 			<search string="Search Service">
        			<filter name="active" string="Active" domain="[('is_active','=',True)]" icon="STOCK_YES"/>
        			<filter name="inactive" string="Inactive" domain="[('is_active','=',False)]" icon="STOCK_NO"/>
-       			<separator orientation="vertical"/>
+       			<separator/>
 	   			<field name="name" default_focus="1"/>
 			</search>
       </field>
@@ -4287,17 +4322,21 @@
      	<field name="priority" eval="1"/>
      	<field name="arch" type="xml">
 			<search string="Search Replacement">
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
-				<separator orientation="vertical"/>
+                <field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>  
+                <separator/>	
+                <filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
+				<separator/>
     			<field name="collaborator_id" default_focus="1"/>
     			<field name="collaborator_replacement_id"/>
     			<field name="event_id"/>
     			<field name="datetime"/>
     			<field name="user_id"/>
     			<field name="datetime"/>
-          		<group expand="0" string="Group by...">
+          		<group string="Agrupar por...">
             		<filter string="Service" icon="terp-partner" domain="[]" context="{'group_by':'event_id'}"/>
             		<filter string="Date" icon="terp-partner" domain="[]" context="{'group_by':'datetime'}"/>
 	  			</group>
@@ -4311,14 +4350,18 @@
      	<field name="priority" eval="2"/>
      	<field name="arch" type="xml">
 			<search string="Search Replacement">        		
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
-				<separator orientation="vertical"/>       			<separator orientation="vertical"/>
+                <field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>  
+                <separator/>	
+                <filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
+				<separator/>       			<separator/>
     			<field name="collaborator_replacement_id" default_focus="1"/>
     			<field name="event_id"/>
     			<field name="datetime"/>
-          		<group expand="0" string="Group by...">
+          		<group string="Agrupar por...">
             		<filter string="Service" icon="terp-partner" domain="[]" context="{'group_by':'event_id'}"/>
 	  			</group>
 			</search>
@@ -4434,17 +4477,21 @@
        			<filter name="draft" string="Draft" domain="[('state','=','draft')]" icon="kanban-pause"/>
        			<filter name="ongoing" string="On Going" domain="[('state','=','on_going')]" icon="STOCK_MEDIA_PLAY"/>
        			<filter name="closed" string="Closed" domain="[('state','=','closed')]" icon="kanban-apply"/>
-       			<separator orientation="vertical"/>
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
-       			<separator orientation="vertical"/>
+       			<separator/>
+       			<field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>  
+                <separator/>
+       			<filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
+       			<separator/>
     			<field name="date_start" default_focus="1"/>
     			<field name="collaborator_id"/>
     			<field name="service_id"/>
     			<field name="team_id"/>
     			<field name="level_id"/>
-    			<separator orientation="vertical"/>
+    			<separator/>
     			<filter name="all_collaborators" string="All collaborators" context="{'all_collaborators':True}" icon="kanban-apply"/>
                 <group string="Agrupar por...">
                   <filter string="Colaborador" domain="[]" context="{'group_by':'collaborator_id'}"/>
@@ -4517,9 +4564,10 @@
                         </strong>
                       </div>
                     </div>
-					<div class="oe_title" states="on_going,creating,draft">
+					<div states="on_going,creating,draft" class="oe_inline">
 	       				<div class="oe_edit_only" states="creating,draft">
                             <label for="service_id"/>
+                            (Inactivar al terminar: <field name="close_to_end"/>)
                         </div>
                         <h2>
                             <field name="service_id" default_focus="1" placeholder="Service Name" />
@@ -4831,13 +4879,16 @@
      	<field name="priority" eval="1"/>
      	<field name="arch" type="xml">
 			<search string="Buscar Evento">
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
-          		<separator/>
+                <field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>  
+                <separator/>
+       			<filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
+                <separator/>
     			<field name="collaborator_id" context="{'collaborator_id':True}"/>
     			<field name="service_id"/>
-    			<field name="date_start"/>
     			<field name="code" default_focus="1"/>
     			<separator/>
        			<filter name="ongoing" string="On Going" domain="[('state','=','on_going')]"/>
@@ -4861,9 +4912,13 @@
      	<field name="priority" eval="2"/>
      	<field name="arch" type="xml">
 			<search string="Search Event">
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
+                <field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>  
+                <separator/>
+       			<filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
          		<separator/>
          		<filter icon="terp-mail-message-new" string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]"/>
                 <separator/>
@@ -5052,25 +5107,28 @@
      	<field name="type">search</field>
      	<field name="priority" eval="1"/>
      	<field name="arch" type="xml">
-			<search string="Search Event">
-       			<filter name="on_time" string="On Time" domain="[('type','=','just_time')]" icon="gtk-yes"/>
-       			<filter name="late" string="Late" domain="[('type','=','late')]" icon="STOCK_NO"/>
-       			<filter name="absence" string="Absence" domain="[('type','=','absence')]" icon="STOCK_NO"/>
-       			<separator orientation="vertical"/>
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
-       			<separator orientation="vertical"/>
+			<search string="Buscar registro de asistencia">
+                <field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>	
+    		    <separator/>
+       			<filter name="on_time" string="On Time" domain="[('type','=','just_time')]"/>
+       			<filter name="late" string="Late" domain="[('type','=','late')]"/>
+       			<filter name="absence" string="Absence" domain="[('type','=','absence')]"/>
+       			<separator/>
+       			<filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
+       			<separator/>
     			<field name="code" default_focus="1"/>
     			<field name="event_id"/>
     			<field name="collaborator_id"/>
     			<field name="service_id"/>
-    			<field name="date"/>
-          		<group expand="0" string="Group by...">
-            		<filter string="Collaborator" icon="terp-personal" domain="[]" context="{'group_by':'collaborator_id'}"/>
-            		<filter string="Service" icon="terp-rating-rated" domain="[]" context="{'group_by':'service_id'}"/>
-            		<filter string="Type" icon="color-picker" domain="[]" context="{'group_by':'type'}"/>
-            		<filter string="Date" icon="terp-go-month" domain="[]" context="{'group_by':'date'}"/>
+          		<group string="Agrupar por...">
+            		<filter string="Collaborator" domain="[]" context="{'group_by':'collaborator_id'}"/>
+            		<filter string="Service" domain="[]" context="{'group_by':'service_id'}"/>
+            		<filter string="Type" domain="[]" context="{'group_by':'type'}"/>
+            		<filter string="Date" domain="[]" context="{'group_by':'date'}"/>
 	  			</group>
 			</search>
       </field>
@@ -5085,15 +5143,19 @@
        			<filter name="on_time" string="On Time" domain="[('type','=','just_time')]" icon="gtk-yes"/>
        			<filter name="late" string="Late" domain="[('type','=','late')]" icon="STOCK_NO"/>
        			<filter name="absence" string="Absence" domain="[('type','=','absence')]" icon="STOCK_NO"/>
-       			<separator orientation="vertical"/>
-       			<filter icon="terp-go-today" name="today" string="Today" context="{'search_today':True}" help="Search saved records today"/>
-       			<filter icon="terp-go-week" name="this_week" string="This week" context="{'search_this_week':True}" help="Search the records saved this week"/>
-       			<filter icon="terp-go-month" name="this_month" string="This Month" context="{'search_this_month':True}" help="Search saved records this month"/>
-    			<separator orientation="vertical"/>
+       			<separator/>
+       			<field name="search_start" context="{'search_start':True}"/>
+                <field name="search_end" context="{'search_end':True}"/>  
+                <separator/>
+       			<filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer"/>
+       			<filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy"/>
+       			<filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
+       			<filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
+    			<separator/>
     			<field name="code" default_focus="1"/>
     			<field name="service_id"/>
     			<field name="date"/>
-          		<group expand="0" string="Group by...">
+          		<group string="Agrupar por...">
             		<filter string="Service" icon="terp-rating-rated" domain="[]" context="{'group_by':'service_id'}"/>
             		<filter string="Type" icon="color-picker" domain="[]" context="{'group_by':'type'}"/>
             		<filter string="Date" icon="terp-go-month" domain="[]" context="{'group_by':'date'}"/>
