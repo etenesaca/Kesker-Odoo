@@ -2275,14 +2275,6 @@
       <field name="type">search</field>
       <field name="arch" type="xml">
         <search string="Search Inicio de Sesión">
-          <filter name="actives" string="Actives" domain="[('active','=',True),]"/>
-          <group>
-            <field name="collaborator_id" default_focus="1"/>
-            <field name="datetime"/>
-            <field name="remote_address"/>
-            <field name="base_location"/>
-          </group>
-          <separator/>
   		  <field name="search_start" context="{'search_start':True}"/>
           <field name="search_end" context="{'search_end':True}"/>  
           <separator/>
@@ -2291,6 +2283,12 @@
   		  <filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana"/>
   		  <filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes"/>
           <separator/>
+          <group>
+            <field name="collaborator_id" default_focus="1"/>
+            <field name="datetime"/>
+            <field name="remote_address"/>
+            <field name="base_location"/>
+          </group>
           <group string="Agrupar por...">
             <filter string="Colaborador" icon="terp-partner" domain="[]" context="{'group_by':'collaborator_id'}"/>
             <filter string="Fecha" icon="terp-partner" domain="[]" context="{'group_by':'datetime'}"/>
