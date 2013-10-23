@@ -5546,17 +5546,20 @@ class kemas_event(osv.osv):
         collaborator_obj = self.pool.get('kemas.collaborator')
         history_points_obj = self.pool.get('kemas.history.points')
         #------------------------------------------------------------------------------
-        event = self.read(cr, uid, event_id,['place_id','service_id','date_start','not_attend_points','message_follower_ids'])
+        event = self.read(cr, uid, event_id,['place_id','service_id','date_start','not_attend_points','close_to_end','message_follower_ids'])
         service_id = event['service_id'][0]
         service = service_obj.read(cr, uid, service_id, [])
         date_start = self.read(cr, uid, event_id,['date_start'])['date_start'] 
-        
+        #Verificar si el evento esta configurado para inactivar el servicio al finalizar
+        if event['close_to_end']:
+            service_obj.do_inactivate(cr,uid,[service_id])
         vals = {
                 'state' : 'closed',
                 'color' : 5,
                 'date_close' : str(time.strftime("%Y-%m-%d %H:%M:%S")),
                 #--Summary----------------------------------------------
                 'rm_service': service['name'],
+                'rm_close_to_end' : event['close_to_end'],
                 'rm_place': event['place_id'][1],
                 'rm_date': date_start,
                 'rm_time_start': service['time_start'],
@@ -5969,7 +5972,7 @@ class kemas_event(osv.osv):
             ],'State'),
         'count':fields.integer('Count'),
         'collaborator_id':fields.many2one('kemas.collaborator','Colaborador', help='Colaborador por el cual se va filtrar los eventos'),
-        'close_to_end':fields.boolean('Cerrar al terminar', required=False, help='Inactivar este servicio al terminar este evento'),
+        'close_to_end':fields.boolean('Inactivar servicio al finalizar', required=False, states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}, help='Marque esta casilla para en el momento en el que finalize este evento el Servicio quede Inactivado y no se pueda usar de nuevo, esta función es util para cuando es un evento que solo se va a usar una sola vez.'),
         #Envio de Correos
         'mailing':fields.function(mailing, type='boolean', string='Mailing'),
         'sending_emails' : fields.boolean('Sending emails?'),
@@ -5991,6 +5994,7 @@ class kemas_event(osv.osv):
         'min_points':fields.integer('Minimum points',help="Minimum points required in order to participate in this event.", states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}),
         #Summary fields
         'rm_service' : fields.char('Service',size=255, help=""),
+        'rm_close_to_end':fields.boolean('Inactivado al finalizar', required=False, help='Indica si el evento fue inactivado al finalizar el evento'),
         'rm_place' : fields.char('Place',size=255, help=""),
         'rm_date':fields.datetime('Date',help=''),
         'rm_time_start' : fields.float('Time start', help=""),

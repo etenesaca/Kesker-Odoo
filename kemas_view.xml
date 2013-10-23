@@ -4567,7 +4567,6 @@
 					<div states="on_going,creating,draft" class="oe_inline">
 	       				<div class="oe_edit_only" states="creating,draft">
                             <label for="service_id"/>
-                            (Inactivar al terminar: <field name="close_to_end"/>)
                         </div>
                         <h2>
                             <field name="service_id" default_focus="1" placeholder="Service Name" />
@@ -4579,12 +4578,14 @@
 							<group colspan="4" col="2">
 								<field name="place_id" placeholder="Event Location" colspan="2"/>
 								<field name="date_start" colspan="2" widget="date"/>
+                                <field name="close_to_end" colspan="2"/>
 							</group>
 					      </group>
 					      <!-- Informacion que se muestras cuando ya se haya acabado el evento -->
 					      <group colspan="4" expand="1" col="30" states="canceled,closed">
 					        <separator string="Service" colspan="30"/>
 							<field name="rm_service" colspan="30" readonly="1"/>
+                            <field name="rm_close_to_end" colspan="30" readonly="1" states="creating,draft,on_going,closed"/>
 							<field name="rm_date" colspan="30" widget="date" readonly="1"/>
 							<field name="rm_place" colspan="30" readonly="1"/>
 							<newline/>
