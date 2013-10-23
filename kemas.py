@@ -83,6 +83,7 @@ class kemas_collaborator_logbook_login(osv.osv):
         return res
     
     def search(self, cr, uid, args, offset = 0, limit = None, order = None, context={}, count = False):
+        #Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month',False):
             range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
             args.append(('datetime','>=',range_dates['date_start']))
@@ -94,7 +95,28 @@ class kemas_collaborator_logbook_login(osv.osv):
         elif context.get('search_today',False):
             range_dates = kemas_extras.get_dates_range_today(context['tz'])
             args.append(('datetime','>=',range_dates['date_start']))
-            args.append(('datetime','<=',range_dates['date_stop']))         
+            args.append(('datetime','<=',range_dates['date_stop']))  
+        elif context.get('search_yesterday',False):
+            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            args.append(('datetime','>=',range_dates['date_start']))
+            args.append(('datetime','<=',range_dates['date_stop']))  
+        
+        #Busqueda de registros entre fechas en el Caso que se seleccione "Buscar desde" o "Buscar hasta"
+        if context.get('search_start',False) or context.get('search_end',False):
+            items_to_remove = []
+            for arg in args:
+                try:
+                    if arg[0] == 'search_start':
+                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00',context['tz'])
+                        args.append(('datetime','>=',start))
+                        items_to_remove.append(arg)
+                    if arg[0] == 'search_end':
+                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59',context['tz'])
+                        args.append(('datetime','<=',end))
+                        items_to_remove.append(arg)
+                except:None
+            for item in items_to_remove:
+                args.remove(item)
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
     
     def create(self, cr, uid, vals, context={}):
@@ -108,7 +130,10 @@ class kemas_collaborator_logbook_login(osv.osv):
         'datetime': fields.datetime('Fecha y hora'),
         'remote_address':fields.char('Conectado desde', size=255, required=False, readonly=False),
         'base_location':fields.char('Conectado a', size=255, required=False, readonly=False),
-        'count': fields.integer('count', required=True)
+        'count': fields.integer('count', required=True),
+        #Campos para buscar entre fechas
+        'search_start':fields.date('Desde',help='Buscar desde'),
+        'search_end':fields.date('Hasta',help='Buscar hasta'),
         }
     
     _defaults = {  
@@ -430,6 +455,42 @@ class kemas_massive_email(osv.osv):
         def_dic['state'] = 'draft'
         self._defaults = def_dic
         return result
+    
+    def search(self, cr, uid, args, offset = 0, limit = None, order = None, context={}, count = False):
+        if context.get('search_this_month',False):
+            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            args.append(('date_create','>=',range_dates['date_start']))
+            args.append(('date_create','<=',range_dates['date_stop']))    
+        elif context.get('search_this_week',False):
+            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            args.append(('date_create','>=',range_dates['date_start']))
+            args.append(('date_create','<=',range_dates['date_stop']))
+        elif context.get('search_today',False):
+            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            args.append(('date_create','>=',range_dates['date_start']))
+            args.append(('date_create','<=',range_dates['date_stop']))  
+        elif context.get('search_yesterday',False):
+            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            args.append(('date_create','>=',range_dates['date_start']))
+            args.append(('date_create','<=',range_dates['date_stop']))  
+                
+        if context.get('search_start',False) or context.get('search_end',False):
+            items_to_remove = []
+            for arg in args:
+                try:
+                    if arg[0] == 'search_start':
+                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00',context['tz'])
+                        args.append(('date_create','>=',start))
+                        items_to_remove.append(arg)
+                    if arg[0] == 'search_end':
+                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59',context['tz'])
+                        args.append(('date_create','<=',end))
+                        items_to_remove.append(arg)
+                except:None
+            for item in items_to_remove:
+                args.remove(item)
+        return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
+    
     _order='date_sent'
     _rec_name = 'subject'
     _name='kemas.massive.email'
@@ -439,6 +500,8 @@ class kemas_massive_email(osv.osv):
         'subject': fields.char('Subject',size=64,required=True,help='It is a subject of the email.', states={'sent':[('readonly',True)]}),
         'date_create':fields.datetime('Date Create',help='Date on which this email was created.'),
         'date_sent':fields.datetime('Date last sent',help='Last date you sent this email.'),
+        'search_start':fields.date('Desde',help='Buscar desde'),
+        'search_end':fields.date('Hasta',help='Buscar hasta'),
         'state':fields.selection([
             ('creating','Creating'),
             ('draft','Draft'),
@@ -2217,6 +2280,7 @@ class kemas_suspension(osv.osv):
             collaborator_ids = collaborator_obj.search(cr,uid,[('user_id','=',uid)])
             args.append(('collaborator_id','in',collaborator_ids))
         
+        #Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month',False):
             range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
             args.append(('date_create','>=',range_dates['date_start']))
@@ -2229,7 +2293,28 @@ class kemas_suspension(osv.osv):
             range_dates = kemas_extras.get_dates_range_today(context['tz'])
             args.append(('date_create','>=',range_dates['date_start']))
             args.append(('date_create','<=',range_dates['date_stop']))  
-                 
+        elif context.get('search_yesterday',False):
+            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            args.append(('date_create','>=',range_dates['date_start']))
+            args.append(('date_create','<=',range_dates['date_stop']))  
+        
+        #Busqueda de registros entre fechas en el Caso que se seleccione "Buscar desde" o "Buscar hasta"
+        if context.get('search_start',False) or context.get('search_end',False):
+            items_to_remove = []
+            for arg in args:
+                try:
+                    if arg[0] == 'search_start':
+                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00',context['tz'])
+                        args.append(('date_create','>=',start))
+                        items_to_remove.append(arg)
+                    if arg[0] == 'search_end':
+                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59',context['tz'])
+                        args.append(('date_create','<=',end))
+                        items_to_remove.append(arg)
+                except:None
+            for item in items_to_remove:
+                args.remove(item)
+        
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
     
     def create(self, cr, uid, vals, *args, **kwargs):
@@ -2254,6 +2339,8 @@ class kemas_suspension(osv.osv):
         'date_create': fields.datetime('Date create', help='Date the collaborator was suspended'),
         'date_lifted': fields.datetime('Date lifted', help='Date suspension lifted her collaborator'),
         'date_end': fields.datetime('Date end', help='The date the suspension ends'),
+        'search_start':fields.date('Desde',help='Buscar desde'),
+        'search_end':fields.date('Hasta',help='Buscar hasta'),
         'days_remaining':fields.function(_get_days_remaining, type='char', string='Days remaining', help='Days remaining to end the suspension'),
         'description': fields.text('Description'),
         'state':fields.selection([
@@ -3857,7 +3944,7 @@ class kemas_task_assigned(osv.osv):
         return self.name_get(cr, uid,ids, context)
     
     def search(self, cr, uid, args, offset = 0, limit = None, order = None, context={}, count = False):
-        if context is None:
+        if context is None or type(context).__name__!="dict":
             return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
         
         if context.get('is_collaborator',False):
@@ -3868,6 +3955,7 @@ class kemas_task_assigned(osv.osv):
         if context.get('search_all',False)==False:
             args.append(('is_active','=',True))  
             
+        #Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month',False):
             range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
             args.append(('date_created','>=',range_dates['date_start']))
@@ -3880,7 +3968,27 @@ class kemas_task_assigned(osv.osv):
             range_dates = kemas_extras.get_dates_range_today(context['tz'])
             args.append(('date_created','>=',range_dates['date_start']))
             args.append(('date_created','<=',range_dates['date_stop']))  
-                 
+        elif context.get('search_yesterday',False):
+            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            args.append(('date_created','>=',range_dates['date_start']))
+            args.append(('date_created','<=',range_dates['date_stop']))  
+        
+        #Busqueda de registros entre fechas en el Caso que se seleccione "Buscar desde" o "Buscar hasta"
+        if context.get('search_start',False) or context.get('search_end',False):
+            items_to_remove = []
+            for arg in args:
+                try:
+                    if arg[0] == 'search_start':
+                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00',context['tz'])
+                        args.append(('date_created','>=',start))
+                        items_to_remove.append(arg)
+                    if arg[0] == 'search_end':
+                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59',context['tz'])
+                        args.append(('date_created','<=',end))
+                        items_to_remove.append(arg)
+                except:None
+            for item in items_to_remove:
+                args.remove(item)
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
     
     def do_close(self,cr,uid,ids,context={}):
@@ -4021,6 +4129,9 @@ class kemas_task_assigned(osv.osv):
         'date_cancelled': fields.datetime('Cancellation date', help='Cancellation date of This Task'),
         'date_start': fields.datetime('Starting Date',select=True),
         'date_end': fields.datetime('Ending Date',select=True),
+        #Campos para buscar entre fechas
+        'search_start':fields.date('Desde',help='Buscar desde'),
+        'search_end':fields.date('Hasta',help='Buscar hasta'),
         }
     
     def _validate(self, cr, uid, ids, context={}): 
@@ -4067,6 +4178,7 @@ class kemas_history_points(osv.osv):
             limit = context.get('limit_records',None)
             order = 'date desc'
         
+        #Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month',False):
             range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
             args.append(('date','>=',range_dates['date_start']))
@@ -4079,7 +4191,27 @@ class kemas_history_points(osv.osv):
             range_dates = kemas_extras.get_dates_range_today(context['tz'])
             args.append(('date','>=',range_dates['date_start']))
             args.append(('date','<=',range_dates['date_stop']))  
-         
+        elif context.get('search_yesterday',False):
+            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            args.append(('date','>=',range_dates['date_start']))
+            args.append(('date','<=',range_dates['date_stop']))  
+        
+        #Busqueda de registros entre fechas en el Caso que se seleccione "Buscar desde" o "Buscar hasta"
+        if context.get('search_start',False) or context.get('search_end',False):
+            items_to_remove = []
+            for arg in args:
+                try:
+                    if arg[0] == 'search_start':
+                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00',context['tz'])
+                        args.append(('date','>=',start))
+                        items_to_remove.append(arg)
+                    if arg[0] == 'search_end':
+                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59',context['tz'])
+                        args.append(('date','<=',end))
+                        items_to_remove.append(arg)
+                except:None
+            for item in items_to_remove:
+                args.remove(item)
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
     
     def write_log_create(self,cr,uid,res_id,notify_partner_ids=[]):
@@ -4153,6 +4285,9 @@ class kemas_history_points(osv.osv):
         'description': fields.text('Description',required=True),
         'summary' : fields.char('Summary',size=255,required=True),
         'points': fields.integer('Points', help='Points that involved this change'),
+        #Campos para buscar entre fechas
+        'search_start':fields.date('Desde',help='Buscar desde'),
+        'search_end':fields.date('Hasta',help='Buscar hasta'),
         }
     _sql_constraints= [
         ('collaborator_code', 'unique (code)', 'This Code already exist!'),
@@ -4308,6 +4443,43 @@ class kemas_recording(osv.osv):
         vals['registration_date'] = time.strftime("%Y-%m-%d %H:%M:%S")
         return super(osv.osv,self).create(cr, uid, vals, *args, **kwargs)
     
+    def search(self, cr, uid, args, offset = 0, limit = None, order = None, context={}, count = False):
+        #Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
+        if context.get('search_this_month',False):
+            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            args.append(('date','>=',range_dates['date_start']))
+            args.append(('date','<=',range_dates['date_stop']))    
+        elif context.get('search_this_week',False):
+            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            args.append(('date','>=',range_dates['date_start']))
+            args.append(('date','<=',range_dates['date_stop']))
+        elif context.get('search_today',False):
+            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            args.append(('date','>=',range_dates['date_start']))
+            args.append(('date','<=',range_dates['date_stop']))  
+        elif context.get('search_yesterday',False):
+            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            args.append(('date','>=',range_dates['date_start']))
+            args.append(('date','<=',range_dates['date_stop']))  
+        
+        #Busqueda de registros entre fechas en el Caso que se seleccione "Buscar desde" o "Buscar hasta"
+        if context.get('search_start',False) or context.get('search_end',False):
+            items_to_remove = []
+            for arg in args:
+                try:
+                    if arg[0] == 'search_start':
+                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00',context['tz'])
+                        args.append(('date','>=',start))
+                        items_to_remove.append(arg)
+                    if arg[0] == 'search_end':
+                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59',context['tz'])
+                        args.append(('date','<=',end))
+                        items_to_remove.append(arg)
+                except:None
+            for item in items_to_remove:
+                args.remove(item)
+        return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
+    
     _order='date'
     _rec_name = 'theme'
     _name='kemas.recording'
@@ -4319,13 +4491,16 @@ class kemas_recording(osv.osv):
         'duration':fields.float('Duration',required=True, help='Duration recording'),
         'details': fields.text('Details'),
         'url':fields.char('URL', size=255,help='Dirección en la que se encuentra almacenado el archivo'),
-        #One to Many Relations----------------------------------------------------------------------------------------------
+        #One to Many Relations
         'recording_type_id':fields.many2one('kemas.recording.type','recording type', required=True, ondelete="restrict"),
         'place_id':fields.many2one('kemas.place','Place', help='Place where the recording was done', ondelete="restrict"),
         'expositor_id':fields.many2one('kemas.expositor','Expositor', help="Expositor's name", ondelete="restrict"),
         'series_id':fields.many2one('kemas.recording.series','Series', help='Name of the series of which this recording', ondelete="restrict"),
-        #Many to One Relations----------------------------------------------------------------------------------------------
+        #Many to One Relations
         'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_recording_collaborator_rel',  'recording_id',  'collaborator_id', 'collaborators',help='Collaborators who participated in the recording'),
+        #Campos para buscar entre fechas
+        'search_start':fields.date('Desde',help='Buscar desde'),
+        'search_end':fields.date('Hasta',help='Buscar hasta'),
         }
     _sql_constraints= [
         ('ucode', 'unique (code)', 'This Code already exist!'),
@@ -4416,6 +4591,43 @@ class kemas_repository(osv.osv):
         vals['user_id']=uid
         return super(osv.osv,self).create(cr, uid, vals, *args, **kwargs)
     
+    def search(self, cr, uid, args, offset = 0, limit = None, order = None, context={}, count = False):
+        #Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
+        if context.get('search_this_month',False):
+            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            args.append(('date','>=',range_dates['date_start']))
+            args.append(('date','<=',range_dates['date_stop']))    
+        elif context.get('search_this_week',False):
+            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            args.append(('date','>=',range_dates['date_start']))
+            args.append(('date','<=',range_dates['date_stop']))
+        elif context.get('search_today',False):
+            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            args.append(('date','>=',range_dates['date_start']))
+            args.append(('date','<=',range_dates['date_stop']))  
+        elif context.get('search_yesterday',False):
+            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            args.append(('date','>=',range_dates['date_start']))
+            args.append(('date','<=',range_dates['date_stop']))  
+        
+        #Busqueda de registros entre fechas en el Caso que se seleccione "Buscar desde" o "Buscar hasta"
+        if context.get('search_start',False) or context.get('search_end',False):
+            items_to_remove = []
+            for arg in args:
+                try:
+                    if arg[0] == 'search_start':
+                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00',context['tz'])
+                        args.append(('date','>=',start))
+                        items_to_remove.append(arg)
+                    if arg[0] == 'search_end':
+                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59',context['tz'])
+                        args.append(('date','<=',end))
+                        items_to_remove.append(arg)
+                except:None
+            for item in items_to_remove:
+                args.remove(item)
+        return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
+    
     _order='name'
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _name='kemas.repository'
@@ -4437,6 +4649,9 @@ class kemas_repository(osv.osv):
             ('draft','Borrador'),
             ('done','Publicado'),
              ],    'Estado', required=True),
+        #Campos para buscar entre fechas
+        'search_start':fields.date('Desde',help='Buscar desde'),
+        'search_end':fields.date('Hasta',help='Buscar hasta'),
         }
     
     _defaults = {  
@@ -4544,6 +4759,7 @@ class kemas_event_collaborator_line(osv.osv):
             if context.has_key('search_filter') == 1:
                 args.append(('event_id.state','in',['on_going','closed','draft']))
         
+        #Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month',False):
             range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
             args.append(('event_id.date_start','>=',range_dates['date_start']))
@@ -4555,8 +4771,28 @@ class kemas_event_collaborator_line(osv.osv):
         elif context.get('search_today',False):
             range_dates = kemas_extras.get_dates_range_today(context['tz'])
             args.append(('event_id.date_start','>=',range_dates['date_start']))
-            args.append(('event_id.date_stop','<=',range_dates['date_stop']))
+            args.append(('event_id.date_stop','<=',range_dates['date_stop']))  
+        elif context.get('search_yesterday',False):
+            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            args.append(('event_id.date_start','>=',range_dates['date_start']))
+            args.append(('event_id.date_stop','<=',range_dates['date_stop']))  
         
+        #Busqueda de registros entre fechas en el Caso que se seleccione "Buscar desde" o "Buscar hasta"
+        if context.get('search_start',False) or context.get('search_end',False):
+            items_to_remove = []
+            for arg in args:
+                try:
+                    if arg[0] == 'search_start':
+                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00',context['tz'])
+                        args.append(('event_id.date_start','>=',start))
+                        items_to_remove.append(arg)
+                    if arg[0] == 'search_end':
+                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59',context['tz'])
+                        args.append(('event_id.date_stop','<=',end))
+                        items_to_remove.append(arg)
+                except:None
+            for item in items_to_remove:
+                args.remove(item)
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
     
     _name='kemas.event.collaborator.line'
@@ -4573,6 +4809,7 @@ class kemas_event_collaborator_line(osv.osv):
             ],    'Send email state', select=True),
         'count':fields.integer('Count'),
         'ct':fields.integer('Count'),
+        'replacement_id':fields.many2one('kemas.event.replacement','Collaborator Replaced', help=''),
         #Related-----------------------------------------------------------------------------------------------------------------------------
         'team_id': fields.related('collaborator_id','team_id',type="many2one",relation="kemas.team",string="Team"),
         'level_id': fields.related('collaborator_id','level_id',type="many2one",relation="kemas.level",string="Level"),
@@ -4588,7 +4825,9 @@ class kemas_event_collaborator_line(osv.osv):
         'date_start': fields.related('event_id', 'date_start',type='datetime',string='Date'),
         'service_id': fields.related('event_id','service_id',type="many2one",relation="kemas.service",string="Service"),
         'state': fields.related('event_id', 'state',type='char',string='State'),
-        'replacement_id':fields.many2one('kemas.event.replacement','Collaborator Replaced', help=''),
+        #Campos para buscar entre fechas
+        'search_start':fields.date('Desde',help='Buscar desde'),
+        'search_end':fields.date('Hasta',help='Buscar hasta'),
         }
     _sql_constraints= [
         ('u_collaborator_event', 'unique (collaborator_id, event_id)', 'One of the contributors appears more than once in the list!'),
@@ -4675,6 +4914,7 @@ class kemas_event(osv.osv):
                 args.append(('date_stop','>=',now))
                 args.append(('state','=','on_going'))
         
+        #Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month',False):
             range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
             args.append(('date_start','>=',range_dates['date_start']))
@@ -4687,6 +4927,27 @@ class kemas_event(osv.osv):
             range_dates = kemas_extras.get_dates_range_today(context['tz'])
             args.append(('date_start','>=',range_dates['date_start']))
             args.append(('date_start','<=',range_dates['date_stop']))  
+        elif context.get('search_yesterday',False):
+            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            args.append(('date_start','>=',range_dates['date_start']))
+            args.append(('date_start','<=',range_dates['date_stop']))  
+        
+        #Busqueda de registros entre fechas en el Caso que se seleccione "Buscar desde" o "Buscar hasta"
+        if context.get('search_start',False) or context.get('search_end',False):
+            items_to_remove = []
+            for arg in args:
+                try:
+                    if arg[0] == 'search_start':
+                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00',context['tz'])
+                        args.append(('date_start','>=',start))
+                        items_to_remove.append(arg)
+                    if arg[0] == 'search_end':
+                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59',context['tz'])
+                        args.append(('date_start','<=',end))
+                        items_to_remove.append(arg)
+                except:None
+            for item in items_to_remove:
+                args.remove(item)
         
         res_ids = super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
         if collaborator_id:
@@ -5709,23 +5970,26 @@ class kemas_event(osv.osv):
         'count':fields.integer('Count'),
         'collaborator_id':fields.many2one('kemas.collaborator','Colaborador', help='Colaborador por el cual se va filtrar los eventos'),
         'close_to_end':fields.boolean('Cerrar al terminar', required=False, help='Inactivar este servicio al terminar este evento'),
-        #Envio de Correos-------------------------------------------------------------------------------
+        #Envio de Correos
         'mailing':fields.function(mailing, type='boolean', string='Mailing'),
         'sending_emails' : fields.boolean('Sending emails?'),
         'collaborator_ids_send_email': fields.many2many('kemas.collaborator', 'kemas_event_collaborator_send_email_rel',  'event_id',  'collaborator_id', 'Collaborators to notify',help=''),
-        #Fechas------------------------------------------------------------------------------------------
+        #Fechas
         'date_init':fields.datetime('Date Init',help=''),
         'date_start':fields.datetime('Date', required=True,help='Scheduled date', states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}),
         'date_stop':fields.datetime('Date Stop',help=''),
         'date_create':fields.datetime('Date create',help="Date the create"),
         'date_close':fields.datetime('Date close',help="Date the closed"),
         'date_cancel':fields.datetime('Date cancel',help="Date the canceled"),
-        #Points-----------------------------------------------------------------------------------------
+        #Campos para buscar entre fechas
+        'search_start':fields.date('Desde',help='Buscar desde'),
+        'search_end':fields.date('Hasta',help='Buscar hasta'),
+        #Points
         'attend_on_time_points':fields.integer('Points for attend on time (+)',help="Points will increase to an collaborator for being on time to the service.", states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}),
         'late_points':fields.integer('Points for being late (-)',help="Point is decreased to a contributor for not arriving on time.", states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}),
         'not_attend_points':fields.integer('Points for not attend (-)',help="Point is decreased to a collaborator not to asist to a service.", states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}),
         'min_points':fields.integer('Minimum points',help="Minimum points required in order to participate in this event.", states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}),
-        #Summary fields---------------------------------------------------------------------------------
+        #Summary fields
         'rm_service' : fields.char('Service',size=255, help=""),
         'rm_place' : fields.char('Place',size=255, help=""),
         'rm_date':fields.datetime('Date',help=''),
@@ -5737,17 +6001,17 @@ class kemas_event(osv.osv):
         'team_id':fields.many2one('kemas.team','Team', help='Team that will participate in this event.', states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}),
         'collaborators_loaded' : fields.boolean('collaborators loaded?'),
         'notification_status':fields.function(_notification_status, type='char', string='Estado de notificaciones'),
-        #One to Many Relations----------------------------------------------------------------------------
+        #One to Many Relations
         'event_collaborator_line_ids': fields.one2many('kemas.event.collaborator.line', 'event_id', 'Collaborators',help='Collaborators who participated in this event', states={'on_going':[('readonly',True)],'closed':[('readonly',True)], 'canceled':[('readonly',True)]}),
         #line_ids': fields.one2many('kemas.event.collaborator.line', 'event_id', 'Lines'),
         'line_ids': fields.text('Lines'),
         'attendance_ids': fields.one2many('kemas.attendance', 'event_id', 'Attendances',help='Attendance register', readonly=True),
-        #Ralated------------------------------------------------------------------------------------------
+        #Ralated
         'time_start': fields.related('service_id', 'time_start', type='char', string='Time start', readonly=True, store=False),
         'time_end': fields.related('service_id', 'time_end', type='char', string='Time end', readonly=True, store=False),
         'time_entry': fields.related('service_id', 'time_entry', type='char', string='Time entry', readonly=True, store=False),
         'time_limit': fields.related('service_id', 'time_limit', type='char', string='time limit', readonly=True, store=False),
-        #Dashboard----------------------------------------------------------------------------------------
+        #Dashboard
         'progress':fields.function(get_percentage, type='float', string='Progress'),
         #-----KANBAN METHOD
         'priority': fields.selection([('4','Very Low'), ('3','Low'), ('2','Medium'), ('1','Important'), ('0','Very important')], 'Priority', select=True),
@@ -5904,7 +6168,6 @@ class kemas_attendance(osv.osv):
                 except:None
             for item in items_to_remove:
                 args.remove(item)
-        print args
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
     
     def register_attendance(self,cr,uid,username,password):
@@ -5957,7 +6220,7 @@ class kemas_attendance(osv.osv):
     def create(self, cr, uid, vals, *args, **kwargs):
         event_obj = self.pool.get('kemas.event')
         event_collaborator_line_obj = self.pool.get('kemas.event.collaborator.line')
-        #-------------------------------------------------------------------------------------
+
         res_current_event =  event_obj.get_current_event(cr, uid, True)
         #---No hay eventos para registrar la asistencia---------------------------------------------
         if res_current_event==None: return 'no event'
@@ -6079,6 +6342,41 @@ class kemas_event_replacement(osv.osv):
     def search(self, cr, uid, args, offset = 0, limit = None, order = None, context={}, count = False):
         if context.get('is_collaborator',False):
             args += ['|',('collaborator_replacement_id.user_id','=',uid),('collaborator_id.user_id','=',uid)]
+            
+        #Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
+        if context.get('search_this_month',False):
+            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            args.append(('datetime','>=',range_dates['date_start']))
+            args.append(('datetime','<=',range_dates['date_stop']))    
+        elif context.get('search_this_week',False):
+            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            args.append(('datetime','>=',range_dates['date_start']))
+            args.append(('datetime','<=',range_dates['date_stop']))
+        elif context.get('search_today',False):
+            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            args.append(('datetime','>=',range_dates['date_start']))
+            args.append(('datetime','<=',range_dates['date_stop']))  
+        elif context.get('search_yesterday',False):
+            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            args.append(('datetime','>=',range_dates['date_start']))
+            args.append(('datetime','<=',range_dates['date_stop']))  
+        
+        #Busqueda de registros entre fechas en el Caso que se seleccione "Buscar desde" o "Buscar hasta"
+        if context.get('search_start',False) or context.get('search_end',False):
+            items_to_remove = []
+            for arg in args:
+                try:
+                    if arg[0] == 'search_start':
+                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00',context['tz'])
+                        args.append(('datetime','>=',start))
+                        items_to_remove.append(arg)
+                    if arg[0] == 'search_end':
+                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59',context['tz'])
+                        args.append(('datetime','<=',end))
+                        items_to_remove.append(arg)
+                except:None
+            for item in items_to_remove:
+                args.remove(item)
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context = context, count = count)
     
     def unlink(self,cr, uid, ids, context={}): 
@@ -6151,5 +6449,8 @@ class kemas_event_replacement(osv.osv):
         'user_id':fields.many2one('res.users','User', help='Person performing the replacement'),
         'datetime': fields.datetime('Date'),
         'description': fields.text('Description'),
+        #Campos para buscar entre fechas
+        'search_start':fields.date('Desde',help='Buscar desde'),
+        'search_end':fields.date('Hasta',help='Buscar hasta'),
         }
 # vim:expandtab:smartind:tabstop=4:softtabstop=4:shiftwidth=4:
