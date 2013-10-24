@@ -4528,7 +4528,8 @@
 	       			<button name="draft" type="object" confirm="You're sure to put back this event in DRAFT now?" string="Draft" icon="kanban-pause" states="on_going" groups="kemas.group_kemas_manager"/>
 	       			<button name="close_this_event" confirm="Are you sure you CLOSE the event now?" type="object" string="Close Event" icon="kanban-apply" states="on_going" groups="kemas.group_kemas_manager"/>
 	       			<button name="cancel_event" confirm="Are you sure you CANCEL the event now?" type="object" string="Cancel Event" icon="gtk-cancel" states="on_going" groups="kemas.group_kemas_manager"/>
-	       			<button name="send_email" class="oe_highlight" attrs="{'invisible':['|',('mailing','=',False),('state','!=','on_going')]}" type="object" string="Send notification e-mails" icon="terp-mail-message-new" colspan="4" groups="kemas.group_kemas_manager"/>
+	       			<button name="send_email" class="oe_highlight" attrs="{'invisible':['|',('mailing','=',False),('state','!=','on_going')]}" type="object" string="enviar notificaciones" icon="terp-mail-message-new" colspan="4" groups="kemas.group_kemas_manager"/>
+                    <button name="send_email" attrs="{'invisible':['|',('mailing','=',False),('state','!=','on_going')]}" type="object" string="Reenviar notificaciones" icon="terp-mail-message-new" colspan="4" groups="kemas.group_kemas_manager"/>
 	       			<field name="state" widget="statusbar" statusbar_visible="draft,on_going,closed" statusbar_colors='{"draft":"blue","on_going":"green","closed":"brown","canceled":"red"}'/>
 	       		</header>
 	       		<sheet string="Event">

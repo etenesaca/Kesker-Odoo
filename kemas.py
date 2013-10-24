@@ -5912,7 +5912,7 @@ class kemas_event(osv.osv):
         for record in records:
             time_start = kemas_extras.convert_float_to_hour_format(record['time_start'])
             time_end = kemas_extras.convert_float_to_hour_format(record['time_end'])
-            date_start = kemas_extras.convert_to_tz(record['date_start'],context['tz'],1)
+            date_start = kemas_extras.convert_to_tz(record['date_start'],self.pool.get('kemas.func').get_tz_by_uid(cr,uid),1)
             result[record['id']] = "%s | %s - %s"%(date_start,time_start,time_end)
         return result
     
