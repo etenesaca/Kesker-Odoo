@@ -1143,6 +1143,9 @@ class kemas_config(osv.osv):
         'system_logo':fields.binary('System Logo', help='The System Logo.'),
         'max_size_photos':fields.integer('Max size photos',help="Maximum size in kilobytes (KB) that can take photos of the system.", required=True),
         'max_size_logos':fields.integer('Max size logos',help="Maximum size in kilobytes (KB) that can take images of the system.", required=True),
+        #---Cliente de registro asistencia---------
+        'logo_program_client':fields.binary('Imagen de Cabecera', help='Es la imagen qye va a salir en la cabecera del programa para registro de asistencias.'),
+        'frequency_program_client': fields.integer('Frecuencia de conexion', help="Frecuencia en segundos con la que el programa se conecta al sistema para consultar los datos"),
         #---Report----------------------------------
         'report_header': fields.text('Report header',help='Text to be displayed in the header of the report.'),
         'use_header' : fields.boolean('Use?'),
@@ -3225,10 +3228,9 @@ class kemas_collaborator(osv.osv):
             photo_path =  addons.__path__[0] + '/web/static/src/img/avatar'
             vals['photo_small'] = kemas_extras.resize_image(vals['photo'], photo_path, 64)
         res = super(osv.osv,self).write(cr, uid, ids, vals, context)
-        
-        if not context is None and context and type(context).__name__=="dict" and not context.get('on_update_logbook',False):
+        if not context is None and context and type(context).__name__=="dict" and not context.get('no_update_logbook',False):
             #Escribir una linea en la bitacora del Colaborador
-            if not vals is None and not vals.has_key('level_id') and not vals.has_key('points') and vals.keys().__len__() != 2: 
+            if not vals is None and not vals.has_key('level_id') and not vals.has_key('points'): 
                 modify = ''
                 func_obj = self.pool.get('kemas.func')
                 for field in vals.keys():
@@ -3566,7 +3568,7 @@ class kemas_collaborator(osv.osv):
     
     def reload_avatar(self,cr,uid,ids,context={}):
         collaborators = super(osv.osv, self).read(cr,uid,ids,['email','use_gravatar'])
-        context['on_update_logbook'] = True
+        context['no_update_logbook'] = True
         for collaborator in collaborators:
             if collaborator['use_gravatar']:
                 avatar = self.get_avatar(cr,uid,collaborator['email'])

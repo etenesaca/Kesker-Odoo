@@ -511,6 +511,20 @@
 						</group> 
 		      		</group>
 			    	</page>
+                    <page string="Cliente de registro de Asistencia">
+                      <group>
+                        <field name="frequency_program_client"/>
+                      </group>
+                      
+                      <div class="oe_title">
+                        <div class="oe_edit_only">
+                            <label for="logo_program_client"/>
+                        </div>
+                        <h1>
+                            <field name="logo_program_client" widget="image" class="oe_left oe_avatar"/>
+                        </h1>
+                      </div>
+                    </page>
 				    <page string="Reports">	
 				      <notebook colspan="4">
 					    <page string="Headers and footers">	
