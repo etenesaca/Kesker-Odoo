@@ -72,6 +72,7 @@
             'static/src/css/hr.css',
             'static/src/css/event.css',
             'static/src/css/ke.css',
+            'static/src/css/event.css',
            ],
     }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

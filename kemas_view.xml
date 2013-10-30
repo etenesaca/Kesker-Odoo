@@ -4839,6 +4839,8 @@
            	<field name="place_id"/>
            	<field name="comments"/>
            	<field name="message_summary"/>
+            <field name="date_start"/>
+            <field name="event_day"/>
            	<templates>
                  <t t-name="kanban-box">
                      <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_project oe_kanban_global_click">
@@ -4851,21 +4853,23 @@
                              </ul>
                          </div>
                          <div class="oe_kanban_content">
-                             <h4><field name="service_id"/></h4>
-                             <div class="oe_kanban_project_list">
-                             </div>
-                             <div class="oe_kanban_footer_left">
+                          <div class="oe_kanban_footer_left">
+                           <table width="99%%">
+                            <tr>
+                              <td width="99%%">
+                                <h4><field name="service_id"/></h4>
+                                <div class="oe_kanban_footer_left">
                                  <t t-if="record.state.raw_value == 'on_going'">
-                                 	<img src="/web/static/src/img/icons/STOCK_MEDIA_PLAY.png" Alt="En Curso"/>
+                                  <img src="/web/static/src/img/icons/STOCK_MEDIA_PLAY.png" Alt="En Curso"/>
                                  </t>
                                  <t t-if="record.state.raw_value == 'draft'">
-                                 	<img src="/web/static/src/img/icons/kanban-pause.png" Alt="Pausado"/>
+                                  <img src="/web/static/src/img/icons/kanban-pause.png" Alt="Pausado"/>
                                  </t>
                                  <t t-if="record.state.raw_value == 'closed'">
-                                 	<img src="/web/static/src/img/icons/kanban-apply.png" Alt="Cerrado"/>
+                                  <img src="/web/static/src/img/icons/kanban-apply.png" Alt="Cerrado"/>
                                  </t>
                                  <t t-if="record.state.raw_value == 'canceled'">
-                                 	<img src="/web/static/src/img/icons/gtk-cancel.png" Alt="Cancelado"/>
+                                  <img src="/web/static/src/img/icons/gtk-cancel.png" Alt="Cancelado"/>
                                  </t>
                                  <span>
                                      <span class="oe_e">N</span>
@@ -4873,8 +4877,25 @@
                                  </span>
                              </div>
                              <div class="oe_kanban_footer_left" style="margin-top:5px;">
-	                               <t t-raw="record.message_summary.raw_value"/>
-	                           </div>
+                               <t t-raw="record.message_summary.raw_value"/>
+                             </div>
+                              </td>
+                              <td width="1%%">
+                                <a type="open" class="oe_date_event_box_icon">
+                                  <div class="oe_event_date "><t t-esc="record.date_start.raw_value.getDate()"/></div>
+                                  <div class="oe_event_month_year">
+                                      <t t-esc="record.date_start.raw_value.toString('MMM')"/>
+                                      <t t-esc="record.date_start.raw_value.getFullYear()"/>
+                                  </div>
+                                  <div class="oe_event_time"><field name="event_day"/></div>
+                                </a>
+                              </td>
+                            </tr>
+                           </table>
+                          </div>
+                             <div class="oe_kanban_project_list">
+                             </div>
+                             
                              <div class="oe_kanban_project_avatars">
                                  <t t-foreach="record.members.raw_value.slice(0,11)" t-as="member">
                                      <img t-att-src="kanban_image('res.users', 'image_small', member)" t-att-data-member_id="member"/>

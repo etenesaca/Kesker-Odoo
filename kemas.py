@@ -5914,8 +5914,7 @@ class kemas_event(osv.osv):
         for record in records:
             time_start = kemas_extras.convert_float_to_hour_format(record['time_start'])
             time_end = kemas_extras.convert_float_to_hour_format(record['time_end'])
-            date_start = kemas_extras.convert_to_tz(record['date_start'],self.pool.get('kemas.func').get_tz_by_uid(cr,uid),1)
-            result[record['id']] = "%s | %s - %s"%(date_start,time_start,time_end)
+            result[record['id']] = "%s - %s"%(time_start,time_end)
         return result
     
     def _notification_status(self, cr, uid, ids, name, arg, context={}): 
@@ -5955,6 +5954,33 @@ class kemas_event(osv.osv):
     
     def refresh_notification_status(self,cr,uid,ids,context={}):
         return True
+    
+    def _event_day(self, cr, uid, ids, name, arg, context={}): 
+        def event_day(date_start):
+            date_start = kemas_extras.convert_to_tz(date_start,self.pool.get('kemas.func').get_tz_by_uid(cr,uid))
+            date_start = parse(date_start)
+            day_number = int(date_start.strftime('%u'))
+            if day_number == 1:
+                res = 'Lunes'
+            elif day_number == 2:
+                res = 'Martes'
+            elif day_number == 3:
+                res = unicode('Miércoles','utf-8')
+            elif day_number == 4:
+                res = 'Jueves'
+            elif day_number == 5:
+                res = 'Viernes'
+            elif day_number == 6:
+                res = unicode('Sábado','utf-8')
+            elif day_number == 7:
+                res = 'Domingo'
+            return res
+         
+        result = {}
+        records = super(osv.osv,self).read(cr,uid,ids,['date_start'])
+        for record in records:
+            result[record['id']] = event_day(record['date_start'])
+        return result
     
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _order='date_start,code'
@@ -6030,6 +6056,7 @@ class kemas_event(osv.osv):
         'time_start_str':fields.function(_get_time_start_str, type='char', string='Time Start'),
         'time_end_str':fields.function(_get_time_end_str, type='char', string='Time end'),
         'event_date_str':fields.function(_get_event_date_str, type='char', string='Event date'),
+        'event_day':fields.function(_event_day, type='char', string='Dia del evento'),
         }
     _sql_constraints= [
         ('event_code', 'unique (code)', 'This Code already exist!'),
