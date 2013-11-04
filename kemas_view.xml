@@ -5713,7 +5713,7 @@
     </record>
     <!--____________________________________________________Collaborator Statics-->
     <record model="ir.actions.act_window" id="kemas_event_collaborator_line_form_action">
-      <field name="name">Collaborator statistics</field>
+      <field name="name">Colaboración</field>
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">kemas.event.collaborator.line</field>
       <field name="context">{'search_filter': 1, 'tree_view_ref' : 'kemas.kemas_event_collaborator_line_tree2_view',}</field>
@@ -6288,22 +6288,26 @@
     <!--_____________Event -->
     <menuitem action="action_kemas_event" name="Events" id="menu_kemas_event" parent="menu_kemas_calendar_menu" sequence="3"/>
     <!--_____________Collaborator Statisitics -->
-    <menuitem action="kemas_event_collaborator_line_form_action" name="Collaborator statistics" id="menu_kemas_event_collaborator_line" parent="menu_kemas_calendar_menu" sequence="4"/>
-    <!--_____________Attendance -->
-    <menuitem action="kemas_attendance_form_action" name="Attendance Record" id="menu_kemas_attendance" parent="menu_kemas_calendar_menu" sequence="5"/>
+    <menuitem action="kemas_event_collaborator_line_form_action" name="Colaboración" id="menu_kemas_event_collaborator_line" parent="menu_kemas_calendar_menu" sequence="4"/>
+    <!--
+      REGISTRO DE ASISTENCICA 
+    -->    
+    <menuitem id="menu_kemas_attendances_collaborator_menu" name="Registro de asistencia" parent="menu_kemas_calendar_menu" sequence="5" groups="group_kemas_manager,group_kemas_admin,group_kemas_register_attedance"/>
+    <!--_____________Registros de asistencia -->
+    <menuitem action="kemas_attendance_form_action" name="Asistencias" id="menu_kemas_attendance" parent="menu_kemas_attendances_collaborator_menu"/>
+	<!--_____________Registrar asistencia -->
+    <menuitem action="kemas_register_attendance_wizard_form_action" name="Registrar" id="menu_kemas_register_attendance_wizard" parent="menu_kemas_attendances_collaborator_menu"/>
     <!--
     	REPLACE COLLABORATOR 
      -->
     <menuitem id="menu_kemas_replace_collaborator_menu" name="Replacements" parent="menu_kemas_calendar_menu" sequence="6" groups="group_kemas_manager,group_kemas_admin,group_kemas_register_attedance"/>
     <!--_____________Replace collaborator -->
-    <menuitem action="kemas_event_replace_collaborator_wizard_form_action" name="Replace collaborator" id="menu_kemas_event_replace_collaborator" parent="menu_kemas_replace_collaborator_menu" sequence="6"/>
+    <menuitem action="kemas_event_replace_collaborator_wizard_form_action" name="Replace collaborator" id="menu_kemas_event_replace_collaborator" parent="menu_kemas_replace_collaborator_menu"/>
     <!--_____________Replacements -->
     <menuitem name="Replacements" action="kemas_event_replacement_form_action" id="menu_kemas_event_replacement" parent="menu_kemas_replace_collaborator_menu"/>
     
     <!--_____________Close past events -->
     <menuitem action="kemas_close_past_event_wizard_form_action" name="Close past events" id="menu_kemas_close_past_event_wizard" parent="menu_kemas_calendar_menu" sequence="7" groups="group_kemas_manager,group_kemas_librarian,group_kemas_admin"/> 
-	<!--_____________Register Attendance -->
-    <menuitem action="kemas_register_attendance_wizard_form_action" name="Register Attendance" id="menu_kemas_register_attendance_wizard" parent="menu_kemas_calendar_menu" sequence="8"/>
     <!-- 
     >>>>>>>>>>>>>>>>>>>>>>>>>>Reports
     -->
