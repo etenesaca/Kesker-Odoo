@@ -5713,7 +5713,7 @@
     </record>
     <!--____________________________________________________Collaborator Statics-->
     <record model="ir.actions.act_window" id="kemas_event_collaborator_line_form_action">
-      <field name="name">Colaboración</field>
+      <field name="name">Estadísticas de Colaboración</field>
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">kemas.event.collaborator.line</field>
       <field name="context">{'search_filter': 1, 'tree_view_ref' : 'kemas.kemas_event_collaborator_line_tree2_view',}</field>
