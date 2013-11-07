@@ -687,6 +687,31 @@ def resize_image(photo, photo_path,size_base=64,remove_file=True):
         os.remove(photo_path)
     return res_image
 
+def compress_file(file, path, file_name, encodeb64=True, remove_file=True):
+    import zipfile
+    import os
+    import StringIO
+    os.chdir(path)
+    #Guardar el Archivo
+    output = open(file_name, 'wb')
+    output.write(file)
+    output.close()
+    #Comprimir el archivo
+    zf = zipfile.ZipFile('ztmp', mode='w')
+    zf.write(file_name)
+    zf.close()
+    #Leer de nuevo el archivo para retornarlo
+    comprimido = open('ztmp',"rb").read()
+    if encodeb64:
+        comprimido = base64.encodestring(comprimido)
+    #Borrar los archivos creados temporalmente
+    if remove_file:
+        try:
+            os.remove(path + file_name)
+            os.remove(path + 'ztmp')
+        except:None
+    return comprimido
+
 def cambiar_meses_a_espaniol(text):
     text = unicode(text)
     text = text.replace(unicode('Monday'),unicode('Enero'))
