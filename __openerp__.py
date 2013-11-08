@@ -62,6 +62,7 @@
         #Reportes
         'wizard/kemas_report_collaborators_list_wizard_view.xml',
         'wizard/kemas_report_events_list_wizard_view.xml',
+        'wizard/kemas_report_attendance_statistics_wizard_view.xml',
         ],
     'installable': True,
     'application': True,

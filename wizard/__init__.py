@@ -38,5 +38,6 @@ import kemas_show_barcode_wizard
 #Reports
 import kemas_report_collaborators_list_wizard
 import kemas_report_events_list_wizard
+import kemas_report_attendance_statistics_wizard
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 
