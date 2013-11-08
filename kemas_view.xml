@@ -515,15 +515,31 @@
                       <group>
                         <field name="frequency_program_client"/>
                       </group>
-                      
-                      <div class="oe_title">
-                        <div class="oe_edit_only">
-                            <label for="logo_program_client"/>
-                        </div>
-                        <h1>
-                            <field name="logo_program_client" widget="image" class="oe_left oe_avatar"/>
-                        </h1>
+                      <div class="oe_edit_only">
+                          <label for="logo_program_client"/>
                       </div>
+                      <separator string="Imagen del Cliente de Registro de Asistencia" colspan="4"/>
+                      <group colspan="4">
+                        <table border="0" width="100%%" colspan="4">
+                          <tr>
+                            <td rowspan="2">
+                              <group>
+                                <field name="logo_program_client" widget="image" class="oe_left oe_avatar"/>
+                              </group>
+                            </td>
+                            <td/>
+                            <td width="404px">
+                              <center>
+                                <h5>La imagen que se selecciona va a aparecer en la parte superior derecha del cliente de registro de asistencia tal como se ven en la imagen</h5>
+                              </center>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td width="50px"/>
+                            <td background="/kemas/static/src/img/Client/client1.png" width="404px" height="409px" style="background-repeat:no-repeat;"/>
+                          </tr>
+                        </table>
+                      </group>
                     </page>
 				    <page string="Reports">	
 				      <notebook colspan="4">

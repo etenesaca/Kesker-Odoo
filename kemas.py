@@ -1094,7 +1094,7 @@ class kemas_config(osv.osv):
                 return self.read(cr, uid, config_ids[0],fields_to_read)
             return config_ids[0]
         else:
-            return None
+            return False
     
     def set_chages_in_res(self,cr,uid,config_id):
         config = self.read(cr,uid,config_id,[])
@@ -1144,7 +1144,7 @@ class kemas_config(osv.osv):
         'max_size_photos':fields.integer('Max size photos',help="Maximum size in kilobytes (KB) that can take photos of the system.", required=True),
         'max_size_logos':fields.integer('Max size logos',help="Maximum size in kilobytes (KB) that can take images of the system.", required=True),
         #---Cliente de registro asistencia---------
-        'logo_program_client':fields.binary('Imagen de Cabecera', help='Es la imagen qye va a salir en la cabecera del programa para registro de asistencias.'),
+        'logo_program_client':fields.binary('Imagen de Cabecera', help='Es la imagen que va a salir en la cabecera del programa para registro de asistencias.'),
         'frequency_program_client': fields.integer('Frecuencia de conexion', help="Frecuencia en segundos con la que el programa se conecta al sistema para consultar los datos"),
         #---Report----------------------------------
         'report_header': fields.text('Report header',help='Text to be displayed in the header of the report.'),
