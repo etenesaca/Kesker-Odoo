@@ -38,7 +38,7 @@
                   </group>
                </group>
                <footer>
-                  <button string="Imprimir reporte" name="call_report" type="object" class="oe_highlight" icon="STOCK_PRINT" confirm="Are you sure you print the report now?"/>
+                  <button string="Imprimir reporte" name="call_report" type="object" class="oe_highlight" icon="STOCK_PRINT" confirm="¿Desea imprimir el reporte ahora?"/>
                   <label string="o"/>
                   <button string="Cancelar" class="oe_link" special="cancel"/>
                </footer>

@@ -89,8 +89,11 @@ class Parser(report_sxw.rml_parse):
                 args.append(('state','=',wizard.state))
         
         if wizard.date_start:
-            args.append(('date_start','>=',wizard.date_start + " 00:00:00"))
-            args.append(('date_start','<=',wizard.date_end + " 23:59:59"))
+            tz = self.pool.get('kemas.func').get_tz_by_uid(cr,uid)
+            date_start = kemas_extras.convert_to_UTC_tz(wizard.date_start + " 00:00:00",tz)
+            date_end = kemas_extras.convert_to_UTC_tz(wizard.date_end + " 23:59:59",tz)
+            args.append(('date_start', '>=', date_start))
+            args.append(('date_start', '<=', date_end))
             
         event_ids = event_obj.search(cr, uid, args)
         fields = ['id','service_id','date_start','time_entry','time_start','time_end','place_id','state']

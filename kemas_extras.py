@@ -258,10 +258,13 @@ def convert_minutes_to_hour_format(minutes, separator="H"):
     minutos = completar_cadena(minutes % 60)
     return "%s%s%s"%(horas,separator, minutos)
     
-def completar_cadena(cadena, num=2):
+def completar_cadena(cadena, num=2,left=True):
     cadena = unicode(cadena)
     while len(cadena) < int(num):
-        cadena = '0' + str(cadena)
+        if left:
+            cadena = '0' + str(cadena)
+        else:
+            cadena = str(cadena) + '0'
     return str(cadena)
 
 def convert_to_datetime(date):
@@ -851,3 +854,17 @@ def pd(dict):
             print "  * %s \t= %s"%(str(key),str(dict[key]))
         except:None
     print '==================================================================='
+
+def round_value(value,digits=2):
+    value = round(value,digits)
+    count = 0
+    has_decimals = False
+    for num in str(value):
+        count += 1
+        if num in [',','.']:
+            has_decimals = True
+            break
+    if has_decimals:
+        decimal = completar_cadena(str(value)[count:], digits, left=False)
+        value = str(value)[:count] + decimal
+    return str(value)

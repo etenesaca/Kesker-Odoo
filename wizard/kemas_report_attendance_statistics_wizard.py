@@ -36,7 +36,7 @@ class kemas_report_attendance_statistics_wizard(osv.osv_memory):
             }
         return {
             'type': 'ir.actions.report.xml',
-            'report_name': 'event_list_report',
+            'report_name': 'attendance_statistics_report',
             'datas': datas,
             }
 

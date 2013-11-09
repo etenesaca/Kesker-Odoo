@@ -31,6 +31,23 @@
     </record>
     <!-- 
     ====================
+    ATTENDANCE STATISTICS
+    ====================
+    -->
+    <record id="kemas_rep_attendance_statistics_id" model="ir.actions.report.xml">
+      <field name="name">Resumen de Colaboración</field>
+      <field name="type">ir.actions.report.xml</field>
+      <field name="model">kemas.attendance.statistics.wizard</field>
+      <field name="report_name">attendance_statistics_report</field>
+      <field name="report_type">aeroo</field>
+      <field name="in_format">oo-odt</field>
+      <field name="parser_loc">kemas/report/attendance_statistics.py</field>
+      <field name="tml_source">file</field>
+      <field name="report_rml">kemas/report/attendance_statistics.odt</field>
+      <field name="parser_state">loc</field>
+    </record>
+    <!-- 
+    ====================
     EVENTS LIST
     ====================
     -->
