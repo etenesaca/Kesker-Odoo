@@ -369,33 +369,8 @@ def convert_to_format_date(date, time_init, time_start, time_end, tz):
     return {'date_init':date_init, 'date_start':date_start, 'date_stop':date_stop}
     
 def convert_month_to_string_format(month):
-    month = int(month)
-    if month==1:
-        return 'Enero'
-    elif month==2:
-        return 'Febrero'
-    elif month==3:
-        return 'Marzo'
-    elif month==4:
-        return 'Abril'
-    elif month==5:
-        return 'Mayo'
-    elif month==6:
-        return 'Junio'
-    elif month==7:
-        return 'Julio'
-    elif month==8:
-        return 'Agosto'
-    elif month==9:
-        return 'Septiembre'
-    elif month==10:
-        return 'Octubre'
-    elif month==11:
-        return 'Noviembre'
-    elif month==11:
-        return 'Diciembre'
-    else:
-        return None
+    months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+    return months[int(month-1)]
     
 def convert_date_format_long_ymd(year, month, day):
     return unicode(day) + ' de ' + unicode(convert_month_to_string_format(month)) + ' del ' + unicode(year)
