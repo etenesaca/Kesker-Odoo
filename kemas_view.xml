@@ -1923,7 +1923,7 @@
                 <field name="collaborator_id" string="Tasks"/>
                 <field name="categ_ids"/>
                 <separator/>
-                <filter name="active" string="Active" domain="[('is_active','=',True)]" icon="STOCK_YES"/>
+                <filter name="active" string="Active" domain="[('is_active','=',True)]" ICON="STOCK_YES"/>
           		<filter name="inactive" string="Inactive" domain="[('is_active','=',False)]" icon="STOCK_NO"/>
                 <separator/>
        			<field name="search_start" context="{'search_start':True}"/>
