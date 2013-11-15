@@ -128,7 +128,7 @@ class Parser(report_sxw.rml_parse):
             item['collaborator'] = collaborator
             collaborator_dict[(item['p_ganados'], collaborator['id'])] = item
         
-        collaborator_dict = sorted(collaborator_dict.items(), key=lambda x:x[0])
+        collaborator_dict = sorted(collaborator_dict.items(), key=lambda x:x[0], reverse=True)
         global datas
         datas = []
         count = 0
