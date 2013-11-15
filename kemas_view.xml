@@ -6377,7 +6377,7 @@
     <!--_____________Listado de Eventos -->
     <menuitem action="kemas_report_events_list_wizard_form_action" name="List of events" id="menu_kemas_report_events_list" parent="menu_kemas_reports_menu"/>
     <!-- Estadísticas de Colaboración -->
-    <menuitem action="kemas_report_attendance_statistics_wizard_action" name="Colaboración" id="kemas_report_attendance_statistics_wizard_menu" parent="menu_kemas_reports_menu"/>
+    <menuitem action="kemas_report_attendance_statistics_wizard_action" name="Colaboración" id="kemas_report_attendance_statistic_wizard_menu" parent="menu_kemas_reports_menu"/>
     <!-- 
     >>>>>>>>>>>>>>>>>>>>>>>>>>Extras
     -->

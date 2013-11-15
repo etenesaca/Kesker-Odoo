@@ -68,50 +68,57 @@ class Parser(report_sxw.rml_parse):
         cr = self.cr
         uid = self.uid
         
-        # Buscar los registros de asistencia
         attedance_obj = self.pool.get('kemas.attendance')
         history_points_obj = self.pool.get('kemas.history.points')
         connection_obj = self.pool.get('kemas.collaborator.logbook.login')
-        args = []
+        collaborator_obj = self.pool.get('kemas.collaborator')
+        
+        args_attendance = []
         args_connections = []
+        args_history_points = []
         
         if wizard.collaborator_id:
-            args.append(('collaborator_id', '=', wizard.collaborator_id.id))
+            collaborator_ids = [wizard.collaborator_id.id]
+        else:
+            collaborator_ids = collaborator_obj.search(cr, uid, [('state', '=', 'Active'), ('type', '=', 'Collaborator')])
+        
+        args_attendance.append(('collaborator_id', 'in', collaborator_ids))
+        args_connections.append(('collaborator_id', 'in', collaborator_ids))
+        args_history_points.append(('collaborator_id', 'in', collaborator_ids))
+            
         if wizard.service_id:
-            args.append(('event_id.service_id', '=', wizard.service_id.id))
+            args_attendance.append(('event_id.service_id', '=', wizard.service_id.id))
         
         if wizard.place_id:
-            args.append(('event_id.service_id', '=', wizard.place_id.id))
+            args_attendance.append(('event_id.service_id', '=', wizard.place_id.id))
         
         if wizard.date_start:
             tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
             date_start = kemas_extras.convert_to_UTC_tz(wizard.date_start + " 00:00:00", tz)
             date_end = kemas_extras.convert_to_UTC_tz(wizard.date_end + " 23:59:59", tz)
-            args.append(('date', '>=', date_start))
-            args.append(('date', '<=', date_end))
-            
+            #Para registros de asistencia
+            args_attendance.append(('date', '>=', date_start))
+            args_attendance.append(('date', '<=', date_end))
+            #Para conexiones
             args_connections.append(('datetime', '>=', date_start))
             args_connections.append(('datetime', '<=', date_end))
+            #Para historial de puntos
+            args_history_points.append(('date', '>=', date_start))
+            args_history_points.append(('date', '<=', date_end))
+             
             
-        attendance_ids = attedance_obj.search(cr, uid, args)
-        attendance_dict = {}
+        #REGISTRO DE ASISTENCIA
+        attendance_ids = attedance_obj.search(cr, uid, args_attendance)
         attendances = attedance_obj.read(cr, uid, attendance_ids, ['type', 'collaborator_id'])
-        
+        attendance_dict = {}
         for attendance in attendances:
             collaborator_id = attendance['collaborator_id'][0]
             if not attendance_dict.has_key(collaborator_id):
-                attendance_dict[collaborator_id] = {'just_time' : 0, 'late' : 0, 'absence' : 0, 'colaboraciones' : 0, 'p_perdidos' : 0, 'p_ganados' : 0}
+                attendance_dict[collaborator_id] = {'just_time' : 0, 'late' : 0, 'absence' : 0, 'colaboraciones' : 0}
             attendance_dict[collaborator_id][attendance['type']] += 1
             attendance_dict[collaborator_id]['colaboraciones'] += 1
-            history_points_ids = history_points_obj.search(cr, uid, [('attendance_id', '=', attendance['id'])])
-            if history_points_ids:
-                history_point = history_points_obj.read(cr, uid, history_points_ids[0], ['type', 'points'])
-                if history_point['type'] == 'decrease':
-                    attendance_dict[collaborator_id]['p_perdidos'] += abs(history_point['points'])
-                else:
-                    attendance_dict[collaborator_id]['p_ganados'] += abs(history_point['points'])
         
-        args_connections.append(('collaborator_id', 'in', attendance_dict.keys()))
+        #CONEXIONES
         connection_ids = connection_obj.search(cr, uid, args_connections)
         connections = connection_obj.read(cr, uid, connection_ids, ['collaborator_id'])
         connection_dict = {}
@@ -120,14 +127,28 @@ class Parser(report_sxw.rml_parse):
                 connection_dict[connection['collaborator_id'][0]] = 0
             connection_dict[connection['collaborator_id'][0]] += 1
         
-        collaborator_dict = {}
-        collaborators = self.pool.get('kemas.collaborator').read(cr, uid, attendance_dict.keys(), ['name_with_nick_name', 'photo_small'])
-        for collaborator in collaborators:
-            collaborator['conexiones'] = connection_dict.get(collaborator['id'], 0)
-            item = attendance_dict[collaborator['id']]
-            item['collaborator'] = collaborator
-            collaborator_dict[(item['p_ganados'], collaborator['id'])] = item
+        #HISTORIAL DE PUNTOS
+        history_points_ids = history_points_obj.search(cr, uid, args_history_points)
+        history_points = history_points_obj.read(cr, uid, history_points_ids, ['type', 'points','collaborator_id'])
+        history_points_dict = {}
+        for history_point in history_points:
+            collaborator_id = history_point['collaborator_id'][0]
+            if not history_points_dict.has_key(collaborator_id):
+                history_points_dict[collaborator_id] = {'p_perdidos' : 0, 'p_ganados' : 0}
+            if history_point['type'] == 'decrease':
+                history_points_dict[collaborator_id]['p_perdidos'] += abs(history_point['points'])
+            elif history_point['type'] == 'increase':
+                history_points_dict[collaborator_id]['p_ganados'] += abs(history_point['points'])
         
+        #Armar el dicionarios de los datos
+        collaborator_dict = {}
+        collaborators = collaborator_obj.read(cr, uid, collaborator_ids, ['name_with_nick_name'])
+        for collaborator in collaborators:
+            collaborator['connections'] = connection_dict.get(collaborator['id'], 0)
+            collaborator['attendances'] = attendance_dict.get(collaborator['id'], {'just_time' : 0, 'late' : 0, 'absence' : 0, 'colaboraciones' : 0})
+            collaborator['history_points'] = history_points_dict.get(collaborator['id'], {'p_perdidos' : 0, 'p_ganados' : 0})
+            collaborator_dict[(collaborator['history_points']['p_ganados'], collaborator['id'])] = collaborator
+
         collaborator_dict = sorted(collaborator_dict.items(), key=lambda x:x[0], reverse=True)
         global datas
         datas = []
@@ -135,28 +156,37 @@ class Parser(report_sxw.rml_parse):
         for item in collaborator_dict:
             count += 1
             num = kemas_extras.completar_cadena(str(count), len(str(len(collaborator_dict))))
+            collaborator = item[1]
+            attendances = collaborator['attendances']
+            history_points = collaborator['history_points']
             
-            porcentual_just_time = float(float((item[1]['just_time'] * 100)) / item[1]['colaboraciones'])
-            porcentual_just_time = str(kemas_extras.round_value(porcentual_just_time, 1)) + '%'
-            porcentual_late = float(float((item[1]['late'] * 100)) / item[1]['colaboraciones'])
-            porcentual_late = str(kemas_extras.round_value(porcentual_late, 1)) + '%'
-            porcentual_absence = float(float((item[1]['absence'] * 100)) / item[1]['colaboraciones'])
-            porcentual_absence = str(kemas_extras.round_value(porcentual_absence, 1)) + '%'
+            if attendances['colaboraciones'] > 0:
+                porcentual_just_time = float(float((attendances['just_time'] * 100)) / attendances['colaboraciones'])
+                porcentual_just_time = str(kemas_extras.round_value(porcentual_just_time, 1)) + '%'
+                porcentual_late = float(float((attendances['late'] * 100)) / attendances['colaboraciones'])
+                porcentual_late = str(kemas_extras.round_value(porcentual_late, 1)) + '%'
+                porcentual_absence = float(float((attendances['absence'] * 100)) / attendances['colaboraciones'])
+                porcentual_absence = str(kemas_extras.round_value(porcentual_absence, 1)) + '%'
+            else:
+                porcentual_just_time = "0.00%"
+                porcentual_late = "0.00%"
+                porcentual_absence = "0.00%"
+            
             row = {
                    'num' : num,
-                   'name' : item[1]['collaborator']['name_with_nick_name'],
+                   'name' : collaborator['name_with_nick_name'],
                    # 'photo' : item[1]['collaborator']['photo_small'],
-                   'just_time' : item[1]['just_time'],
+                   'just_time' : attendances['just_time'],
                    'porcentual_just_time' : porcentual_just_time,
-                   'late' : item[1]['late'],
+                   'late' : attendances['late'],
                    'porcentual_late' : porcentual_late,
-                   'absence' : item[1]['absence'],
+                   'absence' : attendances['absence'],
                    'porcentual_absence' : porcentual_absence,
-                   'colaboraciones' : item[1]['colaboraciones'],
-                   'puntos_perdidos' : item[1]['p_perdidos'],
-                   'puntos_ganados' : item[1]['p_ganados'],
-                   'puntos' : item[1]['p_ganados'] - item[1]['p_perdidos'],
-                   'conexiones' : item[1]['collaborator']['conexiones']
+                   'colaboraciones' :attendances['colaboraciones'],
+                   'puntos_perdidos' : history_points['p_perdidos'],
+                   'puntos_ganados' : history_points['p_ganados'],
+                   'puntos' : history_points['p_ganados'] - history_points['p_perdidos'],
+                   'conexiones' : collaborator['connections']
                    }
             datas.append(row)
         return None
