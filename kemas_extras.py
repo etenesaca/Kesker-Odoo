@@ -370,7 +370,7 @@ def convert_to_format_date(date, time_init, time_start, time_end, tz):
     
 def convert_month_to_string_format(month):
     months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
-    return months[int(month-1)]
+    return months[int(month)-1]
     
 def convert_date_format_long_ymd(year, month, day):
     return unicode(day) + ' de ' + unicode(convert_month_to_string_format(month)) + ' del ' + unicode(year)

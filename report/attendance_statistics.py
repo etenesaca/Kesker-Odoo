@@ -168,9 +168,9 @@ class Parser(report_sxw.rml_parse):
                 porcentual_absence = float(float((attendances['absence'] * 100)) / attendances['colaboraciones'])
                 porcentual_absence = str(kemas_extras.round_value(porcentual_absence, 1)) + '%'
             else:
-                porcentual_just_time = "0.00%"
-                porcentual_late = "0.00%"
-                porcentual_absence = "0.00%"
+                porcentual_just_time = "0.0%"
+                porcentual_late = "0.0%"
+                porcentual_absence = "0.0%"
             
             row = {
                    'num' : num,
