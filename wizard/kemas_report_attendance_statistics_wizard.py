@@ -42,12 +42,22 @@ class kemas_report_attendance_statistics_wizard(osv.osv_memory):
 
     _name='kemas.attendance.statistics.wizard'
     _columns={
-        'collaborator_id':fields.many2one('kemas.collaborator','Colaborador', help=''),
+        'date_type':fields.selection([
+            ('today','Hoy'),
+            ('this_week','Esta semana'),
+            ('this_month','Este mes'),
+            ('other','Entre fechas'),
+             ],    'Fecha', required=True),
+        'date_start': fields.date('Desde'),
+        'date_end': fields.date('Hasta'),
+        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_report_attendance_statistics_wizard_collaborator_rel',  'report_attendance_statistics_wizard_id',  'collaborator_id', 'Colaboradores',help='Collaboradores de los Cuales se va obtener el reporte'),
         'place_id':fields.many2one('kemas.place','Lugar',ondelete='cascade', help=''),
         'service_id':fields.many2one('kemas.service','Servicio',ondelete='cascade', help=''),
-        'date_start': fields.date('Buscar Desde'),
-        'date_end': fields.date('Buscar Hasta'),
         'detailed':fields.boolean('Reporte detallado?', required=False),
+        }
+    
+    _defaults = {  
+        'date_type': 'this_month', 
         }
     
     def validate_dates(self,cr,uid,ids):

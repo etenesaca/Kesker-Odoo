@@ -2,45 +2,46 @@
 <openerp>
    <data>
       <!--
-      ====================
-      REPORT ATTENDANCE STATISICS
-      ====================
+         ====================
+         REPORT ATTENDANCE STATISICS
+         ====================
       -->
       <!--____________________________________________________Vista de Formulario -->
       <record model="ir.ui.view" id="kemas_report_attendance_statistics_wizard_form_view">
          <field name="name">kemas.attendance.statistics.wizard.form</field>
          <field name="model">kemas.attendance.statistics.wizard</field>
          <field name="type">form</field>
-         <field name="priority" eval="1"/>
+         <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Estadísiticas de colaboración" version="7.0">
                <div align="center" class="box_tip">
-                  <img src="/web/static/src/img/icons/gtk-info.png"/>
+                  <img src="/web/static/src/img/icons/gtk-info.png" />
                   <i>
-                     <label string="Aquí se pueden ver un resumen de los registros de asistencia"/>
+                     <label string="Aquí se pueden ver un resumen de los registros de asistencia" />
                   </i>
                </div>
                <group colspan="4" col="10">
                   <group colspan="1">
-                     <img src="/kemas/static/src/img/icons/report.png"/>
+                     <img src="/kemas/static/src/img/icons/report.png" />
                   </group>
                   <group colspan="9" col="20">
-                     <separator string="Resumen de Colaboración" colspan="20"/>
-                     <group colspan="12" col="10">
-                        <field name="date_start" colspan="5" attrs="{'required':[('date_end','!=',False)]}"/>
-                        <field name="date_end" colspan="5" attrs="{'required':[('date_start','!=',False)]}"/>
-                        <field name="collaborator_id" colspan="10"/>
-                        <field name="service_id" colspan="10"/>
-                        <field name="place_id" colspan="10"/>
-                        <field name="detailed" colspan="10" string="¿Reporte detallado?" help="Marque esta casilla si desea también imprimir todos los registros de asistencia"/>
+                     <separator string="Resumen de Colaboración" colspan="20" />
+                     <group colspan="14" col="10">
+                        <field name="date_type" colspan="6" />
+                        <field name="date_start" colspan="2" attrs="{'invisible':[('date_type','!=','other')],'required':[('date_type','=','other')]}" nolabel="1" placeholder="Desde" />
+                        <field name="date_end" colspan="2" attrs="{'invisible':[('date_type','!=','other')],'required':[('date_type','=','other')]}" nolabel="1" placeholder="Hasta" />
+                        <field name="collaborator_ids" widget="many2many_tags" colspan="10" />
+                        <field name="service_id" colspan="10" />
+                        <field name="place_id" colspan="10" />
+                        <field name="detailed" colspan="10" string="¿Reporte detallado?" help="Marque esta casilla si desea también imprimir todos los registros de asistencia" />
                      </group>
-                     <group colspan="8"/>
+                     <group colspan="6" />
                   </group>
                </group>
                <footer>
-                  <button string="Imprimir reporte" name="call_report" type="object" class="oe_highlight" icon="STOCK_PRINT" confirm="¿Desea imprimir el reporte ahora?"/>
-                  <label string="o"/>
-                  <button string="Cancelar" class="oe_link" special="cancel"/>
+                  <button string="Imprimir reporte" name="call_report" type="object" class="oe_highlight" icon="STOCK_PRINT" confirm="¿Desea imprimir el reporte ahora?" />
+                  <label string="o" />
+                  <button string="Cancelar" class="oe_link" special="cancel" />
                </footer>
             </form>
          </field>

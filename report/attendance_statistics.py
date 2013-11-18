@@ -77,8 +77,10 @@ class Parser(report_sxw.rml_parse):
         args_connections = []
         args_history_points = []
         
-        if wizard.collaborator_id:
-            collaborator_ids = [wizard.collaborator_id.id]
+        if wizard.collaborator_ids:
+            collaborator_ids = []
+            for collaborator in wizard.collaborator_ids:
+                collaborator_ids.append(collaborator.id)
         else:
             collaborator_ids = collaborator_obj.search(cr, uid, [('state', '=', 'Active'), ('type', '=', 'Collaborator')])
         
@@ -92,20 +94,28 @@ class Parser(report_sxw.rml_parse):
         if wizard.place_id:
             args_attendance.append(('event_id.service_id', '=', wizard.place_id.id))
         
-        if wizard.date_start:
-            tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-            date_start = kemas_extras.convert_to_UTC_tz(wizard.date_start + " 00:00:00", tz)
-            date_end = kemas_extras.convert_to_UTC_tz(wizard.date_end + " 23:59:59", tz)
-            #Para registros de asistencia
-            args_attendance.append(('date', '>=', date_start))
-            args_attendance.append(('date', '<=', date_end))
-            #Para conexiones
-            args_connections.append(('datetime', '>=', date_start))
-            args_connections.append(('datetime', '<=', date_end))
-            #Para historial de puntos
-            args_history_points.append(('date', '>=', date_start))
-            args_history_points.append(('date', '<=', date_end))
-             
+        #RANGO DE CONSULTA
+        tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
+        if wizard.date_type == 'today':
+            range_dates = kemas_extras.get_dates_range_today(tz)
+        elif wizard.date_type == 'this_week':
+            range_dates = kemas_extras.get_dates_range_this_week(tz)
+        elif wizard.date_type == 'this_month':
+            range_dates = kemas_extras.get_dates_range_this_month(tz)
+        else:
+            range_dates = {
+                           'date_start' : kemas_extras.convert_to_UTC_tz(wizard.date_start + " 00:00:00", tz),
+                           'date_stop' : kemas_extras.convert_to_UTC_tz(wizard.date_end + " 23:59:59", tz)
+                           }
+        #Para registros de asistencia
+        args_attendance.append(('date','>=',range_dates['date_start']))
+        args_attendance.append(('date','<=',range_dates['date_stop']))
+        #Para registros de asistencia
+        args_connections.append(('datetime','>=',range_dates['date_start']))
+        args_connections.append(('datetime','<=',range_dates['date_stop']))
+        #Para registros de asistencia
+        args_history_points.append(('date','>=',range_dates['date_start']))
+        args_history_points.append(('date','<=',range_dates['date_stop']))  
             
         #REGISTRO DE ASISTENCIA
         attendance_ids = attedance_obj.search(cr, uid, args_attendance)
