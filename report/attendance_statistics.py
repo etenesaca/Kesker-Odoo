@@ -96,17 +96,10 @@ class Parser(report_sxw.rml_parse):
         
         #RANGO DE CONSULTA
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        if wizard.date_type == 'today':
-            range_dates = kemas_extras.get_dates_range_today(tz)
-        elif wizard.date_type == 'this_week':
-            range_dates = kemas_extras.get_dates_range_this_week(tz)
-        elif wizard.date_type == 'this_month':
-            range_dates = kemas_extras.get_dates_range_this_month(tz)
-        else:
-            range_dates = {
-                           'date_start' : kemas_extras.convert_to_UTC_tz(wizard.date_start + " 00:00:00", tz),
-                           'date_stop' : kemas_extras.convert_to_UTC_tz(wizard.date_end + " 23:59:59", tz)
-                           }
+        range_dates = {
+                       'date_start' : kemas_extras.convert_to_UTC_tz(wizard.date_start + " 00:00:00", tz),
+                       'date_stop' : kemas_extras.convert_to_UTC_tz(wizard.date_end + " 23:59:59", tz)
+                       }
         #Para registros de asistencia
         args_attendance.append(('date','>=',range_dates['date_start']))
         args_attendance.append(('date','<=',range_dates['date_stop']))
@@ -178,9 +171,13 @@ class Parser(report_sxw.rml_parse):
                 porcentual_absence = float(float((attendances['absence'] * 100)) / attendances['colaboraciones'])
                 porcentual_absence = str(kemas_extras.round_value(porcentual_absence, 1)) + '%'
             else:
-                porcentual_just_time = "0.0%"
-                porcentual_late = "0.0%"
-                porcentual_absence = "0.0%"
+                attendances['just_time'] = '---'
+                porcentual_just_time = "---"
+                attendances['late'] = '---'
+                porcentual_late = "---"
+                attendances['absence'] = '---'
+                porcentual_absence = "---"
+                attendances['colaboraciones'] = "---" 
             
             row = {
                    'num' : num,

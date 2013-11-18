@@ -21,9 +21,26 @@
 
 from osv import fields, osv
 from tools.translate import _
-import addons
+from kemas import kemas_extras
 
 class kemas_report_attendance_statistics_wizard(osv.osv_memory):
+    def create(self, cr, uid, vals, context={}):
+        tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
+        if vals['date_type'] == 'today':
+            range_dates = kemas_extras.get_dates_range_today(tz)
+        elif vals['date_type'] == 'this_week':
+            range_dates = kemas_extras.get_dates_range_this_week(tz)
+        elif vals['date_type'] == 'this_month':
+            range_dates = kemas_extras.get_dates_range_this_month(tz)
+        else:
+            range_dates = {
+                           'date_start' : wizard.date_start,
+                           'date_stop' : wizard.date_end
+                           }
+        vals['date_start'] = kemas_extras.convert_to_tz(range_dates['date_start'], tz)
+        vals['date_end'] = kemas_extras.convert_to_tz(range_dates['date_stop'], tz)
+        return super(osv.osv_memory,self).create(cr, uid, vals, context)
+    
     def call_report(self, cr, uid, ids, context=None):
         datas = {}     
         if context is None:
