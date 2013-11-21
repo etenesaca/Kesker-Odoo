@@ -44,8 +44,8 @@ class Parser(report_sxw.rml_parse):
             'time_d': self._get_time,
             'build_report':self.build_report,
             'config':self.get_config,
-            'cols_title':self.cols,
             'rows_data':self.rows,
+            'rows_collaboration':self.rows_collaboration,
         })
     
     def _get_time(self):
@@ -94,23 +94,23 @@ class Parser(report_sxw.rml_parse):
         if wizard.place_id:
             args_attendance.append(('event_id.service_id', '=', wizard.place_id.id))
         
-        #RANGO DE CONSULTA
+        # RANGO DE CONSULTA
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
         range_dates = {
                        'date_start' : kemas_extras.convert_to_UTC_tz(wizard.date_start + " 00:00:00", tz),
                        'date_stop' : kemas_extras.convert_to_UTC_tz(wizard.date_end + " 23:59:59", tz)
                        }
-        #Para registros de asistencia
-        args_attendance.append(('date','>=',range_dates['date_start']))
-        args_attendance.append(('date','<=',range_dates['date_stop']))
-        #Para registros de asistencia
-        args_connections.append(('datetime','>=',range_dates['date_start']))
-        args_connections.append(('datetime','<=',range_dates['date_stop']))
-        #Para registros de asistencia
-        args_history_points.append(('date','>=',range_dates['date_start']))
-        args_history_points.append(('date','<=',range_dates['date_stop']))  
+        # Para registros de asistencia
+        args_attendance.append(('date', '>=', range_dates['date_start']))
+        args_attendance.append(('date', '<=', range_dates['date_stop']))
+        # Para registros de asistencia
+        args_connections.append(('datetime', '>=', range_dates['date_start']))
+        args_connections.append(('datetime', '<=', range_dates['date_stop']))
+        # Para registros de asistencia
+        args_history_points.append(('date', '>=', range_dates['date_start']))
+        args_history_points.append(('date', '<=', range_dates['date_stop']))  
             
-        #REGISTRO DE ASISTENCIA
+        # REGISTRO DE ASISTENCIA
         attendance_ids = attedance_obj.search(cr, uid, args_attendance)
         attendances = attedance_obj.read(cr, uid, attendance_ids, ['type', 'collaborator_id'])
         attendance_dict = {}
@@ -121,7 +121,7 @@ class Parser(report_sxw.rml_parse):
             attendance_dict[collaborator_id][attendance['type']] += 1
             attendance_dict[collaborator_id]['colaboraciones'] += 1
         
-        #CONEXIONES
+        # CONEXIONES
         connection_ids = connection_obj.search(cr, uid, args_connections)
         connections = connection_obj.read(cr, uid, connection_ids, ['collaborator_id'])
         connection_dict = {}
@@ -130,9 +130,9 @@ class Parser(report_sxw.rml_parse):
                 connection_dict[connection['collaborator_id'][0]] = 0
             connection_dict[connection['collaborator_id'][0]] += 1
         
-        #HISTORIAL DE PUNTOS
+        # HISTORIAL DE PUNTOS
         history_points_ids = history_points_obj.search(cr, uid, args_history_points)
-        history_points = history_points_obj.read(cr, uid, history_points_ids, ['type', 'points','collaborator_id'])
+        history_points = history_points_obj.read(cr, uid, history_points_ids, ['type', 'points', 'collaborator_id'])
         history_points_dict = {}
         for history_point in history_points:
             collaborator_id = history_point['collaborator_id'][0]
@@ -143,7 +143,10 @@ class Parser(report_sxw.rml_parse):
             elif history_point['type'] == 'increase':
                 history_points_dict[collaborator_id]['p_ganados'] += abs(history_point['points'])
         
-        #Armar el dicionarios de los datos
+        # Listado de Colaboradores por colaboración
+        collaboration_list = {}
+        
+        # Armar el dicionarios de los datos
         collaborator_dict = {}
         collaborators = collaborator_obj.read(cr, uid, collaborator_ids, ['name_with_nick_name'])
         for collaborator in collaborators:
@@ -151,8 +154,11 @@ class Parser(report_sxw.rml_parse):
             collaborator['attendances'] = attendance_dict.get(collaborator['id'], {'just_time' : 0, 'late' : 0, 'absence' : 0, 'colaboraciones' : 0})
             collaborator['history_points'] = history_points_dict.get(collaborator['id'], {'p_perdidos' : 0, 'p_ganados' : 0})
             collaborator_dict[(collaborator['history_points']['p_ganados'], collaborator['id'])] = collaborator
+            collaboration_list[(collaborator['attendances']['colaboraciones'], collaborator['id'])] = collaborator
 
+        # Ordenas los diccionario
         collaborator_dict = sorted(collaborator_dict.items(), key=lambda x:x[0], reverse=True)
+        
         global datas
         datas = []
         count = 0
@@ -196,13 +202,37 @@ class Parser(report_sxw.rml_parse):
                    'conexiones' : collaborator['connections']
                    }
             datas.append(row)
+        
+        # Ordenas los diccionario
+        collaboration_list = sorted(collaboration_list.items(), key=lambda x:x[0], reverse=True)
+        
+        global datas_collaboration
+        datas_collaboration = []
+        count = 0
+        for item in collaboration_list:
+            count += 1
+            num = kemas_extras.completar_cadena(str(count), len(str(len(collaborator_dict))))
+            collaborator = item[1]
+            attendances = collaborator['attendances']
+            
+            row = {
+                   'num' : num,
+                   'name' : collaborator['name_with_nick_name'],
+                   'just_time' : attendances['just_time'],
+                   'late' : attendances['late'],
+                   'absence' : attendances['absence'],
+                   'colaboraciones' :attendances['colaboraciones'],
+                   }
+            datas_collaboration.append(row)
+            
         return None
-
-    def cols(self):
-        global headers
-        return headers
 
     def rows(self):      
         global datas
         return datas
+    
+    def rows_collaboration(self):      
+        global datas_collaboration
+        return datas_collaboration
 
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
