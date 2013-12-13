@@ -34,12 +34,12 @@ class kemas_report_attendance_statistics_wizard(osv.osv_memory):
             range_dates = kemas_extras.get_dates_range_this_month(tz)
         else:
             range_dates = {
-                           'date_start' : wizard.date_start,
-                           'date_stop' : wizard.date_end
+                           'date_start' : vals['date_start'] + " 00:00:00",
+                           'date_stop' : vals['date_end'] + " 23:59:59",
                            }
         vals['date_start'] = kemas_extras.convert_to_tz(range_dates['date_start'], tz)
         vals['date_end'] = kemas_extras.convert_to_tz(range_dates['date_stop'], tz)
-        return super(osv.osv_memory,self).create(cr, uid, vals, context)
+        return super(osv.osv_memory, self).create(cr, uid, vals, context)
     
     def call_report(self, cr, uid, ids, context=None):
         datas = {}     
@@ -57,35 +57,35 @@ class kemas_report_attendance_statistics_wizard(osv.osv_memory):
             'datas': datas,
             }
 
-    _name='kemas.attendance.statistics.wizard'
-    _columns={
+    _name = 'kemas.attendance.statistics.wizard'
+    _columns = {
         'date_type':fields.selection([
-            ('today','Hoy'),
-            ('this_week','Esta semana'),
-            ('this_month','Este mes'),
-            ('other','Entre fechas'),
-             ],    'Fecha', required=True),
+            ('today', 'Hoy'),
+            ('this_week', 'Esta semana'),
+            ('this_month', 'Este mes'),
+            ('other', 'Entre fechas'),
+             ], 'Fecha', required=True),
         'date_start': fields.date('Desde'),
         'date_end': fields.date('Hasta'),
-        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_report_attendance_statistics_wizard_collaborator_rel',  'report_attendance_statistics_wizard_id',  'collaborator_id', 'Colaboradores',help='Collaboradores de los Cuales se va obtener el reporte'),
-        'place_id':fields.many2one('kemas.place','Lugar',ondelete='cascade', help=''),
-        'service_id':fields.many2one('kemas.service','Servicio',ondelete='cascade', help=''),
+        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_report_attendance_statistics_wizard_collaborator_rel', 'report_attendance_statistics_wizard_id', 'collaborator_id', 'Colaboradores', help='Collaboradores de los Cuales se va obtener el reporte'),
+        'place_id':fields.many2one('kemas.place', 'Lugar', ondelete='cascade', help=''),
+        'service_id':fields.many2one('kemas.service', 'Servicio', ondelete='cascade', help=''),
         'detailed':fields.boolean('Reporte detallado?', required=False),
         }
     
     _defaults = {  
-        'date_type': 'this_month', 
+        'date_type': 'this_month',
         }
     
-    def validate_dates(self,cr,uid,ids):
-        wizard = self.read(cr, uid, ids[0],['date_start','date_end'])
+    def validate_dates(self, cr, uid, ids):
+        wizard = self.read(cr, uid, ids[0], ['date_start', 'date_end'])
         if wizard['date_start'] > wizard['date_end']:
             raise osv.except_osv(_('Error!'), _('The date from which to search for events can not be higher than the deadline.'))
         else:
             return True
             
-    _constraints=[
-        (validate_dates,'The date from which to search for events can not be higher than the deadline.',['date_start'])
+    _constraints = [
+        (validate_dates, 'The date from which to search for events can not be higher than the deadline.', ['date_start'])
         ]
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 
