@@ -443,17 +443,19 @@ class kemas_massive_email(osv.osv):
 
     def fields_get(self, cr, uid, fields={}, context={}, write_access=True): 
         result = super(kemas_massive_email, self).fields_get(cr, uid, fields, context, write_access)
-        def_dic = {}
-        try:
+        if not context is None and context and type(context).__name__ == "dict":
+            def_dic = {}
             config_obj = self.pool.get('kemas.config')
             config_id = config_obj.get_correct_config(cr, uid)
-            preferences = config_obj.read(cr, uid, config_id, [])
-            def_dic['use_header_message'] = preferences['massive_mail_use_header']
-            def_dic['message'] = preferences['massive_mail_body_default']
-        except:
-            raise osv.except_osv(_('Error!'), _('No hay ninguna configuracion del Sistema definida.'))
-        def_dic['state'] = 'draft'
-        self._defaults = def_dic
+            if config_id:
+                try:
+                    preferences = config_obj.read(cr, uid, config_id, [])
+                    def_dic['use_header_message'] = preferences['massive_mail_use_header']
+                    def_dic['message'] = preferences['massive_mail_body_default']
+                except:
+                    raise osv.except_osv(_('Error!'), _('No hay ninguna configuracion del Sistema definida.'))
+                def_dic['state'] = 'draft'
+                self._defaults = def_dic
         return result
     
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
@@ -1085,14 +1087,15 @@ class kemas_config(osv.osv):
     def get_correct_config(self, cr, uid, fields_to_read=False):
         config_ids = self.search(cr, uid, [])
         dic = []
-        for config_id in config_ids:
-            dic.append(self.read(cr, uid, config_id, ['sequence'])['sequence'])
-        correct_seq = min(dic)
-        config_ids = self.search(cr, uid, [('sequence', '=', correct_seq)])
         if config_ids:
-            if fields_to_read:
-                return self.read(cr, uid, config_ids[0], fields_to_read)
-            return config_ids[0]
+            for config_id in config_ids:
+                dic.append(self.read(cr, uid, config_id, ['sequence'])['sequence'])
+            correct_seq = min(dic)
+            config_ids = self.search(cr, uid, [('sequence', '=', correct_seq)])
+            if config_ids:
+                if fields_to_read:
+                    return self.read(cr, uid, config_ids[0], fields_to_read)
+                return config_ids[0]
         else:
             return False
     
@@ -2940,6 +2943,9 @@ class kemas_collaborator(osv.osv):
             current_points = str(current_points)
             
             summary = str(operator) + str(change_points) + " Puntos. Antes " + str(current_points) + " ahora " + str(new_points) + " Puntos."
+            
+            # Obtener el Codigo para crear el registro de Historial de Puntos
+            seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas History Points'), ])[0]
             vals_1 = {
                     'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
                     'collaborator_id': collaborator_id,
@@ -2947,6 +2953,7 @@ class kemas_collaborator(osv.osv):
                     'description': description,
                     'summary': summary,
                     'points': points,
+                    'code' : unicode(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
                     }
             
             vals_2 = {
@@ -4253,15 +4260,18 @@ class kemas_history_points(osv.osv):
             self.pool.get('mail.notification').create(cr, uid, vals_notication)
         return message_id
     
-    def create(self, cr, uid, vals, *args, **kwargs):
-        seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas History Points'), ])[0]
+    def create(self, cr, uid, vals, context={}):
+        if not vals.get('code', False):
+            seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas History Points'), ])[0]
+            vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
         vals['reg_uid'] = uid
-        vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
         collaborator = self.pool.get('kemas.collaborator').read(cr, uid, vals['collaborator_id'], ['user_id'])
         partner_id = self.pool.get('res.users').read(cr, uid, collaborator['user_id'][0], ['partner_id'])['partner_id'][0]
         follower_ids = [partner_id]
         vals['message_follower_ids'] = [(6, 0, follower_ids)]
-        res_id = super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
+
+        # Guardar el registro        
+        res_id = super(osv.osv, self).create(cr, uid, vals, context)
         
         partner_id = self.pool.get('res.users').read(cr, uid, uid, ['partner_id'])['partner_id'][0]
         if partner_id in follower_ids:
@@ -4313,7 +4323,6 @@ class kemas_place(osv.osv):
             <iframe width="100%%" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="%s"></iframe>
             <br /><small><a href="%s" style="color:#0000FF;text-align:left" target="blank">Ver mapa más grande</a></small>
             """ % (url_map, url_map)
-            import pdb;pdb.set_trace()
             res['arch'] = res['arch'].replace('<!-- mapa -->', map.encode('utf-8'))
         return res
     

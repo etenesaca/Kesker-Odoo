@@ -20,7 +20,7 @@
 #
 ##############################################################################
 {
-    'name': 'Kemas Ministry System',    
+    'name': 'Sistema de Control de Asistencias, Tareas y Personal',
     'description': """Management Kemas Ministry that covers:
     Register Collaborators
     Recording Registry
@@ -38,12 +38,12 @@
         'resource',
         'web_kanban',
         'report_aeroo',
-        #'report_aeroo_ooo',
+        # 'report_aeroo_ooo',
     ],
     'category':'Accounting & Finance',
     'init_xml': [],
     'update_xml': [
-        'security/kemas_security.xml', 
+        'security/kemas_security.xml',
         'security/ir.model.access.csv',
         'report/reports.xml',
         'kemas_view.xml',
@@ -51,7 +51,7 @@
         'data/res.country.state.csv',
         'data/kemas_data.xml',
         'data/planned_actions.xml',
-        #'kemas_installer.xml',
+        # 'kemas_installer.xml',
         'wizard/kemas_collaborator_send_notifications_wizard_view.xml',
         'wizard/kemas_set_points_wizard_view.xml',
         'wizard/kemas_set_points_work_wizard_view.xml',
@@ -59,7 +59,7 @@
         'wizard/kemas_close_past_events_wizard_view.xml',
         'wizard/kemas_suspend_collaborator_wizard_view.xml',
         'wizard/kemas_event_replace_collaborator_wizard_view.xml',
-        #Reportes
+        # Reportes
         'wizard/kemas_report_collaborators_list_wizard_view.xml',
         'wizard/kemas_report_events_list_wizard_view.xml',
         'wizard/kemas_report_attendance_statistics_wizard_view.xml',
