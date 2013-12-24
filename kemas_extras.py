@@ -26,17 +26,17 @@ except :
     print "ERROR IMPORTING REPORT LAB"
 
 def get_dates_range_yesterday(tz):
-    today = fecha_actual = unicode(convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"),tz,res=1))
+    today = fecha_actual = unicode(convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz, res=1))
     today = parse(today)
     yesterday = (today - timedelta(days=1)).date().__str__()
-    date_start = convert_to_UTC_tz(yesterday + ' 00:00:00',tz)
-    date_stop = convert_to_UTC_tz(yesterday + ' 23:59:59',tz)  
+    date_start = convert_to_UTC_tz(yesterday + ' 00:00:00', tz)
+    date_stop = convert_to_UTC_tz(yesterday + ' 23:59:59', tz)  
     return {'date_start' : date_start, 'date_stop' : date_stop}
 
 def get_dates_range_today(tz):
-    fecha_actual = unicode(convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"),tz,res=1))
-    date_start = convert_to_UTC_tz(fecha_actual + ' 00:00:00',tz)
-    date_stop = convert_to_UTC_tz(fecha_actual + ' 23:59:59',tz)  
+    fecha_actual = unicode(convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz, res=1))
+    date_start = convert_to_UTC_tz(fecha_actual + ' 00:00:00', tz)
+    date_stop = convert_to_UTC_tz(fecha_actual + ' 23:59:59', tz)  
     return {'date_start' : date_start, 'date_stop' : date_stop}
 
 def get_dates_range_this_week(tz):
@@ -45,22 +45,22 @@ def get_dates_range_this_week(tz):
     day_number = int(now.strftime('%u'))
     date_start = (now - timedelta(days=day_number - 1)).date().__str__()
     date_stop = (now + timedelta(days=7 - day_number)).date().__str__()
-    date_start = convert_to_UTC_tz(date_start + ' 00:00:00',tz)
-    date_stop = convert_to_UTC_tz(date_stop + ' 23:59:59',tz)
+    date_start = convert_to_UTC_tz(date_start + ' 00:00:00', tz)
+    date_stop = convert_to_UTC_tz(date_stop + ' 23:59:59', tz)
     return {'date_start' : date_start, 'date_stop' : date_stop}
 
 def get_dates_range_this_month(tz):
     import datetime
     now = datetime.datetime.now()
-    year = completar_cadena(now.year,4)
+    year = completar_cadena(now.year, 4)
     month = completar_cadena(now.month)
     
-    days = dias_de_un_mes(now.year,now.month)
-    date_start = "%s-%s-01"%(year,month)
-    date_stop = "%s-%s-%s"%(year,month,days)
+    days = dias_de_un_mes(now.year, now.month)
+    date_start = "%s-%s-01" % (year, month)
+    date_stop = "%s-%s-%s" % (year, month, days)
     
-    date_start = convert_to_UTC_tz(date_start + ' 00:00:00',tz)
-    date_stop = convert_to_UTC_tz(date_stop + ' 23:59:59',tz)  
+    date_start = convert_to_UTC_tz(date_start + ' 00:00:00', tz)
+    date_stop = convert_to_UTC_tz(date_stop + ' 23:59:59', tz)  
     return {'date_start' : date_start, 'date_stop' : date_stop}
 
 def validate_mail(email):
@@ -69,7 +69,7 @@ def validate_mail(email):
             return 1
     return 0
 
-#Extraer numero de una cadena
+# Extraer numero de una cadena
 def extraer_numeros(cadena):
     nuevacadena = ''
 
@@ -96,7 +96,7 @@ def extraer_numeros(cadena):
             nuevacadena = str(nuevacadena) + str(letra)
     return nuevacadena
 
-#Validar la Cedula de una Persona
+# Validar la Cedula de una Persona
 def validar_cedula(cedula):
     pares = [];
     impares = [];
@@ -134,11 +134,11 @@ def validar_cedula(cedula):
     else:
         return False
     
-#Validar la Cedula y RUC de una persona
+# Validar la Cedula y RUC de una persona
 def validar_cedula_ruc(cedula_ruc):
-    ced_ruc=cedula_ruc
+    ced_ruc = cedula_ruc
     if cedula_ruc:
-        if len(cedula_ruc)==10 and cedula_ruc.isdigit() and cedula_ruc:
+        if len(cedula_ruc) == 10 and cedula_ruc.isdigit() and cedula_ruc:
             string = ""
             resultado = 0
             for i in range (0, 10):
@@ -153,7 +153,7 @@ def validar_cedula_ruc(cedula_ruc):
                     resultado += suma
                 else:
                     resultado += int(lista[j]) * coeficientes[j]
-            residuo = resultado%10
+            residuo = resultado % 10
             if residuo != 0:
                 verificador = 10 - residuo
             else:
@@ -163,9 +163,9 @@ def validar_cedula_ruc(cedula_ruc):
             else:
                 return False
         elif not cedula_ruc.isdigit():
-            if cedula_ruc[0]=='P':
+            if cedula_ruc[0] == 'P':
                 return True    
-            #result['value']={'personal_id':cedula_ruc}
+            # result['value']={'personal_id':cedula_ruc}
         else:
             return False
     else:
@@ -194,9 +194,9 @@ def do_dic(cad, type_case='lower'):
         if letra == ' ':
             if len(palabra.lstrip(' ').lower()) > 1:
                 word = palabra.lstrip(' ')
-                if str(type_case).lower() =='lower':
+                if str(type_case).lower() == 'lower':
                     palabras.append(unicode(word).lower())
-                elif str(type_case).lower() =='upper':
+                elif str(type_case).lower() == 'upper':
                     palabras.append(unicode(word).upper())
                 else:
                     palabras.append(word)
@@ -205,9 +205,9 @@ def do_dic(cad, type_case='lower'):
             palabra += unicode(letra)
     if len(palabra.lstrip(' ').lower()) > 1:
         word = palabra.lstrip(' ')
-        if str(type_case).lower() =='lower':
+        if str(type_case).lower() == 'lower':
             palabras.append(unicode(word).lower())
-        elif str(type_case).lower() =='upper':
+        elif str(type_case).lower() == 'upper':
             palabras.append(unicode(word).upper())
         else:
             palabras.append(word)
@@ -216,10 +216,10 @@ def do_dic(cad, type_case='lower'):
         
 def quitar_acentos(cadena):
     try:
-        cadena=unicode(cadena, 'utf-8')
+        cadena = unicode(cadena, 'utf-8')
     except:
         cadena = cadena
-    return normalize('NFKD',cadena).encode('ASCII', 'ignore')
+    return normalize('NFKD', cadena).encode('ASCII', 'ignore')
    
 def buid_username(names):
     dic_name = do_dic(names)
@@ -256,9 +256,9 @@ def convert_float_to_hour_format(hour_float, seconds=False):
 def convert_minutes_to_hour_format(minutes, separator="H"):
     horas = completar_cadena(int(minutes) / 60)
     minutos = completar_cadena(minutes % 60)
-    return "%s%s%s"%(horas,separator, minutos)
+    return "%s%s%s" % (horas, separator, minutos)
     
-def completar_cadena(cadena, num=2,left=True):
+def completar_cadena(cadena, num=2, left=True):
     cadena = unicode(cadena)
     while len(cadena) < int(num):
         if left:
@@ -283,35 +283,35 @@ def convert_to_datetime(date):
                     return False
     return date
 
-def convert_to_UTC_tz(date, tz,res=0):
+def convert_to_UTC_tz(date, tz, res=0):
     date = convert_to_datetime(date)
     tzutc = timezone('UTC')
     tzlocal = timezone(tz)
     local_dt = tzlocal.localize(date, is_dst=False)
     local_utc = local_dt.astimezone(tzutc)
     date_result = local_utc
-    if res==1:
+    if res == 1:
         return date_result.date().__str__()
-    elif res==2:
+    elif res == 2:
         return date_result.time().__str__()
     else:
-        return "%s %s"%(date_result.date().__str__(), date_result.time().__str__())
+        return "%s %s" % (date_result.date().__str__(), date_result.time().__str__())
     
-def convert_to_tz(date, tz,res=0):
+def convert_to_tz(date, tz, res=0):
     date = convert_to_datetime(date)
     tzutc = timezone('UTC')
     tzlocal = timezone(tz)
     utc_dt = tzutc.localize(date, is_dst=False)
     local_dt = utc_dt.astimezone(tzlocal)
     date_result = local_dt
-    if res==1:
+    if res == 1:
         return date_result.date().__str__()
-    elif res==2:
+    elif res == 2:
         return date_result.time().__str__()
     else:
-        return "%s %s"%(date_result.date().__str__(), date_result.time().__str__())
+        return "%s %s" % (date_result.date().__str__(), date_result.time().__str__())
     
-def _convert_UTC_to_GMT(date,dd_mm_yyyy=False,res=0):
+def _convert_UTC_to_GMT(date, dd_mm_yyyy=False, res=0):
     from_zone = tz.tzutc()
     to_zone = tz.tzlocal()
     try:
@@ -327,14 +327,14 @@ def _convert_UTC_to_GMT(date,dd_mm_yyyy=False,res=0):
     if dd_mm_yyyy:
         idate = completar_cadena(str(result.day)) + '-' + completar_cadena(str(result.month)) + '-' + str(result.year)
     itime = completar_cadena(str(result.hour)) + ':' + completar_cadena(str(result.minute)) + ':' + completar_cadena(str(result.second))
-    if res==0:
+    if res == 0:
         return idate + ' ' + itime
     elif res == 1:
         return idate
     elif res == 2:
         return itime
 
-def _convert_GMT_to_UTC(date,dd_mm_yyyy=False,res=0):
+def _convert_GMT_to_UTC(date, dd_mm_yyyy=False, res=0):
     to_zone = tz.tzutc()
     from_zone = tz.tzlocal()
     try:
@@ -351,7 +351,7 @@ def _convert_GMT_to_UTC(date,dd_mm_yyyy=False,res=0):
     if dd_mm_yyyy:
         idate = completar_cadena(str(result.day)) + '-' + completar_cadena(str(result.month)) + '-' + str(result.year)
     itime = completar_cadena(str(result.hour)) + ':' + completar_cadena(str(result.minute)) + ':' + completar_cadena(str(result.second))
-    if res==0:
+    if res == 0:
         return idate + ' ' + itime
     elif res == 1:
         return idate
@@ -363,14 +363,14 @@ def convert_to_format_date(date, time_init, time_start, time_end, tz):
     time_end = convert_float_to_hour_format(time_end)
     time_init = convert_float_to_hour_format(time_init)
     date = str(date)[:10]
-    date_start = convert_to_UTC_tz(date + ' ' + time_start,tz)
-    date_stop = convert_to_UTC_tz(date + ' ' + time_end,tz)
-    date_init = convert_to_UTC_tz(date + ' ' + time_init,tz)
+    date_start = convert_to_UTC_tz(date + ' ' + time_start, tz)
+    date_stop = convert_to_UTC_tz(date + ' ' + time_end, tz)
+    date_init = convert_to_UTC_tz(date + ' ' + time_init, tz)
     return {'date_init':date_init, 'date_start':date_start, 'date_stop':date_stop}
     
 def convert_month_to_string_format(month):
-    months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
-    return months[int(month)-1]
+    months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+    return months[int(month) - 1]
     
 def convert_date_format_long_ymd(year, month, day):
     return unicode(day) + ' de ' + unicode(convert_month_to_string_format(month)) + ' del ' + unicode(year)
@@ -385,7 +385,7 @@ def convert_date_format_short_str(str_date):
     str_year = str_date[:4]
     str_month = str_date[5:7]
     str_day = str_date[8:10]
-    return str_day + '-' +  str_month + '-' + str_year
+    return str_day + '-' + str_month + '-' + str_year
 
 def dias_de_un_mes(year, month):
     cal = calendar.Calendar()
@@ -401,11 +401,11 @@ def get_standard_names(names):
     num_words = len(dic_name)
     username = ''
     if num_words == 2:
-        username = unicode(dic_name[1]).title() + ' ' +  unicode(dic_name[0]).title()
+        username = unicode(dic_name[1]).title() + ' ' + unicode(dic_name[0]).title()
     elif num_words == 3:
-        username = unicode(dic_name[2]).title() + ' '+ unicode(dic_name[0]).title()
+        username = unicode(dic_name[2]).title() + ' ' + unicode(dic_name[0]).title()
     else:
-        username = unicode(dic_name[2]).title() + ' '+ unicode(dic_name[0]).title()
+        username = unicode(dic_name[2]).title() + ' ' + unicode(dic_name[0]).title()
         
     return username
 
@@ -414,7 +414,7 @@ def convert_date_format_long(str_date):
     str_month = str_date[5:7]
     str_day = str_date[8:10]
     
-    t = (int(str_year),int(str_month),int(str_day),00,00,00,00,00,00)
+    t = (int(str_year), int(str_month), int(str_day), 00, 00, 00, 00, 00, 00)
     t = time.mktime(t)
     return time.strftime('%A %d de %B de %Y', time.gmtime(t))
 
@@ -468,61 +468,61 @@ def best_unit_size(bytes_size):
     
 def convert_date_to_dmy(date, separator='/'):
     try:
-        res = DateTime.strptime(date,'%Y-%m-%d %H:%M:%S')
+        res = DateTime.strptime(date, '%Y-%m-%d %H:%M:%S')
     except:
-        res = DateTime.strptime(date,'%Y-%m-%d')
-    return completar_cadena(res.day, 2)  + separator + completar_cadena(res.month, 2) + separator + completar_cadena(res.year, 4)
+        res = DateTime.strptime(date, '%Y-%m-%d')
+    return completar_cadena(res.day, 2) + separator + completar_cadena(res.month, 2) + separator + completar_cadena(res.year, 4)
     
 def calcular_edad(date_start, format=1, date_end="now"):
     try:
         if date_end == "now":
-            date_end=DateTime.now()
+            date_end = DateTime.now()
         else:
-            date_end = DateTime.strptime(date_end,'%Y-%m-%d')
-        dob=DateTime.strptime(date_start,'%Y-%m-%d')
-        delta=DateTime.Age (date_end, dob)
+            date_end = DateTime.strptime(date_end, '%Y-%m-%d')
+        dob = DateTime.strptime(date_start, '%Y-%m-%d')
+        delta = DateTime.Age (date_end, dob)
     
         if format == 1:
             return str(delta.years)
         elif format == 2:
-            return str(delta.years) +" A/"+ str(delta.months) +" M"
+            return str(delta.years) + " A/" + str(delta.months) + " M"
         elif format == 3:
-            return str(delta.years) +" A/"+ str(delta.months) +" M/"+ str(delta.days)+" D "
+            return str(delta.years) + " A/" + str(delta.months) + " M/" + str(delta.days) + " D "
         elif format == 4:
             str_year = ""
             if delta.years < 1:
                 str_year = u""
             elif delta.years == 1:
-                str_year = u"%s %s" %(str(delta.years),u'año')
+                str_year = u"%s %s" % (str(delta.years), u'año')
                 if delta.months > 0:
-                    str_year= str_year + ','
+                    str_year = str_year + ','
             else:
-                str_year = u"%s %s" %(str(delta.years),u'años')
+                str_year = u"%s %s" % (str(delta.years), u'años')
                 if delta.months > 0:
-                    str_year= str_year + ','
+                    str_year = str_year + ','
                 
             str_month = ""
             if delta.months < 1:
                 str_month = ""
             else:
                 if delta.months == 1:
-                    str_month = u"%s %s" %(str(delta.months),u'mes')
+                    str_month = u"%s %s" % (str(delta.months), u'mes')
                 else:
-                    str_month = u"%s %s" %(str(delta.months),u'meses')
+                    str_month = u"%s %s" % (str(delta.months), u'meses')
                 
             str_day = ""
             if (delta.days < 1 and delta.months > 0) or (delta.days < 1 and delta.years > 0):
                 str_day = ""
             else:
                 if delta.days == 1:
-                    str_day = u"%s %s" %(str(delta.days),u'día')
+                    str_day = u"%s %s" % (str(delta.days), u'día')
                 else:
-                    str_day = u"%s %s" %(str(delta.days),u'días')
+                    str_day = u"%s %s" % (str(delta.days), u'días')
                     
                 if delta.months > 0 or delta.years > 0:
-                    str_day =  'y ' + str_day
+                    str_day = 'y ' + str_day
             
-            res =  "%s %s %s"%(str_year,str_month,str_day)
+            res = "%s %s %s" % (str_year, str_month, str_day)
             return res.strip()
     except: return "0"
     
@@ -533,7 +533,7 @@ def convert_to_tuple_str(list, cero=True):
         res = '()'
     if len(list) > 0:
         if len(list) == 1:
-            res = '(%s)'%str(list[0])
+            res = '(%s)' % str(list[0])
         else:
             res = str(tuple(list))
     return res
@@ -551,7 +551,7 @@ def convert_result_query_to_list(result_query, sigle_column=True):
             res.append(row)
     return res
 
-#Dar TimeOut! a un Proceso
+# Dar TimeOut! a un Proceso
 def timeout(func, args=(), kwargs={}, timeout_duration=10, default=None):
     class InterruptableThread(threading.Thread):
         def __init__(self):
@@ -579,7 +579,7 @@ def get_image_code(value, width, height, hr=False, code='QR'):
         raise osv.except_osv('Error', e)
     return base64.encodestring(ret_val.asString('jpg'))
 
-def addworkdays(date_start, days,tz,holidays=(), workdays=('LUN','MAR','MIE','JUE','VIE')):
+def addworkdays(date_start, days, tz, holidays=(), workdays=('LUN', 'MAR', 'MIE', 'JUE', 'VIE')):
     avalible_days = []
     for workday in workdays:
         if workday == 'MON' or workday == 'LUN' or workday == 'LUNES' or workday == 'MONDAY':avalible_days.append(0)
@@ -589,8 +589,8 @@ def addworkdays(date_start, days,tz,holidays=(), workdays=('LUN','MAR','MIE','JU
         if workday == 'FRI' or workday == 'VIE' or workday == 'VIERNES' or workday == 'FRIDAY':avalible_days.append(4)
         if workday == 'SAT' or workday == 'SAB' or workday == 'SABADO' or workday == 'SATURDAY':avalible_days.append(5)
         if workday == 'SUN' or workday == 'DOM' or workday == 'DOMINGO' or workday == 'SUNDAY':avalible_days.append(6)
-    if workdays==False:
-        avalible_days=[1]
+    if workdays == False:
+        avalible_days = [1]
     if type(date_start).__name__ != 'datetime':
         try:date_start = datetime.strptime(date_start, '%Y-%m-%d')
         except:
@@ -610,29 +610,29 @@ def addworkdays(date_start, days,tz,holidays=(), workdays=('LUN','MAR','MIE','JU
         for day in range(sum_days):
             res_date = (date_start + timedelta(days=day))
             if res_date.weekday() in avalible_days:
-                current_date = "%s/%s/%d"%(completar_cadena(res_date.day), completar_cadena(res_date.month), res_date.year)
+                current_date = "%s/%s/%d" % (completar_cadena(res_date.day), completar_cadena(res_date.month), res_date.year)
                 try:
                     for holiday in holidays:
                         if len(holiday) == 5:
-                            holiday = "%s/%d"%(holiday,res_date.year)
+                            holiday = "%s/%d" % (holiday, res_date.year)
                         else:
                             holiday = datetime.strptime(holiday, '%d-%m-%Y')
-                            holiday = "%s/%s/%d"%(completar_cadena(holiday.day), completar_cadena(holiday.month), holiday.year)
+                            holiday = "%s/%s/%d" % (completar_cadena(holiday.day), completar_cadena(holiday.month), holiday.year)
                         if current_date == holiday: res_days += 1
                 except:None
     res_days -= 1
     if days < 1 or res_days < 1:
         res_days = 0
     res = date_start + timedelta(days=res_days)
-    res = convert_to_UTC_tz(res.__str__(),tz)
+    res = convert_to_UTC_tz(res.__str__(), tz)
     return res
     
-def get_end_date(date_start, days,tz, holidays=(), workdays=('LUN','MAR','MIE','JUE','VIE')):
+def get_end_date(date_start, days, tz, holidays=(), workdays=('LUN', 'MAR', 'MIE', 'JUE', 'VIE')):
     date_start = datetime.strptime(date_start, '%Y-%m-%d')
     res = addworkdays(date_start, days, tz, holidays, workdays)
     return res.__str__()
 
-def resize_image(photo, photo_path,size_base=64,remove_file=True):
+def resize_image(photo, photo_path, size_base=64, remove_file=True):
     from PIL import Image
     import StringIO
     try:
@@ -658,9 +658,9 @@ def resize_image(photo, photo_path,size_base=64,remove_file=True):
     else:
         height = size_base
         width = size_base
-    foto = foto.resize((width,height), Image.ANTIALIAS)
-    foto.save(photo_path,format=format)
-    res_image = base64.encodestring(open(photo_path,"rb").read())
+    foto = foto.resize((width, height), Image.ANTIALIAS)
+    foto.save(photo_path, format=format)
+    res_image = base64.encodestring(open(photo_path, "rb").read())
     if remove_file:
         os.remove(photo_path)
     return res_image
@@ -670,19 +670,19 @@ def compress_file(file, path, file_name, encodeb64=True, remove_file=True):
     import os
     import StringIO
     os.chdir(path)
-    #Guardar el Archivo
+    # Guardar el Archivo
     output = open(file_name, 'wb')
     output.write(file)
     output.close()
-    #Comprimir el archivo
+    # Comprimir el archivo
     zf = zipfile.ZipFile('ztmp', mode='w')
     zf.write(file_name)
     zf.close()
-    #Leer de nuevo el archivo para retornarlo
-    comprimido = open('ztmp',"rb").read()
+    # Leer de nuevo el archivo para retornarlo
+    comprimido = open('ztmp', "rb").read()
     if encodeb64:
         comprimido = base64.encodestring(comprimido)
-    #Borrar los archivos creados temporalmente
+    # Borrar los archivos creados temporalmente
     if remove_file:
         try:
             os.remove(path + file_name)
@@ -692,131 +692,131 @@ def compress_file(file, path, file_name, encodeb64=True, remove_file=True):
 
 def cambiar_meses_a_espaniol(text):
     text = unicode(text)
-    text = text.replace(unicode('Monday'),unicode('Enero'))
-    text = text.replace(unicode('February'),unicode('Febrero'))
-    text = text.replace(unicode('March'),unicode('Marzo'))
-    text = text.replace(unicode('Abril'),unicode('Abril'))
-    text = text.replace(unicode('April'),unicode('Mayo'))
-    text = text.replace(unicode('June'),unicode('Junio'))
-    text = text.replace(unicode('Julio'),unicode('Julio'))
-    text = text.replace(unicode('Agosto'),unicode('Agosto'))
-    text = text.replace(unicode('September'),unicode('Septiembre'))
-    text = text.replace(unicode('October'),unicode('Octubre'))
-    text = text.replace(unicode('November'),unicode('Noviembre'))
-    text = text.replace(unicode('December'),unicode('Diciembre'))
+    text = text.replace(unicode('Monday'), unicode('Enero'))
+    text = text.replace(unicode('February'), unicode('Febrero'))
+    text = text.replace(unicode('March'), unicode('Marzo'))
+    text = text.replace(unicode('Abril'), unicode('Abril'))
+    text = text.replace(unicode('April'), unicode('Mayo'))
+    text = text.replace(unicode('June'), unicode('Junio'))
+    text = text.replace(unicode('Julio'), unicode('Julio'))
+    text = text.replace(unicode('Agosto'), unicode('Agosto'))
+    text = text.replace(unicode('September'), unicode('Septiembre'))
+    text = text.replace(unicode('October'), unicode('Octubre'))
+    text = text.replace(unicode('November'), unicode('Noviembre'))
+    text = text.replace(unicode('December'), unicode('Diciembre'))
     
-    text = text.replace(unicode('Monday'),unicode('Lunes'))
-    text = text.replace(unicode('Tuesday'),unicode('Martes'))
+    text = text.replace(unicode('Monday'), unicode('Lunes'))
+    text = text.replace(unicode('Tuesday'), unicode('Martes'))
     try:
-        text = text.replace(unicode('Wednesday'),unicode('Miércoles','utf-8'))
+        text = text.replace(unicode('Wednesday'), unicode('Miércoles', 'utf-8'))
     except:
-        text = text.replace(unicode('Wednesday'),unicode('Miercoles','utf-8'))
-    text = text.replace(unicode('Thursday'),unicode('Jueves'))
-    text = text.replace(unicode('Friday'),unicode('Viernes'))
+        text = text.replace(unicode('Wednesday'), unicode('Miercoles', 'utf-8'))
+    text = text.replace(unicode('Thursday'), unicode('Jueves'))
+    text = text.replace(unicode('Friday'), unicode('Viernes'))
     try:
-        text = text.replace(unicode('Saturday'),unicode('Sábado','utf-8'))
+        text = text.replace(unicode('Saturday'), unicode('Sábado', 'utf-8'))
     except:
-        text = text.replace(unicode('Saturday'),unicode('Sabado','utf-8'))
-    text = text.replace(unicode('Sunday'),unicode('Domingo'))
+        text = text.replace(unicode('Saturday'), unicode('Sabado', 'utf-8'))
+    text = text.replace(unicode('Sunday'), unicode('Domingo'))
     
-    #LOWER
-    ext = text.replace(unicode('Monday').lower().lower(),unicode('Enero').lower().lower())
-    text = text.replace(unicode('February').lower().lower(),unicode('Febrero').lower())
-    text = text.replace(unicode('March').lower(),unicode('Marzo').lower())
-    text = text.replace(unicode('Abril').lower(),unicode('Abril').lower())
-    text = text.replace(unicode('April').lower(),unicode('Mayo').lower())
-    text = text.replace(unicode('June').lower(),unicode('Junio').lower())
-    text = text.replace(unicode('Julio').lower(),unicode('Julio').lower())
-    text = text.replace(unicode('Agosto').lower(),unicode('Agosto').lower())
-    text = text.replace(unicode('September').lower(),unicode('Septiembre').lower())
-    text = text.replace(unicode('October').lower(),unicode('Octubre').lower())
-    text = text.replace(unicode('November').lower(),unicode('Noviembre').lower())
-    text = text.replace(unicode('December').lower(),unicode('Diciembre').lower())
+    # LOWER
+    ext = text.replace(unicode('Monday').lower().lower(), unicode('Enero').lower().lower())
+    text = text.replace(unicode('February').lower().lower(), unicode('Febrero').lower())
+    text = text.replace(unicode('March').lower(), unicode('Marzo').lower())
+    text = text.replace(unicode('Abril').lower(), unicode('Abril').lower())
+    text = text.replace(unicode('April').lower(), unicode('Mayo').lower())
+    text = text.replace(unicode('June').lower(), unicode('Junio').lower())
+    text = text.replace(unicode('Julio').lower(), unicode('Julio').lower())
+    text = text.replace(unicode('Agosto').lower(), unicode('Agosto').lower())
+    text = text.replace(unicode('September').lower(), unicode('Septiembre').lower())
+    text = text.replace(unicode('October').lower(), unicode('Octubre').lower())
+    text = text.replace(unicode('November').lower(), unicode('Noviembre').lower())
+    text = text.replace(unicode('December').lower(), unicode('Diciembre').lower())
     
-    text = text.replace(unicode('Monday').lower(),unicode('Lunes').lower())
-    text = text.replace(unicode('Tuesday').lower(),unicode('Martes').lower())
+    text = text.replace(unicode('Monday').lower(), unicode('Lunes').lower())
+    text = text.replace(unicode('Tuesday').lower(), unicode('Martes').lower())
     try:
-        text = text.replace(unicode('Wednesday').lower(),unicode('Miércoles','utf-8').lower())
+        text = text.replace(unicode('Wednesday').lower(), unicode('Miércoles', 'utf-8').lower())
     except:
-        text = text.replace(unicode('Wednesday').lower(),unicode('Miercoles','utf-8').lower())
+        text = text.replace(unicode('Wednesday').lower(), unicode('Miercoles', 'utf-8').lower())
         
-    text = text.replace(unicode('Thursday').lower(),unicode('Jueves').lower())
-    text = text.replace(unicode('Friday').lower(),unicode('Viernes').lower())
+    text = text.replace(unicode('Thursday').lower(), unicode('Jueves').lower())
+    text = text.replace(unicode('Friday').lower(), unicode('Viernes').lower())
     try:
-        text = text.replace(unicode('Saturday').lower(),unicode('Sábado','utf-8').lower())
+        text = text.replace(unicode('Saturday').lower(), unicode('Sábado', 'utf-8').lower())
     except:
-        text = text.replace(unicode('Saturday').lower(),unicode('Sabado','utf-8').lower())
-    text = text.replace(unicode('Sunday').lower(),unicode('Domingo').lower())
+        text = text.replace(unicode('Saturday').lower(), unicode('Sabado', 'utf-8').lower())
+    text = text.replace(unicode('Sunday').lower(), unicode('Domingo').lower())
     
-    #UPPER
-    text = text.replace(unicode('Monday').upper().upper(),unicode('Enero').upper().upper())
-    text = text.replace(unicode('February').upper().upper(),unicode('Febrero').upper())
-    text = text.replace(unicode('March').upper(),unicode('Marzo').upper())
-    text = text.replace(unicode('Abril').upper(),unicode('Abril').upper())
-    text = text.replace(unicode('April').upper(),unicode('Mayo').upper())
-    text = text.replace(unicode('June').upper(),unicode('Junio').upper())
-    text = text.replace(unicode('Julio').upper(),unicode('Julio').upper())
-    text = text.replace(unicode('Agosto').upper(),unicode('Agosto').upper())
-    text = text.replace(unicode('September').upper(),unicode('Septiembre').upper())
-    text = text.replace(unicode('October').upper(),unicode('Octubre').upper())
-    text = text.replace(unicode('November').upper(),unicode('Noviembre').upper())
-    text = text.replace(unicode('December').upper(),unicode('Diciembre').upper())
+    # UPPER
+    text = text.replace(unicode('Monday').upper().upper(), unicode('Enero').upper().upper())
+    text = text.replace(unicode('February').upper().upper(), unicode('Febrero').upper())
+    text = text.replace(unicode('March').upper(), unicode('Marzo').upper())
+    text = text.replace(unicode('Abril').upper(), unicode('Abril').upper())
+    text = text.replace(unicode('April').upper(), unicode('Mayo').upper())
+    text = text.replace(unicode('June').upper(), unicode('Junio').upper())
+    text = text.replace(unicode('Julio').upper(), unicode('Julio').upper())
+    text = text.replace(unicode('Agosto').upper(), unicode('Agosto').upper())
+    text = text.replace(unicode('September').upper(), unicode('Septiembre').upper())
+    text = text.replace(unicode('October').upper(), unicode('Octubre').upper())
+    text = text.replace(unicode('November').upper(), unicode('Noviembre').upper())
+    text = text.replace(unicode('December').upper(), unicode('Diciembre').upper())
     
-    text = text.replace(unicode('Monday').upper(),unicode('Lunes').upper())
-    text = text.replace(unicode('Tuesday').upper(),unicode('Martes').upper())
+    text = text.replace(unicode('Monday').upper(), unicode('Lunes').upper())
+    text = text.replace(unicode('Tuesday').upper(), unicode('Martes').upper())
     try:
-        text = text.replace(unicode('Wednesday').upper(),unicode('Miércoles','utf-8').upper())
+        text = text.replace(unicode('Wednesday').upper(), unicode('Miércoles', 'utf-8').upper())
     except:
-        text = text.replace(unicode('Wednesday').upper(),unicode('Miercoles','utf-8').upper())
+        text = text.replace(unicode('Wednesday').upper(), unicode('Miercoles', 'utf-8').upper())
     
-    text = text.replace(unicode('Thursday').upper(),unicode('Jueves').upper())
-    text = text.replace(unicode('Friday').upper(),unicode('Viernes').upper())
+    text = text.replace(unicode('Thursday').upper(), unicode('Jueves').upper())
+    text = text.replace(unicode('Friday').upper(), unicode('Viernes').upper())
     try:
-        text = text.replace(unicode('Saturday').upper(),unicode('Sábado','utf-8').upper())
+        text = text.replace(unicode('Saturday').upper(), unicode('Sábado', 'utf-8').upper())
     except:
-        text = text.replace(unicode('Saturday').upper(),unicode('Sábado','utf-8').upper())
+        text = text.replace(unicode('Saturday').upper(), unicode('Sábado', 'utf-8').upper())
     
-    text = text.replace(unicode('Sunday').upper(),unicode('Domingo').upper())
+    text = text.replace(unicode('Sunday').upper(), unicode('Domingo').upper())
     return text
 
 
-#Implementar la misma funcionalidad pero con suds de python
+# Implementar la misma funcionalidad pero con suds de python
 # from suds.client import Client
 # WSDL_URL = 'http://www.webservicex.net/geoipservice.asmx?WSDL'
 # client = Client(WSDL_URL)
 # res = client.service.GetGeoIP('201.238.172.135')
 
 def get_name_ci(ci):
-    #Para estos datos se realiza una conexion con el registro civil
+    # Para estos datos se realiza una conexion con el registro civil
     def _get_name_ci():
         try:
-            warnings.simplefilter('ignore',DeprecationWarning)
+            warnings.simplefilter('ignore', DeprecationWarning)
             wsdlFile = 'http://merlyna.com/merlyna/abc/webserviceSRI-RegistroCivil.php?wsdl'
             server = WSDL.Proxy(wsdlFile)
-            #server.soapproxy.config.dumpSOAPOut = 1
-            #server.soapproxy.config.dumpSOAPIn = 1
-            return server.nombreCedulaRegistroCivil(ci,0,0,'','','','',[1,2],99)
+            # server.soapproxy.config.dumpSOAPOut = 1
+            # server.soapproxy.config.dumpSOAPIn = 1
+            return server.nombreCedulaRegistroCivil(ci, 0, 0, '', '', '', '', [1, 2], 99)
         except:
             return False
-    res = timeout(_get_name_ci,timeout_duration=10,default=False)
+    res = timeout(_get_name_ci, timeout_duration=10, default=False)
     if res is None or not res:
         return False
     else:
         return res
 
 def get_name_ruc(ruc): 
-     #Para estos datos se realiza una conexion con el SRI
+     # Para estos datos se realiza una conexion con el SRI
     def _get_name_ruc():
         try:
-            warnings.simplefilter('ignore',DeprecationWarning)
+            warnings.simplefilter('ignore', DeprecationWarning)
             wsdlFile = 'http://merlyna.com/merlyna/abc/webserviceSRI-RegistroCivil.php?wsdl'
             server = WSDL.Proxy(wsdlFile)
-            #server.soapproxy.config.dumpSOAPOut = 1
-            #server.soapproxy.config.dumpSOAPIn = 1
-            return server.nombreRUCSRI(ruc,0,0,'','','','',[1,2],99)
+            # server.soapproxy.config.dumpSOAPOut = 1
+            # server.soapproxy.config.dumpSOAPIn = 1
+            return server.nombreRUCSRI(ruc, 0, 0, '', '', '', '', [1, 2], 99)
         except:
             return False
-    res = timeout(_get_name_ruc,timeout_duration=10,default=False)
+    res = timeout(_get_name_ruc, timeout_duration=10, default=False)
     if res is None or not res:
         return False
     else:
@@ -826,17 +826,17 @@ def pd(dict):
     print '=====================================[Detalles del Diccionario]===='
     for key in dict.keys():
         try:
-            print "  * %s \t= %s"%(str(key),str(dict[key]))
+            print "  * %s \t= %s" % (str(key), str(dict[key]))
         except:None
     print '==================================================================='
 
-def round_value(value,digits=2):
-    value = round(value,digits)
+def round_value(value, digits=2):
+    value = round(value, digits)
     count = 0
     has_decimals = False
     for num in str(value):
         count += 1
-        if num in [',','.']:
+        if num in [',', '.']:
             has_decimals = True
             break
     if has_decimals:

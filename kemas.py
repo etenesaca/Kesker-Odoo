@@ -5452,7 +5452,11 @@ class kemas_event(osv.osv):
             self.write_log_replace(cr, uid, event_id, collaborator_id, replace_id, replaced['record_id'])
         return True
         
-    def create(self, cr, uid, vals, *args, **kwargs):
+    def create(self, cr, uid, vals, context={}):
+        return super(osv.osv, self).create(cr, uid, vals, context)
+    
+    
+    def create(self, cr, uid, vals, context={}):
         service_obj = self.pool.get('kemas.service')
         #----------------------------------------------------------------------------------------------------------------------------
         seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Event'), ])[0]
@@ -5462,7 +5466,7 @@ class kemas_event(osv.osv):
         vals['count'] = 1
         #--Crear Date start y date stop---------------------------------------------------------------------------------------------
         service = service_obj.read(cr, uid, vals['service_id'], [])
-        dates_dic = kemas_extras.convert_to_format_date(vals['date_start'], service['time_entry'], service['time_start'], service['time_end'], kwargs['context']['tz'])
+        dates_dic = kemas_extras.convert_to_format_date(vals['date_start'], service['time_entry'], service['time_start'], service['time_end'], context['tz'])
         vals['date_start'] = dates_dic['date_start']
         vals['date_stop'] = dates_dic['date_stop']
         vals['date_init'] = dates_dic['date_init']
@@ -5470,7 +5474,7 @@ class kemas_event(osv.osv):
         if vals['date_start'] < time.strftime("%Y-%m-%d %H:%M:%S"):
             raise osv.except_osv(_('Error!'), _('Unable to create an event in a past date.'))
         
-        res = super(kemas_event, self).create(cr, uid, vals, *args, **kwargs)
+        res = super(kemas_event, self).create(cr, uid, vals, context)
         lines_obj = self.pool.get('kemas.event.collaborator.line')
         collaborator_line_ids = self.read(cr, uid, [res], ['event_collaborator_line_ids'])
         line_ids = []
@@ -6278,10 +6282,12 @@ class kemas_attendance(osv.osv):
         for collaborators_involved_id in collaborators_involved_ids:
             collaborator_id = event_collaborator_line_obj.read(cr, uid, collaborators_involved_id, ['collaborator_id'])['collaborator_id'][0]
             collaborators_involved_list.append(collaborator_id)
+        import pdb;pdb.set_trace()
         #---Este colaborador ya registro asistencia
         attendance_ids = super(osv.osv, self).search(cr, uid, [('collaborator_id', '=', vals['collaborator_id']), ('event_id', '=', res_current_event['current_event_id'])])
         if attendance_ids:
             return 'already register'
+        
         #---El Colaborador ho esta entre los colaboradores desginados para este evento--------------   
         if not vals['collaborator_id'] in collaborators_involved_list: return 'no envolved'
         #-------------------------------------------------------------------------------------------
@@ -6341,6 +6347,7 @@ class kemas_attendance(osv.osv):
         res_id = super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
         #------------------------
         history_summary = str(operator) + str(change_points) + " Puntos. Antes " + str(current_points) + " ahora " + str(new_points) + " Puntos."
+        vals_history_points = {}
         history_points_obj.create(cr, uid, {
             'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
             'event_id': event['id'],
