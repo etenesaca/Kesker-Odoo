@@ -6282,7 +6282,7 @@ class kemas_attendance(osv.osv):
         for collaborators_involved_id in collaborators_involved_ids:
             collaborator_id = event_collaborator_line_obj.read(cr, uid, collaborators_involved_id, ['collaborator_id'])['collaborator_id'][0]
             collaborators_involved_list.append(collaborator_id)
-        import pdb;pdb.set_trace()
+        
         #---Este colaborador ya registro asistencia
         attendance_ids = super(osv.osv, self).search(cr, uid, [('collaborator_id', '=', vals['collaborator_id']), ('event_id', '=', res_current_event['current_event_id'])])
         if attendance_ids:
@@ -6347,8 +6347,7 @@ class kemas_attendance(osv.osv):
         res_id = super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
         #------------------------
         history_summary = str(operator) + str(change_points) + " Puntos. Antes " + str(current_points) + " ahora " + str(new_points) + " Puntos."
-        vals_history_points = {}
-        history_points_obj.create(cr, uid, {
+        vals_history_points = {
             'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
             'event_id': event['id'],
             'collaborator_id': vals['collaborator_id'],
@@ -6357,7 +6356,8 @@ class kemas_attendance(osv.osv):
             'description': description,
             'summary': history_summary,
             'points': change_points,
-            })        
+            }
+        history_points_obj.create(cr, uid, vals_history_points)        
         return res_id
     
     _name = 'kemas.attendance'
