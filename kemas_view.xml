@@ -4399,6 +4399,8 @@
                      <newline />
                      <field name="series_id" colspan="3" />
                      <field name="expositor_id" colspan="3" />
+                     <field name="event_id" colspan="3" />
+                     <field name="tag_ids" widget="many2many_tags" colspan="3" />
                      <separator string="Date and place" colspan="6" />
                      <field name="place_id" colspan="4" />
                      <field name="date" colspan="2" />
@@ -4573,6 +4575,57 @@
                   <filter string="Place" icon="STOCK_HOME" domain="[]" context="{'group_by':'place_id'}" />
                   <filter string="Series" icon="star-on" domain="[]" context="{'group_by':'series_id'}" />
                   <filter string="Expositor" icon="terp-personal" domain="[]" context="{'group_by':'expositor_id'}" />
+               </group>
+            </search>
+         </field>
+      </record>
+      <!--
+         ====================
+         RECORDING TAGS
+         ====================
+      -->
+      <!--____________________________________________________Vista de Formulario -->
+      <record model="ir.ui.view" id="kemas_event_tags_form">
+         <field name="name">kemas.recording.tag.form</field>
+         <field name="model">kemas.recording.tag</field>
+         <field name="type">form</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="Etiquetas" version="7.0">
+               <sheet string="Etiquetas">
+                  <div class="oe_title">
+                     <div class="oe_edit_only">
+                        <label for="name" />
+                     </div>
+                     <h1>
+                        <field name="name" default_focus="1" placeholder="Nombre..." />
+                     </h1>
+                  </div>
+               </sheet>
+            </form>
+         </field>
+      </record>
+      <!--____________________________________________________Vista de Arbol -->
+      <record model="ir.ui.view" id="kemas_event_tags_tree">
+         <field name="name">kemas.recording.tag.tree</field>
+         <field name="model">kemas.recording.tag</field>
+         <field name="type">tree</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <tree string="Etiquetas">
+               <field name="name" />
+            </tree>
+         </field>
+      </record>
+      <!--____________________________________________________Vista de Busqueda -->
+      <record model="ir.ui.view" id="kemas_event_tags_search">
+         <field name="name">kemas.recording.tag.search</field>
+         <field name="model">kemas.recording.tag</field>
+         <field name="type">search</field>
+         <field name="arch" type="xml">
+            <search string="Buscar Etiquetas">
+               <group>
+                  <field name="name" default_focus="1" />
                </group>
             </search>
          </field>
@@ -5856,6 +5909,21 @@
          ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::ACTIONS::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       -->
+      <!--____________________________________________________Etiquetas -->
+      <record model="ir.actions.act_window" id="kemas_event_tags_action">
+         <field name="name">Etiquetas</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">kemas.recording.tag</field>
+         <field name="view_mode">tree,form</field>
+         <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+               De click aquí para agregar una Nueva Etiqueta para poder buscar grabaciones.
+            </p>
+            <p>
+
+            </p>
+         </field>
+      </record>
       <!--____________________________________________________Inicios de Sesión -->
       <record model="ir.actions.act_window" id="kemas_collaborator_logbook_login_action">
          <field name="name">Registro de Inicios de Sesión</field>
@@ -7043,15 +7111,16 @@
          >>>>>>>>>>>>>>>>>>>>>>>>>>Recording
       -->
       <menuitem id="menu_kemas_recording_form_action" name="Recordings" parent="menu_kemas_recording_manager_root" sequence="1" />
+      <!--_____________Recording -->
+      <menuitem action="kemas_recording_form_action" name="Recordings" id="menu_kemas_recording" parent="menu_kemas_recording_form_action" sequence="1" />
       <!--_____________Expositor -->
-      <menuitem action="kemas_expositor_form_action" name="Expositors" id="menu_kemas_expositor" parent="menu_kemas_recording_form_action" sequence="1" />
-      <!--_____________Recording type -->
-      <menuitem action="kemas_recording_type_form_action" name="Recording Types" id="menu_kemas_recording_type" parent="menu_kemas_recording_form_action" sequence="2" />
-
+      <menuitem action="kemas_expositor_form_action" name="Expositors" id="menu_kemas_expositor" parent="menu_kemas_recording_form_action" sequence="2" />
       <!--_____________Series -->
       <menuitem action="kemas_recording_series_form_action" name="Series" id="menu_kemas_series" parent="menu_kemas_recording_form_action" sequence="3" />
-      <!--_____________Recording -->
-      <menuitem action="kemas_recording_form_action" name="Recordings" id="menu_kemas_recording" parent="menu_kemas_recording_form_action" sequence="4" />
+      <!--_____________Recording type -->
+      <menuitem action="kemas_recording_type_form_action" name="Recording Types" id="menu_kemas_recording_type" parent="menu_kemas_recording_form_action" sequence="4" />
+      <!-- Etiquetas -->
+      <menuitem action="kemas_event_tags_action" id="kemas_event_tags_menu" parent="menu_kemas_recording_form_action" sequence="5" />
       <!--
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
          ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::LANZADORES:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

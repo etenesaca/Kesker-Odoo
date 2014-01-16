@@ -4503,11 +4503,13 @@ class kemas_recording(osv.osv):
         'details': fields.text('Details'),
         'url':fields.char('URL', size=255, help='Dirección en la que se encuentra almacenado el archivo'),
         # One to Many Relations
+        'event_id':fields.many2one('kemas.event', 'event', help='Servicio en el cual se realizó ésta grabación'),
         'recording_type_id':fields.many2one('kemas.recording.type', 'recording type', required=True, ondelete="restrict"),
         'place_id':fields.many2one('kemas.place', 'Place', help='Place where the recording was done', ondelete="restrict"),
         'expositor_id':fields.many2one('kemas.expositor', 'Expositor', help="Expositor's name", ondelete="restrict"),
         'series_id':fields.many2one('kemas.recording.series', 'Series', help='Name of the series of which this recording', ondelete="restrict"),
         # Many to One Relations
+        'tag_ids': fields.many2many('kemas.recording.tag', 'kemas_recording_tag_rel', 'recording_id', 'tag_id', 'Etiquetas'),
         'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_recording_collaborator_rel', 'recording_id', 'collaborator_id', 'collaborators', help='Collaborators who participated in the recording'),
         # Campos para buscar entre fechas
         'search_start':fields.date('Desde', help='Buscar desde'),
@@ -4516,6 +4518,17 @@ class kemas_recording(osv.osv):
     _sql_constraints = [
         ('ucode', 'unique (code)', 'This Code already exist!'),
         ('utheme_type', 'unique (theme,recording_type_id)', 'Already registered this with this type of recording!'),
+        ]
+
+class kemas_recording_tag(osv.osv):
+    _order = 'name'
+    _name = 'kemas.recording.tag'
+    _columns = {
+        'name': fields.char('Nombre', size=64, required=True),
+        'description': fields.text('Description'),
+        }
+    _sql_constraints = [
+        ('recording_tag_name', 'unique (name)', u'¡Esta etiqueta ya existe!'),
         ]
 
 class kemas_repository_category(osv.osv):
