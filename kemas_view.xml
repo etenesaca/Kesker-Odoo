@@ -4399,7 +4399,7 @@
                      <newline />
                      <field name="series_id" colspan="3" />
                      <field name="expositor_id" colspan="3" />
-                     <field name="event_id" colspan="3" />
+                     <field name="event_id" colspan="3" domain="[('state','=','closed'),]" on_change="on_change_event_id(event_id)" />
                      <field name="tag_ids" widget="many2many_tags" colspan="3" />
                      <separator string="Date and place" colspan="6" />
                      <field name="place_id" colspan="4" />

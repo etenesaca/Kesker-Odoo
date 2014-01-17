@@ -4447,6 +4447,15 @@ class kemas_recording_series(osv.osv):
         ]
     
 class kemas_recording(osv.osv):
+    def on_change_event_id(self, cr, uid, ids, event_id, context={}):
+        values = {}
+        if event_id:
+            collaborator_ids = self.pool.get('kemas.event').read(cr, uid, event_id, ['collaborator_ids'])['collaborator_ids']
+            values['collaborator_ids'] = collaborator_ids
+        else:
+            values['collaborator_ids'] = False
+        return {'value' : values}
+    
     def create(self, cr, uid, vals, *args, **kwargs):
         type_obj = self.pool.get('kemas.recording.type')
         sequence_id = type_obj.read(cr, uid, vals['recording_type_id'], ['sequence_id'])['sequence_id'][0]
@@ -4503,7 +4512,7 @@ class kemas_recording(osv.osv):
         'details': fields.text('Details'),
         'url':fields.char('URL', size=255, help='Dirección en la que se encuentra almacenado el archivo'),
         # One to Many Relations
-        'event_id':fields.many2one('kemas.event', 'event', help='Servicio en el cual se realizó ésta grabación'),
+        'event_id':fields.many2one('kemas.event', 'Evento', help='Servicio en el cual se realizó ésta grabación'),
         'recording_type_id':fields.many2one('kemas.recording.type', 'recording type', required=True, ondelete="restrict"),
         'place_id':fields.many2one('kemas.place', 'Place', help='Place where the recording was done', ondelete="restrict"),
         'expositor_id':fields.many2one('kemas.expositor', 'Expositor', help="Expositor's name", ondelete="restrict"),
@@ -6008,6 +6017,20 @@ class kemas_event(osv.osv):
             result[record['id']] = event_day(record['date_start'])
         return result
     
+    def _getcollaborator_ids(self, cr, uid, ids, name, arg, context={}): 
+        def getcollaborator_ids(record):
+            lines = self.pool.get('kemas.event.collaborator.line').read(cr, uid, record['event_collaborator_line_ids'], ['collaborator_id'])
+            collaborator_ids = []
+            for line in lines:
+                collaborator_ids.append(line['collaborator_id'][0])
+            return collaborator_ids
+             
+        result = {}
+        records = super(osv.osv, self).read(cr, uid, ids, ['id', 'event_collaborator_line_ids'])
+        for record in records:
+            result[record['id']] = getcollaborator_ids(record)
+        return result
+    
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _order = 'date_start,code'
     _name = 'kemas.event'
@@ -6062,6 +6085,7 @@ class kemas_event(osv.osv):
         'notification_status':fields.function(_notification_status, type='char', string='Estado de notificaciones'),
         # One to Many Relations
         'event_collaborator_line_ids': fields.one2many('kemas.event.collaborator.line', 'event_id', 'Collaborators', help='Collaborators who participated in this event', states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
+        'collaborator_ids' : fields.function(_getcollaborator_ids, type='one2many', relation="kemas.collaborator", string='Colaboradores'),
         # line_ids': fields.one2many('kemas.event.collaborator.line', 'event_id', 'Lines'),
         'line_ids': fields.text('Lines'),
         'attendance_ids': fields.one2many('kemas.attendance', 'event_id', 'Attendances', help='Attendance register', readonly=True),
