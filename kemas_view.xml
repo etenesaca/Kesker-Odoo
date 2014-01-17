@@ -4569,6 +4569,8 @@
                <field name="expositor_id" />
                <field name="recording_type_id" widget="selection" />
                <field name="place_id" />
+               <field name="tag_ids" />
+               <field name="details" />
                <group expand="0" string="Extended search...">
                   <filter string="Theme" icon="color-picker" domain="[]" context="{'group_by':'theme'}" />
                   <filter string="Recording Type" icon="star-on" domain="[]" context="{'group_by':'recording_type_id'}" />
@@ -4585,7 +4587,7 @@
          ====================
       -->
       <!--____________________________________________________Vista de Formulario -->
-      <record model="ir.ui.view" id="kemas_event_tags_form">
+      <record model="ir.ui.view" id="kemas_recording_tags_form">
          <field name="name">kemas.recording.tag.form</field>
          <field name="model">kemas.recording.tag</field>
          <field name="type">form</field>
@@ -4606,7 +4608,7 @@
          </field>
       </record>
       <!--____________________________________________________Vista de Arbol -->
-      <record model="ir.ui.view" id="kemas_event_tags_tree">
+      <record model="ir.ui.view" id="kemas_recording_tags_tree">
          <field name="name">kemas.recording.tag.tree</field>
          <field name="model">kemas.recording.tag</field>
          <field name="type">tree</field>
@@ -4618,7 +4620,7 @@
          </field>
       </record>
       <!--____________________________________________________Vista de Busqueda -->
-      <record model="ir.ui.view" id="kemas_event_tags_search">
+      <record model="ir.ui.view" id="kemas_recording_tags_search">
          <field name="name">kemas.recording.tag.search</field>
          <field name="model">kemas.recording.tag</field>
          <field name="type">search</field>
@@ -5910,7 +5912,7 @@
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       -->
       <!--____________________________________________________Etiquetas -->
-      <record model="ir.actions.act_window" id="kemas_event_tags_action">
+      <record model="ir.actions.act_window" id="kemas_recording_tags_action">
          <field name="name">Etiquetas</field>
          <field name="type">ir.actions.act_window</field>
          <field name="res_model">kemas.recording.tag</field>
@@ -7111,16 +7113,16 @@
          >>>>>>>>>>>>>>>>>>>>>>>>>>Recording
       -->
       <menuitem id="menu_kemas_recording_form_action" name="Recordings" parent="menu_kemas_recording_manager_root" sequence="1" />
-      <!--_____________Recording -->
+      <!-- Recording -->
       <menuitem action="kemas_recording_form_action" name="Recordings" id="menu_kemas_recording" parent="menu_kemas_recording_form_action" sequence="1" />
-      <!--_____________Expositor -->
+      <!-- Expositor -->
       <menuitem action="kemas_expositor_form_action" name="Expositors" id="menu_kemas_expositor" parent="menu_kemas_recording_form_action" sequence="2" />
-      <!--_____________Series -->
+      <!-- Series -->
       <menuitem action="kemas_recording_series_form_action" name="Series" id="menu_kemas_series" parent="menu_kemas_recording_form_action" sequence="3" />
-      <!--_____________Recording type -->
+      <!-- Recording type -->
       <menuitem action="kemas_recording_type_form_action" name="Recording Types" id="menu_kemas_recording_type" parent="menu_kemas_recording_form_action" sequence="4" />
       <!-- Etiquetas -->
-      <menuitem action="kemas_event_tags_action" id="kemas_event_tags_menu" parent="menu_kemas_recording_form_action" sequence="5" />
+      <menuitem action="kemas_recording_tags_action" id="kemas_recording_tags_menu" parent="menu_kemas_recording_form_action" sequence="5" />
       <!--
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
          ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::LANZADORES:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
