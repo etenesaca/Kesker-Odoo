@@ -7128,47 +7128,25 @@
          ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::LANZADORES:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       -->
-      <!--
-         ====================
-         VER CODIGO DE BARRAS
-         ====================
-      -->
+      <!-- VER CODIGO DE BARRAS -->
       <act_window name="Ver Código de Barras" res_model="kemas.show.barcode.wizard" src_model="kemas.collaborator" view_mode="form" target="new" key2="client_action_multi" context="{'collaborator_id':context['active_id']}" id="kemas_show_bar_code_act_window" />
-      <!--
-         ====================
-         REEMPLAZAR COLABORADOR
-         ====================
-      -->
+
+      <!-- REEMPLAZAR COLABORADOR -->
       <act_window name="Replace Collaborator" groups="kemas.group_kemas_collaborator" res_model="kemas.replace.collaborator.wizard" src_model="kemas.event" view_mode="form" target="new" key2="client_action_multi" context="{'event_id':context['active_id']}" id="kemas_replace_collaborator_act_window" />
-      <!--
-         ====================
-         ACTIVAR COLABORADOR
-         ====================
-      -->
+
+      <!-- ACTIVAR COLABORADOR -->
       <act_window name="Activate Collaborator" groups="kemas.group_kemas_manager" res_model="kemas.collaborator.active.wizard" src_model="kemas.collaborator" view_mode="form" target="new" key2="client_action_multi" context="{'collaborator_id':context['active_id']}" id="kemas_collaborator_active_act_window" />
-      <!--
-         ====================
-         INACTIVAR COLABORADOR
-         ====================
-      -->
+
+      <!-- INACTIVAR COLABORADOR -->
       <act_window name="Inactivate Collaborator" groups="kemas.group_kemas_manager" res_model="kemas.collaborator.inactive.wizard" src_model="kemas.collaborator" view_mode="form" target="new" key2="client_action_multi" context="{'collaborator_id':context['active_id']}" id="kemas_collaborator_inactivate_act_window" />
-      <!--
-         ====================
-         CREAR USUARIO
-         ====================
-      -->
+
+      <!-- CREAR USUARIO -->
       <act_window name="Assign Code" groups="kemas.group_kemas_manager" res_model="kemas.collaborator.assing.code.wizard" src_model="kemas.collaborator" view_mode="form" target="new" key2="client_action_multi" context="{'collaborator_id':context['active_id']}" id="kemas_collaborator_assing_code_act_window" />
-      <!--
-         ====================
-         CREAR USUARIO
-         ====================
-      -->
+
+      <!-- CREAR USUARIO -->
       <act_window name="Assign User Account" groups="kemas.group_kemas_manager" res_model="kemas.collaborator.assing.user.account.wizard" src_model="kemas.collaborator" view_mode="form" target="new" key2="client_action_multi" context="{'collaborator_id':context['active_id']}" id="kemas_collaborator_assing_user_account_act_window" />
-      <!--
-         ====================
-         RENOTIFICAR CREACION DE CUENTA
-         ====================
-      -->
+
+      <!-- RENOTIFICAR CREACION DE CUENTA -->
       <act_window name="Notify creating account" groups="kemas.group_kemas_manager" res_model="kemas.notify.incorporation.wizard" src_model="kemas.collaborator" view_mode="form" target="new" key2="client_action_multi" context="{'collaborator_id':context['active_id']}" id="kemas_collaborator_notify_incorporation_act_window" />
       <!--
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -7176,9 +7154,7 @@
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       -->
       <!--
-         ====================
          HISTORIAL DE PUNTOS
-         ====================
       -->
       <act_window id="act_kemas_collaborator_kemas_history_points_new" name="History points" res_model="kemas.collaborator" src_model="kemas.history.points" view_mode="tree,form" context="{'collaborator_id': active_id}" domain="[('collaborator_id', '=', active_id)]" view_type="form" />
    </data>
