@@ -1,53 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-  <data>
-  	<!-- 
-    ====================
-    KEMAS MANAGER
-    ====================
-    -->
-    <record id="group_kemas_manager" model="res.groups">
-      <field name="name">Kemas / Manager</field>
-    </record>
-    <!-- 
-    ====================
-    KEMAS COLLABORATOR
-    ====================
-    -->
-    <record id="group_kemas_collaborator" model="res.groups">
-      <field name="name">Kemas / Collaborator</field>
-    </record>
-    <!-- 
-    ====================
-    KEMAS REGISTER ATTENDANCE
-    ====================
-    -->
-    <record id="group_kemas_register_attedance" model="res.groups">
-      <field name="name">Kemas / Register Attendance</field>
-    </record>
-    <!-- 
-    ====================
-    KEMAS CONSULTANT
-    ====================
-    -->
-    <record id="group_kemas_register_consultant" model="res.groups">
-      <field name="name">Kemas / Consultant</field>
-    </record>
-    <!-- 
-    ====================
-    KEMAS LIBRARIAN	
-    ====================
-    -->
-    <record id="group_kemas_librarian" model="res.groups">
-      <field name="name">Kemas / Librarian</field>
-    </record>
-    <!-- 
-    ====================
-    KEMAS ADMIN
-    ====================
-    -->
-    <record id="group_kemas_admin" model="res.groups">
-      <field name="name">Kemas / Admin</field>
-    </record>
-  </data>
+   <data>
+      <!--
+         ====================
+         KEMAS
+         ====================
+      -->
+      <record model="ir.module.category" id="module_category_kemas_management">
+         <field name="name">Ke+</field>
+         <field name="description">Gestión de colaborador, asistencias y eventos.</field>
+         <field name="sequence">200</field>
+      </record>
+
+      <!-- KEMAS MANAGER -->
+      <record id="group_kemas_manager" model="res.groups">
+         <field name="name">Kemas / Manager</field>
+         <field name="category_id" ref="module_category_kemas_management" />
+      </record>
+
+      <!-- KEMAS COLLABORATOR -->
+      <record id="group_kemas_collaborator" model="res.groups">
+         <field name="name">Kemas / Collaborator</field>
+         <field name="category_id" ref="module_category_kemas_management" />
+      </record>
+
+      <!-- KEMAS REGISTER ATTENDANCE -->
+      <record id="group_kemas_register_attedance" model="res.groups">
+         <field name="name">Kemas / Register Attendance</field>
+         <field name="category_id" ref="module_category_kemas_management" />
+      </record>
+
+      <!-- KEMAS CONSULTANT -->
+      <record id="group_kemas_register_consultant" model="res.groups">
+         <field name="name">Kemas / Consultant</field>
+         <field name="category_id" ref="module_category_kemas_management" />
+      </record>
+
+      <!-- KEMAS ADMIN -->
+      <record id="group_kemas_admin" model="res.groups">
+         <field name="name">Kemas / Admin</field>
+         <field name="category_id" ref="module_category_kemas_management" />
+      </record>
+      <!--
+         ====================
+         VIDEOTECA
+         ====================
+      -->
+      <record model="ir.module.category" id="module_category_recording_librarian_management">
+         <field name="name">Videoteca</field>
+         <field name="description">Indica que tiene de permisos va a tener sobre la Videoteca.</field>
+         <field name="sequence">201</field>
+      </record>
+      <record id="group_kemas_librarian" model="res.groups">
+         <field name="name">Administrador</field>
+         <field name="category_id" ref="module_category_recording_librarian_management" />
+      </record>
+      <record id="group_kemas_librarian_consultant" model="res.groups">
+         <field name="category_id" ref="module_category_recording_librarian_management" />
+         <field name="name">Consultante</field>
+      </record>
+   </data>
 </openerp>
