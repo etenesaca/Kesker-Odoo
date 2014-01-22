@@ -4404,7 +4404,7 @@
                      <separator string="Date and place" colspan="6" />
                      <field name="place_id" colspan="4" />
                      <field name="date" colspan="2" />
-                     <field name="url" colspan="6" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
+                     <field name="url" widget="url" colspan="6" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
                   </group>
                   <notebook colspan="4">
                      <page string="Details">
@@ -4485,7 +4485,7 @@
                      <separator string="Date and place" colspan="6" />
                      <field name="place_id" colspan="4" />
                      <field name="date" colspan="2" />
-                     <field name="url" colspan="6" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
+                     <field name="url" widget="url" colspan="6" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
                   </group>
                   <notebook colspan="4">
                      <page string="Details">
