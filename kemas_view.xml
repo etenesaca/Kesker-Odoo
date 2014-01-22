@@ -4231,7 +4231,8 @@
                   </div>
                   <group colspan="4" col="10">
                      <field name="sequence_id" colspan="4" />
-                     <field name="prefix" colspan="2" attrs="{'invisible':[('sequence_id','==',False)]}" />
+                     <field name="prefix" colspan="2" attrs="{'invisible':[('sequence_id','=',False)]}" />
+                     <field name="number_next_actual" colspan="2" attrs="{'invisible':[('sequence_id','=',False)]}" />
                      <group colspan="2" expand="1" attrs="{'invisible':[('sequence_id','!=',False)]}" />
                      <group colspan="2" />
                   </group>

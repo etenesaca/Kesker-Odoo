@@ -4408,6 +4408,7 @@ class kemas_recording_type(osv.osv):
         'name': fields.char('Name', size=64, required=True, help='The name of the recording type'),
         'sequence_id':fields.many2one('ir.sequence', 'Sequence', required=True),
         'prefix': fields.related('sequence_id', 'prefix', type='char', string='Prefix', readonly=1, store=False, help="Prefix that appears with the code of each recording"),
+        'number_next_actual': fields.related('sequence_id', 'number_next_actual', type='char', string=u'Número siguiente', readonly=1, store=False),
         }
     _sql_constraints = [
         ('recording_type_name', 'unique (name)', 'This Name already exist!'),
