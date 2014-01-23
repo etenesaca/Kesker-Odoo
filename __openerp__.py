@@ -20,7 +20,7 @@
 #
 ##############################################################################
 {
-    'name': 'Sistema de Control de Asistencias, Tareas y Personal',
+    'name': 'Control de Asistencias, Tareas y Personal',
     'description': """Management Kemas Ministry that covers:
     Register Collaborators
     Recording Registry

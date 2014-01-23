@@ -11,35 +11,24 @@
          <field name="description">Gestión de colaborador, asistencias y eventos.</field>
          <field name="sequence">200</field>
       </record>
-
-      <!-- KEMAS MANAGER -->
       <record id="group_kemas_manager" model="res.groups">
-         <field name="name">Kemas / Manager</field>
+         <field name="name">Administrador</field>
          <field name="category_id" ref="module_category_kemas_management" />
+         <field name="users" eval="[(4, ref('base.user_root'))]" />
       </record>
-
-      <!-- KEMAS COLLABORATOR -->
       <record id="group_kemas_collaborator" model="res.groups">
-         <field name="name">Kemas / Collaborator</field>
+         <field name="name">Colaborador</field>
          <field name="category_id" ref="module_category_kemas_management" />
       </record>
-
-      <!-- KEMAS REGISTER ATTENDANCE -->
       <record id="group_kemas_register_attedance" model="res.groups">
-         <field name="name">Kemas / Register Attendance</field>
+         <field name="name">Responsable de registros de asistencia</field>
          <field name="category_id" ref="module_category_kemas_management" />
+         <field name="users" eval="[(4, ref('base.user_root'))]" />
       </record>
-
-      <!-- KEMAS CONSULTANT -->
-      <record id="group_kemas_register_consultant" model="res.groups">
-         <field name="name">Kemas / Consultant</field>
-         <field name="category_id" ref="module_category_kemas_management" />
-      </record>
-
-      <!-- KEMAS ADMIN -->
       <record id="group_kemas_admin" model="res.groups">
-         <field name="name">Kemas / Admin</field>
+         <field name="name">Super Administrador</field>
          <field name="category_id" ref="module_category_kemas_management" />
+         <field name="users" eval="[(4, ref('base.user_root'))]" />
       </record>
       <!--
          ====================
@@ -54,6 +43,7 @@
       <record id="group_kemas_librarian" model="res.groups">
          <field name="name">Administrador</field>
          <field name="category_id" ref="module_category_recording_librarian_management" />
+         <field name="users" eval="[(4, ref('base.user_root'))]" />
       </record>
       <record id="group_kemas_librarian_consultant" model="res.groups">
          <field name="category_id" ref="module_category_recording_librarian_management" />
