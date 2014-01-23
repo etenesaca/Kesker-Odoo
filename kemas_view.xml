@@ -4129,9 +4129,10 @@
                               </a>
                            </h4>
                            <ul>
-                              <li>
-                                 <b>Recordings:</b>
-                                 <field name="recording_ids" />
+                              <li t-if="record.email.raw_value">
+                                 <a t-attf-href="mailto:#{record.email.value}">
+                                    <field name="email" />
+                                 </a>
                               </li>
                            </ul>
                         </div>
@@ -4139,17 +4140,6 @@
                   </t>
                </templates>
             </kanban>
-         </field>
-      </record>
-      <record id="action_recording_expositor" model="ir.actions.act_window">
-         <field name="name">Recordings</field>
-         <field name="res_model">kemas.recording</field>
-         <field name="view_mode">tree,form</field>
-         <field name="context">{'search_default_expositor_id': [active_id], 'default_expositor_id': active_id}</field>
-         <field name="help" type="html">
-            <p>
-               No hay grabaciones registradas relacionadas con este Expositor
-            </p>
          </field>
       </record>
       <!--____________________________________________________Vista de Formulario -->
@@ -4170,9 +4160,9 @@
                         <field name="name" default_focus="1" placeholder="Name" />
                      </h1>
                   </div>
-                  <div class="oe_right oe_button_box" name="buttons">
-                     <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_recording_expositor)d" string="Recordings" />
-                  </div>
+                  <group>
+                     <field name="email" widget="email" placeholder="Correo electrónico..." />
+                  </group>
                   <notebook colspan="4">
                      <page string="Details">
                         <field name="details" colspan="4" nolabel="1" placeholder="Details of the expositor" />
@@ -4395,19 +4385,63 @@
                      <field name="theme" default_focus="1" placeholder="Theme of the recording" />
                   </h1>
                   <group colspan="4" col="6">
-                     <field name="code" readonly="1" />
-                     <newline />
-                     <field name="recording_type_id" widget="selection" colspan="3" />
-                     <field name="duration" widget="float_time" colspan="3" />
-                     <newline />
-                     <field name="series_id" colspan="3" />
-                     <field name="expositor_id" colspan="3" />
-                     <field name="event_id" colspan="3" domain="[('state','=','closed'),]" on_change="on_change_event_id(event_id)" />
-                     <field name="tag_ids" widget="many2many_tags" colspan="3" />
-                     <separator string="Date and place" colspan="6" />
-                     <field name="place_id" colspan="4" />
-                     <field name="date" colspan="2" />
-                     <field name="url" widget="url" colspan="6" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
+                     <group colspan="4">
+                        <field name="code" readonly="1" attrs="{'invisible':[('code','=',False)]}" />
+                        <field name="recording_type_id" widget="selection" />
+                        <field name="date" />
+                        <field name="duration" widget="float_time" />
+                        <field name="series_id" />
+                        <field name="tag_ids" widget="many2many_tags" />
+                     </group>
+                     <div colspan="2">
+                        <b>Expositores:</b>
+                        <field name="expositor_ids" widget="many2many_kanban" nolabel="1">
+                           <kanban quick_create="false" create="true">
+                              <field name="name" />
+                              <templates>
+                                 <t t-name="kanban-box">
+                                    <div style="position: relative">
+                                       <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block">
+                                          <img src="/kemas/static/src/img/icons/delete_red.png" alt="Eliminar" />
+                                       </a>
+                                       <div class="oe_module_vignette">
+                                          <a type="open">
+                                             <img t-att-src="kanban_image('kemas.expositor', 'photo_small', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                                          </a>
+                                          <div class="oe_module_desc">
+                                             <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
+                                                <table class="oe_kanban_table">
+                                                   <tr>
+                                                      <td class="oe_kanban_title1" align="left" valign="middle">
+                                                         <h4>
+                                                            <a type="open">
+                                                               <field name="name" />
+                                                            </a>
+                                                         </h4>
+                                                         <div t-if="record.name.raw_value">
+                                                            <a t-if="record.email.raw_value" title="Mail" t-att-href="'mailto:'+record.email.value">
+                                                               <i>
+                                                                  <field name="email" />
+                                                               </i>
+                                                            </a>
+                                                         </div>
+                                                      </td>
+                                                   </tr>
+                                                </table>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </t>
+                              </templates>
+                           </kanban>
+                        </field>
+                     </div>
+                  </group>
+                  <group col="4" colspan="4" string="Lugar y otros">
+                     <field name="event_id" domain="[('state','=','closed'),]" on_change="on_change_event_id(event_id)" colspan="2" placeholder="Evento relacionado..." />
+                     <field name="place_id" colspan="2" placeholder="Lugar en donde se realizo la grabación..." />
+                     <field name="url" widget="url" colspan="4" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
                   </group>
                   <notebook colspan="4">
                      <page string="Details">
@@ -4415,7 +4449,7 @@
                            <field name="details" colspan="4" nolabel="1" placeholder="Details of the recording" />
                         </group>
                      </page>
-                     <page string="Contributors who participated">
+                     <page string="Contributors who participated" groups="kemas.group_kemas_librarian">
                         <field name="collaborator_ids" widget="many2many_kanban">
                            <kanban quick_create="false" create="true">
                               <field name="name_with_nick_name" />
@@ -4457,8 +4491,9 @@
                         </field>
                      </page>
                   </notebook>
-                  <group colspan="4" col="9">
+                  <group colspan="4" col="9" attrs="{'invisible':[('registration_date','=',False)]}">
                      <field name="registration_date" readonly="1" />
+                     <field name="create_user_id" readonly="1" options='{"no_open": True}' />
                   </group>
                </sheet>
             </form>
@@ -4484,7 +4519,6 @@
                      <field name="recording_type_id" widget="selection" colspan="3" />
                      <field name="duration" widget="float_time" colspan="3" />
                      <newline />
-                     <field name="expositor_id" colspan="3" />
                      <separator string="Date and place" colspan="6" />
                      <field name="place_id" colspan="4" />
                      <field name="date" colspan="2" />
@@ -4526,7 +4560,7 @@
                <field name="code" />
                <field name="theme" />
                <field name="series_id" />
-               <field name="expositor_id" />
+               <field name="expositor_ids" />
                <field name="recording_type_id" />
                <field name="place_id" />
                <field name="date" />
@@ -4542,7 +4576,7 @@
          <field name="arch" type="xml">
             <tree string="">
                <field name="theme" />
-               <field name="expositor_id" />
+               <field name="expositor_ids" />
                <field name="recording_type_id" />
                <field name="place_id" />
                <field name="date" />
@@ -4569,7 +4603,7 @@
                <field name="theme" default_focus="1" />
                <field name="date" />
                <field name="series_id" />
-               <field name="expositor_id" />
+               <field name="expositor_ids" />
                <field name="recording_type_id" widget="selection" />
                <field name="place_id" />
                <field name="tag_ids" />
@@ -4579,7 +4613,6 @@
                   <filter string="Recording Type" icon="star-on" domain="[]" context="{'group_by':'recording_type_id'}" />
                   <filter string="Place" icon="STOCK_HOME" domain="[]" context="{'group_by':'place_id'}" />
                   <filter string="Series" icon="star-on" domain="[]" context="{'group_by':'series_id'}" />
-                  <filter string="Expositor" icon="terp-personal" domain="[]" context="{'group_by':'expositor_id'}" />
                </group>
             </search>
          </field>

@@ -4369,6 +4369,19 @@ class kemas_place(osv.osv):
         }
 
 class kemas_expositor(osv.osv):
+    def write(self, cr, uid, ids, vals, context={}):
+        if vals.get('photo'):
+            photo_path = addons.__path__[0] + '/web/static/src/img/expositor_avatar'
+            vals['photo_small'] = kemas_extras.resize_image(vals['photo'], photo_path, 64)
+        return super(kemas_expositor, self).write(cr, uid, ids, vals, context)
+    
+    def create(self, cr, uid, vals, context={}):
+        # Crear una imagen pequeña de la foto del colaborador
+        if vals.get('photo', False):
+            photo_path = addons.__path__[0] + '/web/static/src/img/expositor_avatar'
+            vals['photo_small'] = kemas_extras.resize_image(vals['photo'], photo_path, 64)
+        return super(kemas_expositor, self).create(cr, uid, vals, context)
+    
     def on_change_photo(self, cr, uid, ids, photo):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
@@ -4384,9 +4397,10 @@ class kemas_expositor(osv.osv):
     _name = 'kemas.expositor'
     _columns = {
         'name': fields.char('Name', size=64, required=True, help='The name of the expositor'),
+        'email': fields.char('Email', size=64, required=False),
         'photo': fields.binary("Photo", help="This field holds the image used as avatar for the expositor, limited to 1024x1024px"),
+        'photo_small': fields.binary("Foto"),
         'details': fields.text('Details'),
-        'recording_ids': fields.one2many('kemas.recording', 'expositor_id', 'recordings', readonly=True),
         }
     _sql_constraints = [
         ('expositor_cname', 'unique (name)', 'This Name already exist!'),
@@ -4451,10 +4465,12 @@ class kemas_recording(osv.osv):
     def on_change_event_id(self, cr, uid, ids, event_id, context={}):
         values = {}
         if event_id:
-            collaborator_ids = self.pool.get('kemas.event').read(cr, uid, event_id, ['collaborator_ids'])['collaborator_ids']
-            values['collaborator_ids'] = collaborator_ids
+            event = self.pool.get('kemas.event').read(cr, uid, event_id, ['collaborator_ids', 'place_id'])
+            values['collaborator_ids'] = event['collaborator_ids']
+            values['place_id'] = event['place_id'][0]
         else:
             values['collaborator_ids'] = False
+            values['place_id'] = False
         return {'value' : values}
     
     def create(self, cr, uid, vals, *args, **kwargs):
@@ -4462,6 +4478,7 @@ class kemas_recording(osv.osv):
         sequence_id = type_obj.read(cr, uid, vals['recording_type_id'], ['sequence_id'])['sequence_id'][0]
         vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, sequence_id))
         vals['registration_date'] = time.strftime("%Y-%m-%d %H:%M:%S")
+        vals['create_user_id'] = uid
         return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
     
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
@@ -4508,15 +4525,16 @@ class kemas_recording(osv.osv):
         'theme': fields.char('Theme', size=64, help='The theme of the recording', required=True),
         'date':fields.datetime('Date', help="Date on which the recording was done"),
         'registration_date':fields.datetime('Registration date', help="Date on which this recording was entered into the system"),
+        'create_user_id':fields.many2one('res.users', 'Registrado por', help='Nombre del usuario que creo el registro'),
         'code' : fields.char('Code', size=32, help="unique code that is assigned to each recording"),
         'duration':fields.float('Duration', required=True, help='Duration recording'),
         'details': fields.text('Details'),
         'url':fields.char('URL', size=255, help='Dirección en la que se encuentra almacenado el archivo'),
+        'expositor_ids': fields.many2many('kemas.expositor', 'kemas_recording_expositor_rel', 'recording_id', 'expositor_id', 'Expositores'),
         # One to Many Relations
         'event_id':fields.many2one('kemas.event', 'Evento', help='Servicio en el cual se realizó ésta grabación'),
         'recording_type_id':fields.many2one('kemas.recording.type', 'recording type', required=True, ondelete="restrict"),
         'place_id':fields.many2one('kemas.place', 'Place', help='Place where the recording was done', ondelete="restrict"),
-        'expositor_id':fields.many2one('kemas.expositor', 'Expositor', help="Expositor's name", ondelete="restrict"),
         'series_id':fields.many2one('kemas.recording.series', 'Series', help='Name of the series of which this recording', ondelete="restrict"),
         # Many to One Relations
         'tag_ids': fields.many2many('kemas.recording.tag', 'kemas_recording_tag_rel', 'recording_id', 'tag_id', 'Etiquetas'),
@@ -5069,7 +5087,6 @@ class kemas_event(osv.osv):
             wizard_line_obj.create(cr, uid, {
                         'wizard_id': wizard_id,
                         'collaborator_id': collaborator['id'],
-                        'email': collaborator['email'],
                         'state': state,
                         'send_email': send_email,
                         'event_line_id':event_line_id,
