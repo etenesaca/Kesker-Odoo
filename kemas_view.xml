@@ -4913,8 +4913,8 @@
          <field name="arch" type="xml">
             <form string="Service" version="7.0">
                <header>
-                  <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('is_active','=',True)]}" groups="kemas.group_kemas_manager" />
-                  <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('is_active','=',False)]}" groups="kemas.group_kemas_manager" />
+                  <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('is_active','=',True)]}" />
+                  <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('is_active','=',False)]}" />
                </header>
                <sheet string="Service">
                   <label for="name" class="oe_edit_only" />
