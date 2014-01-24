@@ -4853,6 +4853,7 @@ class kemas_event_collaborator_line(osv.osv):
         'collaborator_id':fields.many2one('kemas.collaborator', 'Collaborator', required=True),
         'event_id':fields.many2one('kemas.event', 'event', required=True, ondelete="cascade"),
         'activity_ids': fields.many2many('kemas.activity', 'kemas_event_collaborator_line_activity_rel', 'event_collaborator_line_id', 'activity_id', 'Activities', help='Activities that have been assigned to this Collaborator in this event'),
+        'sent_date': fields.datetime('Enviado el'),
         'send_email_state':fields.selection([
             ('Sent', 'Sent'),
             ('Waiting', 'Waiting'),
@@ -5063,8 +5064,8 @@ class kemas_event(osv.osv):
         
         vals = {'state' : 'load', 'event_id' : event_id, 'sending_emails':sending_emails}
         wizard_id = wizard_obj.create(cr, uid, vals)
-        for event_line_id in event_line_ids:
-            event_line = event_line_obj.read(cr, uid, event_line_id, [], context)
+        event_lines = event_line_obj.read(cr, uid, event_line_ids, ['send_email_state', 'sent_date', 'collaborator_id'], context)
+        for event_line in event_lines:
             collaborator = collaborator_obj.read(cr, uid, event_line['collaborator_id'][0], ['id', 'email'], context)
             if event_line['send_email_state'] == 'Sent':
                 send_email = False
@@ -5087,9 +5088,11 @@ class kemas_event(osv.osv):
             wizard_line_obj.create(cr, uid, {
                         'wizard_id': wizard_id,
                         'collaborator_id': collaborator['id'],
+                        'email' : collaborator['email'],
                         'state': state,
                         'send_email': send_email,
-                        'event_line_id':event_line_id,
+                        'sent_date' : event_line['sent_date'],
+                        'event_line_id': event_line['id'],
                         })
         
         return{
