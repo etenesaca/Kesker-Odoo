@@ -20,6 +20,7 @@
 #
 ##############################################################################
 import kemas
+import res_users
 import report
 import wizard
 import kemas_extras

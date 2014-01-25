@@ -45,33 +45,6 @@ import math
 from dateutil.parser import  *
     
 _logger = logging.getLogger(__name__)
-
-class res_users(osv.osv):
-    def register_login(self, db_name, user_id, user_agent_env):
-        threaded_sending = threading.Thread(target=self._register_login, args=(db_name, user_id, user_agent_env))
-        threaded_sending.start()
-    
-    def _register_login(self, db_name, user_id, user_agent_env):
-        db, pool = pooler.get_db_and_pool(db_name)
-        cr = db.cursor()
-        if user_id:
-            collaborator_obj = self.pool.get('kemas.collaborator')
-            collaborator_ids = collaborator_obj.search(cr, user_id, [('user_id', '=', user_id)])
-            if collaborator_ids:
-                vals_login = {
-                              'collaborator_id' : collaborator_ids[0],
-                              'base_location' : user_agent_env['base_location'],
-                              'remote_address' : user_agent_env['REMOTE_ADDR'],
-                              }
-                self.pool.get('kemas.collaborator.logbook.login').create(cr, 1, vals_login)
-        cr.commit()
-                
-    def authenticate(self, db, login, password, user_agent_env):
-        uid = super(res_users, self).authenticate(db, login, password, user_agent_env)
-        self.register_login(db, uid, user_agent_env)
-        return uid
-
-    _inherit = 'res.users'
     
 class kemas_collaborator_logbook_login(osv.osv):
     def name_get(self, cr, uid, ids, context={}):
