@@ -4206,7 +4206,7 @@ class kemas_history_points(osv.osv):
         '''
         # Borrar los logs que creados por defecto
         message_obj = self.pool.get('mail.message')
-        message_obj.unlink(cr, uid, message_obj.search(cr, uid, [('res_id', '=', compromise_id)]))
+        message_obj.unlink(cr, uid, message_obj.search(cr, uid, [('res_id', '=', res_id)]))
         return self.write_log_update(cr, uid, res_id, body, notify_partner_ids) 
     
     def write_log_update(self, cr, uid, res_id, body, notify_partner_ids=[]):
