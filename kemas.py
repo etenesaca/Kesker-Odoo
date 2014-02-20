@@ -4345,6 +4345,13 @@ class kemas_place(osv.osv):
         }
 
 class kemas_expositor(osv.osv):
+    def _person_age(self, cr, uid, ids, name, arg, context={}):
+        result = {}
+        collaborators = super(osv.osv, self).read(cr, uid, ids, ['id', 'birth'], context=context)
+        for collaborator in collaborators:
+            result[collaborator['id']] = kemas_extras.calcular_edad(collaborator['birth'], 3)
+        return result
+    
     def write(self, cr, uid, ids, vals, context={}):
         if vals.get('photo'):
             photo_path = addons.__path__[0] + '/web/static/src/img/expositor_avatar'
@@ -4369,13 +4376,41 @@ class kemas_expositor(osv.osv):
         else:
             return {'value':{'image':False}, 'warning':{'title':_('Error!'), 'message':_('The size of the photo can not be greater than %s KB..!!') % str(preferences['max_size_photos'])}}
 
+    def on_change_birth(self, cr, uid, ids, birth, context={}):
+        values = {}
+        if birth:
+            values['age'] = kemas_extras.calcular_edad(birth, 3)
+        return {'value':values}
+    
+    def on_change_email(self, cr, uid, ids, email):
+        if email:
+            if kemas_extras.validate_mail(email):
+                return {'value':{}}
+            else:
+                msg = self.pool.get('kemas.func').get_translate(cr, uid, _('E-mail format invalid..!!'))[0]
+                return {'value':{'email':''}, 'warning':{'title':'Error', 'message':msg}}
+        else:
+            return True
+    
+    def _ff_age(self, cr, uid, ids, name, arg, context={}): 
+        result = {}
+        records = super(osv.osv, self).read(cr, uid, ids, ['id', 'birth'])
+        for record in records:
+            result[record['id']] = kemas_extras.calcular_edad(record['birth'], 3)
+        return result
+    
     _order = 'name'
     _name = 'kemas.expositor'
     _columns = {
         'name': fields.char('Name', size=64, required=True, help='The name of the expositor'),
-        'email': fields.char('Email', size=64, required=False),
+        'email': fields.char('Email', size=64),
         'photo': fields.binary("Photo", help="This field holds the image used as avatar for the expositor, limited to 1024x1024px"),
         'photo_small': fields.binary("Foto"),
+        'birth':fields.date('Fecha de Naciemiento'),
+        'age' : fields.function(_ff_age, type='char', string='Edad'),
+        'telef1' : fields.char(u'Teléfono 1', size=10, help=u"Numero telefónico. Example: 072878563"),
+        'telef2' : fields.char(u'Teléfono 2', size=10, help=u"Numero telefónico. Example: 072878563"),
+        'mobile' : fields.char('Celular', size=10, help=u"Número de celular. Example: 088729345"),
         'details': fields.text('Details'),
         }
     _sql_constraints = [
@@ -4386,7 +4421,8 @@ class kemas_expositor(osv.osv):
             image = open(openerp.modules.get_module_resource('base', 'static/src/img', 'company_image.png')).read()
         else:
             image = tools.image_colorize(open(openerp.modules.get_module_resource('base', 'static/src/img', 'avatar.png')).read())
-        return tools.image_resize_image_big(image.encode('base64'))
+        return tools.image_resize_image_big(image.encode('base64')
+                                            )
     _defaults = {
         'photo': lambda self, cr, uid, ctx: self._get_default_image(cr, uid, ctx.get('default_is_company', False), ctx),
     }

@@ -4160,8 +4160,21 @@
                         <field name="name" default_focus="1" placeholder="Name" />
                      </h1>
                   </div>
-                  <group>
-                     <field name="email" widget="email" placeholder="Correo electrónico..." />
+                  <group colspan="4" expand="1" col="4">
+                     <field name="birth" on_change="on_change_birth(birth)" placeholder="Fecha nac" colspan="2" />
+                     <field name="age" required="1" readonly="1" colspan="2" attrs="{'invisible':[('birth','=',False)]}" />
+                  </group>
+                  <group colspan="4" expand="1" col="6">
+                     <separator string="Contacto" colspan="6" />
+                     <field name="mobile" colspan="2" placeholder="ex: 0985146325" />
+                     <group colspan="4" />
+                     <field name="telef1" colspan="2" placeholder="ex: 072561374" />
+                     <field name="telef2" colspan="2" placeholder="ex: 072561374" attrs="{'invisible':[('telef1','=',False)]}" />
+                     <group colspan="4" />
+                     <group colspan="2" />
+                     <newline />
+                     <field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..." />
+                     <group colspan="2" />
                   </group>
                   <notebook colspan="4">
                      <page string="Details">
@@ -4455,7 +4468,7 @@
                         </group>
                      </page>
                      <page string="Contributors who participated" groups="kemas.group_kemas_librarian">
-                        <field name="collaborator_ids" widget="many2many_kanban" domain="[('state','in','Active'),]">
+                        <field name="collaborator_ids" widget="many2many_kanban" domain="[('state','=','Active'),('type','=','Collaborator')]">
                            <kanban quick_create="false" create="true">
                               <field name="name_with_nick_name" />
                               <templates>
