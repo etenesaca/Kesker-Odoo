@@ -4377,6 +4377,11 @@
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Recording" version="7.0">
+               <header>
+                  <button name="draft" icon="kanban-pause" type="object" string="Regresar a Borrador" states="done" />
+                  <button name="done" icon="kanban-apply" type="object" string="Confirmar" states="draft" class="oe_highlight" confirm="¿Está seguro de confirmar esta grabación una vez confirmada se generará un código para ésta y no se podrá borrar?" />
+                  <field name="state" widget="statusbar" statusbar_visible="draft,done" />
+               </header>
                <sheet string="Recording">
                   <div class="oe_edit_only">
                      <label for="theme" />
@@ -4387,7 +4392,7 @@
                   <group colspan="4" col="6">
                      <group colspan="4">
                         <field name="code" readonly="1" attrs="{'invisible':[('code','=',False)]}" />
-                        <field name="recording_type_id" widget="selection" />
+                        <field name="recording_type_id" widget="selection" placeholder=" --Seleccione el tipo de grabación--" />
                         <field name="date" />
                         <field name="duration" widget="float_time" />
                         <field name="series_id" />
@@ -4450,7 +4455,7 @@
                         </group>
                      </page>
                      <page string="Contributors who participated" groups="kemas.group_kemas_librarian">
-                        <field name="collaborator_ids" widget="many2many_kanban">
+                        <field name="collaborator_ids" widget="many2many_kanban" domain="[('state','in','Active'),]">
                            <kanban quick_create="false" create="true">
                               <field name="name_with_nick_name" />
                               <templates>
@@ -4491,11 +4496,11 @@
                         </field>
                      </page>
                   </notebook>
-                  <group colspan="4" col="9" attrs="{'invisible':[('registration_date','=',False)]}">
-                     <field name="registration_date" readonly="1" />
-                     <field name="create_user_id" readonly="1" options='{"no_open": True}' />
-                  </group>
                </sheet>
+               <div class="oe_chatter" groups="kemas.group_kemas_librarian">
+                  <field name="message_follower_ids" widget="mail_followers" help="Siga esta grabación para recibir notificacion cuando se realicen cambios en esta" />
+                  <field name="message_ids" widget="mail_thread" />
+               </div>
             </form>
          </field>
       </record>
@@ -4556,7 +4561,7 @@
          <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
-            <tree string="Recordings">
+            <tree string="Recordings" colors="red:state=='draft'">
                <field name="code" />
                <field name="theme" />
                <field name="series_id" />
@@ -4565,6 +4570,7 @@
                <field name="place_id" />
                <field name="date" />
                <field name="duration" widget="float_time" />
+               <field name="state" />
             </tree>
          </field>
       </record>
@@ -5128,8 +5134,7 @@
 																	      			'event_collaborator_line_ids' : context['line_ids'],
 			      																	'search_view_ref' : 'kemas.kemas_collaborator_search_view2',
 			      																	'tree_view_ref' : 'kemas.kemas_collaborator_tree_view4',
-			      																	}"
-                        on_change="on_change_collaborator()" options='{"no_open": True}' />
+			      																	}" on_change="on_change_collaborator()" options='{"no_open": True}' />
                   </h1>
                   <group attrs="{'invisible':[('replacement_id','=',False)]}" colspan="4">
                      <field name="replacement_id" options='{"no_open": True}' />
