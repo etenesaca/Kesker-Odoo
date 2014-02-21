@@ -4594,6 +4594,11 @@ class kemas_recording(osv.osv):
         self.write_log_create(cr, uid, res_id)
         return res_id
     
+    def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context={}, orderby=False):
+        res_ids = self.search(cr, uid, domain, context=context)
+        result = super(kemas_recording, self).read_group(cr, uid, domain + [('id', 'in', res_ids)], fields, groupby, offset, limit, context, orderby)
+        return result
+    
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
         # Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month', False):
