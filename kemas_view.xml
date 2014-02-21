@@ -5423,7 +5423,7 @@
                         <group colspan="4" expand="1" states="on_going,creating,draft">
                            <group colspan="4" col="2">
                               <field name="place_id" placeholder="Event Location" colspan="2" />
-                              <field name="date_start" colspan="2" widget="date" />
+                              <field name="date_start" colspan="2" widget="date" placeholder="Fecha..." />
                               <field name="close_to_end" colspan="2" />
                            </group>
                         </group>

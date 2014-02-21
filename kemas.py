@@ -5612,9 +5612,6 @@ class kemas_event(osv.osv):
         
     def create(self, cr, uid, vals, context={}):
         service_obj = self.pool.get('kemas.service')
-        #----------------------------------------------------------------------------------------------------------------------------
-        seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Event'), ])[0]
-        vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
         vals['date_create'] = str(time.strftime("%Y-%m-%d %H:%M:%S"))
         vals['state'] = 'draft'
         vals['count'] = 1
@@ -5983,6 +5980,8 @@ class kemas_event(osv.osv):
             stage_ids = stage_obj.search(cr, uid, [('sequence', '=', 2)])
             if stage_ids:
                 vals['stage_id'] = stage_ids[0]
+            seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Event'), ])[0]
+            vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
             super(osv.osv, self).write(cr, uid, ids, vals)
             message_follower_ids = self.read(cr, uid, ids[0], ['message_follower_ids'])['message_follower_ids']
             self.write_log_on_going(cr, uid, ids[0], message_follower_ids)
