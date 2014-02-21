@@ -4145,6 +4145,11 @@ class kemas_task_assigned(osv.osv):
         return self.write(cr, uid, ids, {'priority' : '2'})
     
 class kemas_history_points(osv.osv):
+    def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context={}, orderby=False):
+        res_ids = self.search(cr, uid, domain, context=context)
+        result = super(kemas_history_points, self).read_group(cr, uid, domain + [('id', 'in', res_ids)], fields, groupby, offset, limit, context, orderby)
+        return result
+    
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
         collaborator_obj = self.pool.get('kemas.collaborator')
         user_obj = self.pool.get('res.users')
@@ -4923,6 +4928,11 @@ class kemas_event_collaborator_line(osv.osv):
             context = {}
         ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
         return self.name_get(cr, uid, ids, context)
+    
+    def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context={}, orderby=False):
+        res_ids = self.search(cr, uid, domain, context=context)
+        result = super(kemas_event_collaborator_line, self).read_group(cr, uid, domain + [('id', 'in', res_ids)], fields, groupby, offset, limit, context, orderby)
+        return result
     
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
         if context.get('search_filter', False):
@@ -6346,7 +6356,12 @@ class kemas_attendance(osv.osv):
             name = "%s | Evento: %s" % (record['code'], unicode(record['event_id'][1]))
             res.append((record['id'], name))  
         return res
-       
+    
+    def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context={}, orderby=False):
+        res_ids = self.search(cr, uid, domain, context=context)
+        result = super(kemas_attendance, self).read_group(cr, uid, domain + [('id', 'in', res_ids)], fields, groupby, offset, limit, context, orderby)
+        return result
+    
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
         collaborator_obj = self.pool.get('kemas.collaborator')
         user_obj = self.pool.get('res.users')
