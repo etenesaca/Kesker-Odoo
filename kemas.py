@@ -4406,7 +4406,7 @@ class kemas_expositor(osv.osv):
         'email': fields.char('Email', size=64),
         'photo': fields.binary("Photo", help="This field holds the image used as avatar for the expositor, limited to 1024x1024px"),
         'photo_small': fields.binary("Foto"),
-        'birth':fields.date('Fecha de Naciemiento'),
+        'birth':fields.date('Fecha de Nacimiento'),
         'age' : fields.function(_ff_age, type='char', string='Edad'),
         'telef1' : fields.char(u'Teléfono 1', size=10, help=u"Numero telefónico. Example: 072878563"),
         'telef2' : fields.char(u'Teléfono 2', size=10, help=u"Numero telefónico. Example: 072878563"),

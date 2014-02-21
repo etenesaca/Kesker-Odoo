@@ -4143,6 +4143,17 @@
          </field>
       </record>
       <!--____________________________________________________Vista de Formulario -->
+      <record id="action_kemas_expositor_goto_recordings" model="ir.actions.act_window">
+         <field name="name">Grabaciones</field>
+         <field name="res_model">kemas.recording</field>
+         <field name="view_mode">tree,form</field>
+         <field name="domain">[('expositor_ids','in',active_id)]</field>
+         <field name="help" type="html">
+            <p>
+               No hay grabaciones relacionadas a este expositor
+            </p>
+         </field>
+      </record>
       <record model="ir.ui.view" id="kemas_expositor_form_view">
          <field name="name">kemas.expositor.form</field>
          <field name="model">kemas.expositor</field>
@@ -4160,27 +4171,24 @@
                         <field name="name" default_focus="1" placeholder="Name" />
                      </h1>
                   </div>
-                  <group colspan="4" expand="1" col="4">
+                  <div class="oe_right oe_button_box" name="buttons">
+                     <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_expositor_goto_recordings)d" string="Grabaciones" />
+                  </div>
+                  <group colspan="4" col="6">
                      <field name="birth" on_change="on_change_birth(birth)" placeholder="Fecha nac" colspan="2" />
                      <field name="age" required="1" readonly="1" colspan="2" attrs="{'invisible':[('birth','=',False)]}" />
-                  </group>
-                  <group colspan="4" expand="1" col="6">
+                     <group colspan="2" />
                      <separator string="Contacto" colspan="6" />
                      <field name="mobile" colspan="2" placeholder="ex: 0985146325" />
                      <group colspan="4" />
                      <field name="telef1" colspan="2" placeholder="ex: 072561374" />
                      <field name="telef2" colspan="2" placeholder="ex: 072561374" attrs="{'invisible':[('telef1','=',False)]}" />
-                     <group colspan="4" />
                      <group colspan="2" />
                      <newline />
                      <field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..." />
                      <group colspan="2" />
+                     <field name="details" colspan="4" placeholder="Details of the expositor" />
                   </group>
-                  <notebook colspan="4">
-                     <page string="Details">
-                        <field name="details" colspan="4" nolabel="1" placeholder="Details of the expositor" />
-                     </page>
-                  </notebook>
                </sheet>
             </form>
          </field>
@@ -4335,8 +4343,8 @@
                      <page string="Recordings">
                         <group colspan="4" expand="1">
                            <field name="recording_ids" colspan="4" nolabel="1" context="{'series_id': active_id,
-																						'form_view_ref' : 'kemas.kemas_recording_form_view2',
-				           																'tree_view_ref' : 'kemas.kemas_recording_tree_view2',
+																						'form_view_ref' : 'kemas.kemas_recording_form_view_series',
+				           																'tree_view_ref' : 'kemas.kemas_recording_tree_view_series',
 				           															   }" />
                         </group>
                      </page>
@@ -4517,13 +4525,18 @@
             </form>
          </field>
       </record>
-      <record model="ir.ui.view" id="kemas_recording_form_view2">
+      <record model="ir.ui.view" id="kemas_recording_form_view_series">
          <field name="name">kemas.recording.form2</field>
          <field name="model">kemas.recording</field>
          <field name="type">form</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <form string="Recording" version="7.0">
+               <header>
+                  <button name="draft" icon="kanban-pause" type="object" string="Regresar a Borrador" states="done" />
+                  <button name="done" icon="kanban-apply" type="object" string="Confirmar" states="draft" class="oe_highlight" confirm="¿Está seguro de confirmar esta grabación una vez confirmada se generará un código para ésta y no se podrá borrar?" />
+                  <field name="state" widget="statusbar" statusbar_visible="draft,done" />
+               </header>
                <sheet string="Recording">
                   <div class="oe_edit_only">
                      <label for="theme" />
@@ -4532,15 +4545,62 @@
                      <field name="theme" default_focus="1" placeholder="Theme of the recording" />
                   </h1>
                   <group colspan="4" col="6">
-                     <field name="code" readonly="1" />
-                     <newline />
-                     <field name="recording_type_id" widget="selection" colspan="3" />
-                     <field name="duration" widget="float_time" colspan="3" />
-                     <newline />
-                     <separator string="Date and place" colspan="6" />
-                     <field name="place_id" colspan="4" />
-                     <field name="date" colspan="2" />
-                     <field name="url" widget="url" colspan="6" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
+                     <group colspan="4">
+                        <field name="code" readonly="1" attrs="{'invisible':[('code','=',False)]}" />
+                        <field name="recording_type_id" widget="selection" placeholder=" --Seleccione el tipo de grabación--" />
+                        <field name="date" />
+                        <field name="duration" widget="float_time" />
+                        <field name="tag_ids" widget="many2many_tags" />
+                     </group>
+                     <div colspan="2">
+                        <b>Expositores:</b>
+                        <field name="expositor_ids" widget="many2many_kanban" nolabel="1">
+                           <kanban quick_create="false" create="true">
+                              <field name="name" />
+                              <templates>
+                                 <t t-name="kanban-box">
+                                    <div style="position: relative">
+                                       <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block">
+                                          <img src="/kemas/static/src/img/icons/delete_red.png" alt="Eliminar" />
+                                       </a>
+                                       <div class="oe_module_vignette">
+                                          <a type="open">
+                                             <img t-att-src="kanban_image('kemas.expositor', 'photo_small', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                                          </a>
+                                          <div class="oe_module_desc">
+                                             <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
+                                                <table class="oe_kanban_table">
+                                                   <tr>
+                                                      <td class="oe_kanban_title1" align="left" valign="middle">
+                                                         <h4>
+                                                            <a type="open">
+                                                               <field name="name" />
+                                                            </a>
+                                                         </h4>
+                                                         <div t-if="record.name.raw_value">
+                                                            <a t-if="record.email.raw_value" title="Mail" t-att-href="'mailto:'+record.email.value">
+                                                               <i>
+                                                                  <field name="email" />
+                                                               </i>
+                                                            </a>
+                                                         </div>
+                                                      </td>
+                                                   </tr>
+                                                </table>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </t>
+                              </templates>
+                           </kanban>
+                        </field>
+                     </div>
+                  </group>
+                  <group col="4" colspan="4" string="Lugar y otros">
+                     <field name="event_id" domain="[('state','=','closed'),]" on_change="on_change_event_id(event_id)" colspan="2" placeholder="Evento relacionado..." />
+                     <field name="place_id" colspan="2" placeholder="Lugar en donde se realizo la grabación..." />
+                     <field name="url" widget="url" colspan="4" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
                   </group>
                   <notebook colspan="4">
                      <page string="Details">
@@ -4548,21 +4608,48 @@
                            <field name="details" colspan="4" nolabel="1" placeholder="Details of the recording" />
                         </group>
                      </page>
-                     <page string="Contributors who participated">
-                        <group colspan="4" expand="1">
-                           <field name="collaborator_ids" colspan="4" nolabel="1" domain="[
-					      														  			('state','=','Active'),
-					      														  			('type','=','Collaborator'),
-					      														  			]" context="{
-					      																	'search_view_ref' : 'kemas.kemas_collaborator_search_view2',
-					      																	'tree_view_ref' : 'kemas.kemas_collaborator_tree_view4',
-					      																	}" />
-                        </group>
+                     <page string="Contributors who participated" groups="kemas.group_kemas_librarian">
+                        <field name="collaborator_ids" widget="many2many_kanban" domain="[('state','=','Active'),('type','=','Collaborator')]">
+                           <kanban quick_create="false" create="true">
+                              <field name="name_with_nick_name" />
+                              <templates>
+                                 <t t-name="kanban-box">
+                                    <div style="position: relative">
+                                       <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block">
+                                          <img src="/kemas/static/src/img/icons/delete_red.png" alt="Eliminar" />
+                                       </a>
+                                       <div class="oe_module_vignette">
+                                          <a type="open">
+                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_small', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                                          </a>
+                                          <div class="oe_module_desc">
+                                             <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
+                                                <table class="oe_kanban_table">
+                                                   <tr>
+                                                      <td class="oe_kanban_title1" align="left" valign="middle">
+                                                         <h4>
+                                                            <a type="open">
+                                                               <field name="name_with_nick_name" />
+                                                            </a>
+                                                         </h4>
+                                                         <div t-if="record.team_id.raw_value">
+                                                            <i>
+                                                               <field name="team_id" />
+                                                            </i>
+                                                         </div>
+                                                      </td>
+                                                   </tr>
+                                                </table>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </t>
+                              </templates>
+                           </kanban>
+                        </field>
                      </page>
                   </notebook>
-                  <group colspan="4" col="9">
-                     <field name="registration_date" readonly="1" />
-                  </group>
                </sheet>
             </form>
          </field>
@@ -4587,19 +4674,22 @@
             </tree>
          </field>
       </record>
-      <record model="ir.ui.view" id="kemas_recording_tree_view2">
+      <!-- Esta vista se ve desde las series -->
+      <record model="ir.ui.view" id="kemas_recording_tree_view_series">
          <field name="name">kemas.recording.tree2</field>
          <field name="model">kemas.recording</field>
          <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <tree string="">
+               <field name="code" />
                <field name="theme" />
                <field name="expositor_ids" />
                <field name="recording_type_id" />
                <field name="place_id" />
                <field name="date" />
                <field name="duration" widget="float_time" sum="Duración total de la Serie" />
+               <field name="state" invisible="1" />
             </tree>
          </field>
       </record>
