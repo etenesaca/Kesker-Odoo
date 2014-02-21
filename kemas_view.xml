@@ -4399,9 +4399,9 @@
          <field name="arch" type="xml">
             <form string="Recording" version="7.0">
                <header>
-                  <button name="draft" icon="kanban-pause" type="object" string="Regresar a Borrador" states="done" />
-                  <button name="done" icon="kanban-apply" type="object" string="Confirmar" states="draft" class="oe_highlight" confirm="¿Está seguro de confirmar esta grabación una vez confirmada se generará un código para ésta y no se podrá borrar?" />
-                  <field name="state" widget="statusbar" statusbar_visible="draft,done" />
+                  <button name="draft" icon="kanban-pause" type="object" string="Regresar a Borrador" states="done" groups="kemas.group_kemas_librarian" />
+                  <button name="done" icon="kanban-apply" type="object" string="Confirmar" states="draft" class="oe_highlight" confirm="¿Está seguro de confirmar esta grabación una vez confirmada se generará un código para ésta y no se podrá borrar?" groups="kemas.group_kemas_librarian" />
+                  <field name="state" widget="statusbar" statusbar_visible="draft,done" groups="kemas.group_kemas_librarian" />
                </header>
                <sheet string="Recording">
                   <div class="oe_edit_only">
@@ -4526,7 +4526,7 @@
          </field>
       </record>
       <record model="ir.ui.view" id="kemas_recording_form_view_series">
-         <field name="name">kemas.recording.form2</field>
+         <field name="name">kemas.recording.form.series</field>
          <field name="model">kemas.recording</field>
          <field name="type">form</field>
          <field name="priority" eval="2" />
@@ -4670,13 +4670,13 @@
                <field name="place_id" />
                <field name="date" />
                <field name="duration" widget="float_time" />
-               <field name="state" />
+               <field name="state" groups="kemas.group_kemas_librarian" />
             </tree>
          </field>
       </record>
       <!-- Esta vista se ve desde las series -->
       <record model="ir.ui.view" id="kemas_recording_tree_view_series">
-         <field name="name">kemas.recording.tree2</field>
+         <field name="name">kemas.recording.tree.series</field>
          <field name="model">kemas.recording</field>
          <field name="type">tree</field>
          <field name="priority" eval="2" />
@@ -6474,6 +6474,21 @@
             </p>
          </field>
       </record>
+      <record model="ir.actions.act_window" id="kemas_recording_form_action_confirmeds">
+         <field name="name">Recordings</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">kemas.recording</field>
+         <field name="view_mode">tree,form</field>
+         <field name="domain">[('state','=','done')]</field>
+         <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+               Click to register a type of recording.
+            </p>
+            <p>
+               Here you can register to be recording events or services ordered to track the tapes or storage medium in which these are saved, you can also choose to upload the recording to store it securely.
+            </p>
+         </field>
+      </record>
       <!--____________________________________________________Category -->
       <record model="ir.actions.act_window" id="action_repository_category_form">
          <field name="name">Etiquetas</field>
@@ -7258,7 +7273,9 @@
       -->
       <menuitem id="menu_kemas_recording_form_action" name="Recordings" parent="menu_kemas_recording_manager_root" sequence="1" />
       <!-- Recording -->
-      <menuitem action="kemas_recording_form_action" name="Recordings" id="menu_kemas_recording" parent="menu_kemas_recording_form_action" sequence="1" />
+      <menuitem action="kemas_recording_form_action" name="Recordings" id="menu_kemas_recording" parent="menu_kemas_recording_form_action" sequence="1" groups="kemas.group_kemas_librarian" />
+      <!-- Recording Confirmadas -->
+      <menuitem action="kemas_recording_form_action_confirmeds" name="Grabaciones" id="menu_kemas_recording_confirmeds" parent="menu_kemas_recording_form_action" sequence="1" groups="kemas.group_kemas_librarian_consultant" />
       <!-- Expositor -->
       <menuitem action="kemas_expositor_form_action" name="Expositors" id="menu_kemas_expositor" parent="menu_kemas_recording_form_action" sequence="2" />
       <!-- Series -->
