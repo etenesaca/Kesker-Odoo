@@ -4540,12 +4540,15 @@ class kemas_recording(osv.osv):
         if type(ids).__name__ in ['int', 'long']:
             ids = list(ids)
             
-        records = self.read(cr, uid, ids, ['recording_type_id'])
+        records = self.read(cr, uid, ids, ['recording_type_id', 'code'])
         for record in records:  
-            type_obj = self.pool.get('kemas.recording.type')
-            sequence_id = type_obj.read(cr, uid, record['recording_type_id'][0], ['sequence_id'])['sequence_id'][0]
-            code = str(self.pool.get('ir.sequence').get_id(cr, uid, sequence_id))
-            self.write(cr, uid, [record['id']], {'code': code, 'state': 'done'})
+            vals = {'state': 'done'}
+            if not record['code']:
+                type_obj = self.pool.get('kemas.recording.type')
+                sequence_id = type_obj.read(cr, uid, record['recording_type_id'][0], ['sequence_id'])['sequence_id'][0]
+                code = str(self.pool.get('ir.sequence').get_id(cr, uid, sequence_id))
+                vals['code'] = code
+            self.write(cr, uid, [record['id']], vals)
             # Escribir log
             self.write_log_done(cr, uid, record['id'])
         return True
@@ -5963,30 +5966,35 @@ class kemas_event(osv.osv):
         return message_id
         
     def on_going(self, cr, uid, ids, context={}):
-        this = self.read(cr, uid, ids[0], ['event_collaborator_line_ids', 'members', 'message_follower_ids'])
-        if this['event_collaborator_line_ids']:
-            user_obj = self.pool.get('res.users')
-            members = user_obj.read(cr, uid, this['members'] + [uid])
-            collaborator_partner_ids = []
-            for member in members:
-                if member['partner_id']:
-                    collaborator_partner_ids.append(member['partner_id'][0])
-            vals = {
-                    'message_follower_ids' : [(6, 0, collaborator_partner_ids)],
-                    'state' : 'on_going',
-                    'color' : 4
-                    }
-            stage_obj = self.pool.get('kemas.event.stage')
-            stage_ids = stage_obj.search(cr, uid, [('sequence', '=', 2)])
-            if stage_ids:
-                vals['stage_id'] = stage_ids[0]
-            seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Event'), ])[0]
-            vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
-            super(osv.osv, self).write(cr, uid, ids, vals)
-            message_follower_ids = self.read(cr, uid, ids[0], ['message_follower_ids'])['message_follower_ids']
-            self.write_log_on_going(cr, uid, ids[0], message_follower_ids)
-        else:
-            raise osv.except_osv(_('Error!'), _('First add the collaborators assigned to this event.'))
+        if type(ids).__name__ in ['int', 'long']:
+            ids = list(ids)
+            
+        records = self.read(cr, uid, ids, ['event_collaborator_line_ids', 'members', 'message_follower_ids', 'code'])
+        for record in records:  
+            if record['event_collaborator_line_ids']:
+                user_obj = self.pool.get('res.users')
+                members = user_obj.read(cr, uid, record['members'] + [uid])
+                collaborator_partner_ids = []
+                for member in members:
+                    if member['partner_id']:
+                        collaborator_partner_ids.append(member['partner_id'][0])
+                vals = {
+                        'message_follower_ids' : [(6, 0, collaborator_partner_ids)],
+                        'state' : 'on_going',
+                        'color' : 4
+                        }
+                stage_obj = self.pool.get('kemas.event.stage')
+                stage_ids = stage_obj.search(cr, uid, [('sequence', '=', 2)])
+                if stage_ids:
+                    vals['stage_id'] = stage_ids[0]
+                if not record['code']:
+                    seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Event'), ])[0]
+                    vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
+                super(osv.osv, self).write(cr, uid, ids, vals)
+                message_follower_ids = self.read(cr, uid, ids[0], ['message_follower_ids'])['message_follower_ids']
+                self.write_log_on_going(cr, uid, ids[0], message_follower_ids)
+            else:
+                raise osv.except_osv(_('Error!'), _('First add the collaborators assigned to this event.'))
         
     def draft(self, cr, uid, ids, context={}):
         if super(osv.osv, self).read(cr, uid, ids[0], ['sending_emails'])['sending_emails']:
