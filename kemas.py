@@ -5611,10 +5611,6 @@ class kemas_event(osv.osv):
         return True
         
     def create(self, cr, uid, vals, context={}):
-        return super(osv.osv, self).create(cr, uid, vals, context)
-    
-    
-    def create(self, cr, uid, vals, context={}):
         service_obj = self.pool.get('kemas.service')
         #----------------------------------------------------------------------------------------------------------------------------
         seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Event'), ])[0]
@@ -5632,9 +5628,9 @@ class kemas_event(osv.osv):
         if vals['date_start'] < time.strftime("%Y-%m-%d %H:%M:%S"):
             raise osv.except_osv(_('Error!'), _('Unable to create an event in a past date.'))
         
-        res = super(kemas_event, self).create(cr, uid, vals, context)
+        res_id = super(kemas_event, self).create(cr, uid, vals, context)
         lines_obj = self.pool.get('kemas.event.collaborator.line')
-        collaborator_line_ids = self.read(cr, uid, [res], ['event_collaborator_line_ids'])
+        collaborator_line_ids = self.read(cr, uid, [res_id], ['event_collaborator_line_ids'])
         line_ids = []
         for line in collaborator_line_ids:
             line_ids += line['event_collaborator_line_ids']
@@ -5645,12 +5641,14 @@ class kemas_event(osv.osv):
             user_id = super(kemas_collaborator, self.pool.get('kemas.collaborator')).read(cr, uid, collaborator_id, ['user_id'])['user_id'][0]
             members.append(user_id)
         vals = {'members' : [(6, 0, members)]}
-        super(osv.osv, self).write(cr, uid, [res], vals)
-        return res
-        self.write_log_create(cr, uid, res)
+        super(osv.osv, self).write(cr, uid, [res_id], vals)
+        
+        # Escribir log
+        self.write_log_create(cr, uid, res_id)
+        return res_id
         return {
-            'nodestroy':True,
-            'res_id': res,
+            'nodestroy': True,
+            'res_id': res_id,
             'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'kemas.event',
@@ -5888,14 +5886,12 @@ class kemas_event(osv.osv):
         body = u'''
         <div>
             <span>
-                %s
+                <b>CREACIÓN</b> del Evento
             </span>
-            <div>     • <b>%s</b>: %s → %s</div>
         </div>
-        ''' % (_('Se creo este evento'), _('Estado'), ('Creando'), _('Borrador'))
+        '''
         # Borrar los logs que creados por defecto
-        message_obj = self.pool.get('mail.message')
-        message_obj.unlink(cr, uid, message_obj.search(cr, uid, [('res_id', '=', compromise_id)]))
+        self.pool.get('mail.message').unlink(cr, uid, self.pool.get('mail.message').search(cr, uid, [('res_id', '=', event_id)]))
         return self.write_log_update(cr, uid, event_id, body, notify_partner_ids)
     
     def write_log_draft(self, cr, uid, event_id, notify_partner_ids=[]):
