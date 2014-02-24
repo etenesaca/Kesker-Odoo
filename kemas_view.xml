@@ -4187,7 +4187,10 @@
                      <newline />
                      <field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..." />
                      <group colspan="2" />
+                     <field name="address" colspan="4" placeholder="Dirección..." />
+                     <group colspan="2" />
                      <field name="details" colspan="4" placeholder="Details of the expositor" />
+                     <group colspan="2" />
                   </group>
                </sheet>
             </form>
@@ -4470,7 +4473,7 @@
                      <field name="url" widget="url" colspan="4" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
                   </group>
                   <notebook colspan="4">
-                     <page string="Details">
+                     <page string="Notas">
                         <group colspan="4" expand="1">
                            <field name="details" colspan="4" nolabel="1" placeholder="Details of the recording" />
                         </group>
@@ -4603,7 +4606,7 @@
                      <field name="url" widget="url" colspan="4" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
                   </group>
                   <notebook colspan="4">
-                     <page string="Details">
+                     <page string="Notas">
                         <group colspan="4" expand="1">
                            <field name="details" colspan="4" nolabel="1" placeholder="Details of the recording" />
                         </group>

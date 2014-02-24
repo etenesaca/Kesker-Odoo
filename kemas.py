@@ -4411,11 +4411,12 @@ class kemas_expositor(osv.osv):
         'email': fields.char('Email', size=64),
         'photo': fields.binary("Photo", help="This field holds the image used as avatar for the expositor, limited to 1024x1024px"),
         'photo_small': fields.binary("Foto"),
-        'birth':fields.date('Fecha de Nacimiento'),
+        'birth': fields.date('Fecha de Nacimiento'),
         'age' : fields.function(_ff_age, type='char', string='Edad'),
         'telef1' : fields.char(u'Teléfono 1', size=10, help=u"Numero telefónico. Example: 072878563"),
         'telef2' : fields.char(u'Teléfono 2', size=10, help=u"Numero telefónico. Example: 072878563"),
         'mobile' : fields.char('Celular', size=10, help=u"Número de celular. Example: 088729345"),
+        'address': fields.text(u'Dirección'),
         'details': fields.text('Details'),
         }
     _sql_constraints = [
@@ -4636,7 +4637,7 @@ class kemas_recording(osv.osv):
                 args.remove(item)
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
     
-    _order = 'date'
+    _order = 'date DESC'
     _rec_name = 'theme'
     _name = 'kemas.recording'
     _inherit = ['mail.thread', 'ir.needaction_mixin']
