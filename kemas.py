@@ -275,7 +275,7 @@ class kemas_massive_email_line(osv.osv):
                 return {'value':{}}
             else:
                 msg = self.pool.get('kemas.func').get_translate(cr, uid, _('E-mail format invalid..!!'))[0]
-                return {'value':{'email': false}, 'warning':{'title':'Error', 'message':msg}}
+                return {'value':{'email': False}, 'warning':{'title':'Error', 'message':msg}}
         else:
             return True
         
@@ -1452,7 +1452,7 @@ Te informamos que ha finalizado el servicio: %sr, programado para el día %dy a 
         'Message_information_massive_email':"""Hola %nk, 
 Acabamos de enviarte un correo a (%em), no olvides revisarlo.
         """,
-        'massive_mail_use_header': false,
+        'massive_mail_use_header': False,
         'massive_mail_body_default' : '''
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <!-- saved from url=(0056)http://www.themefuse.com/demo/html/TechOffers/index.html -->
@@ -1732,7 +1732,7 @@ class kemas_team(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'logo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
 
     _order = 'name'
     _name = 'kemas.team'
@@ -1799,7 +1799,7 @@ class kemas_school4d_line(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the photo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_photos']))
-            return {'value':{'photo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'photo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
         
     def write(self, cr, uid, ids, vals, context={}):
         if vals.get('stage_id', False):
@@ -1952,7 +1952,7 @@ class kemas_area(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'logo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
 
     _order = 'name'
     _name = 'kemas.area'
@@ -1989,7 +1989,7 @@ class kemas_level(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'logo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
 
     def get_next_level(self, cr, uid, level_id):
         level_ids = self.search(cr, uid, [('previous_id', '=', level_id)])
@@ -2158,7 +2158,7 @@ class kemas_web_site(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'logo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
 
     _order = 'name'
     _name = 'kemas.web.site'
@@ -2359,7 +2359,7 @@ class kemas_ministry(osv.osv):
         return True
     
     def do_inactivate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'active': false})
+        super(osv.osv, self).write(cr, uid, ids, {'active': False})
         return True
     
     _order = 'name'
@@ -2390,7 +2390,7 @@ class kemas_specialization_course(osv.osv):
         return True
     
     def do_inactivate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'active': false})
+        super(osv.osv, self).write(cr, uid, ids, {'active': False})
         return True
     
     _order = 'name'
@@ -2504,7 +2504,7 @@ class kemas_collaborator(osv.osv):
         collaborators = super(kemas_collaborator, self).read(cr, uid, ids, ['user_id', 'state', 'type'])
         vals = {
                 'state':'Active',
-                'end_service': false
+                'end_service': False
                 }
         for collaborator in collaborators:
             if collaborator['state'] in ['Active'] or collaborator['type'] in ['Others']:
@@ -2610,7 +2610,7 @@ class kemas_collaborator(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the photo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_photos']))
-            return {'value':{'photo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'photo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
                 
     def on_change_email(self, cr, uid, ids, email):
         if email:
@@ -3896,8 +3896,8 @@ class kemas_task_assigned(osv.osv):
             vals_notication = {
                                'message_id' : message_id,
                                'partner_id' : notify_partner_id,
-                               'read': false,
-                               'starred': false,
+                               'read': False,
+                               'starred': False,
                                }
             self.pool.get('mail.notification').create(cr, uid, vals_notication)
         return message_id
@@ -3983,7 +3983,7 @@ class kemas_task_assigned(osv.osv):
         vals = {
                 'date_closing' :time.strftime("%Y-%m-%d %H:%M:%S"),
                 'state' : 'done',
-                'is_active': false
+                'is_active': False
                 }
         stage_ids = self.pool.get('kemas.task.type').search(cr, uid, [('state', '=', 'done'), ('name', '!=', 'Completed')])
         if stage_ids:
@@ -4000,7 +4000,7 @@ class kemas_task_assigned(osv.osv):
         vals = {
                 'date_cancelled' :time.strftime("%Y-%m-%d %H:%M:%S"),
                 'state' : 'cancelled',
-                'is_active': false
+                'is_active': False
                 }
         stage_ids = self.pool.get('kemas.task.type').search(cr, uid, [('state', '=', 'cancelled')])
         if stage_ids:
@@ -4235,8 +4235,8 @@ class kemas_history_points(osv.osv):
             vals_notication = {
                                'message_id' : message_id,
                                'partner_id' : notify_partner_id,
-                               'read': false,
-                               'starred': false,
+                               'read': False,
+                               'starred': False,
                                }
             self.pool.get('mail.notification').create(cr, uid, vals_notication)
         return message_id
@@ -4292,7 +4292,7 @@ class kemas_place(osv.osv):
         return True
     
     def do_inactivate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'is_active': false})
+        super(osv.osv, self).write(cr, uid, ids, {'is_active': False})
         return True
     
     def __fields_view_get(self, cr, uid, view_id=None, view_type='form', context={}, toolbar=True, submenu=False):       
@@ -4331,7 +4331,7 @@ class kemas_place(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the photo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_photos']))
-            return {'value':{'photo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'photo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
         
     _order = 'name'
     _name = 'kemas.place'
@@ -4379,7 +4379,7 @@ class kemas_expositor(osv.osv):
         if kemas_extras.restrict_size(photo, preferences['max_size_photos']):
             return {'value':{}}
         else:
-            return {'value':{'image': false}, 'warning':{'title':_('Error!'), 'message':_('The size of the photo can not be greater than %s KB..!!') % str(preferences['max_size_photos'])}}
+            return {'value':{'image': False}, 'warning':{'title':_('Error!'), 'message':_('The size of the photo can not be greater than %s KB..!!') % str(preferences['max_size_photos'])}}
 
     def on_change_birth(self, cr, uid, ids, birth, context={}):
         values = {}
@@ -4463,7 +4463,7 @@ class kemas_recording_series(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'logo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
 
     _order = 'name'
     _name = 'kemas.recording.series'
@@ -4536,8 +4536,8 @@ class kemas_recording(osv.osv):
             vals_notication = {
                                'message_id' : message_id,
                                'partner_id' : notify_partner_id,
-                               'read': false,
-                               'starred': false,
+                               'read': False,
+                               'starred': False,
                                }
             self.pool.get('mail.notification').create(cr, uid, vals_notication)
         return message_id
@@ -4741,8 +4741,8 @@ class kemas_repository(osv.osv):
             vals_notication = {
                                'message_id' : message_id,
                                'partner_id' : notify_partner_id,
-                               'read': false,
-                               'starred': false,
+                               'read': False,
+                               'starred': False,
                                }
             self.pool.get('mail.notification').create(cr, uid, vals_notication)
         return message_id
@@ -4851,7 +4851,7 @@ class kemas_service(osv.osv):
         return True
     
     def do_inactivate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'is_active': false})
+        super(osv.osv, self).write(cr, uid, ids, {'is_active': False})
         return True
     
     def name_search(self, cr, uid, name, args=None, operator='ilike', context={}, limit=100):
@@ -5975,8 +5975,8 @@ class kemas_event(osv.osv):
             vals_notication = {
                                'message_id' : message_id,
                                'partner_id' : notify_partner_id,
-                               'read': false,
-                               'starred': false,
+                               'read': False,
+                               'starred': False,
                                }
             self.pool.get('mail.notification').create(cr, uid, vals_notication)
         return message_id

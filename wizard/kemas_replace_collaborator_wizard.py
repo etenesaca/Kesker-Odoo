@@ -33,7 +33,7 @@ class kemas_replace_collaborator_wizard(osv.osv_memory):
             return {'value':{}}
         else:
             msg = _('The selected collaborator already exceeded the limit of replacements available for this month')
-            return {'value':{'collaborator_id': false}, 'warning':{'title':'Error', 'message' : msg}}
+            return {'value':{'collaborator_id': False}, 'warning':{'title':'Error', 'message' : msg}}
         
     def fields_view_get(self, cr, uid, view_id=None, view_type='form', context=None, toolbar=True, submenu=False):       
         res = {}

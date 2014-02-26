@@ -75,7 +75,7 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
     def stop(self, cr, uid, ids, context=None):
         event_obj = self.pool.get('kemas.event')
         event_id = self.read(cr, uid, ids[0], ['event_id'])['event_id']
-        vals = {'sending_emails': false}
+        vals = {'sending_emails': False}
         super(kemas.kemas.kemas_event, event_obj).write(cr, uid, [event_id], vals)
         sql = """DELETE FROM kemas_send_notification_event_line_wizard where wizard_id = %d""" % ids[0]
         cr.execute(sql)
@@ -98,7 +98,7 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
             wizard_line_obj.write(cr, uid, [line_id], {
                                             'state':'Waiting',
                                             'send_email':True,
-                                            'sent_date': false
+                                            'sent_date': False
                                             })
         return{       
                 'res_id' : ids[0],
@@ -201,7 +201,7 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
             if res_email == 'Successful':
                 wizard_line_obj.write(cr, uid, [line['id']], {
                                     'state':'Successful',
-                                    'send_email': false,
+                                    'send_email': False,
                                     'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
                                     })
                 line_obj.write(cr, uid, [line['event_line_id']], {
@@ -230,8 +230,8 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
                                     })
             cr.commit()
         cr.commit()
-        super(kemas_send_notification_event_wizard, self).write(cr, uid, wizard_id, {'sending_emails': false})
-        super(kemas.kemas.kemas_event, event_obj).write(cr, uid, event_id, {'sending_emails': false})
+        super(kemas_send_notification_event_wizard, self).write(cr, uid, wizard_id, {'sending_emails': False})
+        super(kemas.kemas.kemas_event, event_obj).write(cr, uid, event_id, {'sending_emails': False})
         try:
             del self.collaborator_ids_send_email[event_id]
         except:None
@@ -270,7 +270,7 @@ class kemas_send_notification_event_line_wizard(osv.osv_memory):
         values = {}
         if not kemas_extras.validate_mail(email):
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('E-mail format invalid..!!'))[0]
-            return {'value':{'email': false}, 'warning':{'title':'Error', 'message':msg}}
+            return {'value':{'email': False}, 'warning':{'title':'Error', 'message':msg}}
         return {'value':values}
         
     _name = 'kemas.send.notification.event.line.wizard'
