@@ -57,8 +57,8 @@ class kemas_show_barcode_wizard(osv.osv_memory):
     
     _name='kemas.show.barcode.wizard'
     _columns={
-        'barcode':fields.binary('Codigo de Barras'),
-        'barcode_download':fields.binary('Codigo de Barras'),
+        'barcode': fields.binary('Codigo de Barras'),
+        'barcode_download': fields.binary('Codigo de Barras'),
         'barcode_file_name': fields.char('Nombre del archivo',size=255),
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

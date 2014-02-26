@@ -42,7 +42,7 @@ class kemas_set_points_task_wizard(osv.osv_memory):
     
     _name='kemas.set.points.task.wizard'
     _columns={
-        'task_id':fields.many2one('kemas.task','Task', required=True,ondelete='cascade', help='Task to be reclaiming the collaborators'),
+        'task_id': fields.many2one('kemas.task','Task', required=True,ondelete='cascade', help='Task to be reclaiming the collaborators'),
         'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_add_points_task_collaborator_rel',  'collaborator_id',  'wizard_id', 'Collaborators'),
         }
     

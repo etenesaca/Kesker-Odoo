@@ -52,8 +52,8 @@ class kemas_set_points_step1_wizard(osv.osv_memory):
     _name='kemas.set.points.step1.wizard'
     _columns={
         'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_set_points_collaborator_rel',  'collaborator_id',  'set_points_id', 'collaborators',help='Collaborators who are going to modify the points'),
-        'type':fields.selection([('increase','Increase'),('decrease','Decrease')],'Type',required=True),
-        'state':fields.selection([
+        'type': fields.selection([('increase','Increase'),('decrease','Decrease')],'Type',required=True),
+        'state': fields.selection([
             ('step1','Step 1'),
             ('step2','Step 2'),
         ],    'State', select=True, readonly=True),
@@ -93,10 +93,10 @@ class kemas_set_points_step2_wizard(osv.osv_memory):
     _name='kemas.set.points.step2.wizard'
     _columns={
         'collaborator_ids': fields.text('Collaborators'),
-        'type':fields.selection([('increase','Increase'),('decrease','Decrease')],'Type'),
-        'new_points' : fields.integer('Points', required=True, help=""),
+        'type': fields.selection([('increase','Increase'),('decrease','Decrease')],'Type'),
+        'new_points': fields.integer('Points', required=True, help=""),
         'description': fields.text('Description', required=True),
-        'state':fields.selection([
+        'state': fields.selection([
             ('step1','Step 1'),
             ('step2','Step 2'),
         ],    'State', select=True, readonly=True),

@@ -35,6 +35,6 @@ class kemas_message_wizard(osv.osv_memory):
 
     _name = 'kemas.message.wizard'
     _columns = {
-        'name' : fields.text('Name', readonly=True),
+        'name': fields.text('Name', readonly=True),
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

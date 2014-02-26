@@ -33,7 +33,7 @@ class kemas_replace_collaborator_wizard(osv.osv_memory):
             return {'value':{}}
         else:
             msg = _('The selected collaborator already exceeded the limit of replacements available for this month')
-            return {'value':{'collaborator_id':False}, 'warning':{'title':'Error', 'message' : msg}}
+            return {'value':{'collaborator_id': false}, 'warning':{'title':'Error', 'message' : msg}}
         
     def fields_view_get(self, cr, uid, view_id=None, view_type='form', context=None, toolbar=True, submenu=False):       
         res = {}
@@ -152,7 +152,7 @@ class kemas_replace_collaborator_wizard(osv.osv_memory):
           
     _name='kemas.replace.collaborator.wizard'
     _columns={
-        'collaborator_id':fields.many2one('kemas.collaborator','Collaborator', context={'all_collaborators' : True},ondelete='cascade', required=True, help='Collaborator to replace'),
+        'collaborator_id': fields.many2one('kemas.collaborator','Collaborator', context={'all_collaborators' : True},ondelete='cascade', required=True, help='Collaborator to replace'),
         'description': fields.text('Description', required=True),
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

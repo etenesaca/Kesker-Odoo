@@ -59,7 +59,7 @@ class kemas_report_attendance_statistics_wizard(osv.osv_memory):
 
     _name = 'kemas.attendance.statistics.wizard'
     _columns = {
-        'date_type':fields.selection([
+        'date_type': fields.selection([
             ('today', 'Hoy'),
             ('this_week', 'Esta semana'),
             ('this_month', 'Este mes'),
@@ -68,9 +68,9 @@ class kemas_report_attendance_statistics_wizard(osv.osv_memory):
         'date_start': fields.date('Desde'),
         'date_end': fields.date('Hasta'),
         'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_report_attendance_statistics_wizard_collaborator_rel', 'report_attendance_statistics_wizard_id', 'collaborator_id', 'Colaboradores', help='Collaboradores de los Cuales se va obtener el reporte'),
-        'place_id':fields.many2one('kemas.place', 'Lugar', ondelete='cascade', help=''),
-        'service_id':fields.many2one('kemas.service', 'Servicio', ondelete='cascade', help=''),
-        'detailed':fields.boolean('Reporte detallado?', required=False),
+        'place_id': fields.many2one('kemas.place', 'Lugar', ondelete='cascade', help=''),
+        'service_id': fields.many2one('kemas.service', 'Servicio', ondelete='cascade', help=''),
+        'detailed': fields.boolean('Reporte detallado?', required=False),
         }
     
     _defaults = {  

@@ -66,7 +66,7 @@ class kemas_collaborator_active_wizard(osv.osv_memory):
 
     _name='kemas.collaborator.active.wizard'
     _columns={
-        'collaborator_id':fields.many2one('kemas.collaborator','Collaborator',ondelete='cascade',help='Collaborator name, which you want to activate.'),
+        'collaborator_id': fields.many2one('kemas.collaborator','Collaborator',ondelete='cascade',help='Collaborator name, which you want to activate.'),
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

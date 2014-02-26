@@ -75,7 +75,7 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
     def stop(self, cr, uid, ids, context=None):
         event_obj = self.pool.get('kemas.event')
         event_id = self.read(cr, uid, ids[0], ['event_id'])['event_id']
-        vals = {'sending_emails':False}
+        vals = {'sending_emails': false}
         super(kemas.kemas.kemas_event, event_obj).write(cr, uid, [event_id], vals)
         sql = """DELETE FROM kemas_send_notification_event_line_wizard where wizard_id = %d""" % ids[0]
         cr.execute(sql)
@@ -98,7 +98,7 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
             wizard_line_obj.write(cr, uid, [line_id], {
                                             'state':'Waiting',
                                             'send_email':True,
-                                            'sent_date' : False
+                                            'sent_date': false
                                             })
         return{       
                 'res_id' : ids[0],
@@ -201,7 +201,7 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
             if res_email == 'Successful':
                 wizard_line_obj.write(cr, uid, [line['id']], {
                                     'state':'Successful',
-                                    'send_email':False,
+                                    'send_email': false,
                                     'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
                                     })
                 line_obj.write(cr, uid, [line['event_line_id']], {
@@ -230,8 +230,8 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
                                     })
             cr.commit()
         cr.commit()
-        super(kemas_send_notification_event_wizard, self).write(cr, uid, wizard_id, {'sending_emails':False})
-        super(kemas.kemas.kemas_event, event_obj).write(cr, uid, event_id, {'sending_emails':False})
+        super(kemas_send_notification_event_wizard, self).write(cr, uid, wizard_id, {'sending_emails': false})
+        super(kemas.kemas.kemas_event, event_obj).write(cr, uid, event_id, {'sending_emails': false})
         try:
             del self.collaborator_ids_send_email[event_id]
         except:None
@@ -241,9 +241,9 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
     _rec_name = 'state'
     _columns = {
         'send_notification_event_line_wizard_ids': fields.one2many('kemas.send.notification.event.line.wizard', 'wizard_id', 'lines', help='description'),
-        'state' : fields.char('State', size=15),
-        'sending_emails' : fields.boolean('Sending emails?'),
-        'sending_sel':fields.selection([
+        'state': fields.char('State', size=15),
+        'sending_emails': fields.boolean('Sending emails?'),
+        'sending_sel': fields.selection([
             ('sending', 'Sending e-mails...'),
         ], 'State', select=True, readonly=True),
         'event_id': fields.integer('event_id'),
@@ -270,16 +270,16 @@ class kemas_send_notification_event_line_wizard(osv.osv_memory):
         values = {}
         if not kemas_extras.validate_mail(email):
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('E-mail format invalid..!!'))[0]
-            return {'value':{'email':False}, 'warning':{'title':'Error', 'message':msg}}
+            return {'value':{'email': false}, 'warning':{'title':'Error', 'message':msg}}
         return {'value':values}
         
     _name = 'kemas.send.notification.event.line.wizard'
     _rec_name = 'collaborator_id'
     _columns = {
-        'wizard_id':fields.many2one('kemas.send.notification.event.wizard', 'wizard_parent', ondelete='cascade', required=True, help='description'),
-        'collaborator_id':fields.many2one('kemas.collaborator', 'Collaborator', ondelete='cascade', required=True),
-        'email' : fields.char('email', size=255, required=True),
-        'state':fields.selection([
+        'wizard_id': fields.many2one('kemas.send.notification.event.wizard', 'wizard_parent', ondelete='cascade', required=True, help='description'),
+        'collaborator_id': fields.many2one('kemas.collaborator', 'Collaborator', ondelete='cascade', required=True),
+        'email': fields.char('email', size=255, required=True),
+        'state': fields.selection([
             ('Sent', 'Sent'),
             ('Waiting', 'Waiting'),
             ('Error', 'Error'),
@@ -287,14 +287,14 @@ class kemas_send_notification_event_line_wizard(osv.osv_memory):
             ('Successful', 'Successful'),
             ('Ignored', 'Ignored'),
             ], 'State'),
-        'event_line_id' : fields.char('event_line', size=15, required=True),
-        'send_email' : fields.boolean('Send?'),
+        'event_line_id': fields.char('event_line', size=15, required=True),
+        'send_email': fields.boolean('Send?'),
         'sent_date': fields.datetime('Fecha'),
         }
 class kemas_message_sending_begun_wizard(osv.osv_memory):
     _name = 'kemas.message.sending.begun.wizard'
     _columns = {
-        'name' : fields.char('Name', size=5, readonly=True),
+        'name': fields.char('Name', size=5, readonly=True),
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

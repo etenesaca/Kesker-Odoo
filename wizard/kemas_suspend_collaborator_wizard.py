@@ -51,7 +51,7 @@ class kemas_suspend_collaborator_step1_wizard(osv.osv_memory):
     _name='kemas.suspend_collaborator.step1.wizard'
     _columns={
         'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_suspend_collaborator_collaborator_rel',  'collaborator_id',  'suspend_collaborator_id', 'collaborators',help=''),
-        'state':fields.selection([
+        'state': fields.selection([
             ('step1','Step 1'),
             ('step2','Step 2'),
         ],    'State', select=True, readonly=True),
@@ -184,19 +184,19 @@ class kemas_suspend_collaborator_step2_wizard(osv.osv_memory):
     _columns={
         'logo': fields.binary('img'),
         'collaborator_ids': fields.text('Collaborators'),
-        'day1':fields.boolean('Monday', required=False),
-        'day2':fields.boolean('Tuesday', required=False),
-        'day3':fields.boolean('Wednesday', required=False),
-        'day4':fields.boolean('Thursday', required=False),
-        'day5':fields.boolean('Friday', required=False),
-        'day6':fields.boolean('Saturday', required=False),
-        'day7':fields.boolean('Sunday', required=False),
-        'days' : fields.char('Days',size=255,required=True,help=""),
-        'date_end':fields.datetime('Date end',help=""),
-        'remove_points':fields.boolean('Also remove points?', required=False, help="Check the box if you want to also remove points to collaboratords"),
-        'new_points' : fields.integer('Points to remove', required=False, help="Points you currently have a collaborator"),
+        'day1': fields.boolean('Monday', required=False),
+        'day2': fields.boolean('Tuesday', required=False),
+        'day3': fields.boolean('Wednesday', required=False),
+        'day4': fields.boolean('Thursday', required=False),
+        'day5': fields.boolean('Friday', required=False),
+        'day6': fields.boolean('Saturday', required=False),
+        'day7': fields.boolean('Sunday', required=False),
+        'days': fields.char('Days',size=255,required=True,help=""),
+        'date_end': fields.datetime('Date end',help=""),
+        'remove_points': fields.boolean('Also remove points?', required=False, help="Check the box if you want to also remove points to collaboratords"),
+        'new_points': fields.integer('Points to remove', required=False, help="Points you currently have a collaborator"),
         'description': fields.text('Description', required=True),
-        'state':fields.selection([
+        'state': fields.selection([
             ('step1','Step 1'),
             ('step2','Step 2'),
         ],    'State', select=True, readonly=True),

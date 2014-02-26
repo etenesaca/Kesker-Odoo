@@ -53,13 +53,13 @@ class kemas_report_collaborators_list_wizard(osv.osv_memory):
     _name='kemas.report.collaborators.list.wizard'
     _columns={
         'logo': fields.binary('img'),
-        'team_id':fields.many2one('kemas.team','Team',ondelete='cascade'),
-        'type_collaborators':fields.selection([
+        'team_id': fields.many2one('kemas.team','Team',ondelete='cascade'),
+        'type_collaborators': fields.selection([
           ('all','All'),
           ('collaborators','Collaborators'),
           ('others','Others'),
          ],    'Type of persons', select=True, readonly=False, required=True),
-        'type_collaborators_to_select':fields.selection([
+        'type_collaborators_to_select': fields.selection([
           ('all','All'),
           ('actives','Active'),
           ('inactives','Inactive'),
@@ -75,12 +75,12 @@ class kemas_report_collaborators_list_wizard(osv.osv_memory):
         'fl_age': fields.boolean('Age'),
         'fl_email': fields.boolean('Email'),
         'fl_address': fields.boolean('Address'),
-        'fl_state':fields.boolean('State'),
-        'fl_team':fields.boolean('Team'),
-        'fl_level':fields.boolean('Level'),
-        'fl_points':fields.boolean('Points'),
-        'fl_join_date':fields.boolean('Join Date in ministry'),
-        'fl_age_in_ministry':fields.boolean('Age in Ministry')
+        'fl_state': fields.boolean('State'),
+        'fl_team': fields.boolean('Team'),
+        'fl_level': fields.boolean('Level'),
+        'fl_points': fields.boolean('Points'),
+        'fl_join_date': fields.boolean('Join Date in ministry'),
+        'fl_age_in_ministry': fields.boolean('Age in Ministry')
         }
     
     def _get_logo(self, cr, uid, context=None):

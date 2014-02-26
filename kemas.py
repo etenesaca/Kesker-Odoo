@@ -99,14 +99,14 @@ class kemas_collaborator_logbook_login(osv.osv):
     _order = 'datetime DESC'
     _name = 'kemas.collaborator.logbook.login'
     _columns = {
-        'collaborator_id':fields.many2one('kemas.collaborator', 'Colaborador'),
+        'collaborator_id': fields.many2one('kemas.collaborator', 'Colaborador'),
         'datetime': fields.datetime('Fecha y hora'),
-        'remote_address':fields.char('Conectado desde', size=255, required=False, readonly=False),
-        'base_location':fields.char('Conectado a', size=255, required=False, readonly=False),
+        'remote_address': fields.char('Conectado desde', size=255, required=False, readonly=False),
+        'base_location': fields.char('Conectado a', size=255, required=False, readonly=False),
         'count': fields.integer('count', required=True),
         # Campos para buscar entre fechas
-        'search_start':fields.date('Desde', help='Buscar desde'),
-        'search_end':fields.date('Hasta', help='Buscar hasta'),
+        'search_start': fields.date('Desde', help='Buscar desde'),
+        'search_end': fields.date('Hasta', help='Buscar hasta'),
         }
     
     _defaults = {  
@@ -275,7 +275,7 @@ class kemas_massive_email_line(osv.osv):
                 return {'value':{}}
             else:
                 msg = self.pool.get('kemas.func').get_translate(cr, uid, _('E-mail format invalid..!!'))[0]
-                return {'value':{'email':False}, 'warning':{'title':'Error', 'message':msg}}
+                return {'value':{'email': false}, 'warning':{'title':'Error', 'message':msg}}
         else:
             return True
         
@@ -283,7 +283,7 @@ class kemas_massive_email_line(osv.osv):
     _name = 'kemas.massive.email.line'
     _columns = {
         'email': fields.char('Email', size=64, required=True),
-        'massive_email_id':fields.many2one('kemas.massive.email', 'massive_mail'),
+        'massive_email_id': fields.many2one('kemas.massive.email', 'massive_mail'),
         }
 
 class kemas_massive_email(osv.osv):
@@ -471,18 +471,18 @@ class kemas_massive_email(osv.osv):
     _name = 'kemas.massive.email'
     _columns = {
         'message': fields.text('Message', required=True, help='It is the body of the e-mail, can be written in HTML structure.', states={'sent':[('readonly', True)]}),
-        'use_header_message' : fields.boolean('Use system header and footer?', help='Uncheck this box if you do not want to use email header and footer configured in the system for this email in the system'),
+        'use_header_message': fields.boolean('Use system header and footer?', help='Uncheck this box if you do not want to use email header and footer configured in the system for this email in the system'),
         'subject': fields.char('Subject', size=64, required=True, help='It is a subject of the email.', states={'sent':[('readonly', True)]}),
-        'date_create':fields.datetime('Date Create', help='Date on which this email was created.'),
-        'date_sent':fields.datetime('Date last sent', help='Last date you sent this email.'),
-        'search_start':fields.date('Desde', help='Buscar desde'),
-        'search_end':fields.date('Hasta', help='Buscar hasta'),
-        'state':fields.selection([
+        'date_create': fields.datetime('Date Create', help='Date on which this email was created.'),
+        'date_sent': fields.datetime('Date last sent', help='Last date you sent this email.'),
+        'search_start': fields.date('Desde', help='Buscar desde'),
+        'search_end': fields.date('Hasta', help='Buscar hasta'),
+        'state': fields.selection([
             ('creating', 'Creating'),
             ('draft', 'Draft'),
             ('sent', 'Sent'),
              ], 'State', select=True, help='State in which this email.'),
-        'team_id':fields.many2one('kemas.team', 'Team', help='Team who is going to send emails', states={'sent':[('readonly', True)]}),
+        'team_id': fields.many2one('kemas.team', 'Team', help='Team who is going to send emails', states={'sent':[('readonly', True)]}),
         'line_ids': fields.one2many('kemas.massive.email.line', 'massive_email_id', 'Other recipients', states={'sent':[('readonly', True)]}),
         #Many to Many Relations----------------------------------------------------------------------------------------------
         'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_collaborator_massive_email_rel', 'email_id', 'collaborator_id', 'Recipients', help='Collaborators who will receive this email', states={'sent':[('readonly', True)]}),
@@ -1103,50 +1103,50 @@ class kemas_config(osv.osv):
     _name = 'kemas.config'
     _order = 'sequence'
     _columns = {
-        'default_attend_on_time_points':fields.integer('Points for attend on time', help="Default points will increase to an collaborator for being on time to the service.."),
-        'default_late_points':fields.integer('Points for being late', help="Default point is decreased to a contributor for not arriving on time."),
-        'default_not_attend_points':fields.integer('Points for not attend', help="Default point is decreased to a collaborator not to asist to a service."),
-        'default_points':fields.integer('Default points', help="Number of points assigned to a collaborator to create your registration"),
+        'default_attend_on_time_points': fields.integer('Points for attend on time', help="Default points will increase to an collaborator for being on time to the service.."),
+        'default_late_points': fields.integer('Points for being late', help="Default point is decreased to a contributor for not arriving on time."),
+        'default_not_attend_points': fields.integer('Points for not attend', help="Default point is decreased to a collaborator not to asist to a service."),
+        'default_points': fields.integer('Default points', help="Number of points assigned to a collaborator to create your registration"),
         'name_system': fields.char('Name System', size=255, required=True, help='System name, it will show up also in the reports.'),
         'url_system': fields.char('URL System', size=255, required=True, help='The Url of System.'),
-        'sequence':fields.integer('Sequence', help="Prioritization of configurations"),
-        'use_attachments_in_im' : fields.boolean('Use attachments in IM?', required=True, help='Do you want that the attachments to emails are also sent to the IM messages?'),
-        'use_subject_in_im' : fields.boolean('Use Subject in IM?', required=True, help='Do you want to include the matter in IM?'),
+        'sequence': fields.integer('Sequence', help="Prioritization of configurations"),
+        'use_attachments_in_im': fields.boolean('Use attachments in IM?', required=True, help='Do you want that the attachments to emails are also sent to the IM messages?'),
+        'use_subject_in_im': fields.boolean('Use Subject in IM?', required=True, help='Do you want to include the matter in IM?'),
         'number_replacements': fields.integer('Number replacements'),
         'size_collaborator_gravatar': fields.integer('Avatar size', required=True),
         #---Images and logos------------------------
-        'logo':fields.binary('Logo', help='The reports Logo.'),
-        'system_logo':fields.binary('System Logo', help='The System Logo.'),
-        'max_size_photos':fields.integer('Max size photos', help="Maximum size in kilobytes (KB) that can take photos of the system.", required=True),
-        'max_size_logos':fields.integer('Max size logos', help="Maximum size in kilobytes (KB) that can take images of the system.", required=True),
+        'logo': fields.binary('Logo', help='The reports Logo.'),
+        'system_logo': fields.binary('System Logo', help='The System Logo.'),
+        'max_size_photos': fields.integer('Max size photos', help="Maximum size in kilobytes (KB) that can take photos of the system.", required=True),
+        'max_size_logos': fields.integer('Max size logos', help="Maximum size in kilobytes (KB) that can take images of the system.", required=True),
         #---Cliente de registro asistencia---------
-        'logo_program_client':fields.binary('Imagen de Cabecera', help='Es la imagen que va a salir en la cabecera del programa para registro de asistencias.'),
+        'logo_program_client': fields.binary('Imagen de Cabecera', help='Es la imagen que va a salir en la cabecera del programa para registro de asistencias.'),
         'frequency_program_client': fields.integer('Frecuencia de conexion', help="Frecuencia en segundos con la que el programa se conecta al sistema para consultar los datos"),
         #---Report----------------------------------
         'report_header': fields.text('Report header', help='Text to be displayed in the header of the report.'),
-        'use_header' : fields.boolean('Use?'),
+        'use_header': fields.boolean('Use?'),
         'report_footer': fields.text('Report footer', help='Text to be displayed in the footer of the report.'),
-        'use_footer' : fields.boolean('Use?'),
+        'use_footer': fields.boolean('Use?'),
         #---Email----------------------------------
-        'collaborator_manual':fields.many2one('ir.attachment', 'Collaborator manual', help='It is the user manual for collaborators who are sent as an attachment in the welcome email.'),
-        'mailing' : fields.boolean('Mailing?', help='Indicates whether or not to use the tool with notification emails.'),
+        'collaborator_manual': fields.many2one('ir.attachment', 'Collaborator manual', help='It is the user manual for collaborators who are sent as an attachment in the welcome email.'),
+        'mailing': fields.boolean('Mailing?', help='Indicates whether or not to use the tool with notification emails.'),
         'footer_email': fields.text('Footer', help='Text that is sent in the header of all emails.'),
         'header_email': fields.text('Header', help='Text that is sent in the footer of all emails.'),
         #---Incorporation e-mail------------------
-        'use_message_im_incorporation' : fields.boolean('Use IM notification?', required=True, help='?'),
+        'use_message_im_incorporation': fields.boolean('Use IM notification?', required=True, help='?'),
         'Message_im_information_incorporation': fields.text('Message'),
         
-        'use_message_incorporation' : fields.boolean('Use email notification?', required=True, help='Use this email to notify?'),
-        'use_header_message_incorporation' : fields.boolean('Use system header and footer?', help='Uncheck this box if you do not want to use email header and footer configured in the system for this email in the system'),
+        'use_message_incorporation': fields.boolean('Use email notification?', required=True, help='Use this email to notify?'),
+        'use_header_message_incorporation': fields.boolean('Use system header and footer?', help='Uncheck this box if you do not want to use email header and footer configured in the system for this email in the system'),
         'Message_information_incorporation': fields.text('Message'),
         'Message_information_incorporation_subject': fields.char('Subject', size=64, help='Subject of e-mail'),
         #---Event e-mail--------------------------
-        'use_message_im_event' : fields.boolean('Use IM notification?', required=True, help='?'),
+        'use_message_im_event': fields.boolean('Use IM notification?', required=True, help='?'),
         'Message_im_information_event': fields.text('Message'),
         
-        'work_in_background_event' : fields.boolean('Work in backgound?', required=True, help='Send notification e-mails in background?'),
-        'use_message_event' : fields.boolean('Use email notification?', required=True, help='Use this email to notify?'),
-        'use_header_message_event' : fields.boolean('Use system header and footer?', help='Uncheck this box if you do not want to use email header and footer configured in the system for this email in the system'),
+        'work_in_background_event': fields.boolean('Work in backgound?', required=True, help='Send notification e-mails in background?'),
+        'use_message_event': fields.boolean('Use email notification?', required=True, help='Use this email to notify?'),
+        'use_header_message_event': fields.boolean('Use system header and footer?', help='Uncheck this box if you do not want to use email header and footer configured in the system for this email in the system'),
         'Message_information_event': fields.text('Message'),
         'Message_information_event_subject': fields.char('Subject', size=64, help='Subject of e-mail'),
         
@@ -1154,9 +1154,9 @@ class kemas_config(osv.osv):
         'reply_email': fields.char('Reply email', size=255),
         'system_email': fields.char('System email', size=255),
         #---Finalizacion de un evento----------------------
-        'use_event_completion' : fields.boolean('Use email notification?', required=True, help='Using or not the notifications of completion of an event?'),
-        'use_header_message_event_completion' : fields.boolean('Use system header and footer?', help='Uncheck this box if you do not want to use email header and footer configured in the system for this email in the system'),
-        'use_im_event_completion' : fields.boolean('Use IM notification?', required=True, help='Using or not the IM notifications of completion of an event?'),
+        'use_event_completion': fields.boolean('Use email notification?', required=True, help='Using or not the notifications of completion of an event?'),
+        'use_header_message_event_completion': fields.boolean('Use system header and footer?', help='Uncheck this box if you do not want to use email header and footer configured in the system for this email in the system'),
+        'use_im_event_completion': fields.boolean('Use IM notification?', required=True, help='Using or not the IM notifications of completion of an event?'),
         'message_event_completon_subject': fields.char('Subject', size=64, help='Subject of e-mail'),
         
         'message_event_completon_on_time': fields.text('Message'),
@@ -1168,34 +1168,34 @@ class kemas_config(osv.osv):
         'message_event_completon_absence': fields.text('Message'),
         'message_im_event_completon_absence': fields.text('Message'),
         
-        'use_mail_event_completion_canceled' : fields.boolean('Use?', required=True),
+        'use_mail_event_completion_canceled': fields.boolean('Use?', required=True),
         'message_event_completon_canceled_subject': fields.char('Subject', size=64, help='Subject of e-mail'),
         'message_event_completon_canceled': fields.text('Message'),
-        'use_im_event_completion_canceled' : fields.boolean('Use IM notification?', required=True),
+        'use_im_event_completion_canceled': fields.boolean('Use IM notification?', required=True),
         'message_im_event_completon_canceled': fields.text('Message'),
         #---Massive email----------------------------------
         'massive_mail_body_default': fields.text('Cuerpo del Correo massivo por defecto'),
-        'massive_mail_use_header' : fields.boolean('Marcar por defector el uso de cabeceras y pies de correo establecidas en el sistema?', help='La opcion que este marcado aparecera por defecto cada vez que se cree un nuevo correo massivo'),
-        'send_IM_massive_email' : fields.boolean('Send an IM?', required=True, help='Send instant message to notify that was mailed?'),
+        'massive_mail_use_header': fields.boolean('Marcar por defector el uso de cabeceras y pies de correo establecidas en el sistema?', help='La opcion que este marcado aparecera por defecto cada vez que se cree un nuevo correo massivo'),
+        'send_IM_massive_email': fields.boolean('Send an IM?', required=True, help='Send instant message to notify that was mailed?'),
         'Message_information_massive_email': fields.text('Message'),
         #---Add / Remove Points----------------------------
-        'use_message_add_remove_points' : fields.boolean('Use email notification?', required=True, help='Use this email to notify?'),
+        'use_message_add_remove_points': fields.boolean('Use email notification?', required=True, help='Use this email to notify?'),
         'Message_add_remove_points_subject': fields.char('Subject', size=64, help='Subject of e-mail'),
         
-        'use_message_im_add_points' : fields.boolean('Use IM notification?', required=True, help='?'),
-        'use_header_message_add_remove_points' : fields.boolean('Use system header and footer?', help='Uncheck this box if you do not want to use email header and footer configured in the system for this email in the system'),
+        'use_message_im_add_points': fields.boolean('Use IM notification?', required=True, help='?'),
+        'use_header_message_add_remove_points': fields.boolean('Use system header and footer?', help='Uncheck this box if you do not want to use email header and footer configured in the system for this email in the system'),
         'Message_im_add_points': fields.text('Message'),
         'Message_add_points': fields.text('Message'),
         
-        'use_message_im_remove_points' : fields.boolean('Use IM notification?', required=True, help='?'),
+        'use_message_im_remove_points': fields.boolean('Use IM notification?', required=True, help='?'),
         'Message_im_remove_points': fields.text('Message'),
         'Message_remove_points': fields.text('Message'),
         #---QR Code - Collaborator Form-------------------
         'qr_text': fields.text('QR code text', required=True),
-        'qr_width':fields.integer('Width', required=True),
-        'qr_height':fields.integer('height', required=True),
+        'qr_width': fields.integer('Width', required=True),
+        'qr_height': fields.integer('height', required=True),
         #---Bar Code - Collaborator Form-------------------
-        'bc_type':fields.selection([
+        'bc_type': fields.selection([
             ('Standard39', 'Standard39'),
             ('QR', 'QR'),
             ('EAN13', 'EAN13'),
@@ -1211,10 +1211,10 @@ class kemas_config(osv.osv):
             ('I2of5', 'I2of5'),
             ('Code128', 'Code128'),
              ], 'Typo de Codigo de Barras', required=True),
-        'bc_text':fields.char('Texto de Codigo de barras', size=32, required=True),
-        'bc_width':fields.integer('Ancho', required=True),
-        'bc_height':fields.integer('Alto', required=True),
-        'bc_hr_form':fields.boolean("Human Readable", help="Legible para lectura?"),
+        'bc_text': fields.char('Texto de Codigo de barras', size=32, required=True),
+        'bc_width': fields.integer('Ancho', required=True),
+        'bc_height': fields.integer('Alto', required=True),
+        'bc_hr_form': fields.boolean("Human Readable", help="Legible para lectura?"),
         }
     def _get_logo(self, cr, uid, context={}):
         photo_path = addons.get_module_resource('kemas', 'images', 'logo.png')
@@ -1452,7 +1452,7 @@ Te informamos que ha finalizado el servicio: %sr, programado para el día %dy a 
         'Message_information_massive_email':"""Hola %nk, 
 Acabamos de enviarte un correo a (%em), no olvides revisarlo.
         """,
-        'massive_mail_use_header' : False,
+        'massive_mail_use_header': false,
         'massive_mail_body_default' : '''
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <!-- saved from url=(0056)http://www.themefuse.com/demo/html/TechOffers/index.html -->
@@ -1713,7 +1713,7 @@ class kemas_activity(osv.osv):
     _order = 'name'
     _name = 'kemas.activity'
     _columns = {
-        'area_id':fields.many2one('kemas.area', 'Area', required=True, help='Area to which belongs'),
+        'area_id': fields.many2one('kemas.area', 'Area', required=True, help='Area to which belongs'),
         'name': fields.char('Name', size=64, required=True, help='The name of the activity'),
         'description': fields.text('Description', help='The description of the activity'),
         }
@@ -1732,12 +1732,12 @@ class kemas_team(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo':False}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'logo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
 
     _order = 'name'
     _name = 'kemas.team'
     _columns = {
-        'logo':fields.binary('Logo', help='The Team Logo.'),
+        'logo': fields.binary('Logo', help='The Team Logo.'),
         'name': fields.char('Name', size=64, required=True, help='The name of the Team'),
         'responsible': fields.char('Responsible', size=64, required=False, help='Person in charge of this Team.'),
         'description': fields.text('Description', help='The description of the Team'),
@@ -1759,7 +1759,7 @@ class kemas_school4d_detail(osv.osv):
     _order = 'datetime'
     _name = 'kemas.school4d_detail'
     _columns = {
-        'line_id':fields.many2one('kemas.school4d_line', 'Person', required=True, ondelete="cascade"),
+        'line_id': fields.many2one('kemas.school4d_line', 'Person', required=True, ondelete="cascade"),
         'datetime': fields.datetime('Date', required=True),
         'description': fields.text('Description', required=True),
     }
@@ -1799,7 +1799,7 @@ class kemas_school4d_line(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the photo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_photos']))
-            return {'value':{'photo':False}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'photo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
         
     def write(self, cr, uid, ids, vals, context={}):
         if vals.get('stage_id', False):
@@ -1881,25 +1881,25 @@ class kemas_school4d_line(osv.osv):
     _order = 'name'
     _name = 'kemas.school4d_line'
     _columns = {
-        'collaborator_id':fields.many2one('kemas.collaborator', 'Collaborator', required=True, ondelete="cascade"),
+        'collaborator_id': fields.many2one('kemas.collaborator', 'Collaborator', required=True, ondelete="cascade"),
         'photo': fields.binary('Photo', help='The photo of the person'),
         'name': fields.char('Name of person', size=64, required=True, help='Name of person you are discipling wing'),
         'details': fields.text('Details'),
         'detail_ids': fields.one2many('kemas.school4d_detail', 'line_id', 'Details'),
-        'state':fields.selection([
+        'state': fields.selection([
             ('listening', 'Listening'),
             ('believing', 'Believing'),
             ('preaching', 'Preaching'),
             ], 'State', required=True),
-        'telef' : fields.char('Telefone', size=10, help="The number of phone of the person. Example: 072878563"),
-        'mobile' : fields.char('Mobile', size=10, help="The number of mobile phone of the person. Example: 088729345"),
-        'email' : fields.char('E-mail', size=128, help="The person email."),
-        'web_site' : fields.char('Web site', size=128, help="The web site of the person. example: Facebook account."),
-        'address' : fields.char('Address', size=255, help="The person address."),
-        'birth':fields.date('Birth', help="Date of bith od the person."),
-        'age':fields.function(get_age, type='char', string='Age'),
+        'telef': fields.char('Telefone', size=10, help="The number of phone of the person. Example: 072878563"),
+        'mobile': fields.char('Mobile', size=10, help="The number of mobile phone of the person. Example: 088729345"),
+        'email': fields.char('E-mail', size=128, help="The person email."),
+        'web_site': fields.char('Web site', size=128, help="The web site of the person. example: Facebook account."),
+        'address': fields.char('Address', size=255, help="The person address."),
+        'birth': fields.date('Birth', help="Date of bith od the person."),
+        'age': fields.function(get_age, type='char', string='Age'),
 
-        'stage':fields.selection([
+        'stage': fields.selection([
             ('listening', 'Listening'),
             ('believing', 'Believing'),
             ('preaching', 'Preaching'),
@@ -1952,12 +1952,12 @@ class kemas_area(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo':False}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'logo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
 
     _order = 'name'
     _name = 'kemas.area'
     _columns = {
-        'logo':fields.binary('Logo', help='The Area Logo.'),
+        'logo': fields.binary('Logo', help='The Area Logo.'),
         'name': fields.char('Name', size=64, required=True, help='The name of the area'),
         'responsible': fields.char('Responsible', size=64, required=True, help='Person in charge of this Area.'),
         'description': fields.text('Description', help='the description of the area'),
@@ -1989,7 +1989,7 @@ class kemas_level(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo':False}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'logo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
 
     def get_next_level(self, cr, uid, level_id):
         level_ids = self.search(cr, uid, [('previous_id', '=', level_id)])
@@ -2059,8 +2059,8 @@ class kemas_level(osv.osv):
     _columns = {
         'logo': fields.binary('Logo'),
         'name': fields.char('Name', size=64, required=True, help='Name of this level.'),
-        'previous_id':fields.many2one('kemas.level', 'Previous Level', help='Level that precedes this.'),
-        'points' : fields.integer('Points', help="Number of points required to reach this level."),
+        'previous_id': fields.many2one('kemas.level', 'Previous Level', help='Level that precedes this.'),
+        'points': fields.integer('Points', help="Number of points required to reach this level."),
         'first_level': fields.boolean('Is first level?', help="This box must be checked if this is the first level."),
         'collaborator_ids': fields.one2many('kemas.collaborator', 'level_id', 'Levels', help='Collaborators found at this level'),
         'description': fields.text('Description'),
@@ -2144,7 +2144,7 @@ class kemas_collaborator_progress_level(osv.osv):
         self._defaults = def_dic
         return result
     _name = 'kemas.collaborator.progress.level'
-    _columns = {'percentaje':fields.float(''), }
+    _columns = {'percentaje': fields.float(''), }
 
 class kemas_web_site(osv.osv):
     def on_change_logo(self, cr, uid, ids, photo):
@@ -2158,7 +2158,7 @@ class kemas_web_site(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo':False}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'logo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
 
     _order = 'name'
     _name = 'kemas.web.site'
@@ -2314,20 +2314,20 @@ class kemas_suspension(osv.osv):
     _name = 'kemas.suspension'
     _order = 'date_create DESC'
     _columns = {
-        'collaborator_id':fields.many2one('kemas.collaborator', 'Collaborator', required=True, help='Collaborator who underwent the suspension'),
+        'collaborator_id': fields.many2one('kemas.collaborator', 'Collaborator', required=True, help='Collaborator who underwent the suspension'),
         'date_create': fields.datetime('Date create', help='Date the collaborator was suspended'),
         'date_lifted': fields.datetime('Date lifted', help='Date suspension lifted her collaborator'),
         'date_end': fields.datetime('Date end', help='The date the suspension ends'),
-        'search_start':fields.date('Desde', help='Buscar desde'),
-        'search_end':fields.date('Hasta', help='Buscar hasta'),
-        'days_remaining':fields.function(_get_days_remaining, type='char', string='Days remaining', help='Days remaining to end the suspension'),
+        'search_start': fields.date('Desde', help='Buscar desde'),
+        'search_end': fields.date('Hasta', help='Buscar hasta'),
+        'days_remaining': fields.function(_get_days_remaining, type='char', string='Days remaining', help='Days remaining to end the suspension'),
         'description': fields.text('Description'),
-        'state':fields.selection([
+        'state': fields.selection([
             ('on_going', 'On going'),
             ('ended', 'Ended'),
             ], 'State'),
-        'user_create_id':fields.many2one('res.users', 'Create by', help='The user who suspended the collaborador.'),
-        'user_lift_id':fields.many2one('res.users', 'Lifted by', help='User who lifted the suspension to collaborator'),
+        'user_create_id': fields.many2one('res.users', 'Create by', help='The user who suspended the collaborador.'),
+        'user_lift_id': fields.many2one('res.users', 'Lifted by', help='User who lifted the suspension to collaborator'),
         }
 
 class kemas_collaborator_web_site(osv.osv):
@@ -2345,8 +2345,8 @@ class kemas_collaborator_web_site(osv.osv):
     _rec_name = 'url'
     _name = 'kemas.collaborator.web.site'
     _columns = {
-        'web_site_id':fields.many2one('kemas.web.site', 'Web Site'),
-        'collaborator_id':fields.many2one('kemas.collaborator', 'collaborator', required=True),
+        'web_site_id': fields.many2one('kemas.web.site', 'Web Site'),
+        'collaborator_id': fields.many2one('kemas.collaborator', 'collaborator', required=True),
         'url': fields.char('URL', size=256, required=True, help='Web address.'),
         }
     _defaults = {  
@@ -2359,14 +2359,14 @@ class kemas_ministry(osv.osv):
         return True
     
     def do_inactivate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'active' : False})
+        super(osv.osv, self).write(cr, uid, ids, {'active': false})
         return True
     
     _order = 'name'
     _name = 'kemas.ministry'
     _columns = {
-        'logo':fields.binary('Logo', help='Logo del Ministerio.'),
-        'active':fields.boolean('Activo?', required=False),
+        'logo': fields.binary('Logo', help='Logo del Ministerio.'),
+        'active': fields.boolean('Activo?', required=False),
         'name': fields.char('Nombre', size=64, required=True, help='Nombre del minsterio'),
         'description': fields.text('Description', help='Una descripcion breve'),
         'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_ministry_collaborator_rel', 'ministry_id', 'collaborator_id', 'Colaboradores'),
@@ -2390,14 +2390,14 @@ class kemas_specialization_course(osv.osv):
         return True
     
     def do_inactivate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'active' : False})
+        super(osv.osv, self).write(cr, uid, ids, {'active': false})
         return True
     
     _order = 'name'
     _name = 'kemas.specialization.course'
     _columns = {
-        'logo':fields.binary('Logo', help='Logo del Curso.'),
-        'active':fields.boolean('Activo?', required=False),
+        'logo': fields.binary('Logo', help='Logo del Curso.'),
+        'active': fields.boolean('Activo?', required=False),
         'name': fields.char('Name', size=64, required=True, help='Nombre del curso'),
         'description': fields.text('Description', help='Una descripcion breve'),
         'level_ids': fields.one2many('kemas.specialization.course.level', 'course_id', 'Niveles'),
@@ -2420,7 +2420,7 @@ class kemas_specialization_course_level(osv.osv):
     _name = 'kemas.specialization.course.level'
     _columns = {
         'name': fields.char('Nombre', size=64, required=True, help='Nombre del Nivel'),
-        'course_id':fields.many2one('kemas.specialization.course', 'Curso', required=True),
+        'course_id': fields.many2one('kemas.specialization.course', 'Curso', required=True),
         'line_ids': fields.one2many('kemas.specialization.course.line', 'course_id', 'Colaboradores'),
         }
     _sql_constraints = [
@@ -2430,9 +2430,9 @@ class kemas_specialization_course_level(osv.osv):
 class kemas_specialization_course_line(osv.osv):
     _name = 'kemas.specialization.course.line'
     _columns = {
-        'collaborator_id':fields.many2one('kemas.collaborator', 'Colaborador', required=True),
-        'course_id':fields.many2one('kemas.specialization.course', 'Curso', required=True),
-        'level_id':fields.many2one('kemas.specialization.course.level', 'Nivel', required=True),
+        'collaborator_id': fields.many2one('kemas.collaborator', 'Colaborador', required=True),
+        'course_id': fields.many2one('kemas.specialization.course', 'Curso', required=True),
+        'level_id': fields.many2one('kemas.specialization.course.level', 'Nivel', required=True),
         }
     _sql_constraints = [
         ('ucourse', 'unique(collaborator_id,course_id)', "Este colaborador ya esta registrado en este curso!"),
@@ -2448,10 +2448,10 @@ class kemas_collaborator_logbook(osv.osv):
     _order = 'date Desc'
     _columns = {
         'date': fields.datetime('Date'),
-        'user_id':fields.many2one('res.users', 'User', help='User who perform this transaction'),
-        'collaborator_id':fields.many2one('kemas.collaborator', 'Collaborator'),
-        'description':fields.char('Description', size=1000),
-        'type':fields.selection([
+        'user_id': fields.many2one('res.users', 'User', help='User who perform this transaction'),
+        'collaborator_id': fields.many2one('kemas.collaborator', 'Collaborator'),
+        'description': fields.char('Description', size=1000),
+        'type': fields.selection([
             ('info', 'Information'),
             ('important', 'Important'),
             ('low_importance', 'Low importance'),
@@ -2504,7 +2504,7 @@ class kemas_collaborator(osv.osv):
         collaborators = super(kemas_collaborator, self).read(cr, uid, ids, ['user_id', 'state', 'type'])
         vals = {
                 'state':'Active',
-                'end_service' : False
+                'end_service': false
                 }
         for collaborator in collaborators:
             if collaborator['state'] in ['Active'] or collaborator['type'] in ['Others']:
@@ -2610,7 +2610,7 @@ class kemas_collaborator(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the photo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_photos']))
-            return {'value':{'photo':False}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'photo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
                 
     def on_change_email(self, cr, uid, ids, email):
         if email:
@@ -3636,70 +3636,70 @@ class kemas_collaborator(osv.osv):
     _order = 'name'
     _name = 'kemas.collaborator'
     _columns = {
-        'mailing':fields.function(mailing, type='boolean', string='Mailing'),
-        'code' : fields.char('Code', size=32, help="Code that is assigned to each collaborator"),
+        'mailing': fields.function(mailing, type='boolean', string='Mailing'),
+        'code': fields.char('Code', size=32, help="Code that is assigned to each collaborator"),
         'photo': fields.binary('Photo', help='The photo of the person'),
         'photo_small': fields.binary('Small Photo'),
-        'use_gravatar':fields.boolean('Cargar foto desde gravatar'),
-        'qr_code':fields.function(_get_QR_image, type='binary', string='QR code data'),
-        'bar_code':fields.function(_get_barcode_image, type='binary', string='Bar Code data'),
-        'name' : fields.char('Name', size=128, required=True, help="Full names of collaborator. Example: Rios Abad Juan David"),
-        'nick_name' : fields.char('Nick name', size=32, required=True, help="Name you want to use the collaborator."),
-        'name_with_nick_name':fields.function(_get_nick_name, type='char', string='Name'),
-        'birth':fields.date('Birth', help="Collaborator birthday date."),
-        'birthday_date':fields.function(_get_birthday, type='char', string='Name'),
-        'birthday':fields.function(_cal_birthday, type='datetime', string='Name'),
-        'age':fields.function(_person_age, method=True, fnct_inv=_dummy_age, type='char', string='Age', size='128', help='The age of the collaborator'),
-        'genre' : fields.selection([('Male', 'Male'), ('Female', 'Female'), ], 'Genre', required=True, help="The genre of the collaborator",),
-        'marital_status' : fields.selection([('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced'), ('Widower', 'Widower')], 'Marital status', help="Marital Status of the collaborator"),
-        'telef1' : fields.char('Telefone 1', size=10, help="The number of phone of the collaborator. Example: 072878563"),
-        'telef2' : fields.char('Telefone 2', size=10, help="The number of phone of the collaborator. Example: 072878563"),
-        'mobile' : fields.char('Mobile', size=10, help="The number of mobile phone of the collaborator. Example: 088729345"),
-        'email' : fields.char('E-mail', size=128, required=True, help="The collaborator email."),
-        'im_account' : fields.char('IM account', size=128, required=False, help="IM account with which you can communicate with your collaborator."),
-        'address' : fields.char('Address', size=255, required=True, help="The collaborator address."),
-        'vision' : fields.text('Vision', help="The collaborator vision."),
-        'mission' : fields.text('Mission', help="The collaborator mission."),
+        'use_gravatar': fields.boolean('Cargar foto desde gravatar'),
+        'qr_code': fields.function(_get_QR_image, type='binary', string='QR code data'),
+        'bar_code': fields.function(_get_barcode_image, type='binary', string='Bar Code data'),
+        'name': fields.char('Name', size=128, required=True, help="Full names of collaborator. Example: Rios Abad Juan David"),
+        'nick_name': fields.char('Nick name', size=32, required=True, help="Name you want to use the collaborator."),
+        'name_with_nick_name': fields.function(_get_nick_name, type='char', string='Name'),
+        'birth': fields.date('Birth', help="Collaborator birthday date."),
+        'birthday_date': fields.function(_get_birthday, type='char', string='Name'),
+        'birthday': fields.function(_cal_birthday, type='datetime', string='Name'),
+        'age': fields.function(_person_age, method=True, fnct_inv=_dummy_age, type='char', string='Age', size='128', help='The age of the collaborator'),
+        'genre': fields.selection([('Male', 'Male'), ('Female', 'Female'), ], 'Genre', required=True, help="The genre of the collaborator",),
+        'marital_status': fields.selection([('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced'), ('Widower', 'Widower')], 'Marital status', help="Marital Status of the collaborator"),
+        'telef1': fields.char('Telefone 1', size=10, help="The number of phone of the collaborator. Example: 072878563"),
+        'telef2': fields.char('Telefone 2', size=10, help="The number of phone of the collaborator. Example: 072878563"),
+        'mobile': fields.char('Mobile', size=10, help="The number of mobile phone of the collaborator. Example: 088729345"),
+        'email': fields.char('E-mail', size=128, required=True, help="The collaborator email."),
+        'im_account': fields.char('IM account', size=128, required=False, help="IM account with which you can communicate with your collaborator."),
+        'address': fields.char('Address', size=255, required=True, help="The collaborator address."),
+        'vision': fields.text('Vision', help="The collaborator vision."),
+        'mission': fields.text('Mission', help="The collaborator mission."),
         'web_site_ids': fields.one2many('kemas.collaborator.web.site', 'collaborator_id', 'Web sites', help='Web site of this collaborator'),
-        'join_date':fields.date('Join date', help="Date on which the collaborator joined the Ministry."),
-        'age_in_ministry' : fields.function(_get_ministry_age, method=True, fnct_inv=_dummy_age, type='char', string='Age in ministry', size='128', help='Time the collaborator serves or served the ministry.'),
-        'end_service':fields.date('End Service', help="Date on which the collaborator ceased to be an active part of the ministry."),
+        'join_date': fields.date('Join date', help="Date on which the collaborator joined the Ministry."),
+        'age_in_ministry': fields.function(_get_ministry_age, method=True, fnct_inv=_dummy_age, type='char', string='Age in ministry', size='128', help='Time the collaborator serves or served the ministry.'),
+        'end_service': fields.date('End Service', help="Date on which the collaborator ceased to be an active part of the ministry."),
         'logbook_ids': fields.one2many('kemas.collaborator.logbook', 'collaborator_id', 'Logbook'),
-        'state':fields.selection([
+        'state': fields.selection([
             ('creating', 'Creating'),
             ('Inactive', 'Inactive'),
             ('Locked', 'Locked'),
             ('Active', 'Active'),
             ('Suspended', 'Suspended'),
             ], 'State', select=True, help="State in which the collaborator is currently"),
-        'type' : fields.selection([
+        'type': fields.selection([
             ('Collaborator', 'Collaborator'),
             ('Others', 'Others')], 'Type', help="Type of person to be registered"),
-        'born_country' : fields.many2one('res.country', 'Born Country', required=False, help="the born country of the collaborator"),
-        'born_state' : fields.many2one('res.country.state', 'Born State', required=False, help="The born state of the collaborator"),
-        'born_city' : fields.char('Born City', size=255, required=True, help="The born city of the collaborator"),
-        'user_id':fields.many2one('res.users', 'User', help='User assigned to this collaborator'),
+        'born_country': fields.many2one('res.country', 'Born Country', required=False, help="the born country of the collaborator"),
+        'born_state': fields.many2one('res.country.state', 'Born State', required=False, help="The born state of the collaborator"),
+        'born_city': fields.char('Born City', size=255, required=True, help="The born city of the collaborator"),
+        'user_id': fields.many2one('res.users', 'User', help='User assigned to this collaborator'),
         'login': fields.related('user_id', 'login', type='char', store=True, string='Username', readonly=1, help="Name under which the collaborator begins session"),
-        'points' : fields.integer('Points', help="points you currently have a collaborator"),
-        'level_id':fields.many2one('kemas.level', 'Level', help='Level to which it belongs, for the points accumulated.'),
-        'notified':fields.selection([
+        'points': fields.integer('Points', help="points you currently have a collaborator"),
+        'level_id': fields.many2one('kemas.level', 'Level', help='Level to which it belongs, for the points accumulated.'),
+        'notified': fields.selection([
             ('notified', 'Notified'),
             ('no_notified', 'No notified'),
             ], 'Notified', select=True, help="Indicates whether the notification email was sent"),
-        'last_connection':fields.function(_last_connection, type='char', string='Ultima Conexion'),
-        'progress':fields.function(get_percentage, type='float', string='Progress'),
-        'create_date':fields.function(_create_date, type='char', string='Created date'),
-        'replacements':fields.function(_replacements, type='integer', string='Replacements avaliable', help="Number of replacements available events this month"),
+        'last_connection': fields.function(_last_connection, type='char', string='Ultima Conexion'),
+        'progress': fields.function(get_percentage, type='float', string='Progress'),
+        'create_date': fields.function(_create_date, type='char', string='Created date'),
+        'replacements': fields.function(_replacements, type='integer', string='Replacements avaliable', help="Number of replacements available events this month"),
         'ministry_ids': fields.many2many('kemas.ministry', 'kemas_ministry_collaborator_rel', 'collaborator_id', 'ministry_id', 'Ministerios'),
         'specialization_course_ids': fields.one2many('kemas.specialization.course.line', 'collaborator_id', 'Coursos de especializacion'),
         #Suspensions----------------------------------------------------------------------------------------------------------
         'suspension_ids': fields.one2many('kemas.suspension', 'collaborator_id', 'Suspensions'),
-        'day_remaining_suspension':fields.function(_get_days_remaining, type='char', string='Days remaining'),
+        'day_remaining_suspension': fields.function(_get_days_remaining, type='char', string='Days remaining'),
         #One to Many Relations-----------------------------------------------------------------------------------------------
         'school4d_ids': fields.one2many('kemas.school4d_line', 'collaborator_id', 'Persons'),
         'history_points_ids': fields.one2many('kemas.history.points', 'collaborator_id', 'History points'),
         'attendance_ids': fields.one2many('kemas.attendance', 'collaborator_id', 'Attendances', help='Attendance register'),
-        'team_id':fields.many2one('kemas.team', 'Team', help='Equipment to which this Collaborator.'),
+        'team_id': fields.many2one('kemas.team', 'Team', help='Equipment to which this Collaborator.'),
         #Many to Many Relations----------------------------------------------------------------------------------------------
         'area_ids': fields.many2many('kemas.area', 'kemas_collaborator_area_rel', 'collaborator_id', 'area_id', 'Areas', help='Areas belonging to this collaborator'),
         #Related-------------------------------------------------------------------------------------------------------------
@@ -3795,9 +3795,9 @@ class kemas_task(osv.osv):
     
     _name = 'kemas.task'
     _columns = {
-        'name' : fields.char('Name', size=200, help="Work Name", required=True),
+        'name': fields.char('Name', size=200, help="Work Name", required=True),
         'points': fields.integer('Points', required=True, help='Points that he will add the collaborator to fulfill the work'),
-        'is_active':fields.boolean('Active', required=False, help='Indicates whether this work is active or not'),
+        'is_active': fields.boolean('Active', required=False, help='Indicates whether this work is active or not'),
         'description': fields.text('Description', required=True),
         }
     _sql_constraints = [
@@ -3896,8 +3896,8 @@ class kemas_task_assigned(osv.osv):
             vals_notication = {
                                'message_id' : message_id,
                                'partner_id' : notify_partner_id,
-                               'read' : False,
-                               'starred' : False,
+                               'read': false,
+                               'starred': false,
                                }
             self.pool.get('mail.notification').create(cr, uid, vals_notication)
         return message_id
@@ -3983,7 +3983,7 @@ class kemas_task_assigned(osv.osv):
         vals = {
                 'date_closing' :time.strftime("%Y-%m-%d %H:%M:%S"),
                 'state' : 'done',
-                'is_active' : False
+                'is_active': false
                 }
         stage_ids = self.pool.get('kemas.task.type').search(cr, uid, [('state', '=', 'done'), ('name', '!=', 'Completed')])
         if stage_ids:
@@ -4000,7 +4000,7 @@ class kemas_task_assigned(osv.osv):
         vals = {
                 'date_cancelled' :time.strftime("%Y-%m-%d %H:%M:%S"),
                 'state' : 'cancelled',
-                'is_active' : False
+                'is_active': false
                 }
         stage_ids = self.pool.get('kemas.task.type').search(cr, uid, [('state', '=', 'cancelled')])
         if stage_ids:
@@ -4091,8 +4091,8 @@ class kemas_task_assigned(osv.osv):
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _rec_name = 'task_id'
     _columns = {
-        'collaborator_id':fields.many2one('kemas.collaborator', 'Collaborator', required=True, help='Collaborator to perform this task.'),
-        'task_id':fields.many2one('kemas.task', 'Task', required=True, help='Work name you turned.'),
+        'collaborator_id': fields.many2one('kemas.collaborator', 'Collaborator', required=True, help='Collaborator to perform this task.'),
+        'task_id': fields.many2one('kemas.task', 'Task', required=True, help='Work name you turned.'),
         'description': fields.text('Description', required=True),
         'priority': fields.selection([('4', 'Very Low'), ('3', 'Low'), ('2', 'Medium'), ('1', 'Important'), ('0', 'Very important')], 'Priority', select=True),
         'sequence': fields.integer('Sequence', select=True, help="Gives the sequence order when displaying a list of tasks."),
@@ -4105,15 +4105,15 @@ class kemas_task_assigned(osv.osv):
         'user_id': fields.many2one('res.users', 'Assigned to', track_visibility='onchange'),
         'color': fields.integer('Color Index'),
         'user_email': fields.related('user_id', 'email', type='char', string='User Email', readonly=True),
-        'is_active':fields.boolean('Is active', required=False),
+        'is_active': fields.boolean('Is active', required=False),
         'date_created': fields.datetime('Creation date', help='Date of creation of this task'),
         'date_closing': fields.datetime('Closing date', help='Closing date for This Task'),
         'date_cancelled': fields.datetime('Cancellation date', help='Cancellation date of This Task'),
         'date_start': fields.datetime('Starting Date', select=True),
         'date_end': fields.datetime('Ending Date', select=True),
         # Campos para buscar entre fechas
-        'search_start':fields.date('Desde', help='Buscar desde'),
-        'search_end':fields.date('Hasta', help='Buscar hasta'),
+        'search_start': fields.date('Desde', help='Buscar desde'),
+        'search_end': fields.date('Hasta', help='Buscar hasta'),
         }
     
     def _validate(self, cr, uid, ids, context={}): 
@@ -4235,8 +4235,8 @@ class kemas_history_points(osv.osv):
             vals_notication = {
                                'message_id' : message_id,
                                'partner_id' : notify_partner_id,
-                               'read' : False,
-                               'starred' : False,
+                               'read': false,
+                               'starred': false,
                                }
             self.pool.get('mail.notification').create(cr, uid, vals_notication)
         return message_id
@@ -4265,22 +4265,22 @@ class kemas_history_points(osv.osv):
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _name = 'kemas.history.points'
     _columns = {
-        'code' : fields.char('Code', size=32, help="code that is assigned to each register", required=True),
-        'date':fields.datetime('Date', required=True, help="Date you performed the modification of the points."),
-        'reg_uid':fields.many2one('res.users', 'Changed by', readonly=True, help='User who made ​​the points change.'),
-        'collaborator_id':fields.many2one('kemas.collaborator', 'Collaborator', required=True, ondelete="cascade"),
-        'attendance_id':fields.many2one('kemas.attendance', 'Registro de asistencia', ondelete="cascade"),
-        'type':fields.selection([
+        'code': fields.char('Code', size=32, help="code that is assigned to each register", required=True),
+        'date': fields.datetime('Date', required=True, help="Date you performed the modification of the points."),
+        'reg_uid': fields.many2one('res.users', 'Changed by', readonly=True, help='User who made ​​the points change.'),
+        'collaborator_id': fields.many2one('kemas.collaborator', 'Collaborator', required=True, ondelete="cascade"),
+        'attendance_id': fields.many2one('kemas.attendance', 'Registro de asistencia', ondelete="cascade"),
+        'type': fields.selection([
             ('init', 'Init'),
             ('increase', 'Increase'),
             ('decrease', 'Decrease'),
             ], 'Type', select=True, readonly=True),
         'description': fields.text('Description', required=True),
-        'summary' : fields.char('Summary', size=255, required=True),
+        'summary': fields.char('Summary', size=255, required=True),
         'points': fields.integer('Points', help='Points that involved this change'),
         # Campos para buscar entre fechas
-        'search_start':fields.date('Desde', help='Buscar desde'),
-        'search_end':fields.date('Hasta', help='Buscar hasta'),
+        'search_start': fields.date('Desde', help='Buscar desde'),
+        'search_end': fields.date('Hasta', help='Buscar hasta'),
         }
     _sql_constraints = [
         ('collaborator_code', 'unique (code)', 'This Code already exist!'),
@@ -4292,7 +4292,7 @@ class kemas_place(osv.osv):
         return True
     
     def do_inactivate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'is_active' : False})
+        super(osv.osv, self).write(cr, uid, ids, {'is_active': false})
         return True
     
     def __fields_view_get(self, cr, uid, view_id=None, view_type='form', context={}, toolbar=True, submenu=False):       
@@ -4331,7 +4331,7 @@ class kemas_place(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the photo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_photos']))
-            return {'value':{'photo':False}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'photo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
         
     _order = 'name'
     _name = 'kemas.place'
@@ -4340,7 +4340,7 @@ class kemas_place(osv.osv):
         'address': fields.text('Address'),
         'Map': fields.text('Mapa'),
         'photo': fields.binary('Photo', help='the photo of the place'),
-        'is_active':fields.boolean('Active', required=False, help='Indicates whether this place is active or not'),
+        'is_active': fields.boolean('Active', required=False, help='Indicates whether this place is active or not'),
         }
     _sql_constraints = [
         ('place_name', 'unique (name)', 'This Name already exist!'),
@@ -4379,7 +4379,7 @@ class kemas_expositor(osv.osv):
         if kemas_extras.restrict_size(photo, preferences['max_size_photos']):
             return {'value':{}}
         else:
-            return {'value':{'image':False}, 'warning':{'title':_('Error!'), 'message':_('The size of the photo can not be greater than %s KB..!!') % str(preferences['max_size_photos'])}}
+            return {'value':{'image': false}, 'warning':{'title':_('Error!'), 'message':_('The size of the photo can not be greater than %s KB..!!') % str(preferences['max_size_photos'])}}
 
     def on_change_birth(self, cr, uid, ids, birth, context={}):
         values = {}
@@ -4412,10 +4412,10 @@ class kemas_expositor(osv.osv):
         'photo': fields.binary("Photo", help="This field holds the image used as avatar for the expositor, limited to 1024x1024px"),
         'photo_small': fields.binary("Foto"),
         'birth': fields.date('Fecha de Nacimiento'),
-        'age' : fields.function(_ff_age, type='char', string='Edad'),
-        'telef1' : fields.char(u'Teléfono 1', size=10, help=u"Numero telefónico. Example: 072878563"),
-        'telef2' : fields.char(u'Teléfono 2', size=10, help=u"Numero telefónico. Example: 072878563"),
-        'mobile' : fields.char('Celular', size=10, help=u"Número de celular. Example: 088729345"),
+        'age': fields.function(_ff_age, type='char', string='Edad'),
+        'telef1': fields.char(u'Teléfono 1', size=10, help=u"Numero telefónico. Example: 072878563"),
+        'telef2': fields.char(u'Teléfono 2', size=10, help=u"Numero telefónico. Example: 072878563"),
+        'mobile': fields.char('Celular', size=10, help=u"Número de celular. Example: 088729345"),
         'address': fields.text(u'Dirección'),
         'details': fields.text('Details'),
         }
@@ -4438,7 +4438,7 @@ class kemas_recording_type(osv.osv):
     _name = 'kemas.recording.type'
     _columns = {
         'name': fields.char('Name', size=64, required=True, help='The name of the recording type'),
-        'sequence_id':fields.many2one('ir.sequence', 'Sequence', required=True),
+        'sequence_id': fields.many2one('ir.sequence', 'Sequence', required=True),
         'prefix': fields.related('sequence_id', 'prefix', type='char', string='Prefix', readonly=1, store=False, help="Prefix that appears with the code of each recording"),
         'number_next_actual': fields.related('sequence_id', 'number_next_actual', type='char', string=u'Número siguiente', readonly=1, store=False),
         }
@@ -4463,12 +4463,12 @@ class kemas_recording_series(osv.osv):
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo':False}, 'warning':{'title':_('Error!'), 'message':msg}}
+            return {'value':{'logo': false}, 'warning':{'title':_('Error!'), 'message':msg}}
 
     _order = 'name'
     _name = 'kemas.recording.series'
     _columns = {
-        'code' : fields.char('Code', size=32, help="Code that is assigned to each series."),
+        'code': fields.char('Code', size=32, help="Code that is assigned to each series."),
         'logo': fields.binary('Logo', help='The Logo of the serie'),
         'name': fields.char('Name', size=64, required=True, help='The name of the recording type'),
         'recording_ids': fields.one2many('kemas.recording', 'series_id', 'recordings', readonly=False),
@@ -4536,8 +4536,8 @@ class kemas_recording(osv.osv):
             vals_notication = {
                                'message_id' : message_id,
                                'partner_id' : notify_partner_id,
-                               'read' : False,
-                               'starred' : False,
+                               'read': false,
+                               'starred': false,
                                }
             self.pool.get('mail.notification').create(cr, uid, vals_notication)
         return message_id
@@ -4643,29 +4643,29 @@ class kemas_recording(osv.osv):
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _columns = {
         'theme': fields.char('Theme', size=64, help='The theme of the recording', required=True, states={'done':[('readonly', True)]}),
-        'date':fields.datetime('Date', help="Date on which the recording was done", states={'done':[('readonly', True)]}),
-        'state':fields.selection([
+        'date': fields.datetime('Date', help="Date on which the recording was done", states={'done':[('readonly', True)]}),
+        'state': fields.selection([
             ('draft', 'Borrador'),
             ('done', 'Confirmado'),
              ], 'Estado', required=True),
-        'registration_date':fields.datetime('Registration date', readonly=True, help="Date on which this recording was entered into the system"),
-        'create_user_id':fields.many2one('res.users', 'Registrado por', readonly=True, help='Nombre del usuario que creo el registro'),
-        'code' : fields.char('Code', size=32, readonly=True, help="unique code that is assigned to each recording"),
-        'duration':fields.float('Duration', required=True, help='Duration recording', states={'done':[('readonly', True)]}),
+        'registration_date': fields.datetime('Registration date', readonly=True, help="Date on which this recording was entered into the system"),
+        'create_user_id': fields.many2one('res.users', 'Registrado por', readonly=True, help='Nombre del usuario que creo el registro'),
+        'code': fields.char('Code', size=32, readonly=True, help="unique code that is assigned to each recording"),
+        'duration': fields.float('Duration', required=True, help='Duration recording', states={'done':[('readonly', True)]}),
         'details': fields.text('Details', states={'done':[('readonly', True)]}),
-        'url':fields.char('URL', size=255, help='Dirección en la que se encuentra almacenado el archivo', states={'done':[('readonly', True)]}),
+        'url': fields.char('URL', size=255, help='Dirección en la que se encuentra almacenado el archivo', states={'done':[('readonly', True)]}),
         'expositor_ids': fields.many2many('kemas.expositor', 'kemas_recording_expositor_rel', 'recording_id', 'expositor_id', 'Expositores', states={'done':[('readonly', True)]}),
         # One to Many Relations
-        'event_id':fields.many2one('kemas.event', 'Evento', help='Servicio en el cual se realizó ésta grabación', states={'done':[('readonly', True)]}),
-        'recording_type_id':fields.many2one('kemas.recording.type', 'recording type', required=True, ondelete="restrict", states={'done':[('readonly', True)]}),
-        'place_id':fields.many2one('kemas.place', 'Place', help='Place where the recording was done', ondelete="restrict", states={'done':[('readonly', True)]}),
-        'series_id':fields.many2one('kemas.recording.series', 'Series', help='Name of the series of which this recording', ondelete="restrict", states={'done':[('readonly', True)]}),
+        'event_id': fields.many2one('kemas.event', 'Evento', help='Servicio en el cual se realizó ésta grabación', states={'done':[('readonly', True)]}),
+        'recording_type_id': fields.many2one('kemas.recording.type', 'recording type', required=True, ondelete="restrict", states={'done':[('readonly', True)]}),
+        'place_id': fields.many2one('kemas.place', 'Place', help='Place where the recording was done', ondelete="restrict", states={'done':[('readonly', True)]}),
+        'series_id': fields.many2one('kemas.recording.series', 'Series', help='Name of the series of which this recording', ondelete="restrict", states={'done':[('readonly', True)]}),
         # Many to One Relations
         'tag_ids': fields.many2many('kemas.recording.tag', 'kemas_recording_tag_rel', 'recording_id', 'tag_id', 'Etiquetas', states={'done':[('readonly', True)]}),
         'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_recording_collaborator_rel', 'recording_id', 'collaborator_id', 'collaborators', help='Collaborators who participated in the recording', states={'done':[('readonly', True)]}),
         # Campos para buscar entre fechas
-        'search_start':fields.date('Desde', help='Buscar desde'),
-        'search_end':fields.date('Hasta', help='Buscar hasta'),
+        'search_start': fields.date('Desde', help='Buscar desde'),
+        'search_end': fields.date('Hasta', help='Buscar hasta'),
         }
     
     _defaults = {  
@@ -4741,8 +4741,8 @@ class kemas_repository(osv.osv):
             vals_notication = {
                                'message_id' : message_id,
                                'partner_id' : notify_partner_id,
-                               'read' : False,
-                               'starred' : False,
+                               'read': false,
+                               'starred': false,
                                }
             self.pool.get('mail.notification').create(cr, uid, vals_notication)
         return message_id
@@ -4816,23 +4816,23 @@ class kemas_repository(osv.osv):
         'name': fields.char('Name', size=64, required=True, help='Filename'),
         'file': fields.binary('File'),
         'file_name': fields.char('File name', size=255),
-        'type':fields.selection([
+        'type': fields.selection([
             ('binary', 'Binario'),
             ('url', 'Url'),
              ], 'Tipo', required=True, help="Tipo de archivo que se va a adjuntar"),
         'url': fields.char('Url', size=255, help="La Url de la ubicación del archivo"),
-        'code' : fields.char('Code', size=32, help="unique code that is assigned to each file"),
+        'code': fields.char('Code', size=32, help="unique code that is assigned to each file"),
         'tags': fields.many2many('kemas.repository.category', 'kemas_repository_file_category_rel', 'file_id', 'category_id', 'Etiquetas'),
-        'date':fields.datetime('Date upload', help="Date the file was uploaded"),
+        'date': fields.datetime('Date upload', help="Date the file was uploaded"),
         'description': fields.text('Description'),
-        'user_id':fields.many2one('res.users', 'Uploaded by', help='User who uploaded the file'),
-        'state':fields.selection([
+        'user_id': fields.many2one('res.users', 'Uploaded by', help='User who uploaded the file'),
+        'state': fields.selection([
             ('draft', 'Borrador'),
             ('done', 'Publicado'),
              ], 'Estado', required=True),
         # Campos para buscar entre fechas
-        'search_start':fields.date('Desde', help='Buscar desde'),
-        'search_end':fields.date('Hasta', help='Buscar hasta'),
+        'search_start': fields.date('Desde', help='Buscar desde'),
+        'search_end': fields.date('Hasta', help='Buscar hasta'),
         }
     
     _defaults = {  
@@ -4851,7 +4851,7 @@ class kemas_service(osv.osv):
         return True
     
     def do_inactivate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'is_active' : False})
+        super(osv.osv, self).write(cr, uid, ids, {'is_active': false})
         return True
     
     def name_search(self, cr, uid, name, args=None, operator='ilike', context={}, limit=100):
@@ -4897,14 +4897,14 @@ class kemas_service(osv.osv):
     _name = 'kemas.service'
     _columns = {
         'name': fields.char('Name', size=64, required=True),
-        'time_start':fields.float('Time start', required=True, help='Start time of service'),
-        'time_end':fields.float('Time end', required=True, help='End time of service'),
-        'time_entry':fields.float('Time entry', required=True, help='End time of service'),
+        'time_start': fields.float('Time start', required=True, help='Start time of service'),
+        'time_end': fields.float('Time end', required=True, help='End time of service'),
+        'time_entry': fields.float('Time entry', required=True, help='End time of service'),
         #----------------------------------------------------------------------------------------------
-        'time_register':fields.float('Time register', required=True, help='End time of service'),
-        'time_limit':fields.float('Time limit', required=True, help='Limit time to register attendance'),
+        'time_register': fields.float('Time register', required=True, help='End time of service'),
+        'time_limit': fields.float('Time limit', required=True, help='Limit time to register attendance'),
         'description': fields.text('Description'),
-        'is_active':fields.boolean('Active', required=False, help='Indicates whether this service is active or not'),
+        'is_active': fields.boolean('Active', required=False, help='Indicates whether this service is active or not'),
         }
     _sql_constraints = [
         ('service_name', 'unique (name)', 'This Name already exist!'),
@@ -4914,9 +4914,9 @@ class kemas_service(osv.osv):
         ]
     _defaults = {
         'time_start': float(8 + (0.00 * 100 / 60)),
-        'time_end' : float(9 + (0.30 * 100 / 60)),
-        'time_entry' : float(7 + (0.30 * 100 / 60)),
-        'time_register' : float(0.30 * 100 / 60),
+        'time_end': float(9 + (0.30 * 100 / 60)),
+        'time_entry': float(7 + (0.30 * 100 / 60)),
+        'time_register': float(0.30 * 100 / 60),
         'time_limit' : 1.00,
         'is_active':True
         }
@@ -4984,19 +4984,19 @@ class kemas_event_collaborator_line(osv.osv):
     _name = 'kemas.event.collaborator.line'
     _rec_name = 'collaborator_id'
     _columns = {
-        'collaborator_id':fields.many2one('kemas.collaborator', 'Collaborator', required=True),
-        'event_id':fields.many2one('kemas.event', 'event', required=True, ondelete="cascade"),
+        'collaborator_id': fields.many2one('kemas.collaborator', 'Collaborator', required=True),
+        'event_id': fields.many2one('kemas.event', 'event', required=True, ondelete="cascade"),
         'activity_ids': fields.many2many('kemas.activity', 'kemas_event_collaborator_line_activity_rel', 'event_collaborator_line_id', 'activity_id', 'Activities', help='Activities that have been assigned to this Collaborator in this event'),
         'sent_date': fields.datetime('Enviado el'),
-        'send_email_state':fields.selection([
+        'send_email_state': fields.selection([
             ('Sent', 'Sent'),
             ('Waiting', 'Waiting'),
             ('Timeout', 'Timeout'),
             ('Error', 'Error'),
             ], 'Send email state', select=True),
-        'count':fields.integer('Count'),
-        'ct':fields.integer('Count'),
-        'replacement_id':fields.many2one('kemas.event.replacement', 'Collaborator Replaced', help=''),
+        'count': fields.integer('Count'),
+        'ct': fields.integer('Count'),
+        'replacement_id': fields.many2one('kemas.event.replacement', 'Collaborator Replaced', help=''),
         #Related-----------------------------------------------------------------------------------------------------------------------------
         'team_id': fields.related('collaborator_id', 'team_id', type="many2one", relation="kemas.team", string="Team"),
         'level_id': fields.related('collaborator_id', 'level_id', type="many2one", relation="kemas.level", string="Level"),
@@ -5013,8 +5013,8 @@ class kemas_event_collaborator_line(osv.osv):
         'service_id': fields.related('event_id', 'service_id', type="many2one", relation="kemas.service", string="Service"),
         'state': fields.related('event_id', 'state', type='char', string='State'),
         # Campos para buscar entre fechas
-        'search_start':fields.date('Desde', help='Buscar desde'),
-        'search_end':fields.date('Hasta', help='Buscar hasta'),
+        'search_start': fields.date('Desde', help='Buscar desde'),
+        'search_end': fields.date('Hasta', help='Buscar hasta'),
         }
     _sql_constraints = [
         ('u_collaborator_event', 'unique (collaborator_id, event_id)', 'One of the contributors appears more than once in the list!'),
@@ -5975,8 +5975,8 @@ class kemas_event(osv.osv):
             vals_notication = {
                                'message_id' : message_id,
                                'partner_id' : notify_partner_id,
-                               'read' : False,
-                               'starred' : False,
+                               'read': false,
+                               'starred': false,
                                }
             self.pool.get('mail.notification').create(cr, uid, vals_notication)
         return message_id
@@ -6194,56 +6194,56 @@ class kemas_event(osv.osv):
     _name = 'kemas.event'
     _rec_name = 'service_id'
     _columns = {
-        'service_id':fields.many2one('kemas.service', 'Service', required=True, help='Name of service relating to this event.', states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
-        'place_id':fields.many2one('kemas.place', 'Place', required=True, help='Place where the event was done.', states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}, ondelete="restrict"),
-        'code' : fields.char('Code', size=32, help="Unique code that is assigned to each event", readonly=True),
+        'service_id': fields.many2one('kemas.service', 'Service', required=True, help='Name of service relating to this event.', states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
+        'place_id': fields.many2one('kemas.place', 'Place', required=True, help='Place where the event was done.', states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}, ondelete="restrict"),
+        'code': fields.char('Code', size=32, help="Unique code that is assigned to each event", readonly=True),
         'comments': fields.text('Comments', states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
         'information': fields.text('Information', states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
-        'state':fields.selection([
+        'state': fields.selection([
             ('creating', 'Creating'),
             ('draft', 'Draft'),
             ('on_going', 'On Going'),
             ('closed', 'Closed'),
             ('canceled', 'Canceled'),
             ], 'State'),
-        'count':fields.integer('Count'),
-        'collaborator_id':fields.many2one('kemas.collaborator', 'Colaborador', help='Colaborador por el cual se va filtrar los eventos'),
-        'close_to_end':fields.boolean('Inactivar servicio al finalizar', required=False, states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}, help='Marque esta casilla para en el momento en el que finalize este evento el Servicio quede Inactivado y no se pueda usar de nuevo, esta función es util para cuando es un evento que solo se va a usar una sola vez.'),
+        'count': fields.integer('Count'),
+        'collaborator_id': fields.many2one('kemas.collaborator', 'Colaborador', help='Colaborador por el cual se va filtrar los eventos'),
+        'close_to_end': fields.boolean('Inactivar servicio al finalizar', required=False, states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}, help='Marque esta casilla para en el momento en el que finalize este evento el Servicio quede Inactivado y no se pueda usar de nuevo, esta función es util para cuando es un evento que solo se va a usar una sola vez.'),
         # Envio de Correos
-        'mailing':fields.function(mailing, type='boolean', string='Mailing'),
-        'sending_emails' : fields.boolean('Sending emails?'),
+        'mailing': fields.function(mailing, type='boolean', string='Mailing'),
+        'sending_emails': fields.boolean('Sending emails?'),
         'collaborator_ids_send_email': fields.many2many('kemas.collaborator', 'kemas_event_collaborator_send_email_rel', 'event_id', 'collaborator_id', 'Collaborators to notify', help=''),
         # Fechas
-        'date_init':fields.datetime('Date Init', help=''),
-        'date_start':fields.datetime('Date', required=True, help='Scheduled date', states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
-        'date_stop':fields.datetime('Date Stop', help=''),
-        'date_create':fields.datetime('Date create', help="Date the create"),
-        'date_close':fields.datetime('Date close', help="Date the closed"),
-        'date_cancel':fields.datetime('Date cancel', help="Date the canceled"),
+        'date_init': fields.datetime('Date Init', help=''),
+        'date_start': fields.datetime('Date', required=True, help='Scheduled date', states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
+        'date_stop': fields.datetime('Date Stop', help=''),
+        'date_create': fields.datetime('Date create', help="Date the create"),
+        'date_close': fields.datetime('Date close', help="Date the closed"),
+        'date_cancel': fields.datetime('Date cancel', help="Date the canceled"),
         # Campos para buscar entre fechas
-        'search_start':fields.date('Desde', help='Buscar desde'),
-        'search_end':fields.date('Hasta', help='Buscar hasta'),
+        'search_start': fields.date('Desde', help='Buscar desde'),
+        'search_end': fields.date('Hasta', help='Buscar hasta'),
         # Points
-        'attend_on_time_points':fields.integer('Points for attend on time (+)', help="Points will increase to an collaborator for being on time to the service.", states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
-        'late_points':fields.integer('Points for being late (-)', help="Point is decreased to a contributor for not arriving on time.", states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
-        'not_attend_points':fields.integer('Points for not attend (-)', help="Point is decreased to a collaborator not to asist to a service.", states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
-        'min_points':fields.integer('Minimum points', help="Minimum points required in order to participate in this event.", states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
+        'attend_on_time_points': fields.integer('Points for attend on time (+)', help="Points will increase to an collaborator for being on time to the service.", states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
+        'late_points': fields.integer('Points for being late (-)', help="Point is decreased to a contributor for not arriving on time.", states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
+        'not_attend_points': fields.integer('Points for not attend (-)', help="Point is decreased to a collaborator not to asist to a service.", states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
+        'min_points': fields.integer('Minimum points', help="Minimum points required in order to participate in this event.", states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
         # Summary fields
-        'rm_service' : fields.char('Service', size=255, help=""),
-        'rm_close_to_end':fields.boolean('Inactivado al finalizar', required=False, help='Indica si el evento fue inactivado al finalizar el evento'),
-        'rm_place' : fields.char('Place', size=255, help=""),
-        'rm_date':fields.datetime('Date', help=''),
-        'rm_time_start' : fields.float('Time start', help=""),
-        'rm_time_end' : fields.float('Time End', help=""),
-        'rm_time_entry' : fields.float('Time entry', help=""),
-        'rm_time_register' : fields.float('Time registrer', help=""),
-        'rm_time_limit' : fields.float('Time Limit', help=""),
-        'team_id':fields.many2one('kemas.team', 'Team', help='Team that will participate in this event.', states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
-        'collaborators_loaded' : fields.boolean('collaborators loaded?'),
-        'notification_status':fields.function(_notification_status, type='char', string='Estado de notificaciones'),
+        'rm_service': fields.char('Service', size=255, help=""),
+        'rm_close_to_end': fields.boolean('Inactivado al finalizar', required=False, help='Indica si el evento fue inactivado al finalizar el evento'),
+        'rm_place': fields.char('Place', size=255, help=""),
+        'rm_date': fields.datetime('Date', help=''),
+        'rm_time_start': fields.float('Time start', help=""),
+        'rm_time_end': fields.float('Time End', help=""),
+        'rm_time_entry': fields.float('Time entry', help=""),
+        'rm_time_register': fields.float('Time registrer', help=""),
+        'rm_time_limit': fields.float('Time Limit', help=""),
+        'team_id': fields.many2one('kemas.team', 'Team', help='Team that will participate in this event.', states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
+        'collaborators_loaded': fields.boolean('collaborators loaded?'),
+        'notification_status': fields.function(_notification_status, type='char', string='Estado de notificaciones'),
         # One to Many Relations
         'event_collaborator_line_ids': fields.one2many('kemas.event.collaborator.line', 'event_id', 'Collaborators', help='Collaborators who participated in this event', states={'on_going':[('readonly', True)], 'closed':[('readonly', True)], 'canceled':[('readonly', True)]}),
-        'collaborator_ids' : fields.function(_getcollaborator_ids, type='one2many', relation="kemas.collaborator", string='Colaboradores'),
+        'collaborator_ids': fields.function(_getcollaborator_ids, type='one2many', relation="kemas.collaborator", string='Colaboradores'),
         # line_ids': fields.one2many('kemas.event.collaborator.line', 'event_id', 'Lines'),
         'line_ids': fields.text('Lines'),
         'attendance_ids': fields.one2many('kemas.attendance', 'event_id', 'Attendances', help='Attendance register', readonly=True),
@@ -6253,7 +6253,7 @@ class kemas_event(osv.osv):
         'time_entry': fields.related('service_id', 'time_entry', type='char', string='Time entry', readonly=True, store=False),
         'time_limit': fields.related('service_id', 'time_limit', type='char', string='time limit', readonly=True, store=False),
         # Dashboard
-        'progress':fields.function(get_percentage, type='float', string='Progress'),
+        'progress': fields.function(get_percentage, type='float', string='Progress'),
         #-----KANBAN METHOD
         'priority': fields.selection([('4', 'Very Low'), ('3', 'Low'), ('2', 'Medium'), ('1', 'Important'), ('0', 'Very important')], 'Priority', select=True),
         'color': fields.integer('Color Index'),
@@ -6261,10 +6261,10 @@ class kemas_event(osv.osv):
         'photo_place': fields.related('place_id', 'photo', type='binary', store=True, string='photo'),
         'members': fields.many2many('res.users', 'event_user_rel', 'event_id', 'uid', 'Event Members', help=""),
         # Campos para cuando un evento finalice alamacer los datos que tenia el servicio en ese entoces
-        'time_start_str':fields.function(_get_time_start_str, type='char', string='Time Start'),
-        'time_end_str':fields.function(_get_time_end_str, type='char', string='Time end'),
-        'event_date_str':fields.function(_get_event_date_str, type='char', string='Event date'),
-        'event_day':fields.function(_event_day, type='char', string='Dia del evento'),
+        'time_start_str': fields.function(_get_time_start_str, type='char', string='Time Start'),
+        'time_end_str': fields.function(_get_time_end_str, type='char', string='Time end'),
+        'event_date_str': fields.function(_get_event_date_str, type='char', string='Event date'),
+        'event_day': fields.function(_event_day, type='char', string='Dia del evento'),
         }
     _sql_constraints = [
         ('event_code', 'unique (code)', 'This Code already exist!'),
@@ -6564,21 +6564,21 @@ class kemas_attendance(osv.osv):
     _order = 'date DESC'
     _rec_name = 'collaborator_id'
     _columns = {
-        'collaborator_id':fields.many2one('kemas.collaborator', 'Collaborator'),
-        'code' : fields.char('Code', size=32, help="unique code that is assigned to each attendance record"),
-        'type':fields.selection([
+        'collaborator_id': fields.many2one('kemas.collaborator', 'Collaborator'),
+        'code': fields.char('Code', size=32, help="unique code that is assigned to each attendance record"),
+        'type': fields.selection([
             ('just_time', 'On Time'),
             ('late', 'Late'),
             ('absence', 'Absence'),
             ], 'Type', select=True),
-        'count':fields.integer('Count'),
-        'event_id':fields.many2one('kemas.event', 'event', ondelete="restrict"),
-        'date':fields.datetime('Date', help="Date the create"),
-        'summary':fields.text('Summary'),
-        'search_start':fields.date('Desde', help='Buscar desde'),
-        'search_end':fields.date('Hasta', help='Buscar hasta'),
+        'count': fields.integer('Count'),
+        'event_id': fields.many2one('kemas.event', 'event', ondelete="restrict"),
+        'date': fields.datetime('Date', help="Date the create"),
+        'summary': fields.text('Summary'),
+        'search_start': fields.date('Desde', help='Buscar desde'),
+        'search_end': fields.date('Hasta', help='Buscar hasta'),
         'service_id': fields.related('event_id', 'service_id', type="many2one", relation="kemas.service", string="Service", store=True),
-        'user_id':fields.many2one('res.users', 'User', help='User who opened the system to record attendance.'),
+        'user_id': fields.many2one('res.users', 'User', help='User who opened the system to record attendance.'),
         }
     _sql_constraints = [
         ('uattendance_collaborator', 'unique (collaborator_id, event_id)', 'This collaborator has registered their attendance at this event!'),
@@ -6692,15 +6692,15 @@ class kemas_event_replacement(osv.osv):
     _rec_name = 'collaborator_replacement_id'
     _order = 'datetime DESC'
     _columns = {
-        'collaborator_id':fields.many2one('kemas.collaborator', 'Collaborator', help='Collaborator who was originally assigned to the event'),
-        'collaborator_replacement_id':fields.many2one('kemas.collaborator', 'Collaborator replacement', help='Collaborator replacement'),
-        'event_id':fields.many2one('kemas.event', 'Event', help='Event that was carried out the replacement', ondelete="cascade"),
-        'event_collaborator_line_id':fields.many2one('kemas.event.collaborator.line', 'event_collaborator_line', ondelete="cascade", help=''),
-        'user_id':fields.many2one('res.users', 'User', help='Person performing the replacement'),
+        'collaborator_id': fields.many2one('kemas.collaborator', 'Collaborator', help='Collaborator who was originally assigned to the event'),
+        'collaborator_replacement_id': fields.many2one('kemas.collaborator', 'Collaborator replacement', help='Collaborator replacement'),
+        'event_id': fields.many2one('kemas.event', 'Event', help='Event that was carried out the replacement', ondelete="cascade"),
+        'event_collaborator_line_id': fields.many2one('kemas.event.collaborator.line', 'event_collaborator_line', ondelete="cascade", help=''),
+        'user_id': fields.many2one('res.users', 'User', help='Person performing the replacement'),
         'datetime': fields.datetime('Date'),
         'description': fields.text('Description'),
         # Campos para buscar entre fechas
-        'search_start':fields.date('Desde', help='Buscar desde'),
-        'search_end':fields.date('Hasta', help='Buscar hasta'),
+        'search_start': fields.date('Desde', help='Buscar desde'),
+        'search_end': fields.date('Hasta', help='Buscar hasta'),
         }
 # vim:expandtab:smartind:tabstop=4:softtabstop=4:shiftwidth=4:

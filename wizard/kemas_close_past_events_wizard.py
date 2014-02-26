@@ -89,7 +89,7 @@ class kemas_close_past_event_wizard(osv.osv_memory):
     _name='kemas.close.past.event.wizard'
     _columns={
         'line_ids': fields.one2many('kemas.close.past.event.line.wizard', 'wizard_id', 'Events'),
-        'state':fields.selection([
+        'state': fields.selection([
             ('loading','Loading'),
             ('loaded','Loaded'),
             ],    'State'),
@@ -101,8 +101,8 @@ class kemas_close_past_event_wizard(osv.osv_memory):
 class kemas_close_past_event_line_wizard(osv.osv_memory):
     _name='kemas.close.past.event.line.wizard'
     _columns={
-        'wizard_id':fields.many2one('kemas.close.past.event.wizard','wizard_id',ondelete='cascade', required=True),
-        'event_id':fields.many2one('kemas.event','Event',ondelete='cascade',required=True),
+        'wizard_id': fields.many2one('kemas.close.past.event.wizard','wizard_id',ondelete='cascade', required=True),
+        'event_id': fields.many2one('kemas.event','Event',ondelete='cascade',required=True),
         #--Realted Fields------------------------------------------------------------------------------------
         'code': fields.related('event_id', 'code', type='char', string='Code', store=True),
         'service_id': fields.related('event_id','service_id',type="many2one",relation="kemas.service",string="Service",store=True),
@@ -119,7 +119,7 @@ class kemas_close_past_event_line_wizard(osv.osv_memory):
 class kemas_message_closign_begun_wizard(osv.osv_memory):
     _name = 'kemas.message.closing.begun.wizard'
     _columns = {
-        'name' : fields.char('Name',size=5, readonly=True),
+        'name': fields.char('Name',size=5, readonly=True),
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

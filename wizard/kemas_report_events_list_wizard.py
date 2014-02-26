@@ -43,12 +43,12 @@ class kemas_report_events_list_wizard(osv.osv_memory):
     _name='kemas.report.events.list.wizard'
     _columns={
         'logo': fields.binary('img'),
-        'collaborator_id':fields.many2one('kemas.collaborator','Collaborator',ondelete='cascade', help=''),
-        'place_id':fields.many2one('kemas.place','Place',ondelete='cascade', help=''),
-        'service_id':fields.many2one('kemas.service','Service',ondelete='cascade', help=''),
+        'collaborator_id': fields.many2one('kemas.collaborator','Collaborator',ondelete='cascade', help=''),
+        'place_id': fields.many2one('kemas.place','Place',ondelete='cascade', help=''),
+        'service_id': fields.many2one('kemas.service','Service',ondelete='cascade', help=''),
         'date_start': fields.date('Date start'),
         'date_end': fields.date('Date end'),
-        'state':fields.selection([
+        'state': fields.selection([
             ('all','All'),
             ('draft','Draft'),
             ('on_going','On Going'),

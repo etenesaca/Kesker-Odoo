@@ -80,7 +80,7 @@ class kemas_collaborator_assing_code_wizard(osv.osv_memory):
 
     _name='kemas.collaborator.assing.code.wizard'
     _columns={
-        'collaborator_id':fields.many2one('kemas.collaborator','Collaborator',ondelete='cascade',help='Collaborator name, which you want to activate.'),
+        'collaborator_id': fields.many2one('kemas.collaborator','Collaborator',ondelete='cascade',help='Collaborator name, which you want to activate.'),
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

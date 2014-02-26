@@ -138,7 +138,7 @@ class kemas_collaborator_send_notifications_wizard(osv.osv_memory):
     _name='kemas.collaborator.send.notifications.wizard'
     _columns={
         'line_ids': fields.one2many('kemas.collaborator.send.notifications.line.wizard', 'wizard_id', 'Collaborators'),
-        'state':fields.selection([
+        'state': fields.selection([
             ('loading','Loading'),
             ('loaded','Loaded'),
             ],    'State'),
@@ -150,9 +150,9 @@ class kemas_collaborator_send_notifications_wizard(osv.osv_memory):
 class kemas_collaborator_send_notifications_line_wizard(osv.osv_memory):
     _name='kemas.collaborator.send.notifications.line.wizard'
     _columns={
-        'wizard_id':fields.many2one('kemas.collaborator.send.notifications.wizard','wizard_id',ondelete='cascade', required=True),
-        'date_create':fields.datetime('Date create', help='Date the record was created from this Collaborator.'),
-        'collaborator_id':fields.many2one('kemas.collaborator','Collaborator',ondelete='cascade', help='Contributor to which to send the notification mail.'),
+        'wizard_id': fields.many2one('kemas.collaborator.send.notifications.wizard','wizard_id',ondelete='cascade', required=True),
+        'date_create': fields.datetime('Date create', help='Date the record was created from this Collaborator.'),
+        'collaborator_id': fields.many2one('kemas.collaborator','Collaborator',ondelete='cascade', help='Contributor to which to send the notification mail.'),
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

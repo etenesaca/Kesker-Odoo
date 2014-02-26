@@ -137,7 +137,7 @@ class kemas_event_replace_collaborator_wizard(osv.osv_memory):
     _name='kemas.event_replace_collaborator.wizard'
     _rec_name = 'event_id'
     _columns={
-        'event_id':fields.many2one('kemas.event','Event', required=True,ondelete='cascade', help='Event which will replace collaborators.'),
+        'event_id': fields.many2one('kemas.event','Event', required=True,ondelete='cascade', help='Event which will replace collaborators.'),
         'logo': fields.binary('img'),
         'line_ids': fields.one2many('kemas.event_replace_collaborator.wizard.line', 'wizard_id', 'Lines',help=''),
         'collaborator_ids': fields.text('collaborator_id'),
@@ -152,12 +152,12 @@ class kemas_event_replace_collaborator_wizard(osv.osv_memory):
 class kemas_event_replace_collaborator_wizard_line(osv.osv_memory):
     _name='kemas.event_replace_collaborator.wizard.line'
     _columns={
-        'wizard_id':fields.many2one('kemas.event_replace_collaborator.wizard','Wizard parent',ondelete='cascade', help='Event which will replace collaborators.'),
-        'collaborator_id':fields.many2one('kemas.collaborator','Collaborator',ondelete='cascade', help=''),
-        'collaborator_replacement_id':fields.many2one('kemas.collaborator','Replacement',ondelete='cascade', help='Collaborator replacement'),
+        'wizard_id': fields.many2one('kemas.event_replace_collaborator.wizard','Wizard parent',ondelete='cascade', help='Event which will replace collaborators.'),
+        'collaborator_id': fields.many2one('kemas.collaborator','Collaborator',ondelete='cascade', help=''),
+        'collaborator_replacement_id': fields.many2one('kemas.collaborator','Replacement',ondelete='cascade', help='Collaborator replacement'),
         'replacements': fields.integer('Replacements',help='Number of replacements available'),
         'except_ids': fields.text('except_ids'),
-        'replaced':fields.boolean('Replaced'),
+        'replaced': fields.boolean('Replaced'),
         'description': fields.text('Description'),
         'event_collaborator_line_id': fields.integer('event_collaborator_line_id')
         }   
