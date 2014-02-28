@@ -4350,6 +4350,14 @@ class kemas_place(osv.osv):
         }
 
 class kemas_expositor(osv.osv):
+    def do_activate(self, cr, uid, ids, context={}):
+        super(osv.osv, self).write(cr, uid, ids, {'active' : True})
+        return True
+    
+    def do_inactivate(self, cr, uid, ids, context={}):
+        super(osv.osv, self).write(cr, uid, ids, {'active': False})
+        return True
+    
     def _person_age(self, cr, uid, ids, name, arg, context={}):
         result = {}
         collaborators = super(osv.osv, self).read(cr, uid, ids, ['id', 'birth'], context=context)
@@ -4409,6 +4417,7 @@ class kemas_expositor(osv.osv):
     _columns = {
         'name': fields.char('Name', size=64, required=True, help='The name of the expositor'),
         'email': fields.char('Email', size=64),
+        'active': fields.boolean(u'¿Activo?', required=False),
         'photo': fields.binary("Photo", help="This field holds the image used as avatar for the expositor, limited to 1024x1024px"),
         'photo_small': fields.binary("Foto"),
         'birth': fields.date('Fecha de Nacimiento'),
@@ -4419,9 +4428,11 @@ class kemas_expositor(osv.osv):
         'address': fields.text(u'Dirección'),
         'details': fields.text('Details'),
         }
+    
     _sql_constraints = [
         ('expositor_cname', 'unique (name)', 'This Name already exist!'),
         ]
+    
     def _get_default_image(self, cr, uid, is_company, context=None, colorize=False):
         if is_company:
             image = open(openerp.modules.get_module_resource('base', 'static/src/img', 'company_image.png')).read()
@@ -4431,13 +4442,23 @@ class kemas_expositor(osv.osv):
                                             )
     _defaults = {
         'photo': lambda self, cr, uid, ctx: self._get_default_image(cr, uid, ctx.get('default_is_company', False), ctx),
+        'active': True,
     }
 
 class kemas_recording_type(osv.osv):
+    def do_activate(self, cr, uid, ids, context={}):
+        super(osv.osv, self).write(cr, uid, ids, {'active' : True})
+        return True
+    
+    def do_inactivate(self, cr, uid, ids, context={}):
+        super(osv.osv, self).write(cr, uid, ids, {'active': False})
+        return True
+    
     _order = 'name'
     _name = 'kemas.recording.type'
     _columns = {
         'name': fields.char('Name', size=64, required=True, help='The name of the recording type'),
+        'active': fields.boolean(u'¿Activo?', required=False),
         'sequence_id': fields.many2one('ir.sequence', 'Sequence', required=True),
         'prefix': fields.related('sequence_id', 'prefix', type='char', string='Prefix', readonly=1, store=False, help="Prefix that appears with the code of each recording"),
         'number_next_actual': fields.related('sequence_id', 'number_next_actual', type='char', string=u'Número siguiente', readonly=1, store=False),
@@ -4445,6 +4466,10 @@ class kemas_recording_type(osv.osv):
     _sql_constraints = [
         ('recording_type_name', 'unique (name)', 'This Name already exist!'),
         ]
+    
+    _defaults = {  
+        'active': True,
+        }
 
 class kemas_recording_series(osv.osv):
     def create(self, cr, uid, vals, *args, **kwargs):
@@ -4637,7 +4662,7 @@ class kemas_recording(osv.osv):
                 args.remove(item)
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
     
-    _order = 'date DESC'
+    _order = 'date DESC, recording_type_id'
     _rec_name = 'theme'
     _name = 'kemas.recording'
     _inherit = ['mail.thread', 'ir.needaction_mixin']

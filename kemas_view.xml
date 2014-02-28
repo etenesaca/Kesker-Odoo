@@ -4161,6 +4161,10 @@
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Expositor" version="7.0">
+               <header>
+                  <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('active','=',True)]}" groups="kemas.group_kemas_librarian" />
+                  <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('active','=',False)]}" groups="kemas.group_kemas_librarian" />
+               </header>
                <sheet string="Expositor">
                   <field name="photo" widget='image' class="oe_left oe_avatar" on_change="on_change_photo(photo)" />
                   <div class="oe_title">
@@ -4178,6 +4182,7 @@
                      <field name="birth" on_change="on_change_birth(birth)" placeholder="Fecha nac" colspan="2" />
                      <field name="age" required="1" readonly="1" colspan="2" attrs="{'invisible':[('birth','=',False)]}" />
                      <group colspan="2" />
+                     <field name="active" />
                      <separator string="Contacto" colspan="6" />
                      <field name="mobile" colspan="2" placeholder="ex: 0985146325" />
                      <group colspan="4" />
@@ -4203,8 +4208,12 @@
          <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
-            <tree string="expositors">
+            <tree string="expositors" colors="gray:active==False;">
                <field name="name" />
+               <field name="telef1" />
+               <field name="mobile" />
+               <field name="email" />
+               <field name="active" />
             </tree>
          </field>
       </record>
@@ -4215,9 +4224,10 @@
          <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="search expositor">
-               <group>
-                  <field name="name" default_focus="1" />
-               </group>
+               <filter name="active" string="Activos" domain="[('active','=',True)]" />
+               <filter name="inactive" string="Inactivos" domain="[('active','=',False)]" />
+               <separator />
+               <field name="name" default_focus="1" />
             </search>
          </field>
       </record>
@@ -4234,6 +4244,10 @@
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Recording type" version="7.0">
+               <header>
+                  <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('active','=',True)]}" groups="kemas.group_kemas_librarian" />
+                  <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('active','=',False)]}" groups="kemas.group_kemas_librarian" />
+               </header>
                <sheet>
                   <div class="oe_title">
                      <div class="oe_edit_only">
@@ -4243,12 +4257,11 @@
                         <field name="name" default_focus="1" placeholder="ex: Congress" />
                      </h1>
                   </div>
-                  <group colspan="4" col="10">
-                     <field name="sequence_id" colspan="4" />
-                     <field name="prefix" colspan="2" attrs="{'invisible':[('sequence_id','=',False)]}" />
-                     <field name="number_next_actual" colspan="2" attrs="{'invisible':[('sequence_id','=',False)]}" />
-                     <group colspan="2" expand="1" attrs="{'invisible':[('sequence_id','!=',False)]}" />
-                     <group colspan="2" />
+                  <group>
+                     <field name="sequence_id" placeholder="Seleccione o cree una secuencia para este tipo de grabación..." />
+                     <field name="prefix" attrs="{'invisible':[('sequence_id','=',False)]}" />
+                     <field name="number_next_actual" attrs="{'invisible':[('sequence_id','=',False)]}" />
+                     <field name="active" />
                   </group>
                </sheet>
             </form>
@@ -4261,9 +4274,10 @@
          <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
-            <tree string="Recording types">
+            <tree string="Recording types" colors="gray:active==False;">
                <field name="name" />
                <field name="prefix" />
+               <field name="active" />
             </tree>
          </field>
       </record>
@@ -4274,9 +4288,10 @@
          <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Search Recording type">
-               <group>
-                  <field name="name" default_focus="1" />
-               </group>
+               <filter name="active" string="Activos" domain="[('active','=',True)]" />
+               <filter name="inactive" string="Inactivos" domain="[('active','=',False)]" />
+               <separator />
+               <field name="name" default_focus="1" />
             </search>
          </field>
       </record>
