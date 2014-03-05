@@ -44,7 +44,6 @@ import tools7
 import math
 from dateutil.parser import  *
 from openerp import SUPERUSER_ID
-    
 _logger = logging.getLogger(__name__)
     
 class kemas_collaborator_logbook_login(osv.osv):
@@ -115,6 +114,15 @@ class kemas_collaborator_logbook_login(osv.osv):
         }
     
 class kemas_func(osv.osv):
+    def module_installed(self, cr, uid, module_name):
+        sql = """
+            SELECT mdl.id FROM ir_module_module AS mdl
+            WHERE mdl.state = 'installed' AND name = '%s'
+            LIMIT 1 
+            """ % module_name
+        cr.execute(sql)
+        return bool(cr.fetchall())
+    
     def mailing(self, cr, uid):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
@@ -2460,7 +2468,20 @@ class kemas_collaborator_logbook(osv.osv):
              ], 'Type'),
         }
     
-class kemas_collaborator(osv.osv):    
+class kemas_collaborator(osv.osv):
+    def get_collaborator(self, cr, uid, collaborator_id, context={}):
+        fields = "name"
+        sql = """
+            SELECT name FROM kemas_collaborator
+            where id = %d
+            """ % collaborator_id
+        cr.execute(sql)
+        collaborator = cr.dictfetchall()[0]
+        if collaborator:
+            return collaborator
+        else:
+            return False
+        
     def change_to_collaborator(self, cr, uid, ids, context={}):
         collaborator = super(kemas_collaborator, self).read(cr, uid, ids[0], ['nick_name', 'name', 'email', 'code'])
         vals = {
