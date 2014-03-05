@@ -2471,12 +2471,18 @@ class kemas_collaborator(osv.osv):
     def get_collaborator(self, cr, uid, collaborator_id, context={}):
         fields = "name"
         sql = """
-            SELECT name FROM kemas_collaborator
-            where id = %d
+            SELECT CL.name,P.image_medium,Cl.nick_name FROM kemas_collaborator as CL
+            JOIN res_users as U on (Cl.user_id = U.id)
+            JOIN res_partner as P on (U.partner_id = P.id)
+            where Cl.id = %d
             """ % collaborator_id
         cr.execute(sql)
         collaborator = cr.dictfetchall()[0]
         if collaborator:
+            try:
+                collaborator['image_medium'] = unicode(collaborator['image_medium'])
+            except:
+                collaborator['image_medium'] = ''
             return collaborator
         else:
             return False
