@@ -36,7 +36,6 @@ import calendar
 import pooler
 import threading
 from mx import DateTime
-from compiler.pycodegen import EXCEPT
 import base64
 import openerp
 import tools
