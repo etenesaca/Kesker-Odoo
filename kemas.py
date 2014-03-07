@@ -1130,6 +1130,9 @@ class kemas_config(osv.osv):
         #---Cliente de registro asistencia---------
         'logo_program_client': fields.binary('Imagen de Cabecera', help='Es la imagen que va a salir en la cabecera del programa para registro de asistencias.'),
         'frequency_program_client': fields.integer('Frecuencia de conexion', help="Frecuencia en segundos con la que el programa se conecta al sistema para consultar los datos"),
+        #---Cliente mobil---------
+        'mobile_background': fields.binary('Fondo', help='Es la imagen que estla como fndo en el menu de Colaboradores.'),
+        'mobile_background_text_color':fields.char('Color de la letra', size=64, help='Color del texto del Menu.'),
         #---Report----------------------------------
         'report_header': fields.text('Report header', help='Text to be displayed in the header of the report.'),
         'use_header': fields.boolean('Use?'),
@@ -2497,7 +2500,7 @@ class kemas_collaborator(osv.osv):
             collaborator.pop('team_id')
             
             # Poner en español el estado civil
-            lgenre = {'Male': 'o','Female': 'a'}
+            lgenre = {'Male': 'o', 'Female': 'a'}
             if collaborator['marital_status'] == 'single':
                 collaborator['marital_status'] = 'Soleter' + lgenre[collaborator['genre']]
             else:
