@@ -2474,7 +2474,7 @@ class kemas_collaborator(osv.osv):
     def get_collaborator(self, cr, uid, collaborator_id, context={}):
         sql = """
             SELECT 
-                CL.code,CL.name,Cl.nick_name,Cl.birth,Cl.marital_status,Cl.address,P.image_medium,
+                Cl.id, CL.code,CL.name,Cl.nick_name,Cl.birth,Cl.marital_status,Cl.address,P.image_medium,
                 Cl.mobile,Cl.telef1,Cl.telef2,Cl.email,Cl.im_account,
                 Cl.join_date,CL.points,LV.name as level, CL.team_id, Cl.genre
             FROM kemas_collaborator as CL
@@ -2487,14 +2487,32 @@ class kemas_collaborator(osv.osv):
         collaborators = cr.dictfetchall()
         if collaborators:
             collaborator = collaborators[0]
+            # Obtener el listado de Areas de Colaboracion
+            sql = """
+                SELECT name,logo FROM kemas_area as A
+                JOIN kemas_collaborator_area_rel as REL ON (REL.area_id = A.id)
+                WHERE REL.collaborator_id = %s
+                """ % str(collaborator['id'])
+            cr.execute(sql)
+            collaborator['areas'] = cr.dictfetchall()
+            for area in collaborator['areas']:
+                try:
+                    area['logo'] = unicode(area['logo'])
+                except:
+                    area['logo'] = ''
+                
             # Obtener el equipo
             if collaborator['team_id']:
                 sql = """
-                    SELECT name FROM kemas_team
+                    SELECT name,logo FROM kemas_team
                     WHERE id = %s
                     """ % str(collaborator['team_id'])
                 cr.execute(sql)
-                collaborator['team'] = cr.dictfetchall()[0]['name']
+                collaborator['team'] = cr.dictfetchall()[0]
+                try:
+                    collaborator['team']['logo'] = unicode(collaborator['team']['logo'])
+                except:
+                    collaborator['team']['logo'] = ''
             else:
                 collaborator['team'] = ' -- '
             collaborator.pop('team_id')
