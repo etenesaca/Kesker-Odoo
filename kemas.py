@@ -2472,6 +2472,14 @@ class kemas_collaborator_logbook(osv.osv):
     
 class kemas_collaborator(osv.osv):
     def get_collaborator(self, cr, uid, collaborator_id, context={}):
+        def build_image(image):
+            result = ''
+            if not image is None and type(image).__name__ == 'buffer':
+                try:
+                    result = unicode(image)
+                except: None
+            return result
+                
         sql = """
             SELECT 
                 Cl.id, CL.code,CL.name,Cl.nick_name,Cl.birth,Cl.marital_status,Cl.address,P.image_medium,
@@ -2496,11 +2504,8 @@ class kemas_collaborator(osv.osv):
             cr.execute(sql)
             collaborator['areas'] = cr.dictfetchall()
             for area in collaborator['areas']:
-                try:
-                    area['logo'] = unicode(area['logo'])
-                except:
-                    area['logo'] = ''
-                
+                area['logo'] = build_image(area['logo'])
+            
             # Obtener el equipo
             if collaborator['team_id']:
                 sql = """
@@ -2509,12 +2514,9 @@ class kemas_collaborator(osv.osv):
                     """ % str(collaborator['team_id'])
                 cr.execute(sql)
                 collaborator['team'] = cr.dictfetchall()[0]
-                try:
-                    collaborator['team']['logo'] = unicode(collaborator['team']['logo'])
-                except:
-                    collaborator['team']['logo'] = ''
+                collaborator['team']['logo'] = build_image(collaborator['team']['logo'])
             else:
-                collaborator['team'] = ' -- '
+                collaborator['team'] = ''
             collaborator.pop('team_id')
             
             # Poner en español el estado civil
@@ -2524,12 +2526,8 @@ class kemas_collaborator(osv.osv):
             else:
                 collaborator['marital_status'] = 'Casad' + lgenre[collaborator['genre']]
                     
-
             # Poner la foto en el formato correcto
-            try:
-                collaborator['image_medium'] = unicode(collaborator['image_medium'])
-            except:
-                collaborator['image_medium'] = ''
+            collaborator['image_medium'] = build_image(collaborator['image_medium'])
         
             # Calcular la edad
             collaborator['age'] = kemas_extras.calcular_edad(collaborator['birth'])
