@@ -1130,7 +1130,7 @@ class kemas_config(osv.osv):
         #---Cliente de registro asistencia---------
         'logo_program_client': fields.binary('Imagen de Cabecera', help='Es la imagen que va a salir en la cabecera del programa para registro de asistencias.'),
         'frequency_program_client': fields.integer('Frecuencia de conexion', help="Frecuencia en segundos con la que el programa se conecta al sistema para consultar los datos"),
-        #---Cliente mobil---------
+        #---Cliente movil---------
         'mobile_background': fields.binary('Fondo', help='Es la imagen que estla como fndo en el menu de Colaboradores.'),
         'mobile_background_text_color':fields.char('Color de la letra', size=64, help='Color del texto del Menu.'),
         #---Report----------------------------------
@@ -2471,6 +2471,51 @@ class kemas_collaborator_logbook(osv.osv):
         }
     
 class kemas_collaborator(osv.osv):
+    def get_info_for_navigation(self, cr, uid, collaborator_id, context={}):
+        def build_image(image):
+            result = ''
+            if not image is None and type(image).__name__ == 'buffer':
+                try:
+                    result = unicode(image)
+                except: None
+            return result
+        
+        sql = """
+            SELECT P.name,P.image_small as image, CL.team_id
+            FROM kemas_collaborator as CL
+            JOIN res_users as U on (Cl.user_id = U.id)
+            JOIN res_partner as P on (U.partner_id = P.id)
+            WHERE Cl.id = %d
+            """ % collaborator_id
+        cr.execute(sql)
+        collaborators = cr.dictfetchall()
+        if collaborators:
+            result = {}
+            collaborator = collaborators[0]
+            collaborator['image'] = build_image(collaborator['image'])
+            # Obtener el equipo
+            if collaborator['team_id']:
+                sql = """
+                    SELECT name FROM kemas_team
+                    WHERE id = %s
+                    """ % str(collaborator['team_id'])
+                cr.execute(sql)
+                collaborator['team'] = cr.dictfetchall()[0]['name']
+            else:
+                collaborator['team'] = ''
+            collaborator.pop('team_id')
+            result.update(collaborator)
+            
+            sql = """
+                select mobile_background,mobile_background_text_color from kemas_config
+                """
+            cr.execute(sql)
+            config = cr.dictfetchall()[0]
+            config['mobile_background'] = build_image(config['mobile_background'])
+            result.update(config)
+        else:
+            return False
+        
     def get_collaborator(self, cr, uid, collaborator_id, context={}):
         def build_image(image):
             result = ''
