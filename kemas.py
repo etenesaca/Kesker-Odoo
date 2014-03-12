@@ -2513,6 +2513,7 @@ class kemas_collaborator(osv.osv):
             config = cr.dictfetchall()[0]
             config['mobile_background'] = build_image(config['mobile_background'])
             result.update(config)
+            return result
         else:
             return False
         
