@@ -6509,7 +6509,17 @@ class kemas_event(osv.osv):
         'stage_id': _read_group_stage_id
     }
     
-class kemas_attendance(osv.osv):    
+class kemas_attendance(osv.osv):   
+    def get_attendances_to_mobilapp(self, cr, uid, ids, context={}):
+        sql = """
+            SELECT A.id, S.name, A.type, A.date FROM kemas_attendance as A
+            JOIN kemas_event as E ON (E.id = A.event_id)
+            JOIN kemas_service as S ON (S.id = E.service_id)
+            WHERE A.id in %s
+            """ % (kemas_extras.convert_to_tuple_str(ids))
+        cr.execute(sql)
+        return cr.fetchall()
+         
     def name_get(self, cr, uid, ids, context={}):
         records = self.read(cr, uid, ids, ['code', 'event_id'])
         res = []
