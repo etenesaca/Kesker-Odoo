@@ -6516,7 +6516,7 @@ class kemas_attendance(osv.osv):
             JOIN kemas_event as E ON (E.id = A.event_id)
             JOIN kemas_service as S ON (S.id = E.service_id)
             WHERE A.id in %s
-            ORDER BY A.date
+            ORDER BY A.date DESC
             """ % (kemas_extras.convert_to_tuple_str(ids))
         cr.execute(sql)
         print ids
