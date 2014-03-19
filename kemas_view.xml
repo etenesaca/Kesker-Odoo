@@ -2948,6 +2948,7 @@
                      <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_attendance_collaborator)d" string="Asistencias" />
                      <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_suspension_collaborator)d" string="Suspensiones" />
                      <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_collaborator_logbook_login)d" string="Logins" />
+                     <button string="Cortar fotos" name="crop_photo" type="object" icon="gtk-cut"/>
                   </div>
                   <group colspan="4" expand="1" col="10">
                      <field name="notified" invisible="1" />
