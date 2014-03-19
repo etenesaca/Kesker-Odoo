@@ -40,7 +40,7 @@
                                        </a>
                                        <div class="oe_module_vignette">
                                           <a type="open">
-                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_small', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
                                           </a>
                                           <div class="oe_module_desc">
                                              <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
@@ -105,7 +105,7 @@
                   <t t-name="kanban-box">
                      <div class="oe_kanban_vignette oe_semantic_html_override">
                         <a type="open">
-                           <img t-att-src="kanban_image('kemas.team', 'logo', record.id.value)" class="oe_kanban_image" />
+                           <img t-att-src="kanban_image('kemas.team', 'logo_medium', record.id.value)" class="oe_kanban_image" />
                         </a>
                         <div class="oe_kanban_details">
                            <h4 class="oe_partner_heading">
@@ -190,7 +190,7 @@
                                        </a>
                                        <div class="oe_module_vignette">
                                           <a type="open">
-                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_small', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
                                           </a>
                                           <div class="oe_module_desc">
                                              <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
@@ -266,7 +266,7 @@
                   <t t-name="kanban-box">
                      <div class="oe_kanban_vignette oe_semantic_html_override">
                         <a type="open">
-                           <img t-att-src="kanban_image('kemas.area', 'logo', record.id.value)" class="oe_kanban_image" />
+                           <img t-att-src="kanban_image('kemas.area', 'logo_medium', record.id.value)" class="oe_kanban_image" />
                         </a>
                         <div class="oe_kanban_details">
                            <h4 class="oe_partner_heading">
@@ -1492,7 +1492,7 @@
                   <t t-name="kanban-box">
                      <div class="oe_kanban_vignette oe_semantic_html_override">
                         <a type="open">
-                           <img t-att-src="kanban_image('kemas.web.site', 'logo', record.id.value)" class="oe_kanban_image" />
+                           <img t-att-src="kanban_image('kemas.web.site', 'logo_medium', record.id.value)" class="oe_kanban_image" />
                         </a>
                         <div class="oe_kanban_details">
                            <h4 class="oe_partner_heading">
@@ -2485,7 +2485,7 @@
                   <t t-name="kanban-box">
                      <div class="oe_kanban_vignette oe_semantic_html_override">
                         <a type="open">
-                           <img t-att-src="kanban_image('kemas.ministry', 'logo', record.id.value)" class="oe_kanban_image" />
+                           <img t-att-src="kanban_image('kemas.ministry', 'logo_medium', record.id.value)" class="oe_kanban_image" />
                         </a>
                         <div class="oe_kanban_details">
                            <h4 class="oe_partner_heading">
@@ -2541,7 +2541,7 @@
                                        </a>
                                        <div class="oe_module_vignette">
                                           <a type="open">
-                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_small', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
                                           </a>
                                           <div class="oe_module_desc">
                                              <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
@@ -2619,7 +2619,7 @@
                   <t t-name="kanban-box">
                      <div class="oe_kanban_vignette oe_semantic_html_override">
                         <a type="open">
-                           <img t-att-src="kanban_image('kemas.specialization.course', 'logo', record.id.value)" class="oe_kanban_image" />
+                           <img t-att-src="kanban_image('kemas.specialization.course', 'logo_medium', record.id.value)" class="oe_kanban_image" />
                         </a>
                         <div class="oe_kanban_details">
                            <h4 class="oe_partner_heading">
@@ -2948,6 +2948,7 @@
                      <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_attendance_collaborator)d" string="Asistencias" />
                      <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_suspension_collaborator)d" string="Suspensiones" />
                      <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_collaborator_logbook_login)d" string="Logins" />
+                     <button string="Cortar foto" name="crop_photo" type="object" icon="gtk-cut"/>
                   </div>
                   <group colspan="4" expand="1" col="10">
                      <field name="notified" invisible="1" />
@@ -3423,7 +3424,7 @@
                   <t t-name="kanban-box">
                      <div class="oe_kanban_vignette oe_semantic_html_override">
                         <a type="open">
-                           <img t-att-src="kanban_image('kemas.collaborator', 'photo_small', record.id.value)" class="oe_kanban_image" />
+                           <img t-att-src="kanban_image('kemas.collaborator', 'photo_medium', record.id.value)" class="oe_kanban_image" />
                         </a>
                         <div class="oe_kanban_details">
                            <h4 class="oe_partner_heading">
@@ -3469,7 +3470,7 @@
                   <t t-name="kanban-box">
                      <div class="oe_kanban_vignette oe_semantic_html_override">
                         <a type="open">
-                           <img t-att-src="kanban_image('kemas.collaborator', 'photo_small', record.id.value)" class="oe_kanban_image" />
+                           <img t-att-src="kanban_image('kemas.collaborator', 'photo_medium', record.id.value)" class="oe_kanban_image" />
                         </a>
                         <div class="oe_kanban_details">
                            <h4 class="oe_partner_heading">
@@ -3506,7 +3507,7 @@
                <templates>
                   <t t-name="kanban-box">
                      <div class="oe_kanban_vignette oe_semantic_html_override">
-                        <img t-att-src="kanban_image('kemas.collaborator', 'photo_small', record.id.value)" class="oe_kanban_image" />
+                        <img t-att-src="kanban_image('kemas.collaborator', 'photo_medium', record.id.value)" class="oe_kanban_image" />
                         <div class="oe_kanban_details">
                            <h4 class="oe_partner_heading">
                               <field name="name_with_nick_name" />
@@ -4120,7 +4121,7 @@
                   <t t-name="kanban-box">
                      <div class="oe_kanban_vignette oe_semantic_html_override">
                         <a type="open">
-                           <img t-att-src="kanban_image('kemas.expositor', 'photo', record.id.value)" class="oe_kanban_image" />
+                           <img t-att-src="kanban_image('kemas.expositor', 'photo_medium', record.id.value)" class="oe_kanban_image" />
                         </a>
                         <div class="oe_kanban_details">
                            <h4 class="oe_partner_heading">
@@ -4302,7 +4303,7 @@
       -->
       <!--____________________________________________________Vista de Kanban -->
       <record model="ir.ui.view" id="kemas_trecording_series_kanban_view">
-         <field name="name">kemas.recording.series.</field>
+         <field name="name">kemas.recording.series.kanban</field>
          <field name="model">kemas.recording.series</field>
          <field name="type">kanban</field>
          <field name="arch" type="xml">
@@ -4311,7 +4312,7 @@
                   <t t-name="kanban-box">
                      <div class="oe_kanban_vignette oe_semantic_html_override">
                         <a type="open">
-                           <img t-att-src="kanban_image('kemas.recording.series', 'logo', record.id.value)" class="oe_kanban_image" />
+                           <img t-att-src="kanban_image('kemas.recording.series', 'logo_medium', record.id.value)" class="oe_kanban_image" />
                         </a>
                         <div class="oe_kanban_details">
                            <h4 class="oe_partner_heading">
@@ -4450,7 +4451,7 @@
                                        </a>
                                        <div class="oe_module_vignette">
                                           <a type="open">
-                                             <img t-att-src="kanban_image('kemas.expositor', 'photo_small', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                                             <img t-att-src="kanban_image('kemas.expositor', 'photo_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
                                           </a>
                                           <div class="oe_module_desc">
                                              <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
@@ -4505,7 +4506,7 @@
                                        </a>
                                        <div class="oe_module_vignette">
                                           <a type="open">
-                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_small', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
                                           </a>
                                           <div class="oe_module_desc">
                                              <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
@@ -4583,7 +4584,7 @@
                                        </a>
                                        <div class="oe_module_vignette">
                                           <a type="open">
-                                             <img t-att-src="kanban_image('kemas.expositor', 'photo_small', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                                             <img t-att-src="kanban_image('kemas.expositor', 'photo_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
                                           </a>
                                           <div class="oe_module_desc">
                                              <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
@@ -4638,7 +4639,7 @@
                                        </a>
                                        <div class="oe_module_vignette">
                                           <a type="open">
-                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_small', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
                                           </a>
                                           <div class="oe_module_desc">
                                              <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">

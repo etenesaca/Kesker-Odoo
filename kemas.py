@@ -1732,6 +1732,26 @@ class kemas_activity(osv.osv):
         ('activity_name', 'unique (name,area_id)', 'This Activity already exist!'),
         ]
 class kemas_team(osv.osv):
+    def write(self, cr, uid, ids, vals, context={}):
+        result = super(kemas_team, self).write(cr, uid, ids, vals, context)
+        for id in ids:
+            if vals.get('logo', False):
+                path = addons.__path__[0] + '/web/static/src/img/logo' + 'team'
+                vals_write = {}
+                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
+                super(kemas_team, self).write(cr, uid, [id], vals_write, context)
+        return result
+    
+    def create(self, cr, uid, vals, context={}):
+        if vals.get('logo', False):
+            path = addons.__path__[0] + '/web/static/src/img/logo' + 'team'
+            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
+        return super(kemas_team, self).create(cr, uid, vals, context)
+    
     def on_change_logo(self, cr, uid, ids, photo):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
@@ -1749,6 +1769,9 @@ class kemas_team(osv.osv):
     _name = 'kemas.team'
     _columns = {
         'logo': fields.binary('Logo', help='The Team Logo.'),
+        'logo_large': fields.binary('Large Logo'),
+        'logo_medium': fields.binary('Medium Logo'),
+        'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='The name of the Team'),
         'responsible': fields.char('Responsible', size=64, required=False, help='Person in charge of this Team.'),
         'description': fields.text('Description', help='The description of the Team'),
@@ -1952,6 +1975,26 @@ class kemas_school4d_line(osv.osv):
     }
     
 class kemas_area(osv.osv):
+    def write(self, cr, uid, ids, vals, context={}):
+        result = super(kemas_area, self).write(cr, uid, ids, vals, context)
+        for id in ids:
+            if vals.get('logo', False):
+                path = addons.__path__[0] + '/web/static/src/img/logo' + 'area'
+                vals_write = {}
+                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
+                super(kemas_area, self).write(cr, uid, [id], vals_write, context)
+        return result
+
+    def create(self, cr, uid, vals, context={}):
+        if vals.get('logo', False):
+            path = addons.__path__[0] + '/web/static/src/img/logo' + 'area'
+            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
+        return super(kemas_area, self).create(cr, uid, vals, context)
+    
     def on_change_logo(self, cr, uid, ids, photo):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
@@ -1969,6 +2012,9 @@ class kemas_area(osv.osv):
     _name = 'kemas.area'
     _columns = {
         'logo': fields.binary('Logo', help='The Area Logo.'),
+        'logo_large': fields.binary('Large Logo'),
+        'logo_medium': fields.binary('Medium Logo'),
+        'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='The name of the area'),
         'responsible': fields.char('Responsible', size=64, required=True, help='Person in charge of this Area.'),
         'description': fields.text('Description', help='the description of the area'),
@@ -2056,19 +2102,40 @@ class kemas_level(osv.osv):
             if len(level_ids) > 1:
                 return False
         return True
-    def create(self, cr, uid, vals, *args, **kwargs):
-         if vals.get('first_level', False):
+    
+    def write(self, cr, uid, ids, vals, context={}):
+        result = super(kemas_level, self).write(cr, uid, ids, vals, context)
+        for id in ids:
+            if vals.get('logo', False):
+                path = addons.__path__[0] + '/web/static/src/img/logo' + 'level'
+                vals_write = {}
+                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
+                super(kemas_level, self).write(cr, uid, [id], vals_write, context)
+        return result
+
+
+    def create(self, cr, uid, vals, context={}):
+        if vals.get('logo', False):
+            path = addons.__path__[0] + '/web/static/src/img/logo' + 'level'
+            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
+            
+        if vals.get('first_level', False):
              vals['points'] = 0
-         res = super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
-         cr.commit()
-         collaborator_obj = self.pool.get('kemas.collaborator')
-         collaborator_obj.update_collaborators_level(cr, uid)
-         return res
+        res_id = super(kemas_level, self).create(cr, uid, vals, context)
+        self.pool.get('kemas.collaborator').update_collaborators_level(cr, uid)        
+        return res_id
      
     _order = 'points'
     _name = 'kemas.level'
     _columns = {
         'logo': fields.binary('Logo'),
+        'logo_large': fields.binary('Large Logo'),
+        'logo_medium': fields.binary('Medium Logo'),
+        'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='Name of this level.'),
         'previous_id': fields.many2one('kemas.level', 'Previous Level', help='Level that precedes this.'),
         'points': fields.integer('Points', help="Number of points required to reach this level."),
@@ -2076,11 +2143,13 @@ class kemas_level(osv.osv):
         'collaborator_ids': fields.one2many('kemas.collaborator', 'level_id', 'Levels', help='Collaborators found at this level'),
         'description': fields.text('Description'),
         }
+    
     _constraints = [
         (validate_unique_first_level, 'There can be only one level set as the first level.', ['first_level']),
         (validate_points_zero, 'The points must be greater than zero.', ['points']),
         (validate_points, 'The points have to be higher than the previous level.', ['points']),
         ]
+    
     _sql_constraints = [
         ('level_name', 'unique (name)', "This level's name already exist!"),
         ]
@@ -2158,6 +2227,26 @@ class kemas_collaborator_progress_level(osv.osv):
     _columns = {'percentaje': fields.float(''), }
 
 class kemas_web_site(osv.osv):
+    def write(self, cr, uid, ids, vals, context={}):
+        result = super(kemas_web_site, self).write(cr, uid, ids, vals, context)
+        for id in ids:
+            if vals.get('logo', False):
+                path = addons.__path__[0] + '/web/static/src/img/logo' + 'web_site'
+                vals_write = {}
+                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
+                super(kemas_web_site, self).write(cr, uid, [id], vals_write, context)
+        return result
+
+    def create(self, cr, uid, vals, context={}):
+        if vals.get('logo', False):
+            path = addons.__path__[0] + '/web/static/src/img/logo' + 'web_site'
+            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
+        return super(kemas_web_site, self).create(cr, uid, vals, context)
+    
     def on_change_logo(self, cr, uid, ids, photo):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
@@ -2175,6 +2264,9 @@ class kemas_web_site(osv.osv):
     _name = 'kemas.web.site'
     _columns = {
         'logo': fields.binary('Logo'),
+        'logo_large': fields.binary('Large Logo'),
+        'logo_medium': fields.binary('Medium Logo'),
+        'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='The name of the Web Site'),
         'url': fields.char('URL', size=256, help='Web address.'),
         'line_ids': fields.one2many('kemas.collaborator.web.site', 'web_site_id', 'Collaborators'),
@@ -2373,15 +2465,39 @@ class kemas_ministry(osv.osv):
         super(osv.osv, self).write(cr, uid, ids, {'active': False})
         return True
     
+    def write(self, cr, uid, ids, vals, context={}):
+        result = super(kemas_ministry, self).write(cr, uid, ids, vals, context)
+        for id in ids:
+            if vals.get('logo', False):
+                path = addons.__path__[0] + '/web/static/src/img/logo' + 'ministry'
+                vals_write = {}
+                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
+                super(kemas_ministry, self).write(cr, uid, [id], vals_write, context)
+        return result
+
+    def create(self, cr, uid, vals, context={}):
+        if vals.get('logo', False):
+            path = addons.__path__[0] + '/web/static/src/img/logo' + 'ministry'
+            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
+        return super(kemas_ministry, self).create(cr, uid, vals, context)
+    
     _order = 'name'
     _name = 'kemas.ministry'
     _columns = {
         'logo': fields.binary('Logo', help='Logo del Ministerio.'),
+        'logo_large': fields.binary('Large Logo'),
+        'logo_medium': fields.binary('Medium Logo'),
+        'logo_small': fields.binary('Small Logo'),
         'active': fields.boolean('Activo?', required=False),
         'name': fields.char('Nombre', size=64, required=True, help='Nombre del minsterio'),
         'description': fields.text('Description', help='Una descripcion breve'),
         'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_ministry_collaborator_rel', 'ministry_id', 'collaborator_id', 'Colaboradores'),
         }
+    
     _sql_constraints = [
         ('uname', 'unique(name)', "Este Ministerio ya existe!"),
         ]
@@ -2404,10 +2520,33 @@ class kemas_specialization_course(osv.osv):
         super(osv.osv, self).write(cr, uid, ids, {'active': False})
         return True
     
+    def write(self, cr, uid, ids, vals, context={}):
+        result = super(kemas_specialization_course, self).write(cr, uid, ids, vals, context)
+        for id in ids:
+            if vals.get('logo', False):
+                path = addons.__path__[0] + '/web/static/src/img/logo' + 'specialization_course'
+                vals_write = {}
+                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
+                super(kemas_specialization_course, self).write(cr, uid, [id], vals_write, context)
+        return result
+
+    def create(self, cr, uid, vals, context={}):
+        if vals.get('logo', False):
+            path = addons.__path__[0] + '/web/static/src/img/logo' + 'specialization_course'
+            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
+        return super(kemas_specialization_course, self).create(cr, uid, vals, context)
+    
     _order = 'name'
     _name = 'kemas.specialization.course'
     _columns = {
         'logo': fields.binary('Logo', help='Logo del Curso.'),
+        'logo_large': fields.binary('Large Logo'),
+        'logo_medium': fields.binary('Medium Logo'),
+        'logo_small': fields.binary('Small Logo'),
         'active': fields.boolean('Activo?', required=False),
         'name': fields.char('Name', size=64, required=True, help='Nombre del curso'),
         'description': fields.text('Description', help='Una descripcion breve'),
@@ -2471,6 +2610,74 @@ class kemas_collaborator_logbook(osv.osv):
         }
     
 class kemas_collaborator(osv.osv):
+    def crop_photo(self, cr, uid, ids, context={}):
+        # Colaboradores
+        field_name = "photo"
+        obj = self.pool.get('kemas.collaborator')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+            
+        # Expositores
+        obj = self.pool.get('kemas.expositor')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+                
+        # Areas
+        field_name = "logo"
+        obj = self.pool.get('kemas.area')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+    
+        # Equipos
+        field_name = "logo"
+        obj = self.pool.get('kemas.team')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+    
+        # Series
+        obj = self.pool.get('kemas.recording.series')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+    
+        # Niveles
+        obj = self.pool.get('kemas.level')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+        
+        # Sition Web
+        obj = self.pool.get('kemas.web.site')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+    
+        # Ministerios
+        obj = self.pool.get('kemas.ministry')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+                
+        # Cursos de Especializacion
+        obj = self.pool.get('kemas.specialization.course')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+        return True
+    
     def change_to_collaborator(self, cr, uid, ids, context={}):
         collaborator = super(kemas_collaborator, self).read(cr, uid, ids[0], ['nick_name', 'name', 'email', 'code'])
         vals = {
@@ -2712,36 +2919,36 @@ class kemas_collaborator(osv.osv):
                         res['photo'] = self.get_photo_female()
         
         #--------FOTO Para la VISTA DE KANBAN----------------------------
-        if 'photo_small' in fields:
+        if 'photo_medium' in fields:
             if type(res).__name__ == 'list':
                 for read_dict in res:
                     collaborator = super(osv.osv, self).read(cr, uid, read_dict['id'], ['genre'])
-                    if read_dict.has_key('photo_small'):
-                        if read_dict['photo_small'] == False:
+                    if read_dict.has_key('photo_medium'):
+                        if read_dict['photo_medium'] == False:
                             if collaborator['genre'] == 'Male':
-                                read_dict['photo_small'] = self.get_photo_small_male()
+                                read_dict['photo_medium'] = self.get_photo_small_male()
                             else:
-                                read_dict['photo_small'] = self.get_photo_small_female()
+                                read_dict['photo_medium'] = self.get_photo_small_female()
                         else:
                             continue
                     else:
                         if collaborator['genre'] == 'Male':
-                            read_dict['photo_small'] = self.get_photo_small_male()
+                            read_dict['photo_medium'] = self.get_photo_small_male()
                         else:
-                            read_dict['photo_small'] = self.get_photo_small_female()
+                            read_dict['photo_medium'] = self.get_photo_small_female()
             else:
                 collaborator = super(osv.osv, self).read(cr, uid, ids, ['genre'])
-                if res.has_key('photo_small'):
-                    if res['photo_small'] == False:
+                if res.has_key('photo_medium'):
+                    if res['photo_medium'] == False:
                         if collaborator['genre'] == 'Male':
-                            res['photo_small'] = self.get_photo_small_male()
+                            res['photo_medium'] = self.get_photo_small_male()
                         else:
-                            res['photo_small'] = self.get_photo_small_female()               
+                            res['photo_medium'] = self.get_photo_small_female()               
                 else:
                     if collaborator['genre'] == 'Male':
-                        res['photo_small'] = self.get_photo_small_male()
+                        res['photo_medium'] = self.get_photo_small_male()
                     else:
-                        res['photo_small'] = self.get_photo_small_female()
+                        res['photo_medium'] = self.get_photo_small_female()
         return res 
 
     def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):
@@ -3099,7 +3306,9 @@ class kemas_collaborator(osv.osv):
         # Crear una imagen pequeña de la foto del colaborador
         if vals.get('photo', False):
             photo_path = addons.__path__[0] + '/web/static/src/img/avatar'
-            vals['photo_small'] = kemas_extras.resize_image(vals['photo'], photo_path, 64)
+            vals['photo_large'] = kemas_extras.crop_image(vals['photo'], photo_path, False)
+            vals['photo_medium'] = kemas_extras.crop_image(vals['photo'], photo_path, 64)
+            vals['photo_small'] = kemas_extras.crop_image(vals['photo'], photo_path, 32)
 
         res_id = super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
         #----Escribir el historial de puntos-----------------------------------------------------------------
@@ -3217,7 +3426,10 @@ class kemas_collaborator(osv.osv):
         # Crear una imagen pequeña de la foto del colaborador
         if vals.get('photo', False):
             photo_path = addons.__path__[0] + '/web/static/src/img/avatar'
-            vals['photo_small'] = kemas_extras.resize_image(vals['photo'], photo_path, 64)
+            vals['photo_large'] = kemas_extras.crop_image(vals['photo'], photo_path, False)
+            vals['photo_medium'] = kemas_extras.crop_image(vals['photo'], photo_path, 64)
+            vals['photo_small'] = kemas_extras.crop_image(vals['photo'], photo_path, 32)
+            
         res = super(osv.osv, self).write(cr, uid, ids, vals, context)
         if not context is None and context and type(context).__name__ == "dict" and not context.get('no_update_logbook', False):
             # Escribir una linea en la bitacora del Colaborador
@@ -3650,6 +3862,8 @@ class kemas_collaborator(osv.osv):
         'mailing': fields.function(mailing, type='boolean', string='Mailing'),
         'code': fields.char('Code', size=32, help="Code that is assigned to each collaborator"),
         'photo': fields.binary('Photo', help='The photo of the person'),
+        'photo_large': fields.binary('Large Photo'),
+        'photo_medium': fields.binary('Medium Photo'),
         'photo_small': fields.binary('Small Photo'),
         'use_gravatar': fields.boolean('Cargar foto desde gravatar'),
         'qr_code': fields.function(_get_QR_image, type='binary', string='QR code data'),
@@ -4376,16 +4590,23 @@ class kemas_expositor(osv.osv):
         return result
     
     def write(self, cr, uid, ids, vals, context={}):
-        if vals.get('photo'):
-            photo_path = addons.__path__[0] + '/web/static/src/img/expositor_avatar'
-            vals['photo_small'] = kemas_extras.resize_image(vals['photo'], photo_path, 64)
-        return super(kemas_expositor, self).write(cr, uid, ids, vals, context)
-    
+        result = super(kemas_expositor, self).write(cr, uid, ids, vals, context)
+        for id in ids:
+            if vals.get('photo', False):
+                path = addons.__path__[0] + '/web/static/src/img/photo' + 'expositor'
+                vals_write = {}
+                vals_write['photo_large'] = kemas_extras.crop_image(vals['photo'], path, False)
+                vals_write['photo_medium'] = kemas_extras.crop_image(vals['photo'], path, 64)
+                vals_write['photo_small'] = kemas_extras.crop_image(vals['photo'], path, 32)
+                super(kemas_expositor, self).write(cr, uid, [id], vals_write, context)
+        return result
+
     def create(self, cr, uid, vals, context={}):
-        # Crear una imagen pequeña de la foto del colaborador
         if vals.get('photo', False):
-            photo_path = addons.__path__[0] + '/web/static/src/img/expositor_avatar'
-            vals['photo_small'] = kemas_extras.resize_image(vals['photo'], photo_path, 64)
+            path = addons.__path__[0] + '/web/static/src/img/photo' + 'expositor'
+            vals['photo_large'] = kemas_extras.crop_image(vals['photo'], path, False)
+            vals['photo_medium'] = kemas_extras.crop_image(vals['photo'], path, 64)
+            vals['photo_small'] = kemas_extras.crop_image(vals['photo'], path, 32)
         return super(kemas_expositor, self).create(cr, uid, vals, context)
     
     def on_change_photo(self, cr, uid, ids, photo):
@@ -4429,7 +4650,9 @@ class kemas_expositor(osv.osv):
         'email': fields.char('Email', size=64),
         'active': fields.boolean(u'¿Activo?', required=False),
         'photo': fields.binary("Photo", help="This field holds the image used as avatar for the expositor, limited to 1024x1024px"),
-        'photo_small': fields.binary("Foto"),
+        'photo_large': fields.binary('Large Photo'),
+        'photo_medium': fields.binary('Medium Photo'),
+        'photo_small': fields.binary('Small Photo'),
         'birth': fields.date('Fecha de Nacimiento'),
         'age': fields.function(_ff_age, type='char', string='Edad'),
         'telef1': fields.char(u'Teléfono 1', size=10, help=u"Numero telefónico. Example: 072878563"),
@@ -4482,9 +4705,26 @@ class kemas_recording_type(osv.osv):
         }
 
 class kemas_recording_series(osv.osv):
+    def write(self, cr, uid, ids, vals, context={}):
+        result = super(kemas_recording_series, self).write(cr, uid, ids, vals, context)
+        for id in ids:
+            if vals.get('logo', False):
+                path = addons.__path__[0] + '/web/static/src/img/logo' + 'recording_series'
+                vals_write = {}
+                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
+                super(kemas_recording_series, self).write(cr, uid, [id], vals_write, context)
+        return result
+    
     def create(self, cr, uid, vals, *args, **kwargs):
         seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Series'), ])[0]
         vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
+        if vals.get('logo', False):
+            path = addons.__path__[0] + '/web/static/src/img/logo' + 'recording_series'
+            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, False)
+            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 32)
         return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
     
     def on_change_logo(self, cr, uid, ids, photo):
@@ -4505,6 +4745,9 @@ class kemas_recording_series(osv.osv):
     _columns = {
         'code': fields.char('Code', size=32, help="Code that is assigned to each series."),
         'logo': fields.binary('Logo', help='The Logo of the serie'),
+        'logo_large': fields.binary('Large Logo'),
+        'logo_medium': fields.binary('Medium Logo'),
+        'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='The name of the recording type'),
         'recording_ids': fields.one2many('kemas.recording', 'series_id', 'recordings', readonly=False),
         'details': fields.text('Details'),

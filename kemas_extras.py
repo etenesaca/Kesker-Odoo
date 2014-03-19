@@ -632,6 +632,35 @@ def get_end_date(date_start, days, tz, holidays=(), workdays=('LUN', 'MAR', 'MIE
     res = addworkdays(date_start, days, tz, holidays, workdays)
     return res.__str__()
 
+def crop_image(photo, photo_path, size=False, remove_file=True):
+    from PIL import Image, ImageOps
+    import StringIO
+    try:
+        photo = base64.b64decode(photo)
+    except:
+        if not photo or photo is None:
+            return False
+    output = open(photo_path, 'wb')
+    output.write(photo)
+    output.close()
+    foto = Image.open(photo_path)
+    format = str(foto.format).lower()
+    if not size:
+        width = foto.size[0]
+        height = foto.size[1]
+        size = height
+        if width != height:
+            if width < height:
+                size = width
+                 
+    foto = ImageOps.fit(foto, (size, size), Image.ANTIALIAS)
+    
+    foto.save(photo_path, format=format)
+    res_image = base64.encodestring(open(photo_path, "rb").read())
+    if remove_file:
+        os.remove(photo_path)
+    return res_image
+
 def resize_image(photo, photo_path, size_base=64, remove_file=True):
     from PIL import Image
     import StringIO
