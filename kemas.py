@@ -1130,9 +1130,6 @@ class kemas_config(osv.osv):
         #---Cliente de registro asistencia---------
         'logo_program_client': fields.binary('Imagen de Cabecera', help='Es la imagen que va a salir en la cabecera del programa para registro de asistencias.'),
         'frequency_program_client': fields.integer('Frecuencia de conexion', help="Frecuencia en segundos con la que el programa se conecta al sistema para consultar los datos"),
-        #---Cliente movil---------
-        'mobile_background': fields.binary('Fondo', help='Es la imagen que estla como fndo en el menu de Colaboradores.'),
-        'mobile_background_text_color':fields.char('Color de la letra', size=64, help='Color del texto del Menu.'),
         #---Report----------------------------------
         'report_header': fields.text('Report header', help='Text to be displayed in the header of the report.'),
         'use_header': fields.boolean('Use?'),
@@ -2610,74 +2607,6 @@ class kemas_collaborator_logbook(osv.osv):
         }
     
 class kemas_collaborator(osv.osv):
-    def crop_photo(self, cr, uid, ids, context={}):
-        # Colaboradores
-        field_name = "photo"
-        obj = self.pool.get('kemas.collaborator')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-            
-        # Expositores
-        obj = self.pool.get('kemas.expositor')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-                
-        # Areas
-        field_name = "logo"
-        obj = self.pool.get('kemas.area')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-    
-        # Equipos
-        field_name = "logo"
-        obj = self.pool.get('kemas.team')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-    
-        # Series
-        obj = self.pool.get('kemas.recording.series')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-    
-        # Niveles
-        obj = self.pool.get('kemas.level')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-        
-        # Sition Web
-        obj = self.pool.get('kemas.web.site')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-    
-        # Ministerios
-        obj = self.pool.get('kemas.ministry')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-                
-        # Cursos de Especializacion
-        obj = self.pool.get('kemas.specialization.course')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-        return True
-    
     def change_to_collaborator(self, cr, uid, ids, context={}):
         collaborator = super(kemas_collaborator, self).read(cr, uid, ids[0], ['nick_name', 'name', 'email', 'code'])
         vals = {
