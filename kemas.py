@@ -497,6 +497,74 @@ class kemas_massive_email(osv.osv):
         }
     
 class kemas_config(osv.osv):
+    def crop_photo(self, cr, uid, ids, context={}):
+        # Colaboradores
+        field_name = "photo"
+        obj = self.pool.get('kemas.collaborator')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+            
+        # Expositores
+        obj = self.pool.get('kemas.expositor')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+                
+        # Areas
+        field_name = "logo"
+        obj = self.pool.get('kemas.area')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+    
+        # Equipos
+        field_name = "logo"
+        obj = self.pool.get('kemas.team')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+    
+        # Series
+        obj = self.pool.get('kemas.recording.series')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+    
+        # Niveles
+        obj = self.pool.get('kemas.level')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+        
+        # Sition Web
+        obj = self.pool.get('kemas.web.site')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+    
+        # Ministerios
+        obj = self.pool.get('kemas.ministry')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+                
+        # Cursos de Especializacion
+        obj = self.pool.get('kemas.specialization.course')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+        return True
+    
     def build_header_footer_string(self, cr, uid, string):
         #------------------------------------------------------------------------------------
         config_obj = self.pool.get('kemas.config')
@@ -2607,75 +2675,8 @@ class kemas_collaborator_logbook(osv.osv):
         }
     
 class kemas_collaborator(osv.osv):
-    def crop_photo(self, cr, uid, ids, context={}):
-        # Colaboradores
-        field_name = "photo"
-        obj = self.pool.get('kemas.collaborator')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-            
-        # Expositores
-        obj = self.pool.get('kemas.expositor')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-                
-        # Areas
-        field_name = "logo"
-        obj = self.pool.get('kemas.area')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-    
-        # Equipos
-        field_name = "logo"
-        obj = self.pool.get('kemas.team')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-    
-        # Series
-        obj = self.pool.get('kemas.recording.series')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-    
-        # Niveles
-        obj = self.pool.get('kemas.level')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-        
-        # Sition Web
-        obj = self.pool.get('kemas.web.site')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-    
-        # Ministerios
-        obj = self.pool.get('kemas.ministry')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-                
-        # Cursos de Especializacion
-        obj = self.pool.get('kemas.specialization.course')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-        return True
     def change_to_collaborator(self, cr, uid, ids, context={}):
-        collaborator = super(kemas_collaborator, self).read(cr, uid, ids[0], ['nick_name', 'name', 'email', 'code'])
+        collaborator = super(kemas_collaborator, self).read(cr, uid, ids[0], ['nick_name', 'name', 'email', 'code', 'photo_large'])
         vals = {
                 'type' : 'Collaborator',
                 'notified' : 'notified',
@@ -2687,7 +2688,7 @@ class kemas_collaborator(osv.osv):
         nick_name = unicode(collaborator['nick_name']).title()
         apellido = unicode(kemas_extras.do_dic(collaborator['name'])[0]).title()
         name = u'''%s %s''' % (nick_name, apellido)
-        vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, collaborator['email'], collaborator['code'], groups_ids[0])['user_id']
+        vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, collaborator['email'], collaborator['code'], groups_ids[0], collaborator['photo_large'])['user_id']
         super(kemas_collaborator, self).write(cr, uid, ids, vals)
         #----Escribir el historial de puntos-----------------------------------------------------
         description = 'Se incorpora el grupo de colaboradores.'
@@ -3214,13 +3215,23 @@ class kemas_collaborator(osv.osv):
                 corresponding_level = level_id
         return corresponding_level
     
+    
     def unlink(self, cr, uid, ids, context={}):
         users_obj = self.pool.get('res.users')
-        try:
-            user_id = super(osv.osv, self).read(cr, uid, ids[0], ['user_id'])['user_id'][0]
+        partner_obj = self.pool.get('res.partner')
+        records = self.read(cr, uid, ids, ['user_id', 'type', 'state', 'name_with_nick_name'])
+        for record in records:
+            if record['type'] == 'Collaborator' and record['state'] in ['Active']:
+                raise osv.except_osv(u'¡Error!', u'No se puede borrar a "' + record['name_with_nick_name'] + u'" porque aún esta en estado activo.')
+            
+            if not record['user_id']:
+                continue
+            user_id = super(osv.osv, self).read(cr, uid, record['id'], ['user_id'])['user_id'][0]
+            partner = users_obj.read(cr, uid, user_id, ['partner_id'])['partner_id']
             users_obj.unlink(cr, uid, [user_id])
-        except: None
-        return super(osv.osv, self).unlink(cr, uid, ids, context)
+            if partner:
+                partner_obj.unlink(cr, uid, [partner[0]])
+        return super(kemas_collaborator, self).unlink(cr, uid, ids, context)
     
     def _send_notification(self, db_name, uid, collaborator_id):
         db, pool = pooler.get_db_and_pool(db_name)
@@ -3265,6 +3276,7 @@ class kemas_collaborator(osv.osv):
             if vals['photo'] == photo_male or vals['photo'] == photo_female:
                 vals['photo'] = False
                 
+            
         if vals['type'] == 'Collaborator':
             vals['points'] = self.get_initial_points(cr, uid)
             vals['level_id'] = self.get_corresponding_level(cr, uid, self.get_initial_points(cr, uid))
@@ -3275,14 +3287,20 @@ class kemas_collaborator(osv.osv):
             nick_name = unicode(vals['nick_name']).title()
             apellido = unicode(kemas_extras.do_dic(vals['name'])[0]).title()
             name = u'''%s %s''' % (nick_name, apellido)
-            if vals['photo']:
-                photo = vals['photo']
+            if vals.get('photo', False):
+                # Crear una imagen pequeña de la foto del colaborador
+                path = addons.__path__[0] + '/web/static/src/img/avatar' + "collaborator"
+                vals['photo_large'] = kemas_extras.crop_image(vals['photo'], path, 128)
+                vals['photo_medium'] = kemas_extras.crop_image(vals['photo'], path, 64)
+                vals['photo_small'] = kemas_extras.crop_image(vals['photo'], path, 48)
+                photo = vals['photo_large']
             else:
                 if vals['genre'] == 'Male':
                     photo = photo_male
                 else:
                     photo = photo_female
-            vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, vals['email'], vals['code'], groups_ids[0], vals['photo'])['user_id']
+            
+            vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, vals['email'], vals['code'], groups_ids[0], photo)['user_id']
             # Actualizar los datos del Partner
             partner_obj = self.pool.get('res.partner')
             partner_id = self.pool.get('res.users').read(cr, uid, vals['user_id'], ['partner_id'])['partner_id'][0]
@@ -3290,21 +3308,14 @@ class kemas_collaborator(osv.osv):
                             'country_id' : vals['born_country'],
                             'state_id' : vals['born_state'],
                             'city' : vals['born_city'],
-                            'email' : vals['email']
+                            'email' : vals['email'],
+                            'image' : photo
                             }
-            if not partner_obj.read(cr, uid, partner_id, ['image'])['image']:
-                vals_partner['image'] = photo
             partner_obj.write(cr, uid, [partner_id], vals_partner)
         else:
             vals['points'] = 0
         vals['state'] = 'Active'
         
-        # Crear una imagen pequeña de la foto del colaborador
-        if vals.get('photo', False):
-            photo_path = addons.__path__[0] + '/web/static/src/img/avatar'
-            vals['photo_large'] = kemas_extras.crop_image(vals['photo'], photo_path, 128)
-            vals['photo_medium'] = kemas_extras.crop_image(vals['photo'], photo_path, 64)
-            vals['photo_small'] = kemas_extras.crop_image(vals['photo'], photo_path, 48)
 
         res_id = super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
         #----Escribir el historial de puntos-----------------------------------------------------------------
@@ -3455,7 +3466,7 @@ class kemas_collaborator(osv.osv):
                     'email' : collaborator['email']
                     }
         if vals.has_key('photo'):
-            vals_user['image'] = vals['photo']
+            vals_user['image'] = vals['photo_large']
         user_obj.write(cr, uid, [collaborator['user_id'][0]], vals_user)
         
         # Actualizar los datos del Partner
