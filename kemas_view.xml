@@ -2984,8 +2984,10 @@
                         <notebook colspan="4">
                            <page string="Personal Information">
                               <group colspan="4" expand="1" col="4">
-                                 <field name="type" required="1" colspan="2" />
                                  <field name="code" readonly="1" colspan="2" />
+                                 <newline />
+                                 <field name="type" required="1" colspan="2" />
+                                 <field name="personal_id" on_change="on_change_personal_id(personal_id)" colspan="2" placeholder="CI/PASS" />
                                  <field name="marital_status" required="1" colspan="2" />
                                  <field name="genre" required="1" colspan="2" />
                                  <field name="birth" on_change="on_change_birth(birth)" required="1" colspan="2" />
@@ -3194,8 +3196,9 @@
                         <notebook colspan="4">
                            <page string="Personal Information">
                               <group colspan="4" expand="1" col="4">
-                                 <field name="type" required="1" colspan="2" invisible="1" />
                                  <field name="code" readonly="1" colspan="2" />
+                                 <field name="type" required="1" colspan="2" groups="kemas.group_kemas_manager" />
+                                 <field name="personal_id" on_change="on_change_personal_id(personal_id)" colspan="2" placeholder="CI/PASS" />
                                  <field name="marital_status" required="1" colspan="2" />
                                  <field name="genre" required="1" colspan="2" />
                                  <field name="birth" on_change="on_change_birth(birth)" required="1" colspan="2" />
@@ -3289,7 +3292,7 @@
                                  </tree>
                               </field>
                            </page>
-                           <page string="Logbook">
+                           <page string="Logbook" groups="kemas.group_kemas_manager">
                               <field name="logbook_ids" readonly="1" options='{"no_open": True}' />
                            </page>
                         </notebook>

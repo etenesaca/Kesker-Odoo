@@ -136,36 +136,73 @@ def validar_cedula(cedula):
     
 # Validar la Cedula y RUC de una persona
 def validar_cedula_ruc(cedula_ruc):
-    ced_ruc = cedula_ruc
-    if cedula_ruc:
-        if len(cedula_ruc) == 10 and cedula_ruc.isdigit() and cedula_ruc:
-            string = ""
-            resultado = 0
-            for i in range (0, 10):
-                string += ced_ruc[i] + " "
-            lista = string.split()
-            coeficientes = [2, 1, 2, 1, 2, 1, 2, 1, 2]
+    # Primero Verificar si es un pasaporte
+    if not cedula_ruc.isdigit():
+        if cedula_ruc[0] == 'P':
+            return True    
+        else:
+            return False
+        
+    numero_provincias = 25
+    if len(cedula_ruc) < 10 and cedula_ruc == '' or cedula_ruc == False or cedula_ruc == None:
+        return False
+    
+    if int(cedula_ruc[0:2]) > numero_provincias:
+        return False
+    # primero verifico ue sean numeros de 10 0 13 de tamanio
+    if cedula_ruc and cedula_ruc.isdigit() and (len(cedula_ruc) == 10 or len(cedula_ruc) == 13):        
+        if len(cedula_ruc) == 13:  # si es un ruc el utlimo numero de 001 no puede ser 0
+            sucursal = cedula_ruc[10:]
+            if not sucursal[2] > 0 :
+                return False        
+        # separo la parte de la cedula en una lista
+        ced_ruc = []
+        for n in range(len(cedula_ruc)):
+            ced_ruc.append(int(cedula_ruc[n]))
+        cedula_ruc = ced_ruc
+        resultado = 0        
+        if cedula_ruc[2] == 9:  # extranjero
+            coeficientes = [4, 3, 2, 7, 6, 5, 4, 3, 2]
+            pos_verificador = 9
+            cedula = list(cedula_ruc[:9])
+            modulo = 11
             for j in range(0, len(coeficientes)):
-                valor = int(lista[j]) * coeficientes[j]
+                    resultado += int(cedula[j]) * coeficientes[j]
+        elif cedula_ruc[2] == 6:  # RUC PUBLICO
+            coeficientes = [3, 2, 7, 6, 5, 4, 3, 2]
+            pos_verificador = 8
+            cedula = list(cedula_ruc[:8])
+            modulo = 11
+            for j in range(0, len(coeficientes)):
+                    resultado += int(cedula[j]) * coeficientes[j]
+        elif cedula_ruc[2] < 6:  # PERSONA NATURAL o JURIDICA            
+            coeficientes = [2, 1, 2, 1, 2, 1, 2, 1, 2]
+            pos_verificador = 9
+            cedula = list(cedula_ruc[:9])
+            modulo = 10            
+            for j in range(0, len(coeficientes)):
+                valor = int(cedula[j]) * coeficientes[j]
                 if valor >= 10:
                     str1 = str(valor)
                     suma = int(str1[0]) + int(str1[1])
                     resultado += suma
                 else:
-                    resultado += int(lista[j]) * coeficientes[j]
-            residuo = resultado % 10
-            if residuo != 0:
-                verificador = 10 - residuo
-            else:
-                verificador = residuo
-            if verificador == int(lista[9]):
-                return True
-            else:
-                return False
-        elif not cedula_ruc.isdigit():
-            if cedula_ruc[0] == 'P':
-                return True    
-            # result['value']={'personal_id':cedula_ruc}
+                    resultado += valor
+        else:
+            return False
+        # ahora comprubo segun los algoritmos       
+        residuo = resultado % modulo
+        if residuo != 0:
+            verificador = modulo - residuo
+        else:
+            verificador = residuo
+        if verificador == int(cedula_ruc[pos_verificador]):
+            return True
+        else:
+            return False
+    elif not cedula_ruc.isdigit():
+        if cedula_ruc[0] == 'P':
+            return True    
         else:
             return False
     else:

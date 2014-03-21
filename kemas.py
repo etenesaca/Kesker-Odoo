@@ -3861,13 +3861,22 @@ class kemas_collaborator(osv.osv):
         for record in records:
             result[record['id']] = last_connection(record['user_id'])
         return result
-        
+    
+    def on_change_personal_id(self, cr, uid, ids, personal_id, context={}):
+        values = {}
+        warning = {}
+        if personal_id:
+            if not kemas_extras.validar_cedula_ruc(personal_id):
+                values['personal_id'] = False
+                warning = {'title' : u'¡Error!', 'message' : u"Número de Cédula Incorrecto. \nEn el caso de ser un Pasaporte ingrese la 'P' antes del número."}
+        return {'value': values , 'warning': warning}
     
     _order = 'name'
     _name = 'kemas.collaborator'
     _columns = {
         'mailing': fields.function(mailing, type='boolean', string='Mailing'),
         'code': fields.char('Code', size=32, help="Code that is assigned to each collaborator"),
+        'personal_id' : fields.char('CI/PASS', size=15, help=u"Número de cédula o pasaporte",),
         'photo': fields.binary('Photo', help='The photo of the person'),
         'photo_large': fields.binary('Large Photo'),
         'photo_medium': fields.binary('Medium Photo'),
