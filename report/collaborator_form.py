@@ -39,24 +39,25 @@ class Parser(report_sxw.rml_parse):
         super(Parser, self).__init__(cr, uid, name, context)
         self.localcontext.update({             
             'time_d': self._get_time,
-            'config':self.get_config,
-            'state':self.get_state,
-            'telef1':self.get_telef1,
-            'telef2':self.get_telef2,
-            'mobile':self.get_mobile,
-            'team':self.get_team,
-            'birth':self.get_collaborator_birth,
-            'age':self.get_collaborator_age,
-            'join_date':self.get_collaborator_join_date,
-            'areas':self.get_collaborator_areas,
+            'config': self.get_config,
+            'state': self.get_state,
+            'telef1': self.get_telef1,
+            'telef2': self.get_telef2,
+            'mobile': self.get_mobile,
+            'personal_id': self.get_personal_id,
+            'team': self.get_team,
+            'birth': self.get_collaborator_birth,
+            'age': self.get_collaborator_age,
+            'join_date': self.get_collaborator_join_date,
+            'areas': self.get_collaborator_areas,
         })
     
     def _get_time(self):
         import datetime
         now = time.strftime("%Y-%m-%d %H:%M:%S")
         tz = self.pool.get('kemas.func').get_tz_by_uid(self.cr, self.uid)
-        now = kemas_extras.convert_to_tz(now,tz)
-        now = datetime.datetime.strptime(now,"%Y-%m-%d %H:%M:%S")
+        now = kemas_extras.convert_to_tz(now, tz)
+        now = datetime.datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
         return tools.ustr(now.strftime('%A %d de %B de %Y'))
     
     def get_collaborator_birth(self, collaborator_id):
@@ -68,12 +69,12 @@ class Parser(report_sxw.rml_parse):
     
     def get_state(self, collaborator_id):
         collaborator = self.pool.get('kemas.collaborator').read(self.cr, self.uid, collaborator_id, ['state'])
-        selection_dict = eval('dict(%s)'%[
-            ('creating','Creando'),
-            ('Inactive','Inactivo'),
-            ('Locked','Bloqueado'),
-            ('Active','Activo'),
-            ('Suspended','Suspendido'),])
+        selection_dict = eval('dict(%s)' % [
+            ('creating', 'Creando'),
+            ('Inactive', 'Inactivo'),
+            ('Locked', 'Bloqueado'),
+            ('Active', 'Activo'),
+            ('Suspended', 'Suspendido'), ])
         state = selection_dict.get(collaborator['state'])
         return state
     
@@ -101,6 +102,12 @@ class Parser(report_sxw.rml_parse):
             return ' ---'
         return res[1]
     
+    def get_personal_id(self, collaborator_id):
+        res = self.pool.get('kemas.collaborator').read(self.cr, self.uid, collaborator_id, ['personal_id'])['personal_id']
+        if not res or res == '':
+            return ' ---'
+        return res
+    
     def get_collaborator_age(self, collaborator_id):
         cr = self.cr
         uid = self.uid
@@ -123,10 +130,10 @@ class Parser(report_sxw.rml_parse):
         area_obj = self.pool.get('kemas.area')
         collaborator_obj = self.pool.get('kemas.collaborator')
         collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['area_ids'])
-        areas = area_obj.read(cr, uid, collaborator['area_ids'],['name'])
+        areas = area_obj.read(cr, uid, collaborator['area_ids'], ['name'])
         res = ''
         for area in areas:
-            res += """* %s \n"""%(area['name'])
+            res += """* %s \n""" % (area['name'])
         
         if not res or res == '':
             return ' ---'
