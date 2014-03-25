@@ -6824,7 +6824,7 @@
       </record>
       <!--____________________________________________________Replacement -->
       <record id="kemas_event_replacement_form_action" model="ir.actions.act_window">
-         <field name="name">Replacements</field>
+         <field name="name">Historial de reemplazos</field>
          <field name="res_model">kemas.event.replacement</field>
          <field name="view_mode">tree,form,graph</field>
          <field name="context">{'replacemente_long_name' : 1}</field>
@@ -6835,7 +6835,7 @@
          </field>
       </record>
       <record model="ir.actions.act_window" id="kemas_event_replacement_form_action_collaborator">
-         <field name="name">Replacements</field>
+         <field name="name">Historial de reemplazos</field>
          <field name="type">ir.actions.act_window</field>
          <field name="res_model">kemas.event.replacement</field>
          <field name="context">{'is_collaborator':True,'form_view_ref':'kemas.kemas_event_replacement_form_view2','tree_view_ref':'kemas.kemas_event_replacement_tree_view2','search_view_ref':'kemas.kemas_event_replacement_search_view2','search_default_this_month':1}</field>
@@ -7240,7 +7240,7 @@
       <!--_____________Replace collaborator -->
       <menuitem action="kemas_event_replace_collaborator_wizard_form_action" name="Replace collaborator" id="menu_kemas_event_replace_collaborator" parent="menu_kemas_replace_collaborator_menu" />
       <!--_____________Replacements -->
-      <menuitem name="Replacements" action="kemas_event_replacement_form_action" id="menu_kemas_event_replacement" parent="menu_kemas_replace_collaborator_menu" />
+      <menuitem action="kemas_event_replacement_form_action" name="Historial de reemplazos" id="menu_kemas_event_replacement" parent="menu_kemas_replace_collaborator_menu" />
 
       <!--_____________Close past events -->
       <menuitem action="kemas_close_past_event_wizard_form_action" name="Close past events" id="menu_kemas_close_past_event_wizard" parent="menu_kemas_calendar_menu" sequence="7" groups="group_kemas_manager,group_kemas_librarian,group_kemas_admin" />
