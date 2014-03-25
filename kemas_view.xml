@@ -5160,7 +5160,7 @@
          <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
-            <tree string="Replacements">
+            <tree string="Replacements" create="0">
                <field name="collaborator_id" />
                <field name="collaborator_replacement_id" />
                <field name="event_id" />
@@ -5174,7 +5174,7 @@
          <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
-            <tree string="Replacements">
+            <tree string="Replacements" create="0">
                <field name="collaborator_id" />
                <field name="collaborator_replacement_id" />
                <field name="event_id" />
@@ -7077,7 +7077,7 @@
       <!--_____________Event -->
       <menuitem action="kemas_event_form_action2" name="Events" id="menu_kemas_event_menu_collaborator" parent="menu_kemas_collaborator_menu_form_action" sequence="7" />
       <!--_____________Replacements -->
-      <menuitem action="kemas_event_replacement_form_action_collaborator" name="Replacements" id="menu_kemas_replacement_menu_collaborator" parent="menu_kemas_collaborator_menu_form_action" sequence="8" />
+      <menuitem action="kemas_event_replacement_form_action_collaborator" name="Historial de reemplazos" id="menu_kemas_replacement_menu_collaborator" parent="menu_kemas_collaborator_menu_form_action" sequence="8" />
       <!--_____________Task assigned -->
       <menuitem action="action_kemas_task_assigned_collaborator" name="Tasks assigned" id="menu_action_kemas_tasks_assigned_collaborator" parent="menu_kemas_collaborator_menu_form_action" sequence="9" />
       <!--
