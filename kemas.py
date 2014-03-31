@@ -5575,9 +5575,10 @@ class kemas_event(osv.osv):
                 return True
             else:
                 return False
-            
+        
         sql = """
-            SELECT cl.id,cl.nick_name,cl.name FROM kemas_collaborator AS cl
+            SELECT cl.id,cl.nick_name,cl.name,U.login as username FROM kemas_collaborator AS cl
+            JOIN res_users as U on (U.id = cl.user_id)
             WHERE cl.id IN
             (
             SELECT collaborator_id FROM kemas_event_collaborator_line 
@@ -5585,7 +5586,7 @@ class kemas_event(osv.osv):
             )
         """ % (event_id)
         cr.execute(sql)
-        result_query = cr.fetchall()
+        result_query = cr.dictfetchall()
         collaborators = []
         attendance_list = []
         
@@ -5593,16 +5594,17 @@ class kemas_event(osv.osv):
         collaborator_ids = self.get_collaborators_registered(cr, uid, event_id)
         for collaborator in result_query:
             name = "%s %s" % (
-                             unicode(collaborator[1]).title(),
-                             unicode(collaborator[2]).split()[0].title()
+                             unicode(collaborator['nick_name']).title(),
+                             unicode(collaborator['name']).split()[0].title()
                              )
-            photo = get_photo_collaborator(collaborator[0])
+            photo = get_photo_collaborator(collaborator['id'])
             # photo = base64.b64decode(photo)
             collaborator_dic = {
-                            'id': collaborator[0],
+                            'id': collaborator['id'],
                             'name': name,
+                            'username': collaborator['username'],
                             'photo': photo,
-                            'registered': is_registered(collaborator[0]),
+                            'registered': is_registered(collaborator['id']),
                             }
             collaborators.append(collaborator_dic)
         
