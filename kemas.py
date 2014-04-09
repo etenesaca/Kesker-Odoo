@@ -3293,6 +3293,7 @@ class kemas_collaborator(osv.osv):
                 vals['photo_large'] = kemas_extras.crop_image(vals['photo'], path, 128)
                 vals['photo_medium'] = kemas_extras.crop_image(vals['photo'], path, 64)
                 vals['photo_small'] = kemas_extras.crop_image(vals['photo'], path, 48)
+                vals['photo_very_small'] = kemas_extras.crop_image(vals['photo'], path, 32)
                 photo = vals['photo_large']
             else:
                 if vals['genre'] == 'Male':
@@ -3436,6 +3437,7 @@ class kemas_collaborator(osv.osv):
             vals['photo_large'] = kemas_extras.crop_image(vals['photo'], photo_path, 128)
             vals['photo_medium'] = kemas_extras.crop_image(vals['photo'], photo_path, 64)
             vals['photo_small'] = kemas_extras.crop_image(vals['photo'], photo_path, 48)
+            vals['photo_very_small'] = kemas_extras.crop_image(vals['photo'], photo_path, 32)
             
         res = super(osv.osv, self).write(cr, uid, ids, vals, context)
         if not context is None and context and type(context).__name__ == "dict" and not context.get('no_update_logbook', False):
@@ -3881,6 +3883,7 @@ class kemas_collaborator(osv.osv):
         'photo_large': fields.binary('Large Photo'),
         'photo_medium': fields.binary('Medium Photo'),
         'photo_small': fields.binary('Small Photo'),
+        'photo_very_small': fields.binary('Very Small Photo'),
         'use_gravatar': fields.boolean('Cargar foto desde gravatar'),
         'qr_code': fields.function(_get_QR_image, type='binary', string='QR code data'),
         'bar_code': fields.function(_get_barcode_image, type='binary', string='Bar Code data'),
