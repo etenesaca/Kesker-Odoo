@@ -4435,6 +4435,9 @@
                            </h4>
                            <ul>
                               <li>
+                                 <field name="expositor_ids" />
+                                 <b>Fecha:</b>
+                                 <field name="date" />
                               </li>
                            </ul>
                         </div>
