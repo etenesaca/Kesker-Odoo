@@ -909,3 +909,19 @@ def round_value(value, digits=2):
         decimal = completar_cadena(str(value)[count:], digits, left=False)
         value = str(value)[:count] + decimal
     return str(value)
+
+def get_thumbnail_youtube_video(url):
+    import urlparse
+    import urllib2
+    
+    youtube_thumbnail = False
+    if url and 'youtube.com' in url:
+        url_data = urlparse.urlparse(url)
+        query = urlparse.parse_qs(url_data.query)
+        if query.get('v', False):
+            video_id = query["v"][0]
+            thumbnail_url = 'http://img.youtube.com/vi/%s/mqdefault.jpg' % video_id
+            source = urllib2.urlopen(thumbnail_url).read()
+            if source:
+                youtube_thumbnail = base64.b64encode(source)
+    return youtube_thumbnail

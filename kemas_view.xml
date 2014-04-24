@@ -4414,6 +4414,36 @@
          RECORDING
          ====================
       -->
+      <!--____________________________________________________Vista de Kanban -->
+      <record model="ir.ui.view" id="kemas_recording_kanban_view">
+         <field name="name">kemas.recording.kanban</field>
+         <field name="model">kemas.recording</field>
+         <field name="type">kanban</field>
+         <field name="arch" type="xml">
+            <kanban>
+               <templates>
+                  <t t-name="kanban-box">
+                     <div class="oe_kanban_vignette oe_semantic_html_override">
+                        <a type="open">
+                           <img t-att-src="kanban_image('kemas.recording', 'logo_medium', record.id.value)" class="oe_kanban_image" />
+                        </a>
+                        <div class="oe_kanban_details">
+                           <h4 class="oe_partner_heading">
+                              <a type="open">
+                                 <field name="theme" />
+                              </a>
+                           </h4>
+                           <ul>
+                              <li>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </t>
+               </templates>
+            </kanban>
+         </field>
+      </record>
       <!--____________________________________________________Vista de Formulario -->
       <record model="ir.ui.view" id="kemas_recording_form_view">
          <field name="name">kemas.recording.form</field>
@@ -4428,12 +4458,21 @@
                   <field name="state" widget="statusbar" statusbar_visible="draft,done" groups="kemas.group_kemas_librarian" />
                </header>
                <sheet string="Recording">
-                  <div class="oe_edit_only">
-                     <label for="theme" />
-                  </div>
-                  <h1>
-                     <field name="theme" default_focus="1" placeholder="Theme of the recording" />
-                  </h1>
+                  <table width="100%%" colspan="4" style="margin-bottom: -10px;">
+                     <tr>
+                        <td width="100%%">
+                           <div class="oe_edit_only">
+                              <label for="theme" />
+                           </div>
+                           <h1>
+                              <field name="theme" default_focus="1" placeholder="Theme of the recording" />
+                           </h1>
+                        </td>
+                        <td style="padding-left: 20px; align: top">
+                           <field name="logo" widget='image' class="oe_left oe_avatar" options='{"size": [120, 75]}' style="margin-bottom: -10px;" />
+                        </td>
+                     </tr>
+                  </table>
                   <group colspan="4" col="6">
                      <group colspan="4">
                         <field name="code" readonly="1" attrs="{'invisible':[('code','=',False)]}" />
@@ -4491,7 +4530,7 @@
                   <group col="4" colspan="4" string="Lugar y otros">
                      <field name="event_id" domain="[('state','=','closed'),]" on_change="on_change_event_id(event_id)" colspan="2" placeholder="Evento relacionado..." />
                      <field name="place_id" colspan="2" placeholder="Lugar en donde se realizo la grabación..." />
-                     <field name="url" widget="url" colspan="4" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
+                     <field name="url" on_change="on_change_url(url)" widget="url" colspan="4" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
                   </group>
                   <notebook colspan="4">
                      <page string="Notas">
@@ -5261,7 +5300,8 @@
 																	      			'event_collaborator_line_ids' : context['line_ids'],
 			      																	'search_view_ref' : 'kemas.kemas_collaborator_search_view2',
 			      																	'tree_view_ref' : 'kemas.kemas_collaborator_tree_view4',
-			      																	}" on_change="on_change_collaborator()" options='{"no_open": True}' />
+			      																	}"
+                        on_change="on_change_collaborator()" options='{"no_open": True}' />
                   </h1>
                   <group attrs="{'invisible':[('replacement_id','=',False)]}" colspan="4">
                      <field name="replacement_id" options='{"no_open": True}' />
@@ -6488,7 +6528,7 @@
          <field name="name">Recordings</field>
          <field name="type">ir.actions.act_window</field>
          <field name="res_model">kemas.recording</field>
-         <field name="view_mode">tree,form</field>
+         <field name="view_mode">tree,form,kanban</field>
          <field name="help" type="html">
             <p class="oe_view_nocontent_create">
                Click to register a type of recording.
@@ -6502,7 +6542,7 @@
          <field name="name">Recordings</field>
          <field name="type">ir.actions.act_window</field>
          <field name="res_model">kemas.recording</field>
-         <field name="view_mode">tree,form</field>
+         <field name="view_mode">kanban,tree,form</field>
          <field name="domain">[('state','=','done')]</field>
          <field name="help" type="html">
             <p class="oe_view_nocontent_create">

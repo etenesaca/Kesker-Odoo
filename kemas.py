@@ -563,6 +563,16 @@ class kemas_config(osv.osv):
         for record in records:
             if record[field_name]:
                 obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+                
+        # Procesar grabaciones
+        obj = self.pool.get('kemas.recording')
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name, 'url'])
+        for record in records:
+            youtube_thumbnail = kemas_extras.get_thumbnail_youtube_video(record['url'])
+            if youtube_thumbnail and not record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: youtube_thumbnail})
+            elif record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
         return True
     
     def build_header_footer_string(self, cr, uid, string):
@@ -4884,9 +4894,26 @@ class kemas_recording(osv.osv):
                 raise osv.except_osv(_(u'¡Error!'), _(u'!No se puede borrar esta grabación porque ya tiene un CÓDIGO asignado¡'))
         return super(kemas_recording, self).unlink(cr, uid, ids, context)
     
+    def write(self, cr, uid, ids, vals, context={}):
+        result = super(kemas_recording, self).write(cr, uid, ids, vals, context)
+        for id in ids:
+            if vals.get('logo', False):
+                path = addons.__path__[0] + '/web/static/src/img/logo' + 'recording'
+                vals_write = {}
+                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
+                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
+                super(kemas_recording, self).write(cr, uid, [id], vals_write, context)
+        return result
+    
     def create(self, cr, uid, vals, *args, **kwargs):
         vals['registration_date'] = time.strftime("%Y-%m-%d %H:%M:%S")
         vals['create_user_id'] = uid
+        if vals.get('logo', False):
+            path = addons.__path__[0] + '/web/static/src/img/logo' + 'recording'
+            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
+            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
+            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
         res_id = super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
         # Escribir log
         self.write_log_create(cr, uid, res_id)
@@ -4934,11 +4961,22 @@ class kemas_recording(osv.osv):
                 args.remove(item)
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
     
+    def on_change_url(self, cr, uid, ids, url, context={}):
+        values = {}
+        youtube_thumbnail = kemas_extras.get_thumbnail_youtube_video(url)
+        if youtube_thumbnail:
+            values['logo'] = youtube_thumbnail
+        return {'value': values}
+    
     _order = 'date DESC, recording_type_id'
     _rec_name = 'theme'
     _name = 'kemas.recording'
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _columns = {
+        'logo': fields.binary('Portada', help='Portada de la grabación.'),
+        'logo_large': fields.binary('Large Logo'),
+        'logo_medium': fields.binary('Medium Logo'),
+        'logo_small': fields.binary('Small Logo'),
         'theme': fields.char('Theme', size=64, help='The theme of the recording', required=True, states={'done':[('readonly', True)]}),
         'date': fields.datetime('Date', help="Date on which the recording was done", states={'done':[('readonly', True)]}),
         'state': fields.selection([
