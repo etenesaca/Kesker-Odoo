@@ -4063,6 +4063,19 @@ class kemas_task(osv.osv):
         }
 
 class kemas_task_assigned(osv.osv):
+    def close_tasks(self, cr, uid, context={}):
+        task_ids = self.search(cr, uid, [('state', 'in', ['draft', 'open', 'pending']), ('date_end', '!=', False)])
+        tasks = self.read(cr, uid, task_ids, ['date_end'])
+        if task_ids:
+            print '    >>Cerrando tareas Caducadas'
+            context['tz'] = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
+            now = unicode(kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), context['tz']))
+            for task in tasks:
+                date_end = kemas_extras.convert_to_UTC_tz(task['date_end'][:11] + '00:00:00', context['tz'])
+                if now > date_end:
+                    self.do_cancel(cr, uid, [task['id']], context, True)        
+        return True
+    
     def write_log_new(self, cr, uid, task_id, notify_partner_ids=[]):
         state = self.pool.get('kemas.func').get_translate(cr, uid, self.read(cr, uid, task_id, ['state'])['state'])[0].title()
         body = u'''
@@ -4099,6 +4112,29 @@ class kemas_task_assigned(osv.osv):
         ''' % (_('Tarea Completada'), _('Estado'), state, _('Cancelado'))
         collaborator_id = self.read(cr, uid, task_id, ['collaborator_id'])['collaborator_id'][0]
         partner_id = self.pool.get('kemas.collaborator').get_partner_id(cr, uid, collaborator_id)
+        return self.write_log_update(cr, uid, task_id, body, [partner_id])
+    
+    def write_log_cancelled_by_system(self, cr, uid, task_id, notify_partner_ids=[]):
+        state = self.pool.get('kemas.func').get_translate(cr, uid, self.read(cr, uid, task_id, ['state'])['state'])[0].title()
+        body = u'''
+        <div>
+            <span>
+                <b>Tarea Cerrada</b>
+            </span>
+            <div>El tiempo límite de entrega ha terminado</div>
+        </div>
+        '''
+        task = self.read(cr, uid, task_id, ['collaborator_id', 'date_end', 'task_id'])
+        collaborator_id = task['collaborator_id'][0]
+        partner_id = self.pool.get('kemas.collaborator').get_partner_id(cr, uid, collaborator_id)
+        
+        # Suspender al colaborador
+        tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
+        date_end = kemas_extras.convert_to_UTC_tz(task['date_end'][:11] + '00:00:00', tz)
+        description = '''
+        Tarea caducada
+        '''
+        self.pool.get('kemas.collaborator').suspend(cr, uid, [collaborator_id], date_end, description)
         return self.write_log_update(cr, uid, task_id, body, [partner_id])
     
     def write_log_closed(self, cr, uid, task_id, notify_partner_ids=[]):
