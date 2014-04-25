@@ -2257,7 +2257,7 @@
                   <group>
                      <group>
                         <field name="collaborator_id" placeholder="Assigned to..." attrs="{'readonly':[('state','in',['done', 'cancelled'])]}" options='{"no_open": True}' domain="[('state','=','Active'),('type','=','Collaborator'),]" />
-                        <field name="date_end" widget="date" />
+                        <field name="date_end"/>
                      </group>
                      <group>
                         <field name="categ_ids" widget="many2many_tags" />
@@ -2280,7 +2280,6 @@
                            <field name="date_closing" readonly="1" attrs="{'invisible':['|',('is_active','=',True),('state','!=','done')]}" />
                            <field name="date_cancelled" readonly="1" attrs="{'invisible':['|',('is_active','=',True),('state','!=','cancelled')]}" />
                            <field name="date_start" />
-                           <field name="date_end" />
                         </group>
                      </page>
                   </notebook>

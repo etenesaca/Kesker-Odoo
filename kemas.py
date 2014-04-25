@@ -4071,7 +4071,7 @@ class kemas_task_assigned(osv.osv):
             context['tz'] = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
             now = unicode(kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), context['tz']))
             for task in tasks:
-                date_end = kemas_extras.convert_to_UTC_tz(task['date_end'][:11] + '00:00:00', context['tz'])
+                date_end = kemas_extras.convert_to_UTC_tz(task['date_end'], context['tz'])
                 if now > date_end:
                     self.do_cancel(cr, uid, [task['id']], context, True)        
         return True
@@ -4130,7 +4130,7 @@ class kemas_task_assigned(osv.osv):
         
         # Suspender al colaborador
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        date_end = kemas_extras.convert_to_UTC_tz(task['date_end'][:11] + '00:00:00', tz)
+        date_end = kemas_extras.convert_to_UTC_tz(task['date_end'], tz)
         description = '''
         Tarea caducada
         '''
@@ -4286,7 +4286,7 @@ class kemas_task_assigned(osv.osv):
         self.write_log_closed(cr, uid, ids[0], message_follower_ids)
         super(osv.osv, self).write(cr, uid, ids, vals)
         
-    def do_cancel(self, cr, uid, ids, context={}):
+    def do_cancel(self, cr, uid, ids, context={}, bysystem=False):
         vals = {
                 'date_cancelled' :time.strftime("%Y-%m-%d %H:%M:%S"),
                 'state' : 'cancelled',
@@ -4300,8 +4300,21 @@ class kemas_task_assigned(osv.osv):
         partner_id = self.pool.get('res.users').read(cr, uid, uid, ['partner_id'])['partner_id'][0]
         if partner_id in message_follower_ids:
             message_follower_ids.remove(partner_id)
-        self.write_log_cancelled(cr, uid, ids[0], message_follower_ids)
-        super(osv.osv, self).write(cr, uid, ids, vals)
+        
+        if not bysystem:
+            self.write_log_cancelled(cr, uid, ids[0], message_follower_ids)
+            super(osv.osv, self).write(cr, uid, ids, vals)
+        else:
+            self.write_log_cancelled_by_system(cr, uid, ids[0], message_follower_ids)
+            error = True
+            while error:
+                try:
+                    cr.commit()
+                    super(osv.osv, self).write(cr, uid, ids, vals)
+                    error = False
+                except:
+                    error = True
+        return False
     
     def write(self, cr, uid, ids, vals, context={}):
         if type(ids).__name__ == 'int' : 
