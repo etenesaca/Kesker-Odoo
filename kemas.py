@@ -2351,6 +2351,67 @@ class kemas_web_site(osv.osv):
         }
 
 class kemas_suspension(osv.osv):
+    def get_end_date(self, cr, uid, days, day1, day2, day3, day4, day5, day6, day7, context={}):
+        from datetime import datetime
+        tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
+        now = datetime.strptime(kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz), '%Y-%m-%d %H:%M:%S')
+        date_today = "%s-%s-%s" % (kemas_extras.completar_cadena(now.year, 4), kemas_extras.completar_cadena(now.month), kemas_extras.completar_cadena(now.day))
+        
+        days_str = {
+                    'LUN':True,
+                    'MAR':True,
+                    'MIE':True,
+                    'JUE':True,
+                    'VIE':True,
+                    'SAB':True,
+                    'DOM':True
+                    }
+        if day1: 
+            days_str['LUN'] = True
+        else:
+            days_str['LUN'] = False
+        
+        if day2: 
+            days_str['MAR'] = True
+        else:
+            days_str['MAR'] = False
+            
+        if day3: 
+            days_str['MIE'] = True
+        else:
+            days_str['MIE'] = False
+            
+        if day4: 
+            days_str['JUE'] = True
+        else:
+            days_str['JUE'] = False
+            
+        if day5: 
+            days_str['VIE'] = True
+        else:
+            days_str['VIE'] = False
+            
+        if day6: 
+            days_str['SAB'] = True
+        else:
+            days_str['SAB'] = False
+            
+        if day7: 
+            days_str['DOM'] = True
+        else:
+            days_str['DOM'] = False
+        
+        workdays = []
+        if days_str['LUN']:workdays.append('LUN')
+        if days_str['MAR']:workdays.append('MAR')
+        if days_str['MIE']:workdays.append('MIE')
+        if days_str['JUE']:workdays.append('JUE')
+        if days_str['VIE']:workdays.append('VIE')
+        if days_str['SAB']:workdays.append('SAB')
+        if days_str['DOM']:workdays.append('DOM')
+        tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
+        return kemas_extras.get_end_date(date_today, int(days), tz, workdays=tuple(workdays))
+    
     def lift(self, cr, uid, ids, context={}):
         collaborator_obj = self.pool.get('kemas.collaborator')
         vals = {
@@ -2506,6 +2567,7 @@ class kemas_suspension(osv.osv):
             ], 'State'),
         'user_create_id': fields.many2one('res.users', 'Create by', help='The user who suspended the collaborador.'),
         'user_lift_id': fields.many2one('res.users', 'Lifted by', help='User who lifted the suspension to collaborator'),
+        'task_assigned_id':fields.many2one('kemas.task.assigned', 'Tarea', help=u'Tarea no cumplida por la cual se realizó la suspensión'),
         }
 
 class kemas_collaborator_web_site(osv.osv):
@@ -3074,11 +3136,11 @@ class kemas_collaborator(osv.osv):
     def lift_suspension(self, cr, uid, ids, context={}):
         self.pool.get('kemas.suspension').lift_by_collaborator(cr, uid, ids[0])
         
-    def suspend(self, cr, uid, ids, date_end, description):
-        threaded_sending = threading.Thread(target=self._suspend, args=(cr.dbname, uid, ids, date_end, description))
+    def suspend(self, cr, uid, ids, date_end, description, task_id=False):
+        threaded_sending = threading.Thread(target=self._suspend, args=(cr.dbname, uid, ids, date_end, description, task_id))
         threaded_sending.start()
         
-    def _suspend(self, db_name, uid, ids, date_end, description):
+    def _suspend(self, db_name, uid, ids, date_end, description, task_id=False):
         db, pool = pooler.get_db_and_pool(db_name)
         cr = db.cursor()
         def process(collaborator_id, description, date_end):
@@ -3096,6 +3158,8 @@ class kemas_collaborator(osv.osv):
                    'date_end' : date_end,
                    'description' : description
                    }
+            if task_id:
+                vals['task_assigned_id'] = task_id
             suspension_obj.create(cr, uid, vals)
             # Escribir una linea en la bitacora del Colaborador
             vals = {
@@ -4064,15 +4128,15 @@ class kemas_task(osv.osv):
 
 class kemas_task_assigned(osv.osv):
     def close_tasks(self, cr, uid, context={}):
-        task_ids = self.search(cr, uid, [('state', 'in', ['draft', 'open', 'pending']), ('date_end', '!=', False)])
-        tasks = self.read(cr, uid, task_ids, ['date_end'])
+        task_ids = self.search(cr, uid, [('state', 'in', ['draft', 'open', 'pending']), ('date_limit', '!=', False)])
+        tasks = self.read(cr, uid, task_ids, ['date_limit'])
         if task_ids:
             print '    >>Cerrando tareas Caducadas'
             context['tz'] = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
             now = unicode(kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), context['tz']))
             for task in tasks:
-                date_end = kemas_extras.convert_to_UTC_tz(task['date_end'], context['tz'])
-                if now > date_end:
+                date_limit = kemas_extras.convert_to_UTC_tz(task['date_limit'], context['tz'])
+                if now > date_limit:
                     self.do_cancel(cr, uid, [task['id']], context, True)        
         return True
     
@@ -4124,17 +4188,17 @@ class kemas_task_assigned(osv.osv):
             <div>El tiempo límite de entrega ha terminado</div>
         </div>
         '''
-        task = self.read(cr, uid, task_id, ['collaborator_id', 'date_end', 'task_id'])
+        task = self.read(cr, uid, task_id, ['collaborator_id', 'date_limit', 'task_id'])
         collaborator_id = task['collaborator_id'][0]
         partner_id = self.pool.get('kemas.collaborator').get_partner_id(cr, uid, collaborator_id)
         
         # Suspender al colaborador
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        date_end = kemas_extras.convert_to_UTC_tz(task['date_end'], tz)
-        description = '''
-        Tarea caducada
-        '''
-        self.pool.get('kemas.collaborator').suspend(cr, uid, [collaborator_id], date_end, description)
+        now = time.strftime("%Y-%m-%d %H:%M:%S")
+        days = 15
+        date_end_suspension = self.pool.get('kemas.suspension').get_end_date(cr, uid, days, True, True, True, True, True, True, True)
+        description = '''La tarea '%s' que se te fue asignada no fue entregada a tiempo.''' % task['task_id'][1]
+        self.pool.get('kemas.collaborator').suspend(cr, uid, [collaborator_id], date_end_suspension, description, task_id)
         return self.write_log_update(cr, uid, task_id, body, [partner_id])
     
     def write_log_closed(self, cr, uid, task_id, notify_partner_ids=[]):
@@ -4414,6 +4478,7 @@ class kemas_task_assigned(osv.osv):
         'date_cancelled': fields.datetime('Cancellation date', help='Cancellation date of This Task'),
         'date_start': fields.datetime('Starting Date', select=True),
         'date_end': fields.datetime('Ending Date', select=True),
+        'date_limit': fields.datetime('Fecha de entrega', help="Fecha limite de entrega de esta tarea"),
         # Campos para buscar entre fechas
         'search_start': fields.date('Desde', help='Buscar desde'),
         'search_end': fields.date('Hasta', help='Buscar hasta'),

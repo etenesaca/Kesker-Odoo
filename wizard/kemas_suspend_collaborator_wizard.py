@@ -62,69 +62,9 @@ class kemas_suspend_collaborator_step1_wizard(osv.osv_memory):
         }
 
 class kemas_suspend_collaborator_step2_wizard(osv.osv_memory):
-    def get_end_date(self, cr, uid, ids, days, day1, day2, day3, day4, day5, day6, day7, context={}):
-        tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        now = datetime.strptime(kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"),tz), '%Y-%m-%d %H:%M:%S')
-        date_today = "%s-%s-%s"%(kemas_extras.completar_cadena(now.year,4),kemas_extras.completar_cadena(now.month),kemas_extras.completar_cadena(now.day))
-        
-        days_str = {
-                    'LUN':True,
-                    'MAR':True,
-                    'MIE':True,
-                    'JUE':True,
-                    'VIE':True,
-                    'SAB':True,
-                    'DOM':True
-                    }
-        if day1: 
-            days_str['LUN'] = True
-        else:
-            days_str['LUN'] = False
-        
-        if day2: 
-            days_str['MAR'] = True
-        else:
-            days_str['MAR'] = False
-            
-        if day3: 
-            days_str['MIE'] = True
-        else:
-            days_str['MIE'] = False
-            
-        if day4: 
-            days_str['JUE'] = True
-        else:
-            days_str['JUE'] = False
-            
-        if day5: 
-            days_str['VIE'] = True
-        else:
-            days_str['VIE'] = False
-            
-        if day6: 
-            days_str['SAB'] = True
-        else:
-            days_str['SAB'] = False
-            
-        if day7: 
-            days_str['DOM'] = True
-        else:
-            days_str['DOM'] = False
-        
-        workdays = []
-        if days_str['LUN']:workdays.append('LUN')
-        if days_str['MAR']:workdays.append('MAR')
-        if days_str['MIE']:workdays.append('MIE')
-        if days_str['JUE']:workdays.append('JUE')
-        if days_str['VIE']:workdays.append('VIE')
-        if days_str['SAB']:workdays.append('SAB')
-        if days_str['DOM']:workdays.append('DOM')
-        tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        return kemas_extras.get_end_date(date_today, int(days), tz, workdays = tuple(workdays))
-        
     def on_change_days(self, cr, uid, ids, days, day1, day2, day3, day4, day5, day6, day7, context={}):
         values = {}
-        values['date_end'] = self.get_end_date(cr, uid, ids, days, day1, day2, day3, day4, day5, day6, day7, context)
+        values['date_end'] = self.pool.get('kemas.suspension').get_end_date(cr, uid, days, day1, day2, day3, day4, day5, day6, day7, context)
         return {'value':values}
     
     def validate_points_zero(self,cr,uid,ids):
@@ -146,7 +86,7 @@ class kemas_suspend_collaborator_step2_wizard(osv.osv_memory):
         day5 = wizard['day5']
         day6 = wizard['day6']
         day7 = wizard['day7']
-        end_date = self.get_end_date(cr, uid, ids, days, day1, day2, day3, day4, day5, day6, day7, context)
+        end_date = self.pool.get('kemas.suspension').get_end_date(cr, uid, days, day1, day2, day3, day4, day5, day6, day7, context)
         collaborator_obj.suspend(cr, uid, collaborator_ids, end_date, unicode(wizard['description']))
         if wizard['remove_points']:
             collaborator_obj.add_remove_points(cr, uid, collaborator_ids, int(wizard['new_points']), unicode(u'Suspención: ' + wizard['description']), 'decrease')

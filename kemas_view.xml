@@ -1881,7 +1881,7 @@
                   <field name="state" widget="statusbar" statusbar_visible="on_going,ended" statusbar_colors='{"on_going":"red"}' />
                </header>
                <sheet string="Suspension">
-                  <label for="collaborator_id" />
+                  <label for="collaborator_id" class="oe_edit_only" />
                   <h1>
                      <field name="collaborator_id" default_focus="1" placeholder="Name of the service" />
                   </h1>
@@ -1891,6 +1891,7 @@
                      <field name="user_create_id" />
                      <field name="date_lifted" states="ended" />
                      <field name="user_lift_id" states="ended" />
+                     <field name="task_assigned_id" attrs="{'invisible':[('task_assigned_id','=',False)]}" readonly="1" />
                      <field name="description" />
                   </group>
                </sheet>
@@ -1914,6 +1915,7 @@
                   </notebook>
                   <field name="date_create" colspan="3" readonly="1" />
                   <field name="user_create_id" colspan="7" readonly="1" />
+                  <field name="task_assigned_id" attrs="{'invisible':[('task_assigned_id','=',False)]}" readonly="1" />
                   <field name="date_lifted" colspan="3" readonly="1" states="ended" />
                   <field name="user_lift_id" colspan="7" readonly="1" states="ended" />
                   <newline />
@@ -2257,7 +2259,7 @@
                   <group>
                      <group>
                         <field name="collaborator_id" placeholder="Assigned to..." attrs="{'readonly':[('state','in',['done', 'cancelled'])]}" options='{"no_open": True}' domain="[('state','=','Active'),('type','=','Collaborator'),]" />
-                        <field name="date_end"/>
+                        <field name="date_limit" />
                      </group>
                      <group>
                         <field name="categ_ids" widget="many2many_tags" />
@@ -2280,6 +2282,7 @@
                            <field name="date_closing" readonly="1" attrs="{'invisible':['|',('is_active','=',True),('state','!=','done')]}" />
                            <field name="date_cancelled" readonly="1" attrs="{'invisible':['|',('is_active','=',True),('state','!=','cancelled')]}" />
                            <field name="date_start" />
+                           <field name="date_end" />
                         </group>
                      </page>
                   </notebook>
@@ -2336,6 +2339,7 @@
                <field name="date_created" />
                <field name="date_start" />
                <field name="date_end" />
+               <field name="date_limit" />
                <field name="stage_id" />
                <field name="state" invisible="1" />
             </tree>
