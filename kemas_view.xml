@@ -745,6 +745,7 @@
                      </group>
                   </page>
                   <page string="Suspensiones">
+                     <separator string="Tareas no cumplidas" />
                      <group>
                         <field name="day_to_suspension_task_closed" />
                      </group>

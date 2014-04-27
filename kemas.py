@@ -1201,7 +1201,7 @@ class kemas_config(osv.osv):
         'number_replacements': fields.integer('Number replacements'),
         'size_collaborator_gravatar': fields.integer('Avatar size', required=True),
         # --Suspensiones
-        'day_to_suspension_task_closed':fields.boolean(u'Dia de suspensión', required=False, help=u"Días que se van a suspender a un colaborador por no haber entregado una tarea a tiempo"),
+        'day_to_suspension_task_closed': fields.integer(u'Dia de suspensión', required=False, help=u"Días que se van a suspender a un colaborador por no haber entregado una tarea a tiempo"),
         #---Images and logos------------------------
         'logo': fields.binary('Logo', help='The reports Logo.'),
         'system_logo': fields.binary('System Logo', help='The System Logo.'),
@@ -1320,6 +1320,8 @@ class kemas_config(osv.osv):
         'default_not_attend_points' : 40,
         'url_system' : 'http://127.0.0.1:8069',
         'number_replacements':5,
+        # --suspensiones
+        'day_to_suspension_task_closed': 10,
         #---Images and logos----------------------------
         'logo': _get_logo,
         'system_logo': _get_system_logo,
@@ -4197,7 +4199,9 @@ class kemas_task_assigned(osv.osv):
         # Suspender al colaborador
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
         now = time.strftime("%Y-%m-%d %H:%M:%S")
-        days = 15
+        
+        preferences = self.pool.get('kemas.config').read(cr, uid, self.pool.get('kemas.config').get_correct_config(cr, uid), ['day_to_suspension_task_closed'])
+        days = int(preferences['day_to_suspension_task_closed'])
         date_end_suspension = self.pool.get('kemas.suspension').get_end_date(cr, uid, days, True, True, True, True, True, True, True)
         description = '''La tarea '%s' que se te fue asignada no fue entregada a tiempo.''' % task['task_id'][1]
         self.pool.get('kemas.collaborator').suspend(cr, uid, [collaborator_id], date_end_suspension, description, task_id)
