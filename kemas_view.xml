@@ -744,6 +744,11 @@
                         <field name="default_not_attend_points" colspan="2" />
                      </group>
                   </page>
+                  <page string="Suspensiones">
+                     <group>
+                        <field name="day_to_suspension_task_closed" />
+                     </group>
+                  </page>
                   <page string="Emails and notifications">
                      <group colspan="4" expand="1" col="10">
                         <field name="mailing" colspan="4" />
@@ -4439,6 +4444,7 @@
                            </h4>
                            <ul>
                               <li>
+                                 <field name="code" />
                                  <field name="expositor_ids" />
                                  <b>Fecha:</b>
                                  <field name="date" />

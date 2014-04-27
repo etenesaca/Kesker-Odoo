@@ -1200,6 +1200,8 @@ class kemas_config(osv.osv):
         'use_subject_in_im': fields.boolean('Use Subject in IM?', required=True, help='Do you want to include the matter in IM?'),
         'number_replacements': fields.integer('Number replacements'),
         'size_collaborator_gravatar': fields.integer('Avatar size', required=True),
+        # --Suspensiones
+        'day_to_suspension_task_closed':fields.boolean(u'Dia de suspensión', required=False, help=u"Días que se van a suspender a un colaborador por no haber entregado una tarea a tiempo"),
         #---Images and logos------------------------
         'logo': fields.binary('Logo', help='The reports Logo.'),
         'system_logo': fields.binary('System Logo', help='The System Logo.'),
