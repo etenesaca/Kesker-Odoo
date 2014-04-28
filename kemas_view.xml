@@ -1543,8 +1543,9 @@
                      </h1>
                      <field name="url" widget="url" colspan="4" />
                   </div>
-                  <group>
+                  <group string="Obtener foto de perfíl">
                      <field name="allow_get_avatar" />
+                     <field name="get_avatar_method" string="Método de obtención" attrs="{'invisible':[('allow_get_avatar','=',False)],'required':[('allow_get_avatar','=',True)]}" />
                   </group>
                   <notebook colspan="4">
                      <page string="Collaborators">

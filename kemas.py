@@ -2350,6 +2350,10 @@ class kemas_web_site(osv.osv):
         'url': fields.char('URL', size=256, help='Web address.'),
         'line_ids': fields.one2many('kemas.collaborator.web.site', 'web_site_id', 'Collaborators'),
         'allow_get_avatar':fields.boolean(u'Permitir obtener foto de perfil', required=False, help=u"Indica si un colaborador puede obtener la foto de perfil desde está página, esta opción es util con las redes sociales."),
+        'get_avatar_method':fields.selection([
+            ('facebook', 'facebook.com'),
+            ('gravatar', 'Gravatar'),
+             ], u'Método de obtención de la foto'),
         }
     _defaults = {  
         'url': 'https://www.'
