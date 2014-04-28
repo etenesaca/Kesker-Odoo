@@ -1497,6 +1497,7 @@
          <field name="type">kanban</field>
          <field name="arch" type="xml">
             <kanban>
+               <field name="allow_get_avatar" />
                <templates>
                   <t t-name="kanban-box">
                      <div class="oe_kanban_vignette oe_semantic_html_override">
@@ -1514,6 +1515,16 @@
                                  <a t-attf-href="#{record.url.value}">
                                     <field name="url" />
                                  </a>
+                              </li>
+                              <li t-if="record.allow_get_avatar.raw_value">
+                                 Fotos de perfíl:
+                                 <b>
+                                    <i>Si</i>
+                                 </b>
+                              </li>
+                              <li t-if="!record.allow_get_avatar.raw_value">
+                                 Fotos de perfíl:
+                                 <i>No</i>
                               </li>
                            </ul>
                         </div>
