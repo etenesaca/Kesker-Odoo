@@ -2316,6 +2316,15 @@ class kemas_web_site(osv.osv):
                 vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
                 vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
                 super(kemas_web_site, self).write(cr, uid, [id], vals_write, context)
+            
+            if vals.has_key('allow_get_avatar'):
+                line_obj = self.pool.get('kemas.collaborator.web.site')
+                line_ids = line_obj.search(cr, uid, [('web_site_id', '=', id)])
+                
+                vals = {'allow_get_avatar': vals['allow_get_avatar']}
+                if not vals['allow_get_avatar']:
+                    vals['get_avatar_from_website'] = False
+                line_obj.write(cr, uid, line_ids, vals)
         return result
 
     def create(self, cr, uid, vals, context={}):
@@ -2338,6 +2347,12 @@ class kemas_web_site(osv.osv):
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
             msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
             return {'value':{'logo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
+        
+    def on_change_allow_get_avatar(self, cr, uid, ids, allow_get_avatar, context={}):
+        values = {}
+        if not allow_get_avatar:
+            values['get_avatar_method'] = False
+        return {'value': values}
 
     _order = 'name'
     _name = 'kemas.web.site'
