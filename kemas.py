@@ -2349,6 +2349,7 @@ class kemas_web_site(osv.osv):
         'name': fields.char('Name', size=64, required=True, help='The name of the Web Site'),
         'url': fields.char('URL', size=256, help='Web address.'),
         'line_ids': fields.one2many('kemas.collaborator.web.site', 'web_site_id', 'Collaborators'),
+        'allow_get_avatar':fields.boolean(u'Permitir obtener foto de perfil', required=False, help=u"Indica si un colaborador puede obtener la foto de perfil desde está página, esta opción es util con las redes sociales."),
         }
     _defaults = {  
         'url': 'https://www.'
@@ -2583,7 +2584,12 @@ class kemas_collaborator_web_site(osv.osv):
             if url:
                 values['url'] = str(url) + '/'
         except: None
-        return {'value':values}
+        
+        values['allow_get_avatar'] = False
+        if web_site_id:
+            values['allow_get_avatar'] = web_site_obj.read(cr, uid, web_site_id, ['allow_get_avatar'])['allow_get_avatar']
+        
+        return {'value': values}
     
     _order = 'web_site_id'
     _rec_name = 'url'
@@ -2592,6 +2598,8 @@ class kemas_collaborator_web_site(osv.osv):
         'web_site_id': fields.many2one('kemas.web.site', 'Web Site'),
         'collaborator_id': fields.many2one('kemas.collaborator', 'collaborator', required=True),
         'url': fields.char('URL', size=256, required=True, help='Web address.'),
+        'get_avatar_from_website':fields.boolean(u'Obtener la foto desde está página', required=False),
+        'allow_get_avatar':fields.boolean(u'Permitir obtener foto de perfil', required=False, help=u"Indica si un colaborador puede obtener la foto de perfil desde está página, esta opción es util con las redes sociales."),
         }
     _defaults = {  
         'url': 'http://www.'
