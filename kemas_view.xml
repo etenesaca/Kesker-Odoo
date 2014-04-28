@@ -1544,8 +1544,11 @@
                      <field name="url" widget="url" colspan="4" />
                   </div>
                   <group string="Obtener foto de perfíl">
-                     <field name="allow_get_avatar" on_change="on_change_allow_get_avatar(allow_get_avatar)" />
-                     <field name="get_avatar_method" string="Método de obtención" attrs="{'invisible':[('allow_get_avatar','=',False)],'required':[('allow_get_avatar','=',True)]}" />
+                     <group>
+                        <field name="allow_get_avatar" on_change="on_change_allow_get_avatar(allow_get_avatar)" />
+                        <field name="get_avatar_method" string="Método de obtención" attrs="{'invisible':[('allow_get_avatar','=',False)],'required':[('allow_get_avatar','=',True)]}" />
+                     </group>
+                     <group />
                   </group>
                   <notebook colspan="4">
                      <page string="Collaborators">
@@ -1577,6 +1580,7 @@
             <tree string="Web sites">
                <field name="name" select="1" />
                <field name="url" widget="url" />
+               <field name="allow_get_avatar" />
             </tree>
          </field>
       </record>
@@ -1589,6 +1593,7 @@
             <search string="Search Web site">
                <group>
                   <field name="name" default_focus="1" />
+                  <field name="allow_get_avatar" />
                </group>
             </search>
          </field>
