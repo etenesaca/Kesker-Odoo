@@ -566,12 +566,18 @@ class kemas_config(osv.osv):
                 
         # Procesar grabaciones
         obj = self.pool.get('kemas.recording')
+        """
         records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name, 'url'])
         for record in records:
             youtube_thumbnail = kemas_extras.get_thumbnail_youtube_video(record['url'])
             if youtube_thumbnail and not record[field_name]:
                 obj.write(cr, uid, [record['id']], {field_name: youtube_thumbnail})
             elif record[field_name]:
+                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
+        """
+        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
+        for record in records:
+            if record[field_name]:
                 obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
         return True
     
@@ -5050,6 +5056,7 @@ class kemas_recording(osv.osv):
                 vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
                 vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
                 vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
+                vals_write['logo_landscape'] = kemas_extras.crop_image_with_size(vals['logo'], path, 112, 64)
                 super(kemas_recording, self).write(cr, uid, [id], vals_write, context)
         return result
     
@@ -5061,6 +5068,7 @@ class kemas_recording(osv.osv):
             vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
             vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
             vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
+            vals['logo_landscape'] = kemas_extras.crop_image_with_size(vals['logo'], path, 112, 64)
         res_id = super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
         # Escribir log
         self.write_log_create(cr, uid, res_id)
@@ -5124,6 +5132,7 @@ class kemas_recording(osv.osv):
         'logo_large': fields.binary('Large Logo'),
         'logo_medium': fields.binary('Medium Logo'),
         'logo_small': fields.binary('Small Logo'),
+        'logo_landscape': fields.binary('Logo apaisado'),
         'theme': fields.char('Theme', size=64, help='The theme of the recording', required=True, states={'done':[('readonly', True)]}),
         'date': fields.datetime('Date', help="Date on which the recording was done", states={'done':[('readonly', True)]}),
         'state': fields.selection([
