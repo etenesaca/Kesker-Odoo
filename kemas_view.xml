@@ -733,8 +733,6 @@
                         <button string="Cortar fotos y logos" name="crop_photo" type="object" icon="gtk-cut" />
                      </div>
                      <group colspan="4" col="6">
-                        <field name="size_collaborator_gravatar" string="Tamaño del avatar" placeholder="tamaño del Avatar" help="Tamaño del avatar que se cargar en el caso de que el colaborador elija cargar su foto desde gravatar.com con el correo ingresado." />
-                        <newline />
                         <field name="default_points" colspan="2" />
                         <field name="number_replacements" colspan="2" />
                         <group colspan="2" />
@@ -3034,9 +3032,6 @@
                                  <group colspan="4" />
                                  <group colspan="2" />
                                  <newline />
-                                 <field name="use_gravatar" help="¿Usar foto desde Gravatar?" colspan="2" />
-                                 <button name="reload_avatar" icon="STOCK_REFRESH" type="object" string="Recargar Avatar" colspan="2" attrs="{'invisible':['|',('use_gravatar','=',False),('state','=','creating')]}" class="oe_link oe_edit_only" />
-                                 <newline />
                                  <field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..." />
                                  <group colspan="2" />
                                  <field name="im_account" colspan="4" widget="email" on_change="on_change_im_account(im_account)" placeholder="Puedes usar una cuenta de facebook: jperez@facebook.com" />
@@ -3123,18 +3118,18 @@
                               <field name="web_site_ids">
                                  <form>
                                     <field name="allow_get_avatar" invisible="1" />
-                                    <group>
-                                       <field name="web_site_id" on_change="on_change_web_site_id(web_site_id)" default_focus="1" options='{"no_open": True}' />
-                                       <field name="get_avatar_from_website" attrs="{'invisible':[('allow_get_avatar','=',False)]}" />
-                                    </group>
-                                    <group>
-                                       <field name="url" widget="url" />
+                                    <group col="4">
+                                       <field name="web_site_id" on_change="on_change_web_site_id(web_site_id)" default_focus="1" options='{"no_open": True}' colspan="2" />
+                                       <group colspan="2" />
+                                       <field name="get_avatar_from_website" attrs="{'invisible':[('allow_get_avatar','=',False)]}" colspan="4" />
+                                       <field name="url" widget="url" colspan="4" string="URL o E-mail" />
                                     </group>
                                  </form>
                                  <tree>
                                     <field name="web_site_id" default_focus="1" />
-                                    <field name="url" widget="url" />
+                                    <field name="url" widget="url" string="URL o E-mail" />
                                     <field name="get_avatar_from_website" />
+                                    <button string="Actualizar" name="reload_info" type="object" icon="gtk-refresh" attrs="{'invisible':[('get_avatar_from_website','=',False)]}" />
                                  </tree>
                               </field>
                            </page>
@@ -3252,9 +3247,6 @@
                                  <group colspan="4" />
                                  <group colspan="2" />
                                  <newline />
-                                 <field name="use_gravatar" help="¿Usar foto desde Gravatar?" colspan="2" />
-                                 <button name="reload_avatar" icon="STOCK_REFRESH" type="object" string="Recargar Avatar" colspan="2" attrs="{'invisible':['|',('use_gravatar','=',False),('state','=','creating')]}" class="oe_link oe_edit_only" />
-                                 <newline />
                                  <field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..." />
                                  <group colspan="2" />
                                  <field name="im_account" colspan="4" widget="email" on_change="on_change_im_account(im_account)" placeholder="Puedes usar una cuenta de facebook: jperez@facebook.com" />
@@ -3321,18 +3313,18 @@
                               <field name="web_site_ids">
                                  <form>
                                     <field name="allow_get_avatar" invisible="1" />
-                                    <group>
-                                       <field name="web_site_id" on_change="on_change_web_site_id(web_site_id)" default_focus="1" options='{"no_open": True}' />
-                                       <field name="get_avatar_from_website" attrs="{'invisible':[('allow_get_avatar','=',False)]}" />
-                                    </group>
-                                    <group>
-                                       <field name="url" widget="url" />
+                                    <group col="4">
+                                       <field name="web_site_id" on_change="on_change_web_site_id(web_site_id)" default_focus="1" options='{"no_open": True}' colspan="2" />
+                                       <group colspan="2" />
+                                       <field name="get_avatar_from_website" attrs="{'invisible':[('allow_get_avatar','=',False)]}" colspan="4" />
+                                       <field name="url" widget="url" colspan="4" string="URL o E-mail" />
                                     </group>
                                  </form>
                                  <tree>
                                     <field name="web_site_id" default_focus="1" />
-                                    <field name="url" widget="url" />
+                                    <field name="url" widget="url" string="URL o E-mail" />
                                     <field name="get_avatar_from_website" />
+                                    <button string="Actualizar" name="reload_info" type="object" icon="gtk-refresh" attrs="{'invisible':[('get_avatar_from_website','=',False)]}" />
                                  </tree>
                               </field>
                            </page>
@@ -6558,7 +6550,7 @@
       <!-- Configuraciones -->
       <menuitem action="action_kemas_config" name="Configurations" id="menu_kemas_config" parent="menu_kemas_config_form_action" />
 
-      
+
       <!--
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
          ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::LANZADORES:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

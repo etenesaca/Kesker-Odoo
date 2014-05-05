@@ -946,3 +946,48 @@ def get_thumbnail_youtube_video(url):
             if source:
                 youtube_thumbnail = base64.b64encode(source)
     return youtube_thumbnail
+
+def get_avatar(email, size):
+    import urllib2
+    import urllib, hashlib
+    
+    avatar = False
+    default = "http://www.example.com/default.jpg"
+    try:
+        gravatar_url = "http://www.gravatar.com/avatar/ " + hashlib.md5(email.lower()).hexdigest() + "?"
+        gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
+        gravatar_url = unicode(gravatar_url).replace(' ', '')
+        
+        import urllib2
+        source = urllib2.urlopen(gravatar_url).read()
+        avatar = base64.b64encode(source)
+    except:
+        None
+    return avatar
+
+def get_facebook_info(url, size='large'):
+    import urllib2
+    from urlparse import urlparse
+    """
+    Tamanios de las imagenes que se pueden consultar
+     * small
+     * normal
+     * large
+    """
+    profile_info = {}
+    try:
+        res_parse = urlparse(url)
+        used_id = res_parse.path.replace('/', '')
+        
+        # Get info
+        url_info = 'http://graph.facebook.com/%s' % (used_id)
+        profile_info = eval(urllib2.urlopen(url_info).read())
+        
+        # Get profile photo
+        url_photo = 'http://graph.facebook.com/%s/picture?type=%s' % (profile_info['username'], size)
+        source = urllib2.urlopen(url_photo).read()
+        if source:
+            profile_info['photo'] = base64.b64encode(source)
+    except:
+        None 
+    return profile_info

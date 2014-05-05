@@ -1205,7 +1205,6 @@ class kemas_config(osv.osv):
         'use_attachments_in_im': fields.boolean('Use attachments in IM?', required=True, help='Do you want that the attachments to emails are also sent to the IM messages?'),
         'use_subject_in_im': fields.boolean('Use Subject in IM?', required=True, help='Do you want to include the matter in IM?'),
         'number_replacements': fields.integer('Number replacements'),
-        'size_collaborator_gravatar': fields.integer('Avatar size', required=True),
         # --Suspensiones
         'day_to_suspension_task_closed': fields.integer(u'Dia de suspensión', required=False, help=u"Días que se van a suspender a un colaborador por no haber entregado una tarea a tiempo"),
         #---Images and logos------------------------
@@ -1744,7 +1743,6 @@ Fecha de Ingreso al ministerio: %jd
         'bc_type':"Code128",
         'bc_width':200,
         'bc_height':50,
-        'size_collaborator_gravatar':90,
     }
     _sql_constraints = [
         ('config_name', 'unique (name_system)', 'This system name already exist!'),
@@ -2370,7 +2368,7 @@ class kemas_web_site(osv.osv):
         'name': fields.char('Name', size=64, required=True, help='The name of the Web Site'),
         'url': fields.char('URL', size=256, help='Web address.'),
         'line_ids': fields.one2many('kemas.collaborator.web.site', 'web_site_id', 'Collaborators'),
-        'allow_get_avatar':fields.boolean(u'Permitir obtener foto de perfil', required=False, help=u"Indica si un colaborador puede obtener la foto de perfil desde está página, esta opción es util con las redes sociales."),
+        'allow_get_avatar':fields.boolean(u'Permitir sincronizar datos', required=False, help=u"Indica si se pueden obtener datos está página por ejemplo la foto, esta opción es util con las redes sociales."),
         'get_avatar_method':fields.selection([
             ('facebook', 'facebook.com'),
             ('gravatar', 'Gravatar'),
@@ -2601,6 +2599,50 @@ class kemas_suspension(osv.osv):
         }
 
 class kemas_collaborator_web_site(osv.osv):
+    def sync(self, cr, uid, ids, context={}):
+        wsline = self.read(cr, uid, ids[0], [])
+        if not wsline['get_avatar_from_website']:
+            return False
+        web_site = self.pool.get('kemas.web.site').read(cr, uid, wsline['web_site_id'][0], ['allow_get_avatar', 'get_avatar_method'])
+        if not web_site['allow_get_avatar']:
+            return False
+        
+        vals = {}
+        if web_site['get_avatar_method'] == 'facebook':
+            profile = kemas_extras.get_facebook_info(wsline['url'], 'large')
+            if profile:
+                vals = {'photo': profile['photo']}
+                if profile.get('gender', False):
+                    if profile['gender'] == 'male':
+                        vals['genre'] = 'Male'
+                    else:
+                        vals['genre'] = 'Female'
+            
+        if web_site['get_avatar_method'] == 'gravatar':
+            photo = kemas_extras.get_avatar(wsline['url'], 120)
+            if photo:
+                vals = {'photo': photo}
+        
+        if vals:
+            self.pool.get('kemas.collaborator').write(cr, uid, [wsline['collaborator_id'][0]], vals)
+            return True
+        else:
+            return False
+        
+    def reload_info(self, cr, uid, ids, context={}):
+        if self.sync(cr, uid, ids, context):    
+            wsline = self.read(cr, uid, ids[0], []) 
+            return {   
+                    'res_id' : wsline['collaborator_id'][0],
+                    'context': "{}",
+                    'view_type': 'form',
+                    'view_mode': 'form',
+                    'res_model': 'kemas.collaborator',
+                    'type': 'ir.actions.act_window',
+                   }
+        else:
+            return False
+    
     def on_change_web_site_id(self, cr, uid, ids, web_site_id, context={}):
         values = {}
         web_site_obj = self.pool.get('kemas.web.site')
@@ -2622,9 +2664,9 @@ class kemas_collaborator_web_site(osv.osv):
     _columns = {
         'web_site_id': fields.many2one('kemas.web.site', 'Web Site'),
         'collaborator_id': fields.many2one('kemas.collaborator', 'collaborator', required=True),
-        'url': fields.char('URL', size=256, required=True, help='Web address.'),
-        'get_avatar_from_website':fields.boolean(u'Obtener la foto desde está página', required=False),
-        'allow_get_avatar':fields.boolean(u'Permitir obtener foto de perfil', required=False, help=u"Indica si un colaborador puede obtener la foto de perfil desde está página, esta opción es util con las redes sociales."),
+        'url': fields.char('URL o E-mail', size=256, required=True, help='Web address.'),
+        'get_avatar_from_website':fields.boolean(u'Sincronizar datos', required=False),
+        'allow_get_avatar':fields.boolean(u'Permitir sincronizar datos', required=False, help=u"Indica Si se van a sincronizar datos con esta cuenta por ejemplo la foto, esta opción es util con las redes sociales."),
         }
     _defaults = {  
         'url': 'http://www.'
@@ -3364,8 +3406,6 @@ class kemas_collaborator(osv.osv):
             
     def create(self, cr, uid, vals, *args, **kwargs):
         vals['email'] = unicode(vals['email']).lower()
-        if vals.get('use_gravatar', False):
-            vals['photo'] = self.get_avatar(cr, uid, vals['email'])
             
         if vals.has_key('points'):
             return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
@@ -3872,35 +3912,19 @@ class kemas_collaborator(osv.osv):
             result[event_id] = mailing
         return result
     
-    def get_avatar(self, cr, uid, email):
-        import urllib, hashlib
-        
-        preferences = self.pool.get('kemas.config').read(cr, uid, self.pool.get('kemas.config').get_correct_config(cr, uid), ['size_collaborator_gravatar'])
-        default = "http://www.example.com/default.jpg"
-        try:
-            gravatar_url = "http://www.gravatar.com/avatar/ " + hashlib.md5(email.lower()).hexdigest() + "?"
-            gravatar_url += urllib.urlencode({'d':default, 's':str(preferences['size_collaborator_gravatar'])})
-            gravatar_url = unicode(gravatar_url).replace(' ', '')
-            
-            import urllib2
-            source = urllib2.urlopen(gravatar_url).read()
-            avatar = base64.b64encode(source)
-            return avatar
-        except:
-            return False
-    
     def reload_avatar(self, cr, uid, ids, context={}):
-        collaborators = super(osv.osv, self).read(cr, uid, ids, ['email', 'use_gravatar'])
+        collaborators = super(osv.osv, self).read(cr, uid, ids, ['web_site_ids'])
         context['no_update_logbook'] = True
         for collaborator in collaborators:
-            if collaborator['use_gravatar']:
-                avatar = self.get_avatar(cr, uid, collaborator['email'])
-                if avatar:
-                    self.write(cr, uid, [collaborator['id']], {'photo' : avatar}, context)
+            wslines = self.pool.get('kemas.collaborator.web.site').read(cr, uid, collaborator['web_site_ids'], ['get_avatar_from_website'])
+            for wsline in wslines:
+                if wsline['get_avatar_from_website']:
+                    self.pool.get('kemas.collaborator.web.site').sync(cr, uid, [wsline['id']], context)
+                    continue
         return True
     
     def update_avatars(self, cr, uid, context={}):
-        collaborator_ids = super(osv.osv, self).search(cr, uid, [('use_gravatar', '=', True)])
+        collaborator_ids = super(osv.osv, self).search(cr, uid, [])
         return self.reload_avatar(cr, uid, collaborator_ids, context)
     
     def _replacements(self, cr, uid, ids, name, arg, context={}):
@@ -3995,7 +4019,6 @@ class kemas_collaborator(osv.osv):
         'photo_medium': fields.binary('Medium Photo'),
         'photo_small': fields.binary('Small Photo'),
         'photo_very_small': fields.binary('Very Small Photo'),
-        'use_gravatar': fields.boolean('Cargar foto desde gravatar'),
         'qr_code': fields.function(_get_QR_image, type='binary', string='QR code data'),
         'bar_code': fields.function(_get_barcode_image, type='binary', string='Bar Code data'),
         'name': fields.char('Name', size=128, required=True, help="Full names of collaborator. Example: Rios Abad Juan David"),

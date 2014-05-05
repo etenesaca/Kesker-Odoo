@@ -63,11 +63,11 @@
       </record>
       <!--
          ====================
-         ACTUALIZAR AVATARS DE LOS COLABORADORES
+         ACTUALIZAR FOTOS DE LOS COLABORADORES
          ====================
       -->
       <record id="update_avatars_cron" model="ir.cron">
-         <field name="name">Kemas - Actualizar Avatars</field>
+         <field name="name">Kemas - Actualizar fotos de Colaboradores</field>
          <field name="user_id">1</field>
          <field name="interval_type">days</field>
          <field name="interval_number">1</field>
