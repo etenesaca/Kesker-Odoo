@@ -5152,6 +5152,7 @@
                <field name="service_id" />
                <field name="code" default_focus="1" />
                <separator />
+               <filter name="new" string="Nuevos y en Curso" domain="[('state','in',['draft','on_going'])]" context="{'order_date_start': 'ASC'}" />
                <filter name="ongoing" string="On Going" domain="[('state','=','on_going')]" />
                <filter name="draft" string="Draft" domain="[('state','=','draft')]" />
                <filter name="closed" string="Closed" domain="[('state','=','closed')]" />
@@ -5183,7 +5184,7 @@
                <separator />
                <filter icon="terp-mail-message-new" string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]" />
                <separator />
-               <filter name="ongoing" string="On Going" domain="[('state','=','on_going')]" />
+               <filter name="ongoing" string="On Going" domain="[('state','=','on_going')]" context="{'order_date_start': 'ASC'}"/>
                <filter name="closed" string="Closed" domain="[('state','=','closed')]" />
                <separator />
                <field name="code" default_focus="1" />

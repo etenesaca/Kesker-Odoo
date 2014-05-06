@@ -5166,6 +5166,9 @@ class kemas_event(osv.osv):
         return {'value':values}
                 
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):    
+        if context.get('order_date_start',False):
+            order = 'date_start ' + context['order_date_start'] 
+        
         collaborator_id = False
         if context.get('collaborator_id', False):
             for arg in args:
@@ -6305,7 +6308,7 @@ class kemas_event(osv.osv):
         return result
     
     _inherit = ['mail.thread', 'ir.needaction_mixin']
-    _order = 'date_start,code'
+    _order = 'date_start DESC,code'
     _name = 'kemas.event'
     _rec_name = 'service_id'
     _columns = {
