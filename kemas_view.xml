@@ -1515,13 +1515,13 @@
                                  </a>
                               </li>
                               <li t-if="record.allow_get_avatar.raw_value">
-                                 Fotos de perfíl:
+                                 Sincronizar datos:
                                  <b>
                                     <i>Si</i>
                                  </b>
                               </li>
                               <li t-if="!record.allow_get_avatar.raw_value">
-                                 Fotos de perfíl:
+                                 Sincronizar datos:
                                  <i>No</i>
                               </li>
                            </ul>
