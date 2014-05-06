@@ -2671,6 +2671,29 @@ class kemas_collaborator_web_site(osv.osv):
     _defaults = {  
         'url': 'http://www.'
         }
+    _sql_constraints = [
+            ('u_web_site', 'unique (web_site_id,collaborator_id)', 'Ya se ha registrado una cuenta relaicionado a este sitio web!'),
+            ]
+    
+    def _validate_unique_sync_account(self, cr, uid, ids): 
+        """
+        Esta funcion verifica: Que un colaborador solo pueda tener una sola cuenta para sincronizar datos.
+        @return: Si la validacion es correctar de vuelve True caso contrario False y se revierte el proceso de Guardado.
+        """
+        def validate_unique_sync_account(record):
+            wsline_ids = self.search(cr, uid, [('collaborator_id', '=', record['collaborator_id'][0]), ('get_avatar_from_website', '=', True)])
+            if len(wsline_ids) > 1:
+                return False
+            else:
+                return True
+            
+        records = self.read(cr, uid, ids, ['collaborator_id'])
+        for record in records:
+            if not validate_unique_sync_account(record):
+                return False
+        return True
+    
+    _constraints = [(_validate_unique_sync_account, u'\n\nSolo se puede usar una sola cuenta para sincronizar datos.', [u'Sitios web']), ]
     
 class kemas_ministry(osv.osv):
     def do_activate(self, cr, uid, ids, context={}):
