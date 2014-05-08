@@ -1215,6 +1215,7 @@ class kemas_config(osv.osv):
         #---Cliente de registro asistencia---------
         'logo_program_client': fields.binary('Imagen de Cabecera', help='Es la imagen que va a salir en la cabecera del programa para registro de asistencias.'),
         'frequency_program_client': fields.integer('Frecuencia de conexion', help="Frecuencia en segundos con la que el programa se conecta al sistema para consultar los datos"),
+        'allow_checkout_registers':fields.boolean('Permitir registrar registro de salida', required=False, help="Indica si se va poder registrar las salidas de los colaboradores"),
         #---Report----------------------------------
         'report_header': fields.text('Report header', help='Text to be displayed in the header of the report.'),
         'use_header': fields.boolean('Use?'),

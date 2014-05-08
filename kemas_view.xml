@@ -546,9 +546,10 @@
                         </group>
                      </group>
                   </page>
-                  <page string="Cliente de registro de Asistencia">
+                  <page id="attendance_records" string="Registro de Asistencia">
                      <group>
                         <field name="frequency_program_client" />
+                        <field name="allow_checkout_registers" />
                      </group>
                      <div class="oe_edit_only">
                         <label for="logo_program_client" />
@@ -5184,7 +5185,7 @@
                <separator />
                <filter icon="terp-mail-message-new" string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]" />
                <separator />
-               <filter name="ongoing" string="On Going" domain="[('state','=','on_going')]" context="{'order_date_start': 'ASC'}"/>
+               <filter name="ongoing" string="On Going" domain="[('state','=','on_going')]" context="{'order_date_start': 'ASC'}" />
                <filter name="closed" string="Closed" domain="[('state','=','closed')]" />
                <separator />
                <field name="code" default_focus="1" />
