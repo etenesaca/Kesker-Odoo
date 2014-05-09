@@ -6610,6 +6610,7 @@ class kemas_attendance(osv.osv):
         search_args = [('collaborator_id', '=', vals['collaborator_id']), ('event_id', '=', res_current_event['current_event_id'])]
         attendance_ids = super(osv.osv, self).search(cr, uid, search_args)
         if attendance_ids:
+            import pdb;pdb.set_trace()
             preferences = self.pool.get('kemas.config').read(cr, uid, self.pool.get('kemas.config').get_correct_config(cr, uid), ['allow_checkout_registers'])
             if preferences['allow_checkout_registers']:
                 last_register = self.read(cr, uid, attendance_ids[0], ['checkout_id'])
@@ -6710,7 +6711,7 @@ class kemas_attendance(osv.osv):
         'register_type': fields.selection([
             ('checkin', 'Entrada'),
             ('checkout', 'Salida'),
-            ], 'Tipo de registro'),
+            ], 'Tipo de registro', required=True),
         'type': fields.selection([
             ('just_time', 'On Time'),
             ('late', 'Late'),
@@ -6726,14 +6727,15 @@ class kemas_attendance(osv.osv):
         'user_id': fields.many2one('res.users', 'User', help='User who opened the system to record attendance.'),
         
         'checkin_id':fields.many2one('kemas.attendance', 'Registro de Entrada', help=''),
-        'checkin_out':fields.many2one('kemas.attendance', 'Registro de Salida', help=''),
+        'checkout_id':fields.many2one('kemas.attendance', 'Registro de Salida', help=''),
         }
     _sql_constraints = [
         ('uattendance_collaborator', 'unique (collaborator_id, event_id)', 'This collaborator has registered their attendance at this event!'),
         ('ucode', 'unique (code)', 'This code already exists!'),
         ]
     _defaults = {  
-        'count': 1
+        'count': 1,
+        'register_type': 'checkin'
         }
     
 class kemas_event_replacement(osv.osv):
