@@ -5167,7 +5167,7 @@ class kemas_event(osv.osv):
         return {'value':values}
                 
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):    
-        if context.get('order_date_start',False):
+        if context.get('order_date_start', False):
             order = 'date_start ' + context['order_date_start'] 
         
         collaborator_id = False
@@ -6571,6 +6571,9 @@ class kemas_attendance(osv.osv):
                     elif res == 'already register':
                         _logger.error("'%s' Username already register. %s" % (username, "REGISTER ATTENDANCE"))
                         return 'r_5'
+                    elif res == 'already checkout':
+                        _logger.error("'%s' Username already checkout. %s" % (username, "REGISTER ATTENDANCE"))
+                        return 'r_6'
                     else:
                         _logger.info("Register attendance '%s' OK. %s" % (username, "REGISTER ATTENDANCE"))
                         return res
@@ -6603,9 +6606,19 @@ class kemas_attendance(osv.osv):
             collaborators_involved_list.append(collaborator_id)
         
         #---Este colaborador ya registro asistencia
-        attendance_ids = super(osv.osv, self).search(cr, uid, [('collaborator_id', '=', vals['collaborator_id']), ('event_id', '=', res_current_event['current_event_id'])])
+        checkin_id = False
+        search_args = [('collaborator_id', '=', vals['collaborator_id']), ('event_id', '=', res_current_event['current_event_id'])]
+        attendance_ids = super(osv.osv, self).search(cr, uid, search_args)
         if attendance_ids:
-            return 'already register'
+            preferences = self.pool.get('kemas.config').read(cr, uid, self.pool.get('kemas.config').get_correct_config(cr, uid), ['allow_checkout_registers'])
+            if preferences['allow_checkout_registers']:
+                last_register = self.read(cr, uid, attendance_ids[0], ['checkout_id'])
+                if last_register['checkout_id']:
+                    return 'already checkout'
+                else:
+                    checkin_id = attendance_ids[0]
+            else:
+                return 'already register'
         
         #---El Colaborador ho esta entre los colaboradores desginados para este evento--------------   
         if not vals['collaborator_id'] in collaborators_involved_list: return 'no envolved'
@@ -6616,6 +6629,11 @@ class kemas_attendance(osv.osv):
         vals['user_id'] = uid
         vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
         vals['event_id'] = res_current_event['current_event_id']
+        if checkin_id:
+            vals['checkin_id'] = checkin_id
+            vals['register_type'] = 'checkout'
+        else:
+            vals['register_type'] = 'checkin'
         
         #---------Verificar tipo de Asistencia------------------------------------------------------
         time_entry = res_current_event['time_entry']
@@ -6676,7 +6694,11 @@ class kemas_attendance(osv.osv):
             'summary': history_summary,
             'points': change_points,
             }
-        history_points_obj.create(cr, uid, vals_history_points)        
+        history_points_obj.create(cr, uid, vals_history_points)      
+        
+        # Actualizar el registro de entrada
+        if checkin_id:
+            self.write(cr, uid, [checkin_id], {'checkin_out': res_id})  
         return res_id
     
     _name = 'kemas.attendance'
@@ -6685,6 +6707,10 @@ class kemas_attendance(osv.osv):
     _columns = {
         'collaborator_id': fields.many2one('kemas.collaborator', 'Collaborator'),
         'code': fields.char('Code', size=32, help="unique code that is assigned to each attendance record"),
+        'register_type': fields.selection([
+            ('checkin', 'Entrada'),
+            ('checkout', 'Salida'),
+            ], 'Tipo de registro'),
         'type': fields.selection([
             ('just_time', 'On Time'),
             ('late', 'Late'),
@@ -6698,6 +6724,9 @@ class kemas_attendance(osv.osv):
         'search_end': fields.date('Hasta', help='Buscar hasta'),
         'service_id': fields.related('event_id', 'service_id', type="many2one", relation="kemas.service", string="Service", store=True),
         'user_id': fields.many2one('res.users', 'User', help='User who opened the system to record attendance.'),
+        
+        'checkin_id':fields.many2one('kemas.attendance', 'Registro de Entrada', help=''),
+        'checkin_out':fields.many2one('kemas.attendance', 'Registro de Salida', help=''),
         }
     _sql_constraints = [
         ('uattendance_collaborator', 'unique (collaborator_id, event_id)', 'This collaborator has registered their attendance at this event!'),
