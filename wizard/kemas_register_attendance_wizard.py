@@ -104,6 +104,8 @@ class kemas_register_attendance_wizard(osv.osv_memory):
             raise osv.except_osv(_('Error!'), _('There are no services for record attendance.'))
         elif res == 'r_5':
             raise osv.except_osv(_('Error!'), _('This collaborator has registered their attendance at this event!'))
+        elif res == 'r_6':
+            raise osv.except_osv(_('Error!'), _('Este Colaborador ya marco el registro de salida!'))
         else:
             mensaje = 'OK.'
             return{            

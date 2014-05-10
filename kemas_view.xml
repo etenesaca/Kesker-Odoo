@@ -5207,8 +5207,9 @@
          <field name="arch" type="xml">
             <form string="Attendance" version="7.0" edit="0" create="0" delete="0">
                <sheet string="Attendance">
-                  <field name="register_type" invisible="1" />
                   <group colspan="4" expand="1" col="10">
+                     <field name="register_type" />
+                     <newline />
                      <field name="collaborator_id" colspan="7" readonly="1" />
                      <field name="user_id" colspan="3" readonly="1" />
                      <field name="code" colspan="2" readonly="1" />
@@ -5217,8 +5218,8 @@
                      <field name="event_id" colspan="7" readonly="1" />
                      <field name="date" colspan="3" readonly="1" />
                      <newline />
-                     <field name="checkin_id" attrs="{'invisible':[('register_type','=','checkout')]}" />
-                     <field name="checkout_id" attrs="{'invisible':[('register_type','=','checkin')]}" />
+                     <field name="checkin_id" attrs="{'invisible':[('register_type','=','checkin')]}" colspan="10" />
+                     <field name="checkout_id" attrs="{'invisible':[('register_type','=','checkout')]}" colspan="10" />
                   </group>
                   <notebook colspan="4">
                      <page string="Summary">
@@ -5238,16 +5239,17 @@
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <form string="Attendance" version="7.0" edit="0" create="0" delete="0">
-               <field name="register_type" invisible="1" />
                <group colspan="4" expand="1" col="10">
+                  <field name="register_type" />
+                  <newline />
                   <field name="code" colspan="2" readonly="1" />
                   <group colspan="8"></group>
                   <newline />
                   <field name="event_id" colspan="7" readonly="1" />
                   <field name="date" colspan="3" readonly="1" />
                   <newline />
-                  <field name="checkin_id" attrs="{'invisible':[('register_type','=','checkout')]}" />
-                  <field name="checkout_id" attrs="{'invisible':[('register_type','=','checkin')]}" />
+                  <field name="checkin_id" attrs="{'invisible':[('register_type','=','checkin')]}" colspan="10" />
+                  <field name="checkout_id" attrs="{'invisible':[('register_type','=','checkout')]}" colspan="10" />
                </group>
                <notebook colspan="4">
                   <page string="Summary">
@@ -5266,8 +5268,9 @@
          <field name="priority" eval="3" />
          <field name="arch" type="xml">
             <form string="Attendance" version="7.0" edit="0" create="0" delete="0">
-               <field name="register_type" invisible="1" />
                <group colspan="4" expand="1" col="10">
+                  <field name="register_type" />
+                  <newline />
                   <field name="collaborator_id" colspan="10" readonly="1" />
                   <field name="code" colspan="2" readonly="1" />
                   <group colspan="8"></group>
@@ -5275,8 +5278,8 @@
                   <field name="date" colspan="3" readonly="1" />
                   <group colspan="7"></group>
                   <newline />
-                  <field name="checkin_id" attrs="{'invisible':[('register_type','=','checkout')]}" />
-                  <field name="checkout_id" attrs="{'invisible':[('register_type','=','checkin')]}" />
+                  <field name="checkin_id" attrs="{'invisible':[('register_type','=','checkin')]}" colspan="10" />
+                  <field name="checkout_id" attrs="{'invisible':[('register_type','=','checkout')]}" colspan="10" />
                </group>
                <notebook colspan="4">
                   <page string="Summary">

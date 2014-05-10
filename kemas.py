@@ -6607,10 +6607,9 @@ class kemas_attendance(osv.osv):
         
         #---Este colaborador ya registro asistencia
         checkin_id = False
-        search_args = [('collaborator_id', '=', vals['collaborator_id']), ('event_id', '=', res_current_event['current_event_id'])]
+        search_args = [('collaborator_id', '=', vals['collaborator_id']), ('event_id', '=', res_current_event['current_event_id']), ('register_type', '=', 'checkin')]
         attendance_ids = super(osv.osv, self).search(cr, uid, search_args)
         if attendance_ids:
-            import pdb;pdb.set_trace()
             preferences = self.pool.get('kemas.config').read(cr, uid, self.pool.get('kemas.config').get_correct_config(cr, uid), ['allow_checkout_registers'])
             if preferences['allow_checkout_registers']:
                 last_register = self.read(cr, uid, attendance_ids[0], ['checkout_id'])
@@ -6630,6 +6629,7 @@ class kemas_attendance(osv.osv):
         vals['user_id'] = uid
         vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
         vals['event_id'] = res_current_event['current_event_id']
+        
         if checkin_id:
             vals['checkin_id'] = checkin_id
             vals['register_type'] = 'checkout'
@@ -6699,7 +6699,7 @@ class kemas_attendance(osv.osv):
         
         # Actualizar el registro de entrada
         if checkin_id:
-            self.write(cr, uid, [checkin_id], {'checkin_out': res_id})  
+            self.write(cr, uid, [checkin_id], {'checkout_id': res_id})  
         return res_id
     
     _name = 'kemas.attendance'
@@ -6730,7 +6730,7 @@ class kemas_attendance(osv.osv):
         'checkout_id':fields.many2one('kemas.attendance', 'Registro de Salida', help=''),
         }
     _sql_constraints = [
-        ('uattendance_collaborator', 'unique (collaborator_id, event_id)', 'This collaborator has registered their attendance at this event!'),
+        ('uattendance_collaborator', 'unique (collaborator_id,event_id,register_type)', 'This collaborator has registered their attendance at this event!'),
         ('ucode', 'unique (code)', 'This code already exists!'),
         ]
     _defaults = {  
