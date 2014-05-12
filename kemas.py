@@ -5436,7 +5436,7 @@ class kemas_event(osv.osv):
                             'name': name,
                             'username': collaborator['username'],
                             'photo': photo,
-                            'registered': is_registered(event_id,collaborator['id']),
+                            'registered': is_registered(event_id, collaborator['id']),
                             }
             collaborators.append(collaborator_dic)
         
@@ -6545,7 +6545,7 @@ class kemas_attendance(osv.osv):
                 args.remove(item)
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
     
-    def register_attendance(self, cr, uid, username, password):
+    def register_attendance(self, cr, uid, username, password, context={}):
         '''
         r_1    Error en logeo
         r_2    Logueo correcto pero este Usuario no pertenece a un Colaborador
@@ -6570,7 +6570,7 @@ class kemas_attendance(osv.osv):
                 collaborator_ids = super(kemas_collaborator, collaborator_obj).search(cr, uid, [('user_id', '=', user['id']), ('state', '=', 'Active'), ('type', '=', 'Collaborator'), ])
                 if collaborator_ids:
                     vals = {'collaborator_id': collaborator_ids[0]}
-                    res = self.create(cr, uid, vals)
+                    res = self.create(cr, uid, vals, context)
                     if res == 'no event':
                         _logger.error("'%s' no has events for regsiter attedance. %s" % (username, "REGISTER ATTENDANCE"))
                         return 'r_4'
@@ -6594,8 +6594,8 @@ class kemas_attendance(osv.osv):
         else:
             _logger.warning("'%s' Username don't exist. %s" % (username, "REGISTER ATTENDANCE"))
             return 'r_1'
-        
-    def create(self, cr, uid, vals, *args, **kwargs):
+    
+    def create(self, cr, uid, vals, context={}):
         event_obj = self.pool.get('kemas.event')
         event_collaborator_line_obj = self.pool.get('kemas.event.collaborator.line')
 
@@ -6691,7 +6691,7 @@ class kemas_attendance(osv.osv):
                             'level_id':current_level_id,
                             })
         
-        res_id = super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
+        res_id = super(osv.osv, self).create(cr, uid, vals, context)
         #------------------------
         history_summary = str(operator) + str(change_points) + " Puntos. Antes " + str(current_points) + " ahora " + str(new_points) + " Puntos."
         vals_history_points = {
@@ -6709,6 +6709,9 @@ class kemas_attendance(osv.osv):
         # Actualizar el registro de entrada
         if checkin_id:
             self.write(cr, uid, [checkin_id], {'checkout_id': res_id})  
+        
+        if context.get('with_register_type', False):
+            res_id = {'res_id': res_id, 'register_type': vals['register_type']}
         return res_id
     
     _name = 'kemas.attendance'
