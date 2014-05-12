@@ -3039,12 +3039,15 @@ class kemas_collaborator(osv.osv):
         return result
 
     def read(self, cr, uid, ids, fields=None, context={}, load='_classic_read'):
-        res = super(osv.osv, self).read(cr, uid, ids, fields, context) 
+        res = super(osv.osv, self).read(cr, uid, ids, fields, context)
+        if fields is None or not list(set(['photo', 'photo_large', 'photo_medium', 'photo_small', 'photo_very_small']) & set(fields)):
+            return res
+          
+        '''
         user_obj = self.pool.get('res.users')
         group_obj = self.pool.get('res.groups')
         user_id = user_obj.search(cr, uid, [('id', '=', uid), ])
         groups_id = user_obj.read(cr, uid, user_id, ['groups_id'])[0]['groups_id']
-        '''
         #---Validar si esque el usuario puede este registro----------------------------------------------------
         try:
             if type(context).__name__ == 'dict':
@@ -3101,7 +3104,7 @@ class kemas_collaborator(osv.osv):
                         res[photo_field] = self.get_photo_female()
         
         #--------FOTO Para la VISTA DE KANBAN----------------------------
-        if 'photo_medium' in fields:
+        elif 'photo_medium' in fields:
             if type(res).__name__ == 'list':
                 for read_dict in res:
                     collaborator = super(osv.osv, self).read(cr, uid, read_dict['id'], ['genre'])
@@ -5398,8 +5401,8 @@ class kemas_event(osv.osv):
             JOIN res_users as U on (U.id = cl.user_id)
             WHERE cl.id IN
             (
-            SELECT collaborator_id FROM kemas_event_collaborator_line 
-            WHERE event_id = %d
+                SELECT collaborator_id FROM kemas_event_collaborator_line 
+                WHERE event_id = %d
             )
         """ % (event_id)
         cr.execute(sql)
@@ -5429,6 +5432,7 @@ class kemas_event(osv.osv):
                 res.append(collaborator)
         for collaborator in l2:
             res.append(collaborator)
+        
         return res
         
     def get_next_event(self, cr, uid):
