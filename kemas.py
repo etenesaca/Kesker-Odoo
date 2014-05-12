@@ -5358,12 +5358,15 @@ class kemas_event(osv.osv):
 
     def get_collaborators_registered(self, cr, uid, event_id):
         sql = """
-            SELECT collaborator_id FROM kemas_attendance 
-            WHERE event_id = %d
+            SELECT collaborator_id, checkout_id FROM kemas_attendance 
+            WHERE event_id = %d and register_type = 'checkin'
         """ % (event_id)
         cr.execute(sql)
-        result_query = cr.fetchall()
-        return kemas_extras.convert_result_query_to_list(result_query)
+        result_query = cr.dictfetchall()
+        for record in result_query:
+            if record['checkout_id'] is None:
+                 record['checkout_id'] = False
+        return result_query
     
     def get_collaborators_by_event(self, cr, uid, event_id, min_image_size=64):
         def get_photo_collaborator(collaborator_id):
@@ -5393,9 +5396,17 @@ class kemas_event(osv.osv):
                     return get_photo_thumbnail()
                 return image_small
             
-        def is_registered(collaborator_id):
-            if collaborator_id in collaborator_ids:
-                return True
+        def is_registered(event_id, collaborator_id):
+            sql = """
+                SELECT checkout_id FROM kemas_attendance 
+                WHERE event_id = %d and collaborator_id = %d and register_type = 'checkin'
+                """ % (event_id, collaborator_id)
+            cr.execute(sql)
+            result_query = cr.dictfetchall()
+            if result_query:
+                if result_query[0]['checkout_id'] is None:
+                    result_query[0]['checkout_id'] = False
+                return result_query[0]
             else:
                 return False
         
@@ -5413,8 +5424,6 @@ class kemas_event(osv.osv):
         collaborators = []
         attendance_list = []
         
-        
-        collaborator_ids = self.get_collaborators_registered(cr, uid, event_id)
         for collaborator in result_query:
             name = "%s %s" % (
                              unicode(collaborator['nick_name']).title(),
@@ -5427,7 +5436,7 @@ class kemas_event(osv.osv):
                             'name': name,
                             'username': collaborator['username'],
                             'photo': photo,
-                            'registered': is_registered(collaborator['id']),
+                            'registered': is_registered(event_id,collaborator['id']),
                             }
             collaborators.append(collaborator_dic)
         
