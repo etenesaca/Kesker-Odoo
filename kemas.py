@@ -3059,36 +3059,46 @@ class kemas_collaborator(osv.osv):
         except:None
         '''
         #--------FOTO----------------------------
+        photo_field = False
         if 'photo' in fields:
+            photo_field = 'photo'
+        elif 'photo_large' in fields:
+            photo_field = 'photo_large'
+        elif 'photo_medium' in fields:
+            photo_field = 'photo_small'
+        elif 'photo_small' in fields:
+            photo_field = 'photo_small'
+            
+        if photo_field:
             if type(res).__name__ == 'list':
                 for read_dict in res:
                     collaborator = super(osv.osv, self).read(cr, uid, read_dict['id'], ['genre'])
-                    if read_dict.has_key('photo'):
-                        if read_dict['photo'] == False:
+                    if read_dict.has_key(photo_field):
+                        if read_dict[photo_field] == False:
                             if collaborator['genre'] == 'Male':
-                                read_dict['photo'] = self.get_photo_male()
+                                read_dict[photo_field] = self.get_photo_male()
                             else:
-                                read_dict['photo'] = self.get_photo_female()
+                                read_dict[photo_field] = self.get_photo_female()
                         else:
                             continue
                     else:
                         if collaborator['genre'] == 'Male':
-                            read_dict['photo'] = self.get_photo_male()
+                            read_dict[photo_field] = self.get_photo_male()
                         else:
-                            read_dict['photo'] = self.get_photo_female()
+                            read_dict[photo_field] = self.get_photo_female()
             else:
                 collaborator = super(osv.osv, self).read(cr, uid, ids, ['genre'])
-                if res.has_key('photo'):
-                    if res['photo'] == False:
+                if res.has_key(photo_field):
+                    if res[photo_field] == False:
                         if collaborator['genre'] == 'Male':
-                            res['photo'] = self.get_photo_male()
+                            res[photo_field] = self.get_photo_male()
                         else:
-                            res['photo'] = self.get_photo_female()               
+                            res[photo_field] = self.get_photo_female()               
                 else:
                     if collaborator['genre'] == 'Male':
-                        res['photo'] = self.get_photo_male()
+                        res[photo_field] = self.get_photo_male()
                     else:
-                        res['photo'] = self.get_photo_female()
+                        res[photo_field] = self.get_photo_female()
         
         #--------FOTO Para la VISTA DE KANBAN----------------------------
         if 'photo_medium' in fields:
@@ -5368,34 +5378,7 @@ class kemas_event(osv.osv):
                  record['checkout_id'] = False
         return result_query
     
-    def get_collaborators_by_event(self, cr, uid, event_id, min_image_size=64):
-        def get_photo_collaborator(collaborator_id):
-            def get_default_image():
-                default_photo = open(addons.get_module_resource('kemas', 'images', 'collaborator.png'), 'rb').read().encode('base64')
-                return kemas_extras.resize_image(default_photo, photo_path, min_image_size)
-            
-            def get_photo_thumbnail():
-                photo = super(kemas_collaborator, collaborator_obj).read(cr, uid, collaborator_id, ['photo'])['photo']
-                if not photo:
-                    return get_default_image()
-                else:
-                    return kemas_extras.resize_image(photo, photo_path, min_image_size)
-            
-            collaborator_obj = self.pool.get('kemas.collaborator')
-            photo_path = addons.__path__[0] + '/web/static/src/img/tmp'
-            user = super(kemas_collaborator, collaborator_obj).read(cr, uid, collaborator_id, ['user_id'])['user_id']
-            if not user:
-                return get_default_image()
-            else:
-                image_small = self.pool.get('res.users').read(cr, uid, user[0], ['image_small'])['image_small']
-                if image_small:
-                    if len(image_small) > 15000:
-                        return get_photo_thumbnail()
-                    return image_small
-                else:
-                    return get_photo_thumbnail()
-                return image_small
-            
+    def get_collaborators_by_event(self, cr, uid, event_id):
         def is_registered(event_id, collaborator_id):
             sql = """
                 SELECT checkout_id FROM kemas_attendance 
@@ -5429,13 +5412,10 @@ class kemas_event(osv.osv):
                              unicode(collaborator['nick_name']).title(),
                              unicode(collaborator['name']).split()[0].title()
                              )
-            photo = get_photo_collaborator(collaborator['id'])
-            # photo = base64.b64decode(photo)
             collaborator_dic = {
                             'id': collaborator['id'],
                             'name': name,
                             'username': collaborator['username'],
-                            'photo': photo,
                             'registered': is_registered(event_id, collaborator['id']),
                             }
             collaborators.append(collaborator_dic)
