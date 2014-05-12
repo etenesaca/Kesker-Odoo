@@ -3234,20 +3234,6 @@ class kemas_collaborator(osv.osv):
             return result
         else:
             return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
-    
-    def get_by_user_id(self, cr, uid, username):
-        user_obj = self.pool.get('res.users')
-        collaborator_obj = self.pool.get('kemas.collaborator')
-        #--------------------------------------------------------------------------------
-        user_ids = user_obj.search(cr, uid, [('login', '=', username)])
-        if user_ids:
-            collaborator_ids = super(kemas_collaborator, collaborator_obj).search(cr, uid, [('user_id', '=', user_ids[0])])
-            if collaborator_ids:
-                return collaborator_ids[0]
-            else:
-                return 0
-        else:
-            return 0
         
     def lift_suspension(self, cr, uid, ids, context={}):
         self.pool.get('kemas.suspension').lift_by_collaborator(cr, uid, ids[0])
