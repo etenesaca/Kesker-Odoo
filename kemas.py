@@ -6540,6 +6540,7 @@ class kemas_attendance(osv.osv):
                 collaborator_ids = super(kemas_collaborator, collaborator_obj).search(cr, uid, [('user_id', '=', user['id']), ('state', '=', 'Active'), ('type', '=', 'Collaborator'), ])
                 if collaborator_ids:
                     vals = {'collaborator_id': collaborator_ids[0]}
+                    context['with_register_type'] = True
                     res = self.create(cr, uid, vals, context)
                     if res == 'no event':
                         _logger.error("'%s' no has events for regsiter attedance. %s" % (username, "REGISTER ATTENDANCE"))
@@ -6554,7 +6555,10 @@ class kemas_attendance(osv.osv):
                         _logger.error("'%s' Username already checkout. %s" % (username, "REGISTER ATTENDANCE"))
                         return 'r_6'
                     else:
-                        _logger.info("Register attendance '%s' OK. %s" % (username, "REGISTER ATTENDANCE"))
+                        if res['register_type'] == 'checkin':
+                            _logger.info("Registro de Asistencia 'ENTRADA' '%s' OK. %s" % (username, "REGISTER ATTENDANCE"))
+                        else:
+                            _logger.info("Registro de Asistencia 'SALIDA' '%s' OK. %s" % (username, "REGISTER ATTENDANCE"))
                         return res
                 else:
                     return 'r_2'
