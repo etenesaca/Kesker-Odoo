@@ -6389,6 +6389,7 @@ class kemas_event(osv.osv):
         line_ids = line_obj.search(cr, uid, [('event_id', '=', ids[0])])
         line_obj.unlink(cr, uid, line_ids)
         args = []
+        args.append(('state', '=', 'Active'))
         args.append(('type', '=', 'Collaborator'))
         args.append(('points', '>', int(event['min_points'])))
             
@@ -6405,7 +6406,7 @@ class kemas_event(osv.osv):
         self.write(cr, uid, ids, {'collaborators_loaded':True}, context)
         line_ids = line_obj.search(cr, uid, [('event_id', '=', ids[0])])
         collaborator_ids = line_obj.read(cr, uid, line_ids, ['collaborator_id'])
-        self.write(cr, uid, ids, {'line_ids':collaborator_ids}, context)       
+        self.write(cr, uid, ids, {'line_ids': collaborator_ids}, context)       
     
     _defaults = {
         'state':'creating',
