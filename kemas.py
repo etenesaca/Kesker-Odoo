@@ -1310,7 +1310,6 @@ class kemas_config(osv.osv):
         'bc_height': fields.integer('Alto', required=True),
         'bc_hr_form': fields.boolean("Human Readable", help="Legible para lectura?"),
         }
-    
     def _get_logo(self, cr, uid, context={}):
         photo_path = addons.get_module_resource('kemas', 'images', 'logo.png')
         return open(photo_path, 'rb').read().encode('base64')
