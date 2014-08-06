@@ -10,7 +10,6 @@
       <record model="ir.ui.view" id="kemas_team_form_view">
          <field name="name">kemas.team.form</field>
          <field name="model">kemas.team</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Team" version="7.0">
@@ -85,7 +84,6 @@
       <record model="ir.ui.view" id="kemas_team_tree_view">
          <field name="name">kemas.team.tree</field>
          <field name="model">kemas.team</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Teams">
@@ -98,7 +96,6 @@
       <record model="ir.ui.view" id="kemas_team_kanban_view">
          <field name="name">kemas.team.kanban</field>
          <field name="model">kemas.team</field>
-         <field name="type">kanban</field>
          <field name="arch" type="xml">
             <kanban>
                <templates>
@@ -130,7 +127,6 @@
       <record model="ir.ui.view" id="kemas_team_search_view">
          <field name="name">kemas.team.search</field>
          <field name="model">kemas.team</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Search Team">
                <group>
@@ -149,7 +145,6 @@
       <record model="ir.ui.view" id="kemas_area_form_view">
          <field name="name">kemas.area.form</field>
          <field name="model">kemas.area</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Area" version="7.0">
@@ -235,7 +230,6 @@
       <record model="ir.ui.view" id="kemas_area_tree_view">
          <field name="name">kemas.area.tree</field>
          <field name="model">kemas.area</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Areas">
@@ -247,7 +241,6 @@
       <record model="ir.ui.view" id="kemas_area_tree_view2">
          <field name="name">kemas.area.tree2</field>
          <field name="model">kemas.area</field>
-         <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <tree string="Areas">
@@ -259,7 +252,6 @@
       <record model="ir.ui.view" id="kemas_area_kanban_view">
          <field name="name">kemas.area.kanban</field>
          <field name="model">kemas.area</field>
-         <field name="type">kanban</field>
          <field name="arch" type="xml">
             <kanban>
                <templates>
@@ -291,7 +283,6 @@
       <record model="ir.ui.view" id="kemas_area_search_view">
          <field name="name">kemas.area.search</field>
          <field name="model">kemas.area</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Areas">
                <group>
@@ -306,7 +297,6 @@
       <record model="ir.ui.view" id="kemas_activity_form_view">
          <field name="name">kemas.activity.form</field>
          <field name="model">kemas.activity</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Activity" version="7.0">
@@ -327,7 +317,6 @@
       <record model="ir.ui.view" id="kemas_activity_form2_view">
          <field name="name">kemas.activity.form2</field>
          <field name="model">kemas.activity</field>
-         <field name="type">form</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <form string="Activity" version="7.0">
@@ -345,7 +334,6 @@
       <record model="ir.ui.view" id="kemas_activity_tree_view">
          <field name="name">kemas.activity.tree</field>
          <field name="model">kemas.activity</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Activities">
@@ -357,7 +345,6 @@
       <record model="ir.ui.view" id="kemas_activity_tree2_view">
          <field name="name">kemas.activity.tree2</field>
          <field name="model">kemas.activity</field>
-         <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <tree string="">
@@ -369,7 +356,6 @@
       <record model="ir.ui.view" id="kemas_activity_search_view">
          <field name="name">kemas.activity.search</field>
          <field name="model">kemas.activity</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Activity">
                <field name="name" />
@@ -389,7 +375,6 @@
       <record model="ir.ui.view" id="kemas_email_line_form_view">
          <field name="name">kemas.massive.email.line.form</field>
          <field name="model">kemas.massive.email.line</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Other recipients">
@@ -401,7 +386,6 @@
       <record model="ir.ui.view" id="kemas_email_line_tree_view">
          <field name="name">kemas.massive.email.line.tree</field>
          <field name="model">kemas.massive.email.line</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="" editable="bottom">
@@ -418,7 +402,6 @@
       <record model="ir.ui.view" id="kemas_massive_email_form_view">
          <field name="name">kemas.massive.email.form</field>
          <field name="model">kemas.massive.email</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Massive email" version="7.0">
@@ -470,7 +453,6 @@
       <record model="ir.ui.view" id="kemas_massive_email_tree_view">
          <field name="name">kemas.massive.email.tree</field>
          <field name="model">kemas.massive.email</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Massive emails" colors="blue:state=='draft';green:state=='sent'">
@@ -485,7 +467,6 @@
       <record model="ir.ui.view" id="kemas_massive_email_search_view">
          <field name="name">kemas.massive.email.search</field>
          <field name="model">kemas.massive.email</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Search Massive email">
                <filter name="draft" string="Draft" domain="[('state','=','draft')]" />
@@ -517,7 +498,6 @@
       <record model="ir.ui.view" id="kemas_config_form_view">
          <field name="name">kemas.config.form</field>
          <field name="model">kemas.config</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Configuration" version="7.0">
@@ -1452,7 +1432,6 @@
       <record model="ir.ui.view" id="kemas_config_tree_view">
          <field name="name">kemas.config.tree</field>
          <field name="model">kemas.config</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Configurations">
@@ -1472,7 +1451,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_progress_level_form_view">
          <field name="name">kemas.collaborator.progress.level.form</field>
          <field name="model">kemas.collaborator.progress.level</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Progress">
@@ -1493,7 +1471,6 @@
       <record model="ir.ui.view" id="kemas_web_site_kanban_view">
          <field name="name">kemas.web.site.kanban</field>
          <field name="model">kemas.web.site</field>
-         <field name="type">kanban</field>
          <field name="arch" type="xml">
             <kanban>
                <field name="allow_get_avatar" />
@@ -1537,7 +1514,6 @@
       <record model="ir.ui.view" id="kemas_web_site_form_view">
          <field name="name">kemas.web.site.form</field>
          <field name="model">kemas.web.site</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Web site" version="7.0">
@@ -1584,7 +1560,6 @@
       <record model="ir.ui.view" id="kemas_web_site_tree_view">
          <field name="name">kemas.web.site.tree</field>
          <field name="model">kemas.web.site</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Web sites">
@@ -1598,7 +1573,6 @@
       <record model="ir.ui.view" id="kemas_web_site_search_view">
          <field name="name">kemas.web.site.search</field>
          <field name="model">kemas.web.site</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Search Web site">
                <group>
@@ -1617,7 +1591,6 @@
       <record model="ir.ui.view" id="kemas_school4d_detail_form_view">
          <field name="name">kemas.school4d_detail.form</field>
          <field name="model">kemas.school4d_detail</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Detail">
@@ -1637,7 +1610,6 @@
       <record model="ir.ui.view" id="kemas_school4d_detail_tree_view">
          <field name="name">kemas.school4d_detail.tree</field>
          <field name="model">kemas.school4d_detail</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="">
@@ -1655,7 +1627,6 @@
       <record model="ir.ui.view" id="kemas_school4d_line_kanban_view">
          <field name="name">kemas.school4d_line.kanban</field>
          <field name="model">kemas.school4d_line</field>
-         <field name="type">kanban</field>
          <field name="arch" type="xml">
             <kanban default_group_by="stage_id">
                <field name="color" />
@@ -1754,7 +1725,6 @@
       <record model="ir.ui.view" id="kemas_school4d_line_form_view">
          <field name="name">kemas.school4d_line.form</field>
          <field name="model">kemas.school4d_line</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Person">
@@ -1790,7 +1760,6 @@
       <record model="ir.ui.view" id="kemas_school4d_line_form_view2">
          <field name="name">kemas.school4d_detail.form2</field>
          <field name="model">kemas.school4d_detail</field>
-         <field name="type">form</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <form string="Person">
@@ -1828,7 +1797,6 @@
       <record model="ir.ui.view" id="kemas_school4d_line_tree_view">
          <field name="name">kemas.school4d_line.tree</field>
          <field name="model">kemas.school4d_line</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Persons" colors="blue:state=='listening';green:state=='believing';gray:state=='preaching'">
@@ -1841,7 +1809,6 @@
       <record model="ir.ui.view" id="kemas_school4d_line_tree_view2">
          <field name="name">kemas.school4d_line.tree2</field>
          <field name="model">kemas.school4d_line</field>
-         <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <tree string="" colors="blue:state=='listening';green:state=='believing';gray:state=='preaching'">
@@ -1854,7 +1821,6 @@
       <record model="ir.ui.view" id="kemas_school4d_line_search_view">
          <field name="name">kemas.school4d_line.search</field>
          <field name="model">kemas.school4d_line</field>
-         <field name="type">search</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <search string="Search Person">
@@ -1874,7 +1840,6 @@
       <record model="ir.ui.view" id="kemas_school4d_line_search_view2">
          <field name="name">kemas.school4d_line.search2</field>
          <field name="model">kemas.school4d_line</field>
-         <field name="type">search</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <search string="Search Person">
@@ -1897,7 +1862,6 @@
       <record model="ir.ui.view" id="kemas_suspension_form_view">
          <field name="name">kemas.suspension.form</field>
          <field name="model">kemas.suspension</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Suspension" version="7.0" create="0" edit="0">
@@ -1926,7 +1890,6 @@
       <record model="ir.ui.view" id="kemas_suspension_form_view2">
          <field name="name">kemas.suspension.form2</field>
          <field name="model">kemas.suspension</field>
-         <field name="type">form</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <form string="Suspension" version="7.0" create="0" edit="0">
@@ -1953,7 +1916,6 @@
       <record model="ir.ui.view" id="kemas_suspension_tree_view">
          <field name="name">kemas.suspension.tree</field>
          <field name="model">kemas.suspension</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Suspension" colors="red:state=='on_going'" create="0" edit="0">
@@ -1969,7 +1931,6 @@
       <record model="ir.ui.view" id="kemas_suspension_tree_view2">
          <field name="name">kemas.suspension.tree2</field>
          <field name="model">kemas.suspension</field>
-         <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <tree string="" colors="red:state=='on_going'" create="0" edit="0">
@@ -1984,7 +1945,6 @@
       <record model="ir.ui.view" id="kemas_suspension_search_view">
          <field name="name">kemas.suspension.search</field>
          <field name="model">kemas.suspension</field>
-         <field name="type">search</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <search string="Search Suspension">
@@ -2015,7 +1975,6 @@
       <record model="ir.ui.view" id="kemas_suspension_search_view2">
          <field name="name">kemas.suspension.search2</field>
          <field name="model">kemas.suspension</field>
-         <field name="type">search</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <search string="Search Suspension">
@@ -2056,7 +2015,6 @@
       <record model="ir.ui.view" id="kemas_task_category_tree_view">
          <field name="name">kemas.task.category.tree</field>
          <field name="model">kemas.task.category</field>
-         <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <tree string="">
@@ -2262,7 +2220,6 @@
       <record model="ir.ui.view" id="kemas_task_assigned_form_view">
          <field name="name">kemas.task.assigned.form</field>
          <field name="model">kemas.task.assigned</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Task Assigned" version="7.0">
@@ -2329,7 +2286,6 @@
       <record model="ir.ui.view" id="kemas_task_assigned_form_view2">
          <field name="name">kemas.task.assigned.form2</field>
          <field name="model">kemas.task.assigned</field>
-         <field name="type">form</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <form string="Task Assigned">
@@ -2354,7 +2310,6 @@
       <record model="ir.ui.view" id="kemas_task_assigned_tree_view">
          <field name="name">kemas.task.assigned.tree</field>
          <field name="model">kemas.task.assigned</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Tasks assigned" fonts="bold:message_unread==True" colors="blue:state in ['draft','open','pending'];green:state in ['done'];red:state in ['cancelled']">
@@ -2373,7 +2328,6 @@
       <record model="ir.ui.view" id="kemas_task_assigned_tree_view2">
          <field name="name">kemas.task.assigned.tree2</field>
          <field name="model">kemas.task.assigned</field>
-         <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <tree string="Tasks assigned" fonts="bold:message_unread==True" colors="blue:state=='waiting_for_confirmation';green:state=='confirmed';red:state=='nulled'">
@@ -2388,7 +2342,6 @@
       <record model="ir.ui.view" id="kemas_task_assigned_search_view">
          <field name="name">kemas.task.assigned.search</field>
          <field name="model">kemas.task.assigned</field>
-         <field name="type">search</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <search string="Tasks">
@@ -2429,7 +2382,6 @@
       <record model="ir.ui.view" id="kemas_task_assigned_search_view2">
          <field name="name">kemas.task.assigned.search2</field>
          <field name="model">kemas.task.assigned</field>
-         <field name="type">search</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <search string="Search task assigned">
@@ -2453,7 +2405,6 @@
       <record model="ir.ui.view" id="kemas_task_form_view">
          <field name="name">kemas.task.form</field>
          <field name="model">kemas.task</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Task" version="7.0">
@@ -2476,7 +2427,6 @@
       <record model="ir.ui.view" id="kemas_task_tree_view">
          <field name="name">kemas.task.tree</field>
          <field name="model">kemas.task</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Tasks" colors="gray:is_active==False">
@@ -2491,7 +2441,6 @@
       <record model="ir.ui.view" id="kemas_task_search_view">
          <field name="name">kemas.task.search</field>
          <field name="model">kemas.task</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Search Task">
                <filter name="active" string="Active" domain="[('is_active','=',True)]" icon="STOCK_YES" />
@@ -2510,7 +2459,6 @@
       <record model="ir.ui.view" id="kemas_ministry_kanban_view">
          <field name="name">kemas.ministry.kanban</field>
          <field name="model">kemas.ministry</field>
-         <field name="type">kanban</field>
          <field name="arch" type="xml">
             <kanban>
                <templates>
@@ -2536,7 +2484,6 @@
       <record model="ir.ui.view" id="kemas_ministry_form_view">
          <field name="name">kemas.ministry.form</field>
          <field name="model">kemas.ministry</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Ministerio" version="7.0">
@@ -2611,7 +2558,6 @@
       <record model="ir.ui.view" id="kemas_ministry_tree_view">
          <field name="name">kemas.ministry.tree</field>
          <field name="model">kemas.ministry</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Ministerios">
@@ -2624,7 +2570,6 @@
       <record model="ir.ui.view" id="kemas_ministry_search_view">
          <field name="name">kemas.ministry.search</field>
          <field name="model">kemas.ministry</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Buscar Ministerio">
                <filter name="Activos" string="Actives" domain="[('active','=',True),]" />
@@ -2644,7 +2589,6 @@
       <record model="ir.ui.view" id="kemas_specialization_course_kanban_view">
          <field name="name">kemas.specialization.course.kanban</field>
          <field name="model">kemas.specialization.course</field>
-         <field name="type">kanban</field>
          <field name="arch" type="xml">
             <kanban>
                <templates>
@@ -2676,7 +2620,6 @@
       <record model="ir.ui.view" id="kemas_specialization_course_form_view">
          <field name="name">kemas.specialization.course.form</field>
          <field name="model">kemas.specialization.course</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Curso" version="7.0">
@@ -2728,7 +2671,6 @@
       <record model="ir.ui.view" id="kemas_specialization_course_tree_view">
          <field name="name">kemas.specialization.course.tree</field>
          <field name="model">kemas.specialization.course</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Cursos">
@@ -2741,7 +2683,6 @@
       <record model="ir.ui.view" id="kemas_specialization_course_search_view">
          <field name="name">kemas.specialization.course.search</field>
          <field name="model">kemas.specialization.course</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Buscar Curso">
                <filter name="Activos" string="Actives" domain="[('active','=',True),]" />
@@ -2762,7 +2703,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_logbook_form_view">
          <field name="name">kemas.collaborator.logbook.form</field>
          <field name="model">kemas.collaborator.logbook</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Logbook">
@@ -2778,7 +2718,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_logbook_tree_view">
          <field name="name">kemas.collaborator.logbook.tree</field>
          <field name="model">kemas.collaborator.logbook</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Logbooks" colors="blue:type=='info';darkgreen:type=='important';red:type=='bad';">
@@ -2798,7 +2737,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_logbook_login_form_view">
          <field name="name">kemas.collaborator.logbook.login.form</field>
          <field name="model">kemas.collaborator.logbook.login</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Inicio de Sesión" version="7.0" create="0" edit="0" delete="0">
@@ -2817,7 +2755,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_logbook_login_tree_view">
          <field name="name">kemas.collaborator.logbook.login.tree</field>
          <field name="model">kemas.collaborator.logbook.login</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Inicios de Sesión" create="0" edit="0" delete="0">
@@ -2832,7 +2769,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_logbook_login_search_view">
          <field name="name">kemas.collaborator.logbook.login.search</field>
          <field name="model">kemas.collaborator.logbook.login</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Search Inicio de Sesión">
                <field name="search_start" context="{'search_start':True}" />
@@ -2862,7 +2798,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_logbook_login_search_graph_view">
          <field name="name">kemas.collaborator.logbook.login.graph</field>
          <field name="model">kemas.collaborator.logbook.login</field>
-         <field name="type">graph</field>
          <field name="arch" type="xml">
             <graph string="Collaborators" type="radar">
                <field name="collaborator_id" />
@@ -2934,7 +2869,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_form_view">
          <field name="name">kemas.collaborator.form</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Collaborator" version="7.0">
@@ -3153,7 +3087,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_form_view_me">
          <field name="name">kemas.collaborator.form.me</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">form</field>
          <field name="priority" eval="10" />
          <field name="arch" type="xml">
             <form string="Collaborator" version="7.0" delete="0" create="0">
@@ -3342,7 +3275,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_form_view2">
          <field name="name">kemas.collaborator.form2</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">form</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <form string="Collaborator">
@@ -3444,7 +3376,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_form_view3">
          <field name="name">kemas.collaborator.form3</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">form</field>
          <field name="priority" eval="3" />
          <field name="arch" type="xml">
             <form string="Collaborator">
@@ -3456,7 +3387,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_kanban_view">
          <field name="name">kemas.collaborator.kanban</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">kanban</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <kanban>
@@ -3511,7 +3441,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_kanban_view2">
          <field name="name">kemas.collaborator.kanban2</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">kanban</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <kanban>
@@ -3540,7 +3469,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_kanban_view3">
          <field name="name">kemas.collaborator.kanban3</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">kanban</field>
          <field name="priority" eval="3" />
          <field name="arch" type="xml">
             <kanban>
@@ -3597,7 +3525,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_tree_view">
          <field name="name">kemas.collaborator.tree</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Collaborators">
@@ -3620,7 +3547,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_tree_view2">
          <field name="name">kemas.collaborator.tree2</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <tree string="">
@@ -3643,7 +3569,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_tree_view3">
          <field name="name">kemas.collaborator.tree3</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">tree</field>
          <field name="priority" eval="3" />
          <field name="arch" type="xml">
             <tree string="Recipients" editable="bottom">
@@ -3666,7 +3591,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_tree_view4">
          <field name="name">kemas.collaborator.tree4</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">tree</field>
          <field name="priority" eval="4" />
          <field name="arch" type="xml">
             <tree string="Recipients">
@@ -3689,7 +3613,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_tree_view5">
          <field name="name">kemas.collaborator.tree5</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">tree</field>
          <field name="priority" eval="5" />
          <field name="arch" type="xml">
             <tree string="Recipients">
@@ -3712,7 +3635,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_tree_view6">
          <field name="name">kemas.collaborator.tree6</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">tree</field>
          <field name="priority" eval="6" />
          <field name="arch" type="xml">
             <tree string="Recipients">
@@ -3736,7 +3658,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_search_view">
          <field name="name">kemas.collaborator.search</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">search</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <search string="search collaborator">
@@ -3771,7 +3692,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_search_view2">
          <field name="name">kemas.collaborator.search2</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">search</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <search string="search collaborator">
@@ -3799,7 +3719,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_search_view3">
          <field name="name">kemas.collaborator.search3</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">search</field>
          <field name="priority" eval="3" />
          <field name="arch" type="xml">
             <search string="search collaborator">
@@ -3822,7 +3741,6 @@
       <record model="ir.ui.view" id="kemas_collaborator_search_view_me">
          <field name="name">kemas.collaborator.search.me</field>
          <field name="model">kemas.collaborator</field>
-         <field name="type">search</field>
          <field name="priority" eval="4" />
          <field name="arch" type="xml">
             <search string="search collaborator">
@@ -3838,7 +3756,6 @@
       <record model="ir.ui.view" id="kemas_history_points_form_view">
          <field name="name">kemas.history.points.form</field>
          <field name="model">kemas.history.points</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="History Points" version="7.0" create="0" edit="0">
@@ -3863,7 +3780,6 @@
       <record model="ir.ui.view" id="kemas_history_points_form_view2">
          <field name="name">kemas.history.points.form2</field>
          <field name="model">kemas.history.points</field>
-         <field name="type">form</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <form string="History Points" version="7.0" create="0" edit="0">
@@ -3888,7 +3804,6 @@
       <record model="ir.ui.view" id="kemas_history_points_tree_view">
          <field name="name">kemas.history.points.tree</field>
          <field name="model">kemas.history.points</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="" colors="red:type=='decrease';green:type=='init'" fonts="bold:message_unread==True" create="0" edit="0">
@@ -3906,7 +3821,6 @@
       <record model="ir.ui.view" id="kemas_history_points_tree_view2">
          <field name="name">kemas.history.points.tree2</field>
          <field name="model">kemas.history.points</field>
-         <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <tree string="" colors="red:type=='decrease';green:type=='init'" fonts="bold:message_unread==True" create="0" edit="0">
@@ -3924,7 +3838,6 @@
       <record model="ir.ui.view" id="kemas_history_points_search_view">
          <field name="name">kemas.history.points.search</field>
          <field name="model">kemas.history.points</field>
-         <field name="type">search</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <search string="Search history points">
@@ -3958,7 +3871,6 @@
       <record model="ir.ui.view" id="kemas_history_points_search_view2">
          <field name="name">kemas.history.points.search2</field>
          <field name="model">kemas.history.points</field>
-         <field name="type">search</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <search string="Search history points">
@@ -3995,7 +3907,6 @@
       <record model="ir.ui.view" id="kemas_level_form_view">
          <field name="name">kemas.level.form</field>
          <field name="model">kemas.level</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Level" version="7.0">
@@ -4034,7 +3945,6 @@
       <record model="ir.ui.view" id="kemas_level_tree_view">
          <field name="name">kemas.level.tree</field>
          <field name="model">kemas.level</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Levels">
@@ -4047,7 +3957,6 @@
       <record model="ir.ui.view" id="kemas_level_search_view">
          <field name="name">kemas.level.search</field>
          <field name="model">kemas.level</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Search">
                <group>
@@ -4065,7 +3974,6 @@
       <record model="ir.ui.view" id="kemas_place_kanban_view">
          <field name="name">kemas.place.kanban</field>
          <field name="model">kemas.place</field>
-         <field name="type">kanban</field>
          <field name="arch" type="xml">
             <kanban>
                <templates>
@@ -4096,7 +4004,6 @@
       <record model="ir.ui.view" id="kemas_place_form_view">
          <field name="name">kemas.place.form</field>
          <field name="model">kemas.place</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Place" version="7.0">
@@ -4126,7 +4033,6 @@
       <record model="ir.ui.view" id="kemas_place_tree_view">
          <field name="name">kemas.place.tree</field>
          <field name="model">kemas.place</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Places" colors="gray:is_active==False">
@@ -4140,7 +4046,6 @@
       <record model="ir.ui.view" id="kemas_place_search_view">
          <field name="name">kemas.place.search</field>
          <field name="model">kemas.place</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="search place">
                <filter name="active" string="Active" domain="[('is_active','=',True)]" icon="STOCK_YES" />
@@ -4163,7 +4068,6 @@
       <record model="ir.ui.view" id="kemas_repository_category_form_view">
          <field name="name">kemas.repository.category.form</field>
          <field name="model">kemas.repository.category</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Tags" version="7.0">
@@ -4187,7 +4091,6 @@
       <record model="ir.ui.view" id="kemas_repository_category_tree_view">
          <field name="name">kemas.repository.category.tree</field>
          <field name="model">kemas.repository.category</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Tags">
@@ -4199,7 +4102,6 @@
       <record model="ir.ui.view" id="kemas_repository_category_search_view">
          <field name="name">kemas.repository.category.search</field>
          <field name="model">kemas.repository.category</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Buscar Etiqueta">
                <group>
@@ -4218,7 +4120,6 @@
       <record model="ir.ui.view" id="kemas_repository_form_view">
          <field name="name">kemas.repository.form</field>
          <field name="model">kemas.repository</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Archivo" version="7.0">
@@ -4270,7 +4171,6 @@
       <record model="ir.ui.view" id="kemas_repository_form_view2">
          <field name="name">kemas.repository.form2</field>
          <field name="model">kemas.repository</field>
-         <field name="type">form</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <form string="Archivo" version="7.0" create="0" edit="0" delete="0">
@@ -4323,7 +4223,6 @@
       <record model="ir.ui.view" id="kemas_repository_tree_view">
          <field name="name">kemas.repository.tree</field>
          <field name="model">kemas.repository</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Files" colors="blue:state=='draft';" fonts="bold:message_unread==True">
@@ -4342,7 +4241,6 @@
       <record model="ir.ui.view" id="kemas_repository_tree_view2">
          <field name="name">kemas.repository.tree2</field>
          <field name="model">kemas.repository</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Files" fonts="bold:message_unread==True" version="7.0" create="0" edit="0" delete="0">
@@ -4361,7 +4259,6 @@
       <record model="ir.ui.view" id="kemas_repository_search_view">
          <field name="name">kemas.repository.search</field>
          <field name="model">kemas.repository</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Search File">
                <field name="search_start" context="{'search_start':True}" />
@@ -4394,7 +4291,6 @@
       <record model="ir.ui.view" id="kemas_service_form_view">
          <field name="name">kemas.service.form</field>
          <field name="model">kemas.service</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Service" version="7.0">
@@ -4432,7 +4328,6 @@
       <record model="ir.ui.view" id="kemas_service_tree_view">
          <field name="name">kemas.service.tree</field>
          <field name="model">kemas.service</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Services" colors="gray:is_active==False">
@@ -4450,7 +4345,6 @@
       <record model="ir.ui.view" id="kemas_service_search_view">
          <field name="name">kemas.service.search</field>
          <field name="model">kemas.service</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Search Service">
                <filter name="active" string="Active" domain="[('is_active','=',True)]" icon="STOCK_YES" />
@@ -4469,7 +4363,6 @@
       <record model="ir.ui.view" id="kemas_event_replacement_form_view">
          <field name="name">kemas.event.replacement.form</field>
          <field name="model">kemas.event.replacement</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Replacement" version="7.0" create="0" edit="0">
@@ -4489,7 +4382,6 @@
       <record model="ir.ui.view" id="kemas_event_replacement_form_view2">
          <field name="name">kemas.event.replacement.form2</field>
          <field name="model">kemas.event.replacement</field>
-         <field name="type">form</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <form string="Replacement" version="7.0" create="0" edit="0">
@@ -4510,7 +4402,6 @@
       <record model="ir.ui.view" id="kemas_event_replacement_tree_view">
          <field name="name">kemas.event.replacement.tree</field>
          <field name="model">kemas.event.replacement</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Replacements" create="0">
@@ -4524,7 +4415,6 @@
       <record model="ir.ui.view" id="kemas_event_replacement_tree_view2">
          <field name="name">kemas.event.replacement.tree2</field>
          <field name="model">kemas.event.replacement</field>
-         <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <tree string="Replacements" create="0">
@@ -4539,7 +4429,6 @@
       <record model="ir.ui.view" id="kemas_event_replacement_search_view2">
          <field name="name">kemas.event.replacement.search2</field>
          <field name="model">kemas.event.replacement</field>
-         <field name="type">search</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <search string="Search Replacement">
@@ -4567,7 +4456,6 @@
       <record model="ir.ui.view" id="kemas_event_replacement_search_view2">
          <field name="name">kemas.event.replacement.search2</field>
          <field name="model">kemas.event.replacement</field>
-         <field name="type">search</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <search string="Search Replacement">
@@ -4598,7 +4486,6 @@
       <record model="ir.ui.view" id="kemas_event_collaborator_line_form_view">
          <field name="name">kemas.event.collaborator.line.form</field>
          <field name="model">kemas.event.collaborator.line</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Collaborator" version="7.0">
@@ -4614,8 +4501,7 @@
 																	      			'event_collaborator_line_ids' : context['line_ids'],
 			      																	'search_view_ref' : 'kemas.kemas_collaborator_search_view2',
 			      																	'tree_view_ref' : 'kemas.kemas_collaborator_tree_view4',
-			      																	}"
-                        on_change="on_change_collaborator()" options='{"no_open": True}' />
+			      																	}" on_change="on_change_collaborator()" options='{"no_open": True}' />
                   </h1>
                   <group attrs="{'invisible':[('replacement_id','=',False)]}" colspan="4">
                      <field name="replacement_id" options='{"no_open": True}' />
@@ -4638,7 +4524,6 @@
       <record model="ir.ui.view" id="kemas_event_collaborator_line_tree_view">
          <field name="name">kemas.event.collaborator.line.tree</field>
          <field name="model">kemas.event.collaborator.line</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="" colors="blue:replacement_id != False" editable="bottom">
@@ -4662,7 +4547,6 @@
       <record model="ir.ui.view" id="kemas_event_collaborator_line_tree2_view">
          <field name="name">kemas.event.collaborator.line.tree2</field>
          <field name="model">kemas.event.collaborator.line</field>
-         <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <tree string="" colors="blue:replacement_id != False" create="0" edit="0" delete="0">
@@ -4678,7 +4562,6 @@
       <record model="ir.ui.view" id="kemas_event_collaborator_line_graph_view">
          <field name="name">kemas.event.collaborator.line.graph</field>
          <field name="model">kemas.event.collaborator.line</field>
-         <field name="type">graph</field>
          <field name="arch" type="xml">
             <graph string="Collaborators" type="radar">
                <field name="collaborator_id" />
@@ -4690,7 +4573,6 @@
       <record model="ir.ui.view" id="kemas_event_collaborator_line_search_view">
          <field name="name">kemas.event.collaborator.line.search</field>
          <field name="model">kemas.event.collaborator.line</field>
-         <field name="type">search</field>
          <field name="arch" type="xml">
             <search string="Areas">
                <filter name="draft" string="Draft" domain="[('state','=','draft')]" icon="kanban-pause" />
@@ -4739,7 +4621,6 @@
       <record model="ir.ui.view" id="kemas_event_form_view">
          <field name="name">kemas.event.form</field>
          <field name="model">kemas.event</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Event" version="7.0">
@@ -4833,7 +4714,7 @@
                            <field name="line_ids" invisible="1" />
                            <field name="collaborators_loaded" invisible="1" />
                            <group colspan="4" col="8" attrs="{'invisible':[('team_id','=',False),('state','not in',['draft'])]}">
-                              <field name="team_id" colspan="2" widget="selection" on_change="on_change_team(team_id)" placeholder=" -- "/>
+                              <field name="team_id" colspan="2" widget="selection" on_change="on_change_team(team_id)" placeholder=" -- " />
                               <button name="load_collaborators" icon="STOCK_REFRESH" type="object" string="Load collaborators" colspan="4" states="draft" class="oe_highlight oe_edit_only" />
                            </group>
                            <field name="event_collaborator_line_ids" colspan="4" nolabel="1" on_change="on_change_lines(event_collaborator_line_ids)" context="{'event_id': active_id, 'line_ids': line_ids, 'min_points': min_points}" attrs="{'invisible':[('collaborators_loaded','=',False)]}" />
@@ -4872,7 +4753,6 @@
       <record model="ir.ui.view" id="kemas_event_form_view2">
          <field name="name">kemas.event.form2</field>
          <field name="model">kemas.event</field>
-         <field name="type">form</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <form string="Event" version="7.0" create="0" edit="0" delete="0">
@@ -4951,7 +4831,6 @@
       <record model="ir.ui.view" id="kemas_event_tree_view">
          <field name="name">kemas.event.tree</field>
          <field name="model">kemas.event</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Events" colors="gray:state=='canceled';
@@ -4973,7 +4852,6 @@
       <record model="ir.ui.view" id="kemas_event_tree_view2">
          <field name="name">kemas.event.tree2</field>
          <field name="model">kemas.event</field>
-         <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <tree string="Current Events" colors="gray:progress==0;
@@ -4991,7 +4869,6 @@
       <record model="ir.ui.view" id="kemas_event_tree_view3">
          <field name="name">kemas.event.tree3</field>
          <field name="model">kemas.event</field>
-         <field name="type">tree</field>
          <field name="priority" eval="3" />
          <field name="arch" type="xml">
             <tree string="Events" colors="gray:state=='canceled';
@@ -5036,7 +4913,6 @@
       <record model="ir.ui.view" id="kemas_event_kanban_view">
          <field name="name">kemas.event.kanban</field>
          <field name="model">kemas.event</field>
-         <field name="type">kanban</field>
          <field name="arch" type="xml">
             <kanban version="7.0" class="oe_background_grey">
                <field name="color" />
@@ -5137,7 +5013,6 @@
       <record model="ir.ui.view" id="kemas_event_search_view">
          <field name="name">kemas.event.search</field>
          <field name="model">kemas.event</field>
-         <field name="type">search</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <search string="Buscar Evento">
@@ -5171,7 +5046,6 @@
       <record model="ir.ui.view" id="kemas_event_search_view2">
          <field name="name">kemas.event.search2</field>
          <field name="model">kemas.event</field>
-         <field name="type">search</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <search string="Search Event">
@@ -5202,7 +5076,6 @@
       <record model="ir.ui.view" id="kemas_attendance_form_view">
          <field name="name">kemas.attendance.form</field>
          <field name="model">kemas.attendance</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Attendance" version="7.0" edit="0" create="0" delete="0">
@@ -5235,7 +5108,6 @@
       <record model="ir.ui.view" id="kemas_attendance_form_view2">
          <field name="name">kemas.attendance.form2</field>
          <field name="model">kemas.attendance</field>
-         <field name="type">form</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <form string="Attendance" version="7.0" edit="0" create="0" delete="0">
@@ -5264,7 +5136,6 @@
       <record model="ir.ui.view" id="kemas_attendance_form_view3">
          <field name="name">kemas.attendance.form3</field>
          <field name="model">kemas.attendance</field>
-         <field name="type">form</field>
          <field name="priority" eval="3" />
          <field name="arch" type="xml">
             <form string="Attendance" version="7.0" edit="0" create="0" delete="0">
@@ -5295,7 +5166,6 @@
       <record model="ir.ui.view" id="kemas_attendance_tree_view">
          <field name="name">kemas.attendance.tree</field>
          <field name="model">kemas.attendance</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Attendances" colors="red:type=='absence';blue:type=='late'" version="7.0" edit="0" create="0" delete="0">
@@ -5313,7 +5183,6 @@
       <record model="ir.ui.view" id="kemas_attendance_tree_view2">
          <field name="name">kemas.attendance.tree2</field>
          <field name="model">kemas.attendance</field>
-         <field name="type">tree</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <tree string="" colors="red:type=='absence';blue:type=='late'" version="7.0" edit="0" create="0" delete="0">
@@ -5328,7 +5197,6 @@
       <record model="ir.ui.view" id="kemas_attendance_tree_view3">
          <field name="name">kemas.attendance.tree3</field>
          <field name="model">kemas.attendance</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="" colors="red:type=='absence';blue:type=='late'" version="7.0" edit="0" create="0" delete="0">
@@ -5344,7 +5212,6 @@
       <record model="ir.ui.view" id="kemas_attendance_tree_view4">
          <field name="name">kemas.attendance.tree4</field>
          <field name="model">kemas.attendance</field>
-         <field name="type">tree</field>
          <field name="priority" eval="4" />
          <field name="arch" type="xml">
             <tree string="Attendances" colors="red:type=='absence';blue:type=='late'" version="7.0" edit="0" create="0" delete="0">
@@ -5359,7 +5226,6 @@
       <record model="ir.ui.view" id="kemas_attendance_tree_view5">
          <field name="name">kemas.attendance.tree5</field>
          <field name="model">kemas.attendance</field>
-         <field name="type">tree</field>
          <field name="priority" eval="4" />
          <field name="arch" type="xml">
             <tree string="Attendances" colors="red:type=='absence';blue:type=='late'" version="7.0" edit="0" create="0" delete="0">
@@ -5374,7 +5240,6 @@
       <record model="ir.ui.view" id="kemas_attendancel_graph_view">
          <field name="name">kemas.attendance.graph</field>
          <field name="model">kemas.attendance</field>
-         <field name="type">graph</field>
          <field name="arch" type="xml">
             <graph string="Statisctics" type="pie">
                <field name="type" />
@@ -5386,7 +5251,6 @@
       <record model="ir.ui.view" id="kemas_attendance_search_view">
          <field name="name">kemas.attendance.search</field>
          <field name="model">kemas.attendance</field>
-         <field name="type">search</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <search string="Buscar registro de asistencia">
@@ -5418,7 +5282,6 @@
       <record model="ir.ui.view" id="kemas_attendance_search_view2">
          <field name="name">kemas.attendance.search2</field>
          <field name="model">kemas.attendance</field>
-         <field name="type">search</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <search string="Search Event">
@@ -6301,7 +6164,6 @@
       <record id="kemas_collaborator_dashboard_form" model="ir.ui.view">
          <field name="name">kemas.collaborator.dashboard.form</field>
          <field name="model">board.board</field>
-         <field name="type">form</field>
          <field name="arch" type="xml">
             <form string="Collaborator Dashboard">
                <board style="2-1">
@@ -6412,7 +6274,6 @@
       <record id="kemas_manager_dashboard_form" model="ir.ui.view">
          <field name="name">kemas.manager.dashboard.form</field>
          <field name="model">board.board</field>
-         <field name="type">form</field>
          <field name="arch" type="xml">
             <form string="Manager Dashboard">
                <board style="2-1">

@@ -17,32 +17,10 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-##############################################################################
-from osv import fields, osv
-from lxml import etree
-from tools.translate import _
-from mx import DateTime
-from datetime import *
-from datetime import timedelta
-from datetime import datetime
-import time
-import datetime 
-import kemas_extras
-import addons
-import unicodedata
-import random
+from openerp.osv import fields, osv
+from openerp import pooler
 import logging
-import calendar
-import pooler
 import threading
-from mx import DateTime
-from compiler.pycodegen import EXCEPT
-import base64
-import openerp
-import tools
-import tools7
-import math
-from dateutil.parser import  *
     
 _logger = logging.getLogger(__name__)
 
