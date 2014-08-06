@@ -10,7 +10,6 @@
       <record model="ir.ui.view" id="kemas_send_notification_event_wizard_form_view">
          <field name="name">kemas.send.notification.event.wizard.form</field>
          <field name="model">kemas.send.notification.event.wizard</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Notify" version="7.0">
@@ -51,7 +50,6 @@
       <record model="ir.ui.view" id="kemas_send_notification_event_line_wizard_form_view">
          <field name="name">kemas.send.notification.event.line.wizard.form</field>
          <field name="model">kemas.send.notification.event.line.wizard</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Notify">
@@ -67,7 +65,6 @@
       <record model="ir.ui.view" id="kemas_send_notification_event_line_wizard_tree_view">
          <field name="name">kemas.send.notification.event.line.wizard.tree</field>
          <field name="model">kemas.send.notification.event.line.wizard</field>
-         <field name="type">tree</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="" create="0" delete="0" editable="bottom" colors="gray:state in ['Sent','Ignored'];

@@ -6,4 +6,43 @@ before_install:
  - sudo apt-get update
 
 install:
- - sudo apt-get install -y python-dateutil python-feedparser python-gdata python-ldap python-libxslt1 python-lxml python-mako python-openid python-psycopg2  python-pybabel python-pychart python-pydot python-pyparsing python-reportlab python-simplejson python-tz python-vatnumber python-vobject python-webdav python-xlwt python-yaml python-zsi python-docutils python-psutil bzr wget python-unittest2 python-mock python-jinja2 python-soappy python-setuptools wkhtmltopdf
+ - sudo apt-get install -y git python-dateutil python-feedparser python-gdata python-ldap python-libxslt1 python-lxml python-mako python-openid python-psycopg2  python-pybabel python-pychart python-pydot python-pyparsing python-reportlab python-simplejson python-tz python-vatnumber python-vobject python-webdav python-xlwt python-yaml python-zsi python-docutils python-psutil bzr wget python-unittest2 python-mock python-jinja2 python-soappy python-setuptools wkhtmltopdf
+
+before_install:
+ - psql --version
+ - sudo /etc/init.d/postgresql stop
+ - sudo apt-get -y --purge remove postgresql libpq-dev libpq5 postgresql-client-common postgresql-common
+ - sudo rm -rf /var/lib/postgresql
+ - wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+ - sudo sh -c "echo deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main $PGVERSION >> /etc/apt/sources.list.d/postgresql.list"
+ - sudo sh -c "echo deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg-testing main $PGVERSION >> /etc/apt/sources.list.d/postgresql.list"
+ - sudo apt-get update -qq
+ - sudo apt-get -y -o Dpkg::Options::=--force-confdef -o Dpkg::Options::="--force-confnew" install postgresql-$PGVERSION postgresql-server-dev-$PGVERSION
+ - sudo chmod 777 /etc/postgresql/$PGVERSION/main/pg_hba.conf
+ - sudo echo "local   all         postgres                          trust" > /etc/postgresql/$PGVERSION/main/pg_hba.conf
+ - sudo echo "local   all         all                               trust" >> /etc/postgresql/$PGVERSION/main/pg_hba.conf
+ - sudo echo "host    all         all         127.0.0.1/32          trust" >> /etc/postgresql/$PGVERSION/main/pg_hba.conf
+ - sudo echo "host    all         all         ::1/128               trust" >> /etc/postgresql/$PGVERSION/main/pg_hba.conf
+ - sudo /etc/init.d/postgresql restart
+ - sudo apt-get install -qq graphviz
+
+before_script:
+  - createuser -U postgres -s travis
+  - psql -c "CREATE USER openerp WITH PASSWORD 'pass_test';" -U postgres
+  - psql -c 'create database openerp with owner openerp;' -U postgres
+
+env:
+  matrix:
+    - PGVERSION=9.3
+    - PGVERSION=9.2
+    - PGVERSION=9.1
+
+install:
+    - ./.travis_install_nightly.sh
+
+script:
+    - ./.travis_test_script.sh
+
+notifications:
+  email:
+    - edgartenesaca@gmail.com

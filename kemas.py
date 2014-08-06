@@ -21,7 +21,6 @@
 from osv import fields, osv
 from lxml import etree
 from tools.translate import _
-from mx import DateTime
 from datetime import *
 from datetime import timedelta
 from datetime import datetime
@@ -212,9 +211,6 @@ class kemas_func(osv.osv):
         return self.is_in_grups(cr, uid, groups_list)
     
     def verify_permissions(self, cr, uid, ids, context={}):
-        group_obj = self.pool.get('res.groups')
-        user_obj = self.pool.get('res.users')
-        
         vals = {}
         vals['state'] = 'on_going'
         stage_obj = self.pool.get('kemas.event.stage')
@@ -308,9 +304,9 @@ class kemas_massive_email(osv.osv):
         self.write(cr, uid, ids, vals, context)    
         
     def create(self, cr, uid, vals, *args, **kwargs):
-         vals['state'] = 'draft'
-         vals['date_create'] = time.strftime("%Y-%m-%d %H:%M:%S")
-         return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
+        vals['state'] = 'draft'
+        vals['date_create'] = time.strftime("%Y-%m-%d %H:%M:%S")
+        return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
     
     def _send_email(self, db_name, uid, message_id, email_list, collaborator_ids, message, subject, context={}):
         def send_IMs():
@@ -1128,14 +1124,9 @@ class kemas_config(osv.osv):
             
         server_obj = self.pool.get('ir.mail_server')
         config_obj = self.pool.get('kemas.config')
-        event_obj = self.pool.get('kemas.event')
-        service_obj = self.pool.get('kemas.service')
         collaborator_obj = self.pool.get('kemas.collaborator')
         line_obj = self.pool.get('kemas.event.collaborator.line')
-        activity_obj = self.pool.get('kemas.activity')
         line = line_obj.read(cr, uid, line_id, ['collaborator_id', 'activity_ids', 'event_id'])
-        event = event_obj.read(cr, uid, line['event_id'][0], ['date_start', 'service_id', 'place_id', 'attend_on_time_points', 'late_points', 'not_attend_points'])
-        service = service_obj.read(cr, uid, event['service_id'][0], ['time_start', 'time_end', 'time_entry', 'time_limit', 'time_register'])
         collaborator = collaborator_obj.read(cr, uid, line['collaborator_id'][0], ['email', 'im_account'])
         #------------------------------------------------------------------------------------
         config_id = config_obj.get_correct_config(cr, uid)
@@ -1819,14 +1810,14 @@ class kemas_activity(osv.osv):
 class kemas_team(osv.osv):
     def write(self, cr, uid, ids, vals, context={}):
         result = super(kemas_team, self).write(cr, uid, ids, vals, context)
-        for id in ids:
+        for rec_id in ids:
             if vals.get('logo', False):
                 path = addons.__path__[0] + '/web/static/src/img/logo' + 'team'
                 vals_write = {}
                 vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
                 vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
                 vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-                super(kemas_team, self).write(cr, uid, [id], vals_write, context)
+                super(kemas_team, self).write(cr, uid, [rec_id], vals_write, context)
         return result
     
     def create(self, cr, uid, vals, context={}):
@@ -1841,8 +1832,6 @@ class kemas_team(osv.osv):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
         preferences = config_obj.read(cr, uid, config_id, [])
-        #------------------------------------------------------------------------------------
-        values = {} 
         if kemas_extras.restrict_size(photo, preferences['max_size_logos']):
             return {'value':{}}
         else:
@@ -1911,8 +1900,6 @@ class kemas_school4d_line(osv.osv):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
         preferences = config_obj.read(cr, uid, config_id, [])
-        #------------------------------------------------------------------------------------
-        values = {} 
         if kemas_extras.restrict_size(photo, preferences['max_size_photos']):
             return {'value':{}}
         else:
@@ -2062,14 +2049,14 @@ class kemas_school4d_line(osv.osv):
 class kemas_area(osv.osv):
     def write(self, cr, uid, ids, vals, context={}):
         result = super(kemas_area, self).write(cr, uid, ids, vals, context)
-        for id in ids:
+        for record_id in ids:
             if vals.get('logo', False):
                 path = addons.__path__[0] + '/web/static/src/img/logo' + 'area'
                 vals_write = {}
                 vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
                 vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
                 vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-                super(kemas_area, self).write(cr, uid, [id], vals_write, context)
+                super(kemas_area, self).write(cr, uid, [record_id], vals_write, context)
         return result
 
     def create(self, cr, uid, vals, context={}):
@@ -2084,8 +2071,6 @@ class kemas_area(osv.osv):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
         preferences = config_obj.read(cr, uid, config_id, [])
-        #------------------------------------------------------------------------------------
-        values = {} 
         if kemas_extras.restrict_size(photo, preferences['max_size_logos']):
             return {'value':{}}
         else:
@@ -2124,8 +2109,6 @@ class kemas_level(osv.osv):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
         preferences = config_obj.read(cr, uid, config_id, [])
-        #------------------------------------------------------------------------------------
-        values = {} 
         if kemas_extras.restrict_size(photo, preferences['max_size_logos']):
             return {'value':{}}
         else:
@@ -2190,14 +2173,14 @@ class kemas_level(osv.osv):
     
     def write(self, cr, uid, ids, vals, context={}):
         result = super(kemas_level, self).write(cr, uid, ids, vals, context)
-        for id in ids:
+        for record_id in ids:
             if vals.get('logo', False):
                 path = addons.__path__[0] + '/web/static/src/img/logo' + 'level'
                 vals_write = {}
                 vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
                 vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
                 vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-                super(kemas_level, self).write(cr, uid, [id], vals_write, context)
+                super(kemas_level, self).write(cr, uid, [record_id], vals_write, context)
         return result
 
 
@@ -2209,7 +2192,7 @@ class kemas_level(osv.osv):
             vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
             
         if vals.get('first_level', False):
-             vals['points'] = 0
+            vals['points'] = 0
         res_id = super(kemas_level, self).create(cr, uid, vals, context)
         self.pool.get('kemas.collaborator').update_collaborators_level(cr, uid)        
         return res_id
@@ -2314,18 +2297,18 @@ class kemas_collaborator_progress_level(osv.osv):
 class kemas_web_site(osv.osv):
     def write(self, cr, uid, ids, vals, context={}):
         result = super(kemas_web_site, self).write(cr, uid, ids, vals, context)
-        for id in ids:
+        for record_id in ids:
             if vals.get('logo', False):
                 path = addons.__path__[0] + '/web/static/src/img/logo' + 'web_site'
                 vals_write = {}
                 vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
                 vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
                 vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-                super(kemas_web_site, self).write(cr, uid, [id], vals_write, context)
+                super(kemas_web_site, self).write(cr, uid, [record_id], vals_write, context)
             
             if vals.has_key('allow_get_avatar'):
                 line_obj = self.pool.get('kemas.collaborator.web.site')
-                line_ids = line_obj.search(cr, uid, [('web_site_id', '=', id)])
+                line_ids = line_obj.search(cr, uid, [('web_site_id', '=', record_id)])
                 
                 vals = {'allow_get_avatar': vals['allow_get_avatar']}
                 if not vals['allow_get_avatar']:
@@ -2345,8 +2328,6 @@ class kemas_web_site(osv.osv):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
         preferences = config_obj.read(cr, uid, config_id, [])
-        #------------------------------------------------------------------------------------
-        values = {} 
         if kemas_extras.restrict_size(photo, preferences['max_size_logos']):
             return {'value':{}}
         else:
@@ -2566,10 +2547,10 @@ class kemas_suspension(osv.osv):
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
     
     def create(self, cr, uid, vals, *args, **kwargs):
-         vals['state'] = 'on_going'
-         vals['date_create'] = time.strftime("%Y-%m-%d %H:%M:%S")
-         vals['user_create_id'] = uid
-         return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
+        vals['state'] = 'on_going'
+        vals['date_create'] = time.strftime("%Y-%m-%d %H:%M:%S")
+        vals['user_create_id'] = uid
+        return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
      
     def name_get(self, cr, uid, ids, context={}):
         records = self.read(cr, uid, ids, ['id', 'collaborator_id', 'date_create'])
@@ -2708,14 +2689,14 @@ class kemas_ministry(osv.osv):
     
     def write(self, cr, uid, ids, vals, context={}):
         result = super(kemas_ministry, self).write(cr, uid, ids, vals, context)
-        for id in ids:
+        for record_id in ids:
             if vals.get('logo', False):
                 path = addons.__path__[0] + '/web/static/src/img/logo' + 'ministry'
                 vals_write = {}
                 vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
                 vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
                 vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-                super(kemas_ministry, self).write(cr, uid, [id], vals_write, context)
+                super(kemas_ministry, self).write(cr, uid, [record_id], vals_write, context)
         return result
 
     def create(self, cr, uid, vals, context={}):
@@ -2763,14 +2744,14 @@ class kemas_specialization_course(osv.osv):
     
     def write(self, cr, uid, ids, vals, context={}):
         result = super(kemas_specialization_course, self).write(cr, uid, ids, vals, context)
-        for id in ids:
+        for record_id in ids:
             if vals.get('logo', False):
                 path = addons.__path__[0] + '/web/static/src/img/logo' + 'specialization_course'
                 vals_write = {}
                 vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
                 vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
                 vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-                super(kemas_specialization_course, self).write(cr, uid, [id], vals_write, context)
+                super(kemas_specialization_course, self).write(cr, uid, [record_id], vals_write, context)
         return result
 
     def create(self, cr, uid, vals, context={}):
@@ -2968,7 +2949,6 @@ class kemas_collaborator(osv.osv):
         return res
     
     def on_change_name(self, cr, uid, ids, name, context={}):
-        values = {}
         dic_name = kemas_extras.do_dic(name)
         if len(dic_name) < 4:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('At least two valid names must be entered.'))[0]
@@ -2981,7 +2961,6 @@ class kemas_collaborator(osv.osv):
                     }
     
     def on_change_nick_name(self, cr, uid, ids, name, nick_name, context={}):
-        values = {}
         name = unicode(name).lower().strip()
         nick_name = unicode(nick_name).lower().strip()
         if nick_name in name:
@@ -2994,8 +2973,6 @@ class kemas_collaborator(osv.osv):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
         preferences = config_obj.read(cr, uid, config_id, [])
-        #------------------------------------------------------------------------------------
-        values = {} 
         if kemas_extras.restrict_size(photo, preferences['max_size_photos']):
             return {'value':{}}
         else:
@@ -3146,10 +3123,6 @@ class kemas_collaborator(osv.osv):
         return self.name_get(cr, uid, ids, context)
     
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
-        user_obj = self.pool.get('res.users')
-        group_obj = self.pool.get('res.groups')
-        user_id = user_obj.search(cr, uid, [('id', '=', uid), ])
-        groups_id = user_obj.read(cr, uid, user_id, ['groups_id'])[0]['groups_id']
         collaborator_except_ids = []
         if context.get('min_points', False):
             args.append(('points', '>', context['min_points']))
@@ -3290,9 +3263,9 @@ class kemas_collaborator(osv.osv):
             
             operator = '-'
             if type == 'add': 
-                type == 'increase'
+                type = 'increase'
             if type == 'remove': 
-                type == 'decrease'
+                type = 'decrease'
             
             if type == 'increase':
                 operator = '+'
@@ -3527,7 +3500,6 @@ class kemas_collaborator(osv.osv):
             if uid != collaborator['user_id'][0]:
                 raise osv.except_osv(_('Error!'), _('You can not change information that is not yours!'))
             
-        zero_points = False
         send_email = False
 
         #--Si la  persona ya no es colaborador se le quita el usuario------------------------------------
@@ -3546,7 +3518,6 @@ class kemas_collaborator(osv.osv):
                 change_points = str(collaborator['points'])
                 current_points = str(collaborator['points'])
                 new_points = str(0)
-                zero_points = True
                 #---Escribir puntaje-----
                 vals['points'] = new_points
                 #------------------------
@@ -3871,7 +3842,6 @@ class kemas_collaborator(osv.osv):
         hr_form = preferences['bc_hr_form']
         
         def get_barcode_image(collaborator):
-            bc_text = preferences['bc_text'].replace('%id', unicode(collaborator['id']))
             bc_text = preferences['bc_text'].replace('%cd', unicode(collaborator['code']))
             return kemas_extras.get_image_code(bc_text, width, height, hr_form, image_type)
 
@@ -4263,7 +4233,6 @@ class kemas_task_assigned(osv.osv):
         return self.write_log_update(cr, uid, task_id, body, [partner_id])
     
     def write_log_cancelled_by_system(self, cr, uid, task_id, notify_partner_ids=[]):
-        state = self.pool.get('kemas.func').get_translate(cr, uid, self.read(cr, uid, task_id, ['state'])['state'])[0].title()
         body = u'''
         <div>
             <span>
@@ -4277,9 +4246,6 @@ class kemas_task_assigned(osv.osv):
         partner_id = self.pool.get('kemas.collaborator').get_partner_id(cr, uid, collaborator_id)
         
         # Suspender al colaborador
-        tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        now = time.strftime("%Y-%m-%d %H:%M:%S")
-        
         preferences = self.pool.get('kemas.config').read(cr, uid, self.pool.get('kemas.config').get_correct_config(cr, uid), ['day_to_suspension_task_closed'])
         days = int(preferences['day_to_suspension_task_closed'])
         date_end_suspension = self.pool.get('kemas.suspension').get_end_date(cr, uid, days, True, True, True, True, True, True, True)
@@ -4749,15 +4715,14 @@ class kemas_place(osv.osv):
         return True
     
     def __fields_view_get(self, cr, uid, view_id=None, view_type='form', context={}, toolbar=True, submenu=False):       
-        from lxml import etree
         res = super(kemas_place, self).fields_view_get(cr, uid, view_id=view_id, view_type=view_type, context=context, toolbar=False, submenu=False)
         if res['type'] == 'form':
             url_map = "https://www.google.com.ec/maps?t=m&amp;ie=UTF8&amp;ll=-2.897671,-78.997305&amp;spn=0.001559,0.002511&amp;z=19&amp;output=embed" 
-            map = """
+            map_str = """
             <iframe width="100%%" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="%s"></iframe>
             <br /><small><a href="%s" style="color:#0000FF;text-align:left" target="blank">Ver mapa más grande</a></small>
             """ % (url_map, url_map)
-            res['arch'] = res['arch'].replace('<!-- mapa -->', map.encode('utf-8'))
+            res['arch'] = res['arch'].replace('<!-- mapa -->', map_str.encode('utf-8'))
         return res
     
     def name_search(self, cr, uid, name, args=None, operator='ilike', context={}, limit=100):
@@ -4777,8 +4742,6 @@ class kemas_place(osv.osv):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
         preferences = config_obj.read(cr, uid, config_id, [])
-        #------------------------------------------------------------------------------------
-        values = {} 
         if kemas_extras.restrict_size(photo, preferences['max_size_photos']):
             return {'value':{}}
         else:
@@ -4982,11 +4945,11 @@ class kemas_service(osv.osv):
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
 
     def write(self, cr, uid, ids, vals, context={}):
-         if super(osv.osv, self).write(cr, uid, ids, vals, context):
-             event_obj = self.pool.get('kemas.event')
-             event_ids = event_obj.search(cr, uid, [('state', 'in', ['draft', 'on_going']), ('service_id', '=', ids[0])])
-             for event_id in event_ids: self.pool.get('kemas.event').write(cr, uid, [event_id], {'service_id':ids[0]}, {'change_service':True})
-         return True
+        if super(osv.osv, self).write(cr, uid, ids, vals, context):
+            event_obj = self.pool.get('kemas.event')
+            event_ids = event_obj.search(cr, uid, [('state', 'in', ['draft', 'on_going']), ('service_id', '=', ids[0])])
+            for event_id in event_ids: self.pool.get('kemas.event').write(cr, uid, [event_id], {'service_id':ids[0]}, {'change_service':True})
+        return True
      
     def validate_valid_input(self, cr, uid, ids):
         service = self.read(cr, uid, ids[0], [])
@@ -5193,7 +5156,6 @@ class kemas_event(osv.osv):
                 event_line_ids = event_line_obj.search(cr, uid, [('collaborator_id', 'in', collaborator_ids)])
                 l1 = super(osv.osv, self).search(cr, uid, args + [('event_collaborator_line_ids', 'in', event_line_ids)])
 
-                compose_obj = self.pool.get('mail.compose.message')
                 partner_id = user_obj.read(cr, uid, uid, ['partner_id'])['partner_id'][0]
                 sql = """
                 select c.res_id from mail_compose_message c
@@ -5365,7 +5327,7 @@ class kemas_event(osv.osv):
         result_query = cr.dictfetchall()
         for record in result_query:
             if record['checkout_id'] is None:
-                 record['checkout_id'] = False
+                record['checkout_id'] = False
         return result_query
     
     def get_collaborators_by_event(self, cr, uid, event_id):
@@ -5395,7 +5357,6 @@ class kemas_event(osv.osv):
         cr.execute(sql)
         result_query = cr.dictfetchall()
         collaborators = []
-        attendance_list = []
         
         for collaborator in result_query:
             name = "%s %s" % (
@@ -5691,7 +5652,7 @@ class kemas_event(osv.osv):
         vals['date_stop'] = dates_dic['date_stop']
         vals['date_init'] = dates_dic['date_init']
         #----------------------------------------------------------------------------------------------------------------------------
-        res = super(osv.osv, self).write(cr, uid, ids, vals, context)
+        super(osv.osv, self).write(cr, uid, ids, vals, context)
         lines_obj = self.pool.get('kemas.event.collaborator.line')
         collaborator_line_ids = self.read(cr, uid, ids, ['event_collaborator_line_ids'])
         line_ids = []
@@ -5797,7 +5758,6 @@ class kemas_event(osv.osv):
         for event_id in event_ids:
             cont += 1
             self.close_event(cr, uid, event_id)
-            event = self.read(cr, uid, event_id, ['id', 'service_id', 'date_start']) 
             event_name = self.name_get(cr, uid, [event_id])[0][1]
             cr.commit()
             print """\t\t\t* Closed: %s """ % (event_name)
@@ -6625,7 +6585,6 @@ class kemas_attendance(osv.osv):
         time_entry = res_current_event['time_entry']
         now = res_current_event['now']
         time_register = res_current_event['time_register']
-        time_limit = res_current_event['time_limit']
         
         type = 'just_time'
         summary = 'Asistencia Puntual.'
@@ -6822,9 +6781,9 @@ class kemas_event_replacement(osv.osv):
         return res
     
     def create(self, cr, uid, vals, *args, **kwargs):
-         vals['datetime'] = time.strftime("%Y-%m-%d %H:%M:%S")
-         vals['user_id'] = uid
-         return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
+        vals['datetime'] = time.strftime("%Y-%m-%d %H:%M:%S")
+        vals['user_id'] = uid
+        return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
 
     _name = 'kemas.event.replacement'
     _rec_name = 'collaborator_replacement_id'

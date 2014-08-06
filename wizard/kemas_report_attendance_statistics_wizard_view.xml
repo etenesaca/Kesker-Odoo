@@ -10,7 +10,6 @@
       <record model="ir.ui.view" id="kemas_report_attendance_statistics_wizard_form_view">
          <field name="name">kemas.attendance.statistics.wizard.form</field>
          <field name="model">kemas.attendance.statistics.wizard</field>
-         <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Estadísiticas de colaboración" version="7.0">
