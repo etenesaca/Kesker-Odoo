@@ -1,120 +1,100 @@
 <?xml version="1.0"?>
 <openerp>
-  <data>
-  	<!-- 
-    <ir_set>
-        <field eval="'action'" name="key"/>
-        <field eval="'client_print_multi'" name="key2"/>
-        <field eval="['kemas.collaborator']" name="models"/>
-        <field name="name">Activate Collaborator</field>
-        <field eval="'ir.actions.report.xml,'+str(academic_career_subjects_lists)" name="value"/>
-        <field eval="True" name="isobject"/>
-        <field eval="True" name="replace"/>
-    </ir_set>
-     -->
-    <!-- 
-    ====================
-    COLLABORATOR LIST
-    ====================
-    -->
-    <record id="kemas_rep_collaborator_list_id" model="ir.actions.report.xml">
-      <field name="name">Report Collaborator list</field>
-      <field name="type">ir.actions.report.xml</field>
-      <field name="model">kemas.report.collaborators.list.wizard</field>
-      <field name="report_name">collaborator_list_report</field>
-      <field name="report_type">aeroo</field>
-      <field name="in_format">oo-ods</field>
-      <field name="parser_loc">kemas/report/collaborator_list.py</field>
-      <field name="tml_source">file</field>
-      <field name="report_rml">kemas/report/collaborator_list.ods</field>
-      <field name="parser_state">loc</field>
-    </record>
-    <!-- 
-    ====================
-    ATTENDANCE STATISTICS
-    ====================
-    -->
-    <record id="kemas_rep_attendance_statistics_id" model="ir.actions.report.xml">
-      <field name="name">Resumen de Colaboración</field>
-      <field name="type">ir.actions.report.xml</field>
-      <field name="model">kemas.attendance.statistics.wizard</field>
-      <field name="report_name">attendance_statistics_report</field>
-      <field name="report_type">aeroo</field>
-      <field name="in_format">oo-odt</field>
-      <field name="parser_loc">kemas/report/attendance_statistics.py</field>
-      <field name="tml_source">file</field>
-      <field name="report_rml">kemas/report/attendance_statistics.odt</field>
-      <field name="parser_state">loc</field>
-    </record>
-    <!-- 
-    ====================
-    EVENTS LIST
-    ====================
-    -->
-    <record id="kemas_rep_event_list_id" model="ir.actions.report.xml">
-      <field name="name">List of events</field>
-      <field name="type">ir.actions.report.xml</field>
-      <field name="model">kemas.report.events.list.wizard</field>
-      <field name="report_name">event_list_report</field>
-      <field name="report_type">aeroo</field>
-      <field name="in_format">oo-odt</field>
-      <field name="parser_loc">kemas/report/event_list.py</field>
-      <field name="tml_source">file</field>
-      <field name="report_rml">kemas/report/event_list.odt</field>
-      <field name="parser_state">loc</field>
-    </record>
-    <!-- 
-    ====================
-    COLLABORATOR FORM
-    ====================
-    -->
-    <record id="kemas_rep_collaborator_form_id" model="ir.actions.report.xml">
-      <field name="name">Collaborator Form</field>
-      <field name="type">ir.actions.report.xml</field>
-      <field name="model">kemas.collaborator</field>
-      <field name="report_name">collaborator_form_report</field>
-      <field name="report_type">aeroo</field>
-      <field name="in_format">oo-odt</field>
-      <field name="parser_loc">kemas/report/collaborator_form.py</field>
-      <field name="tml_source">file</field>
-      <field name="report_rml">kemas/report/collaborator_form.odt</field>
-      <field name="parser_state">loc</field>
-    </record>
-    <ir_set>
-        <field eval="'action'" name="key"/>
-        <field eval="'client_print_multi'" name="key2"/>
-        <field eval="['kemas.collaborator']" name="models"/>
-        <field name="name">Collaborator form</field>
-        <field eval="'ir.actions.report.xml,'+str(kemas_rep_collaborator_form_id)" name="value"/>
-        <field eval="True" name="isobject"/>
-        <field eval="True" name="replace"/>
-    </ir_set>
-    <!-- 
-    ====================
-    TEAM LIST
-    ====================
-    -->
-    <record id="kemas_rep_team_list_id" model="ir.actions.report.xml">
-      <field name="name">Team List</field>
-      <field name="type">ir.actions.report.xml</field>
-      <field name="model">kemas.team</field>
-      <field name="report_name">team_list_report</field>
-      <field name="report_type">aeroo</field>
-      <field name="in_format">oo-odt</field>
-      <field name="parser_loc">kemas/report/team_list.py</field>
-      <field name="tml_source">file</field>
-      <field name="report_rml">kemas/report/team_list.odt</field>
-      <field name="parser_state">loc</field>
-    </record>
-    <ir_set>
-        <field eval="'action'" name="key"/>
-        <field eval="'client_print_multi'" name="key2"/>
-        <field eval="['kemas.team']" name="models"/>
-        <field name="name">Collaborator form</field>
-        <field eval="'ir.actions.report.xml,'+str(kemas_rep_team_list_id)" name="value"/>
-        <field eval="True" name="isobject"/>
-        <field eval="True" name="replace"/>
-    </ir_set>
-  </data>
+   <data>
+      <!--
+         <ir_set>
+         <field eval="'action'" name="key"/>
+         <field eval="'client_print_multi'" name="key2"/>
+         <field eval="['kemas.collaborator']" name="models"/>
+         <field name="name">Activate Collaborator</field>
+         <field eval="'ir.actions.report.xml,'+str(academic_career_subjects_lists)" name="value"/>
+         <field eval="True" name="isobject"/>
+         <field eval="True" name="replace"/>
+         </ir_set>
+      -->
+      <!--
+         ====================
+         COLLABORATOR LIST
+         ====================
+      -->
+      <record id="kemas_rep_collaborator_list_id" model="ir.actions.report.xml">
+         <field name="name">Report Collaborator list</field>
+         <field name="type">ir.actions.report.xml</field>
+         <field name="model">kemas.report.collaborators.list.wizard</field>
+         <field name="report_name">collaborator_list_report</field>
+         <field name="report_type">aeroo</field>
+         <field name="report_rml">kemas/report/collaborator_list.ods</field>
+      </record>
+      <!--
+         ====================
+         ATTENDANCE STATISTICS
+         ====================
+      -->
+      <record id="kemas_rep_attendance_statistics_id" model="ir.actions.report.xml">
+         <field name="name">Resumen de Colaboración</field>
+         <field name="type">ir.actions.report.xml</field>
+         <field name="model">kemas.attendance.statistics.wizard</field>
+         <field name="report_name">attendance_statistics_report</field>
+         <field name="report_type">aeroo</field>
+         <field name="report_rml">kemas/report/attendance_statistics.odt</field>
+      </record>
+      <!--
+         ====================
+         EVENTS LIST
+         ====================
+      -->
+      <record id="kemas_rep_event_list_id" model="ir.actions.report.xml">
+         <field name="name">List of events</field>
+         <field name="type">ir.actions.report.xml</field>
+         <field name="model">kemas.report.events.list.wizard</field>
+         <field name="report_name">event_list_report</field>
+         <field name="report_type">aeroo</field>
+         <field name="report_rml">kemas/report/event_list.odt</field>
+      </record>
+      <!--
+         ====================
+         COLLABORATOR FORM
+         ====================
+      -->
+      <record id="kemas_rep_collaborator_form_id" model="ir.actions.report.xml">
+         <field name="name">Collaborator Form</field>
+         <field name="type">ir.actions.report.xml</field>
+         <field name="model">kemas.collaborator</field>
+         <field name="report_name">collaborator_form_report</field>
+         <field name="report_type">aeroo</field>
+         <field name="report_rml">kemas/report/collaborator_form.odt</field>
+      </record>
+      <ir_set>
+         <field eval="'action'" name="key" />
+         <field eval="'client_print_multi'" name="key2" />
+         <field eval="['kemas.collaborator']" name="models" />
+         <field name="name">Collaborator form</field>
+         <field eval="'ir.actions.report.xml,'+str(kemas_rep_collaborator_form_id)" name="value" />
+         <field eval="True" name="isobject" />
+         <field eval="True" name="replace" />
+      </ir_set>
+      <!--
+         ====================
+         TEAM LIST
+         ====================
+      -->
+      <record id="kemas_rep_team_list_id" model="ir.actions.report.xml">
+         <field name="name">Team List</field>
+         <field name="type">ir.actions.report.xml</field>
+         <field name="model">kemas.team</field>
+         <field name="report_name">team_list_report</field>
+         <field name="report_type">aeroo</field>
+         <field name="report_rml">kemas/report/team_list.odt</field>
+      </record>
+      <ir_set>
+         <field eval="'action'" name="key" />
+         <field eval="'client_print_multi'" name="key2" />
+         <field eval="['kemas.team']" name="models" />
+         <field name="name">Collaborator form</field>
+         <field eval="'ir.actions.report.xml,'+str(kemas_rep_team_list_id)" name="value" />
+         <field eval="True" name="isobject" />
+         <field eval="True" name="replace" />
+      </ir_set>
+   </data>
 </openerp>
 

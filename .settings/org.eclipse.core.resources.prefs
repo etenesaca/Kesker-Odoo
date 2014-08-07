@@ -1,4 +1,7 @@
 eclipse.preferences.version=1
 encoding//report/collaborator_list.py=utf-8
+encoding//report/team_list.py=utf-8
+encoding/__init__.py=utf-8
+encoding/__openerp__.py=utf-8
 encoding/kemas.py=utf-8
 encoding/res_users.py=utf-8

@@ -37,8 +37,6 @@
         'mail',
         'resource',
         'web_kanban',
-        'report_aeroo',
-        # 'report_aeroo_ooo',
     ],
     'category':'Accounting & Finance',
     'init_xml': [],
