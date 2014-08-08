@@ -300,17 +300,15 @@
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Activity" version="7.0">
-               <sheet string="Level">
-                  <label for="name" class="oe_edit_only" />
-                  <h1>
-                     <field name="name" placeholder="Name of the activity" />
-                  </h1>
-                  <group>
-                     <field name="area_id" />
-                  </group>
-                  <newline />
-                  <field name="description" nolabel="1" placeholder="Description of the activity" />
-               </sheet>
+               <label for="name" class="oe_edit_only" />
+               <h1>
+                  <field name="name" placeholder="Name of the activity" />
+               </h1>
+               <group>
+                  <field name="area_id" />
+               </group>
+               <newline />
+               <field name="description" nolabel="1" placeholder="Description of the activity" />
             </form>
          </field>
       </record>
@@ -320,13 +318,11 @@
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <form string="Activity" version="7.0">
-               <sheet string="Level">
-                  <label for="name" class="oe_edit_only" />
-                  <h1>
-                     <field name="name" placeholder="Name of the activity" />
-                  </h1>
-                  <field name="description" nolabel="1" placeholder="Description of the activity" />
-               </sheet>
+               <label for="name" class="oe_edit_only" />
+               <h1>
+                  <field name="name" placeholder="Name of the activity" />
+               </h1>
+               <field name="description" nolabel="1" placeholder="Description of the activity" />
             </form>
          </field>
       </record>
@@ -6309,11 +6305,9 @@
       <!--
          >>>>>>>>>>>>Areas
       -->
-      <menuitem id="menu_kemas_collaborator_areas_management" name="Areas" parent="menu_kemas_collaborator_management" sequence="1" />
+      <menuitem id="menu_kemas_collaborator_areas_management" name="Areas" parent="" sequence="1" />
       <!--_____________Area -->
-      <menuitem action="action_kemas_area" name="Areas" id="menu_kemas_area" parent="menu_kemas_collaborator_areas_management" sequence="1" />
-      <!--_____________Activity -->
-      <menuitem action="action_kemas_activity" name="Activities" id="menu_kemas_activity" parent="menu_kemas_collaborator_areas_management" sequence="2" />
+      <menuitem action="action_kemas_area" name="Areas" id="menu_kemas_area" parent="menu_kemas_collaborator_management" sequence="1" />
       <!--
          >>>>>>>>>>>>Tasks
       -->
@@ -6348,8 +6342,9 @@
       <!--
          >>>>>>>>>>>Collaborator
       -->
-      <!--_____________School4d -->
-      <menuitem action="kemas_school4d_line_form_action" name="School4D" id="menu_kemas_school4d" parent="menu_kemas_collaborator_management" sequence="1" />
+      <!--_____________School4d
+         <menuitem action="kemas_school4d_line_form_action" name="School4D" id="menu_kemas_school4d" parent="menu_kemas_collaborator_management" sequence="1" />
+      -->
       <!--_____________Teams -->
       <menuitem action="action_kemas_team" name="Teams" id="menu_kemas_team" parent="menu_kemas_collaborator_management" sequence="6" />
       <!--_____________Web Sites -->
@@ -6404,11 +6399,11 @@
       <!--
          >>>>>>>>>>>>GESTION DOCUMENTAL
       -->
-      <menuitem id="menu_kemas_gestion_documental_menu" name="Gestión Documental" parent="menu_kemas_extras_menu" sequence="1" />
+      <menuitem id="menu_kemas_documentos_menu" name="Documentos" parent="menu_kemas_extras_menu" sequence="1" />
       <!--_____________Tags -->
-      <menuitem action="action_repository_category_form" name="Etiquetas" id="menu_kemas_repository_category" parent="menu_kemas_gestion_documental_menu" sequence="1" />
+      <menuitem action="action_repository_category_form" name="Etiquetas" id="menu_kemas_repository_category" parent="menu_kemas_documentos_menu" sequence="1" />
       <!--_____________Files -->
-      <menuitem action="action_kemas_repository_form" name="Documentos" id="menu_kemas_repository" parent="menu_kemas_gestion_documental_menu" sequence="2" />
+      <menuitem action="action_kemas_repository_form" name="Documentos" id="menu_kemas_repository" parent="menu_kemas_documentos_menu" sequence="2" />
       <!--
          >>>>>>>>>>>>MASSIVE E-MAIL
       -->
