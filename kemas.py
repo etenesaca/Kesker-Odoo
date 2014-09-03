@@ -382,7 +382,8 @@ class kemas_massive_email(osv.osv):
             except:
                 _logger.warning('Massive email Failed to send email to: %s', email)
         
-        send_IMs()
+        # Por ahora ya no ve van a mandar los mensaje instantaneaos ya que facebook ya no los permite
+        #send_IMs()
         
     def send_email(self, cr, uid, ids, context={}):
         line_obj = self.pool.get('kemas.massive.email.line')
@@ -707,8 +708,8 @@ class kemas_config(osv.osv):
         #------------------------------------------------------------------------------------
         subject = self.build_incorporation_string(cr, uid, preferences['Message_add_remove_points_subject'], collaborator_id)
         res_send_email = send_email()
-        if res_send_email:
-            send_IM()
+        #if res_send_email:
+        #    send_IM()
         return res_send_email
     
     def build_incorporation_string(self, cr, uid, message, collaborator_id):
@@ -820,8 +821,8 @@ class kemas_config(osv.osv):
         #------------------------------------------------------------------------------------
         subject = self.build_incorporation_string(cr, uid, preferences['Message_information_incorporation_subject'], collaborator_id)
         res_send_email = send_email()
-        if res_send_email:
-            send_IM()
+        #if res_send_email:
+        #    send_IM()
         return res_send_email
     
     def _build_event_completed_string(self, cr, uid, preferences, message, event_id, service_id, collaborator_id, type_attend):
@@ -1063,8 +1064,8 @@ class kemas_config(osv.osv):
         #------------------------------------------------------------------------------------
         subject = self._build_event_completed_string(cr, uid, preferences, preferences['message_event_completon_subject'], event_id, service_id, collaborator_id, type_attend)
         res_send_email = send_email()
-        if res_send_email:
-            send_IM()
+        #if res_send_email:
+        #    send_IM()
         return res_send_email
     
     def send_email_event(self, cr, uid, line_id, context={}):
@@ -1136,8 +1137,8 @@ class kemas_config(osv.osv):
         #------------------------------------------------------------------------------------
         subject = self.build_event_string(cr, uid, preferences['Message_information_event_subject'], line_id)
         res_send_email = send_email()
-        if res_send_email:
-            send_IM()
+        #if res_send_email:
+        #    send_IM()
         return res_send_email
             
     def get_correct_config(self, cr, uid, fields_to_read=False):

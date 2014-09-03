@@ -2965,8 +2965,6 @@
                                  <newline />
                                  <field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..." />
                                  <group colspan="2" />
-                                 <field name="im_account" colspan="4" widget="email" on_change="on_change_im_account(im_account)" placeholder="Puedes usar una cuenta de facebook: jperez@facebook.com" />
-                                 <group colspan="2" />
                               </group>
                               <group colspan="4" col="4">
                                  <separator string="Born Information" colspan="4" />
@@ -3179,8 +3177,6 @@
                                  <newline />
                                  <field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..." />
                                  <group colspan="2" />
-                                 <field name="im_account" colspan="4" widget="email" on_change="on_change_im_account(im_account)" placeholder="Puedes usar una cuenta de facebook: jperez@facebook.com" />
-                                 <group colspan="2" />
                               </group>
                               <group colspan="4" col="4">
                                  <separator string="Born Information" colspan="4" />
@@ -3298,7 +3294,6 @@
                               <field name="telef2" colspan="2" />
                               <field name="mobile" colspan="2" attrs="{'required':[('telef1','=',False)]}" />
                               <field name="email" colspan="6" widget="email" on_change="on_change_email(email)" />
-                              <field name="im_account" colspan="6" widget="email" on_change="on_change_im_account(im_account)" />
                               <group colspan="6" col="4">
                                  <separator string="Born Information" colspan="4" />
                                  <field name="born_country" colspan="2" required="1" />
