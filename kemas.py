@@ -383,7 +383,7 @@ class kemas_massive_email(osv.osv):
                 _logger.warning('Massive email Failed to send email to: %s', email)
         
         # Por ahora ya no ve van a mandar los mensaje instantaneaos ya que facebook ya no los permite
-        #send_IMs()
+        # send_IMs()
         
     def send_email(self, cr, uid, ids, context={}):
         line_obj = self.pool.get('kemas.massive.email.line')
@@ -708,7 +708,7 @@ class kemas_config(osv.osv):
         #------------------------------------------------------------------------------------
         subject = self.build_incorporation_string(cr, uid, preferences['Message_add_remove_points_subject'], collaborator_id)
         res_send_email = send_email()
-        #if res_send_email:
+        # if res_send_email:
         #    send_IM()
         return res_send_email
     
@@ -821,7 +821,7 @@ class kemas_config(osv.osv):
         #------------------------------------------------------------------------------------
         subject = self.build_incorporation_string(cr, uid, preferences['Message_information_incorporation_subject'], collaborator_id)
         res_send_email = send_email()
-        #if res_send_email:
+        # if res_send_email:
         #    send_IM()
         return res_send_email
     
@@ -1064,7 +1064,7 @@ class kemas_config(osv.osv):
         #------------------------------------------------------------------------------------
         subject = self._build_event_completed_string(cr, uid, preferences, preferences['message_event_completon_subject'], event_id, service_id, collaborator_id, type_attend)
         res_send_email = send_email()
-        #if res_send_email:
+        # if res_send_email:
         #    send_IM()
         return res_send_email
     
@@ -1137,7 +1137,7 @@ class kemas_config(osv.osv):
         #------------------------------------------------------------------------------------
         subject = self.build_event_string(cr, uid, preferences['Message_information_event_subject'], line_id)
         res_send_email = send_email()
-        #if res_send_email:
+        # if res_send_email:
         #    send_IM()
         return res_send_email
             
@@ -2378,7 +2378,7 @@ class kemas_suspension(osv.osv):
                     'SAB':True,
                     'DOM':True
                     }
-        if day1: 
+        if day1:
             days_str['LUN'] = True
         else:
             days_str['LUN'] = False
@@ -4758,6 +4758,7 @@ class kemas_place(osv.osv):
         'Map': fields.text('Mapa'),
         'photo': fields.binary('Photo', help='the photo of the place'),
         'is_active': fields.boolean('Active', required=False, help='Indicates whether this place is active or not'),
+        'map_url':fields.char('URL del mapa', size=400, required=False, readonly=False),
         }
     _sql_constraints = [
         ('place_name', 'unique (name)', 'This Name already exist!'),
