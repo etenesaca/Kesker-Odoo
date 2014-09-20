@@ -19,13 +19,11 @@
 #
 ##############################################################################
 
-from osv import fields, osv
-from tools.translate import _
-import kemas
-from kemas import kemas_extras
-import time
-import pooler
-import threading
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+from openerp import addons
+#import kemas
+from openerp.addons.kemas import kemas_extras
 
 class kemas_collaborator_assing_user_account_wizard(osv.osv_memory):
     def fields_view_get(self, cr, uid, view_id=None, view_type='form', context={}, toolbar=False, submenu=False):

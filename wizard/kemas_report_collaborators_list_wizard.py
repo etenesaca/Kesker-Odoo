@@ -19,9 +19,8 @@
 #
 ##############################################################################
 
-from osv import fields, osv
-from tools.translate import _
-import addons
+from openerp.osv import fields, osv
+from openerp import addons
 
 class kemas_report_collaborators_list_wizard(osv.osv_memory):
     def on_change_type_collaborators(self, cr, uid, ids, type_collaborators, context={}):

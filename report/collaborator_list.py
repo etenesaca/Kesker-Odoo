@@ -22,7 +22,7 @@
 import re
 from report import report_sxw
 from osv import osv
-from tools.translate import _
+from openerp.tools.translate import _
 import kemas
 from kemas import kemas_extras
 

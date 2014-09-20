@@ -18,17 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import time
-from osv import fields, osv
-from lxml import etree
-from tools.translate import _
-import addons
-import datetime
-from datetime import datetime
-import time
-import kemas
-from kemas import kemas_extras
-import copy
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+from openerp import addons
+#import kemas
 
 class kemas_event_replace_collaborator_wizard(osv.osv_memory):
     def load_collaborators(self, cr, uid, ids, context={}):

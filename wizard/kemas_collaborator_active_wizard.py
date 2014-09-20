@@ -19,9 +19,9 @@
 #
 ##############################################################################
 
-from osv import fields, osv
-from tools.translate import _
-import kemas
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+
 
 class kemas_collaborator_active_wizard(osv.osv_memory):
     def fields_view_get(self, cr, uid, view_id=None, view_type='form', context={}, toolbar=False, submenu=False):

@@ -19,11 +19,9 @@
 #
 ##############################################################################
 
-import time
-from osv import fields, osv
-from lxml import etree
-from tools.translate import _
-import addons
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+
 
 class kemas_set_points_task_wizard(osv.osv_memory):
     def validate_collaborators(self,cr,uid,ids):

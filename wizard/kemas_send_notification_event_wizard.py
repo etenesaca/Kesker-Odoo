@@ -19,12 +19,17 @@
 #
 ##############################################################################
 
-from osv import fields, osv
-from tools.translate import _
-from kemas import kemas_extras
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+from openerp.addons.kemas import kemas_extras
+#from kemas import kemas_extras
 import time
-import kemas
-import pooler
+
+from openerp import addons
+#import kemas
+
+from openerp import pooler
+#import pooler
 import threading
 
 class kemas_send_notification_event_wizard(osv.osv_memory):

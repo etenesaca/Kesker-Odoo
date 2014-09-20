@@ -20,8 +20,8 @@
 ##############################################################################
 
 import time
-from osv import fields, osv
-from tools.translate import _
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
 
 class kemas_close_past_event_wizard(osv.osv_memory):
     def load_form(self,cr,uid,ids,context={}):

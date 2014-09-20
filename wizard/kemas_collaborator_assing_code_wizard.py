@@ -19,11 +19,10 @@
 #
 ##############################################################################
 
-from osv import fields, osv
-from tools.translate import _
-import kemas
-from kemas import kemas_extras
-import time
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+from openerp import addons
+#import kemas
 
 class kemas_collaborator_assing_code_wizard(osv.osv_memory):
     def fields_view_get(self, cr, uid, view_id=None, view_type='form', context={}, toolbar=False, submenu=False):

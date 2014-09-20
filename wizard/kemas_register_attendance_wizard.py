@@ -19,10 +19,11 @@
 #
 ##############################################################################
 
-from osv import fields, osv
+from openerp.osv import fields, osv
 from lxml import etree
-from tools.translate import _
-from kemas import kemas_extras
+from openerp.tools.translate import _
+from openerp.addons.kemas import kemas_extras
+#from kemas import kemas_extras
 
 class kemas_register_attendance_wizard(osv.osv_memory):
     def fields_view_get(self, cr, uid, view_id=None, view_type='form', context=None, toolbar=True, submenu=False):

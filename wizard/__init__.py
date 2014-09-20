@@ -18,7 +18,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import kemas
+
+from openerp import addons
+
 import kemas_message_wizard     
 import kemas_collaborator_active_wizard
 import kemas_collaborator_inactive_wizard  

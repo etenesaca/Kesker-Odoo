@@ -7,8 +7,8 @@
 # ver 1.2 Con personalización para instituciones de Educación Superior.
 #
 ##############################################################################
-from osv import fields, osv
-from tools.translate import _
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
 
 class kemas_message_wizard(osv.osv_memory):
     def fields_view_get(self, cr, uid, view_id=None, view_type='form', context={}, toolbar=False, submenu=False):

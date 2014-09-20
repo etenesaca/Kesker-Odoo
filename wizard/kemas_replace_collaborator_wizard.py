@@ -19,11 +19,10 @@
 #
 ##############################################################################
 
-import time
-from osv import fields, osv
+from openerp.osv import fields, osv
 from lxml import etree
-from tools.translate import _
-import addons
+from openerp.tools.translate import _
+from openerp import addons
 
 class kemas_replace_collaborator_wizard(osv.osv_memory):
     def on_change_collaborator_id(self, cr, uid, ids, collaborator_id, context={}):

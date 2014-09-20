@@ -18,31 +18,39 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from osv import fields, osv
+from openerp.osv import fields, osv
+from openerp import addons
+from openerp import tools
+
+from openerp.tools.translate import _
+from openerp import pooler
+
 from lxml import etree
-from tools.translate import _
 from datetime import *
 from datetime import timedelta
 from datetime import datetime
 import time
 import datetime 
 import kemas_extras
-import addons
+
 import unicodedata
 import random
 import logging
 import calendar
-import pooler
 import threading
 from mx import DateTime
 import base64
 import openerp
-import tools
-import tools7
 import math
 from dateutil.parser import  *
 from openerp import SUPERUSER_ID
-_logger = logging.getLogger(__name__)
+
+# from openerp.tools.translate import _
+# _logger = logging.getLogger(__name__)
+# import addons
+# import pooler
+# import tools
+# import tools7
     
 class kemas_collaborator_logbook_login(osv.osv):
     def name_get(self, cr, uid, ids, context={}):
@@ -1290,12 +1298,14 @@ class kemas_config(osv.osv):
         }
 
     def _get_logo(self, cr, uid, context={}):
-        photo_path = addons.get_module_resource('kemas', 'images', 'logo.png')
-        return open(photo_path, 'rb').read().encode('base64')
+        # photo_path = addons.get_module_resource('kemas', 'images', 'logo.png')
+        # return open(photo_path, 'rb').read().encode('base64')
+        return False
     
     def _get_system_logo(self, cr, uid, context={}):
-        photo_path = addons.get_module_resource('kemas', 'images', 'system_logo.png')
-        return open(photo_path, 'rb').read().encode('base64')
+        # photo_path = addons.get_module_resource('kemas', 'images', 'system_logo.png')
+        # return open(photo_path, 'rb').read().encode('base64')
+        return False
 
     _defaults = {
         'name_system' : 'Kemas 4D',
@@ -1843,8 +1853,9 @@ class kemas_team(osv.osv):
         ('team_name', 'unique (name)', "This Team already exist!"),
         ]
     def _get_logo(self, cr, uid, context={}):
-        photo_path = addons.get_module_resource('kemas', 'images', 'team.png')
-        return open(photo_path, 'rb').read().encode('base64')
+        # photo_path = addons.get_module_resource('kemas', 'images', 'team.png')
+        # return open(photo_path, 'rb').read().encode('base64')
+        return False
 
     _defaults = {
         'logo': _get_logo,
@@ -2084,8 +2095,9 @@ class kemas_area(osv.osv):
         ('area_name', 'unique (name)', "This Area already exist!"),
         ]
     def _get_logo(self, cr, uid, context={}):
-        photo_path = addons.get_module_resource('kemas', 'images', 'area.png')
-        return open(photo_path, 'rb').read().encode('base64')
+        # photo_path = addons.get_module_resource('kemas', 'images', 'area.png')
+        # return open(photo_path, 'rb').read().encode('base64')
+        return False
 
     _defaults = {
         'logo': _get_logo,
@@ -3267,11 +3279,16 @@ class kemas_collaborator(osv.osv):
         seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Collaborator'), ])[0]
         vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
         
-        photo_path_male = addons.get_module_resource('kemas', 'images', 'male.png')
-        photo_male = open(photo_path_male, 'rb').read().encode('base64')
+        # photo_path_male = addons.get_module_resource('kemas', 'images', 'male.png')
+        # photo_male = open(photo_path_male, 'rb').read().encode('base64')
+        photo_path_male = False
+        photo_male = False
         
-        photo_path_female = addons.get_module_resource('kemas', 'images', 'female.png')
-        photo_female = open(photo_path_female, 'rb').read().encode('base64')
+        # photo_path_female = addons.get_module_resource('kemas', 'images', 'female.png')
+        # photo_female = open(photo_path_female, 'rb').read().encode('base64')
+        photo_path_female = False
+        photo_female = False
+        
         if vals['genre'] == 'Male':
             if vals['photo'] == photo_male or vals['photo'] == photo_female:
                 vals['photo'] = False
@@ -3857,6 +3874,24 @@ class kemas_collaborator(osv.osv):
                 warning = {'title' : u'¡Error!', 'message' : u"Número de Cédula Incorrecto. \nEn el caso de ser un Pasaporte ingrese la 'P' antes del número."}
         return {'value': values , 'warning': warning}
     
+    def _ff_age(self, cr, uid, ids, name, arg, context={}): 
+        result = {}
+        records = super(osv.osv, self).read(cr, uid, ids, ['id', 'birth'])
+        for record in records:
+            result[record['id']] = kemas_extras.calcular_edad(record['birth'], 3)
+        return result
+    
+    def _ff_age_in_ministry(self, cr, uid, ids, name, arg, context={}): 
+        result = {}
+        records = super(osv.osv, self).read(cr, uid, ids, ['id', 'join_date', 'end_service', 'state'])
+        for record in records:
+            if record['state'] != 'Active':
+                res = kemas_extras.calcular_edad(record['join_date'], 4, record['end_service'])
+            else:
+                res = kemas_extras.calcular_edad(record['join_date'], 4)
+            result[record['id']] = res
+        return result
+    
     _order = 'name'
     _name = 'kemas.collaborator'
     _columns = {
@@ -3876,7 +3911,7 @@ class kemas_collaborator(osv.osv):
         'birth': fields.date('Birth', help="Collaborator birthday date."),
         'birthday_date': fields.function(_get_birthday, type='char', string='Name'),
         'birthday': fields.function(_cal_birthday, type='datetime', string='Name'),
-        'age': fields.function(_person_age, method=True, fnct_inv=_dummy_age, type='char', string='Age', size='128', help='The age of the collaborator'),
+        'age' : fields.function(_ff_age, type='char', string='Edad', help="Edad del colaborador"),
         'genre': fields.selection([('Male', 'Male'), ('Female', 'Female'), ], 'Genre', required=True, help="The genre of the collaborator",),
         'marital_status': fields.selection([('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced'), ('Widower', 'Widower')], 'Marital status', help="Marital Status of the collaborator"),
         'telef1': fields.char('Telefone 1', size=10, help="The number of phone of the collaborator. Example: 072878563"),
@@ -3887,7 +3922,7 @@ class kemas_collaborator(osv.osv):
         'address': fields.char('Address', size=255, required=True, help="The collaborator address."),
         'web_site_ids': fields.one2many('kemas.collaborator.web.site', 'collaborator_id', 'Web sites', help='Web site of this collaborator'),
         'join_date': fields.date('Join date', help="Date on which the collaborator joined the Ministry."),
-        'age_in_ministry': fields.function(_get_ministry_age, method=True, fnct_inv=_dummy_age, type='char', string='Age in ministry', size='128', help='Time the collaborator serves or served the ministry.'),
+        'age_in_ministry' : fields.function(_ff_age_in_ministry, type='char', string='Tiempo de colaboración'),
         'end_service': fields.date('End Service', help="Date on which the collaborator ceased to be an active part of the ministry."),
         'logbook_ids': fields.one2many('kemas.collaborator.logbook', 'collaborator_id', 'Logbook'),
         'state': fields.selection([
@@ -3932,20 +3967,24 @@ class kemas_collaborator(osv.osv):
         }
     
     def get_photo_male(self):
-        photo_path = addons.get_module_resource('kemas', 'images', 'male.png')
-        return open(photo_path, 'rb').read().encode('base64')
+        # photo_path = addons.get_module_resource('kemas', 'images', 'male.png')
+        # return open(photo_path, 'rb').read().encode('base64')
+        return False
     
     def get_photo_small_male(self):
-        photo_path = addons.get_module_resource('kemas', 'images', 'male_small.jpg')
-        return open(photo_path, 'rb').read().encode('base64')
+        # photo_path = addons.get_module_resource('kemas', 'images', 'male_small.jpg')
+        # return open(photo_path, 'rb').read().encode('base64')
+        return False
     
     def get_photo_female(self):
-        photo_path = addons.get_module_resource('kemas', 'images', 'female.png')
-        return open(photo_path, 'rb').read().encode('base64')
+        # photo_path = addons.get_module_resource('kemas', 'images', 'female.png')
+        # return open(photo_path, 'rb').read().encode('base64')
+        return False
     
     def get_photo_small_female(self):
-        photo_path = addons.get_module_resource('kemas', 'images', 'female_small.jpg')
-        return open(photo_path, 'rb').read().encode('base64')
+        # photo_path = addons.get_module_resource('kemas', 'images', 'female_small.jpg')
+        # return open(photo_path, 'rb').read().encode('base64')
+        return False
     
     def get_first_level(self, cr, uid, context={}):
         level_obj = self.pool.get('kemas.level')

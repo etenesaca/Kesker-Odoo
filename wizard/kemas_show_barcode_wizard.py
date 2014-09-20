@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from osv import fields, osv
+from openerp.osv import fields, osv
 from lxml import etree
 
 class kemas_show_barcode_wizard(osv.osv_memory):

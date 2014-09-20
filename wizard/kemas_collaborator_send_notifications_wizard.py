@@ -19,11 +19,13 @@
 #
 ##############################################################################
 import time
-from osv import fields, osv
-from tools.translate import _
-import pooler
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+from openerp import pooler
+#import pooler
 import threading
-import kemas
+from openerp import addons
+# import kemas
 from lxml import etree
 
 class kemas_collaborator_send_notifications_wizard(osv.osv_memory):

@@ -19,9 +19,9 @@
 #
 ##############################################################################
 
-from osv import fields, osv
-from tools.translate import _
-import addons
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+from openerp import addons
 
 class kemas_report_events_list_wizard(osv.osv_memory):
     def call_report(self, cr, uid, ids, context=None):

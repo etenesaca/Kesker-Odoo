@@ -18,15 +18,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import time
-from osv import fields, osv
-from lxml import etree
-from tools.translate import _
-import addons
-import datetime
-from datetime import datetime
-import time
-from kemas import kemas_extras
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+
 
 class kemas_suspend_collaborator_step1_wizard(osv.osv_memory):
     def do_next(self, cr, uid, ids, context={}):

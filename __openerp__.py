@@ -32,7 +32,6 @@
     'website': 'www.attempt.sys.com',
     'depends': [
         'base_setup',
-        'base_status',
         'board',
         'mail',
         'resource',
@@ -40,13 +39,13 @@
     ],
     'category':'Accounting & Finance',
     'init_xml': [],
-    'update_xml': [
+    'data': [
         'data/res.country.state.csv',
         'data/kemas_data.xml',
         'data/planned_actions.xml',
         'security/kemas_security.xml',
         'security/ir.model.access.csv',
-        'report/reports.xml',
+        #'report/reports.xml',
         'kemas_view.xml',
         'controllers/kemas_sequence.xml',
         # 'kemas_installer.xml',

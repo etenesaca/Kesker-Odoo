@@ -19,9 +19,9 @@
 #
 ##############################################################################
 
-from osv import fields, osv
-from tools.translate import _
-from kemas import kemas_extras
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+from openerp.addons.kemas import kemas_extras
 
 class kemas_report_attendance_statistics_wizard(osv.osv_memory):
     def create(self, cr, uid, vals, context={}):
