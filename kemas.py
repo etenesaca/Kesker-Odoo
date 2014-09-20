@@ -546,21 +546,7 @@ class kemas_config(osv.osv):
         for record in records:
             if record[field_name]:
                 obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-    
-        # Ministerios
-        obj = self.pool.get('kemas.ministry')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-                
-        # Cursos de Especializacion
-        obj = self.pool.get('kemas.specialization.course')
-        records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name])
-        for record in records:
-            if record[field_name]:
-                obj.write(cr, uid, [record['id']], {field_name: record[field_name]})
-                
+        
         # Procesar grabaciones
         obj = self.pool.get('kemas.recording')
         """
@@ -2679,138 +2665,6 @@ class kemas_collaborator_web_site(osv.osv):
     
     _constraints = [(_validate_unique_sync_account, u'\n\nSolo se puede usar una sola cuenta para sincronizar datos.', [u'Sitios web']), ]
     
-class kemas_ministry(osv.osv):
-    def do_activate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'active' : True})
-        return True
-    
-    def do_inactivate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'active': False})
-        return True
-    
-    def write(self, cr, uid, ids, vals, context={}):
-        result = super(kemas_ministry, self).write(cr, uid, ids, vals, context)
-        for record_id in ids:
-            if vals.get('logo', False):
-                path = addons.__path__[0] + '/web/static/src/img/logo' + 'ministry'
-                vals_write = {}
-                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-                super(kemas_ministry, self).write(cr, uid, [record_id], vals_write, context)
-        return result
-
-    def create(self, cr, uid, vals, context={}):
-        if vals.get('logo', False):
-            path = addons.__path__[0] + '/web/static/src/img/logo' + 'ministry'
-            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-        return super(kemas_ministry, self).create(cr, uid, vals, context)
-    
-    _order = 'name'
-    _name = 'kemas.ministry'
-    _columns = {
-        'logo': fields.binary('Logo', help='Logo del Ministerio.'),
-        'logo_large': fields.binary('Large Logo'),
-        'logo_medium': fields.binary('Medium Logo'),
-        'logo_small': fields.binary('Small Logo'),
-        'active': fields.boolean('Activo?', required=False),
-        'name': fields.char('Nombre', size=64, required=True, help='Nombre del minsterio'),
-        'description': fields.text('Description', help='Una descripcion breve'),
-        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_ministry_collaborator_rel', 'ministry_id', 'collaborator_id', 'Colaboradores'),
-        }
-    
-    _sql_constraints = [
-        ('uname', 'unique(name)', "Este Ministerio ya existe!"),
-        ]
-    
-    def _get_logo(self, cr, uid, context={}):
-        photo_path = addons.get_module_resource('kemas', 'images', 'ministry.png')
-        return open(photo_path, 'rb').read().encode('base64')
-
-    _defaults = {
-        'logo': _get_logo,
-        'active': True
-    }
-    
-class kemas_specialization_course(osv.osv):
-    def do_activate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'active' : True})
-        return True
-    
-    def do_inactivate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'active': False})
-        return True
-    
-    def write(self, cr, uid, ids, vals, context={}):
-        result = super(kemas_specialization_course, self).write(cr, uid, ids, vals, context)
-        for record_id in ids:
-            if vals.get('logo', False):
-                path = addons.__path__[0] + '/web/static/src/img/logo' + 'specialization_course'
-                vals_write = {}
-                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-                super(kemas_specialization_course, self).write(cr, uid, [record_id], vals_write, context)
-        return result
-
-    def create(self, cr, uid, vals, context={}):
-        if vals.get('logo', False):
-            path = addons.__path__[0] + '/web/static/src/img/logo' + 'specialization_course'
-            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-        return super(kemas_specialization_course, self).create(cr, uid, vals, context)
-    
-    _order = 'name'
-    _name = 'kemas.specialization.course'
-    _columns = {
-        'logo': fields.binary('Logo', help='Logo del Curso.'),
-        'logo_large': fields.binary('Large Logo'),
-        'logo_medium': fields.binary('Medium Logo'),
-        'logo_small': fields.binary('Small Logo'),
-        'active': fields.boolean('Activo?', required=False),
-        'name': fields.char('Name', size=64, required=True, help='Nombre del curso'),
-        'description': fields.text('Description', help='Una descripcion breve'),
-        'level_ids': fields.one2many('kemas.specialization.course.level', 'course_id', 'Niveles'),
-        }
-    _sql_constraints = [
-        ('uname', 'unique(name)', "Este Curso ya existe!"),
-        ]
-    
-    def _get_logo(self, cr, uid, context={}):
-        photo_path = addons.get_module_resource('kemas', 'images', 'ministry.png')
-        return open(photo_path, 'rb').read().encode('base64')
-
-    _defaults = {
-        'logo': _get_logo,
-        'active': True
-    }
-    
-class kemas_specialization_course_level(osv.osv):
-    _order = 'name'
-    _name = 'kemas.specialization.course.level'
-    _columns = {
-        'name': fields.char('Nombre', size=64, required=True, help='Nombre del Nivel'),
-        'course_id': fields.many2one('kemas.specialization.course', 'Curso', required=True),
-        'line_ids': fields.one2many('kemas.specialization.course.line', 'course_id', 'Colaboradores'),
-        }
-    _sql_constraints = [
-        ('ulevel', 'unique(name,course_id)', "ya agregaste este nivel a este curso!"),
-        ]
-    
-class kemas_specialization_course_line(osv.osv):
-    _name = 'kemas.specialization.course.line'
-    _columns = {
-        'collaborator_id': fields.many2one('kemas.collaborator', 'Colaborador', required=True),
-        'course_id': fields.many2one('kemas.specialization.course', 'Curso', required=True),
-        'level_id': fields.many2one('kemas.specialization.course.level', 'Nivel', required=True),
-        }
-    _sql_constraints = [
-        ('ucourse', 'unique(collaborator_id,course_id)', "Este colaborador ya esta registrado en este curso!"),
-        ]
-    
 class kemas_collaborator_logbook(osv.osv):
     def create(self, cr, uid, vals, *args, **kwargs):
         vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -4031,8 +3885,6 @@ class kemas_collaborator(osv.osv):
         'email': fields.char('E-mail', size=128, required=True, help="The collaborator email."),
         'im_account': fields.char('IM account', size=128, required=False, help="IM account with which you can communicate with your collaborator."),
         'address': fields.char('Address', size=255, required=True, help="The collaborator address."),
-        'vision': fields.text('Vision', help="The collaborator vision."),
-        'mission': fields.text('Mission', help="The collaborator mission."),
         'web_site_ids': fields.one2many('kemas.collaborator.web.site', 'collaborator_id', 'Web sites', help='Web site of this collaborator'),
         'join_date': fields.date('Join date', help="Date on which the collaborator joined the Ministry."),
         'age_in_ministry': fields.function(_get_ministry_age, method=True, fnct_inv=_dummy_age, type='char', string='Age in ministry', size='128', help='Time the collaborator serves or served the ministry.'),
@@ -4063,8 +3915,6 @@ class kemas_collaborator(osv.osv):
         'progress': fields.function(get_percentage, type='float', string='Progress'),
         'create_date': fields.function(_create_date, type='char', string='Created date'),
         'replacements': fields.function(_replacements, type='integer', string='Replacements avaliable', help="Number of replacements available events this month"),
-        'ministry_ids': fields.many2many('kemas.ministry', 'kemas_ministry_collaborator_rel', 'collaborator_id', 'ministry_id', 'Ministerios'),
-        'specialization_course_ids': fields.one2many('kemas.specialization.course.line', 'collaborator_id', 'Coursos de especializacion'),
         #Suspensions----------------------------------------------------------------------------------------------------------
         'suspension_ids': fields.one2many('kemas.suspension', 'collaborator_id', 'Suspensions'),
         'day_remaining_suspension': fields.function(_get_days_remaining, type='char', string='Days remaining'),
