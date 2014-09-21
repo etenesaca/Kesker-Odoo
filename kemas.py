@@ -1811,7 +1811,7 @@ class kemas_team(osv.osv):
         result = super(kemas_team, self).write(cr, uid, ids, vals, context)
         for rec_id in ids:
             if vals.get('logo', False):
-                path = addons.__path__[0] + '/web/static/src/img/logo' + 'team'
+                path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'team'
                 vals_write = {}
                 vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
                 vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
@@ -1821,7 +1821,7 @@ class kemas_team(osv.osv):
     
     def create(self, cr, uid, vals, context={}):
         if vals.get('logo', False):
-            path = addons.__path__[0] + '/web/static/src/img/logo' + 'team'
+            path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'team'
             vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
             vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
             vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
@@ -2051,7 +2051,7 @@ class kemas_area(osv.osv):
         result = super(kemas_area, self).write(cr, uid, ids, vals, context)
         for record_id in ids:
             if vals.get('logo', False):
-                path = addons.__path__[0] + '/web/static/src/img/logo' + 'area'
+                path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'area'
                 vals_write = {}
                 vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
                 vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
@@ -2061,7 +2061,7 @@ class kemas_area(osv.osv):
 
     def create(self, cr, uid, vals, context={}):
         if vals.get('logo', False):
-            path = addons.__path__[0] + '/web/static/src/img/logo' + 'area'
+            path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'area'
             vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
             vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
             vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
@@ -2176,7 +2176,7 @@ class kemas_level(osv.osv):
         result = super(kemas_level, self).write(cr, uid, ids, vals, context)
         for record_id in ids:
             if vals.get('logo', False):
-                path = addons.__path__[0] + '/web/static/src/img/logo' + 'level'
+                path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'level'
                 vals_write = {}
                 vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
                 vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
@@ -2187,7 +2187,7 @@ class kemas_level(osv.osv):
 
     def create(self, cr, uid, vals, context={}):
         if vals.get('logo', False):
-            path = addons.__path__[0] + '/web/static/src/img/logo' + 'level'
+            path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'level'
             vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
             vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
             vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
@@ -2300,7 +2300,7 @@ class kemas_web_site(osv.osv):
         result = super(kemas_web_site, self).write(cr, uid, ids, vals, context)
         for record_id in ids:
             if vals.get('logo', False):
-                path = addons.__path__[0] + '/web/static/src/img/logo' + 'web_site'
+                path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'web_site'
                 vals_write = {}
                 vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
                 vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
@@ -2319,7 +2319,7 @@ class kemas_web_site(osv.osv):
 
     def create(self, cr, uid, vals, context={}):
         if vals.get('logo', False):
-            path = addons.__path__[0] + '/web/static/src/img/logo' + 'web_site'
+            path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'web_site'
             vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
             vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
             vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
@@ -3311,7 +3311,7 @@ class kemas_collaborator(osv.osv):
             name = u'''%s %s''' % (nick_name, apellido)
             if vals.get('photo', False):
                 # Crear una imagen pequeña de la foto del colaborador
-                path = addons.__path__[0] + '/web/static/src/img/avatar' + "collaborator"
+                path = addons.kemas.__path__[0] + '/images/tmp/avatar' + "collaborator"
                 vals['photo_large'] = kemas_extras.crop_image(vals['photo'], path, 128)
                 vals['photo_medium'] = kemas_extras.crop_image(vals['photo'], path, 64)
                 vals['photo_small'] = kemas_extras.crop_image(vals['photo'], path, 48)
@@ -3453,7 +3453,7 @@ class kemas_collaborator(osv.osv):
             
         # Crear una imagen pequeña de la foto del colaborador
         if vals.get('photo', False):
-            photo_path = addons.__path__[0] + '/web/static/src/img/avatar'
+            photo_path = addons.kemas.__path__[0] + '/images/tmp/avatar'
             vals['photo_large'] = kemas_extras.crop_image(vals['photo'], photo_path, 128)
             vals['photo_medium'] = kemas_extras.crop_image(vals['photo'], photo_path, 64)
             vals['photo_small'] = kemas_extras.crop_image(vals['photo'], photo_path, 48)
@@ -3488,7 +3488,7 @@ class kemas_collaborator(osv.osv):
                     'email' : collaborator['email']
                     }
         if vals.has_key('photo'):
-            vals_user['image'] = vals['photo_large']
+            vals_user['image'] = vals.get('photo_large')
         user_obj.write(cr, uid, [collaborator['user_id'][0]], vals_user)
         
         # Actualizar los datos del Partner
@@ -3949,24 +3949,20 @@ class kemas_collaborator(osv.osv):
         }
     
     def get_photo_male(self):
-        # photo_path = addons.get_module_resource('kemas', 'images', 'male.png')
-        # return open(photo_path, 'rb').read().encode('base64')
-        return False
+        photo_path = addons.kemas.__path__[0] + '/images/male.jpg'
+        return open(photo_path, 'rb').read().encode('base64')
     
     def get_photo_small_male(self):
-        # photo_path = addons.get_module_resource('kemas', 'images', 'male_small.jpg')
-        # return open(photo_path, 'rb').read().encode('base64')
-        return False
+        photo_path = addons.kemas.__path__[0] + '/images/male_small.jpg'
+        return open(photo_path, 'rb').read().encode('base64')
     
     def get_photo_female(self):
-        # photo_path = addons.get_module_resource('kemas', 'images', 'female.png')
-        # return open(photo_path, 'rb').read().encode('base64')
-        return False
+        photo_path = addons.kemas.__path__[0] + '/images/female.jpg'
+        return open(photo_path, 'rb').read().encode('base64')
     
     def get_photo_small_female(self):
-        # photo_path = addons.get_module_resource('kemas', 'images', 'female_small.jpg')
-        # return open(photo_path, 'rb').read().encode('base64')
-        return False
+        photo_path = addons.kemas.__path__[0] + '/images/female_small.jpg'
+        return open(photo_path, 'rb').read().encode('base64')
     
     def get_first_level(self, cr, uid, context={}):
         level_obj = self.pool.get('kemas.level')
