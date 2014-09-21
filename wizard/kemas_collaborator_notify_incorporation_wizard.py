@@ -37,10 +37,10 @@ class kemas_collaborator_notify_incorporation_wizard(osv.osv_memory):
             collaborator_obj = self.pool.get('kemas.collaborator')
             if config_obj.send_email_incoporation(cr, uid, collaborator_id):
                 vals = {'notified':'notified'}
-                super(kemas.kemas.kemas_collaborator, collaborator_obj).write(cr, uid, [collaborator_id], vals)
+                super(addons.kemas.kemas.kemas_collaborator, collaborator_obj).write(cr, uid, [collaborator_id], vals)
             else:
                 vals = {'notified':'no_notified'}
-                super(kemas.kemas.kemas_collaborator, collaborator_obj).write(cr, uid, [collaborator_id], vals)
+                super(addons.kemas.kemas.kemas_collaborator, collaborator_obj).write(cr, uid, [collaborator_id], vals)
         else:
             threaded_sending = threading.Thread(target=self._send_notification, args=(cr.dbname , uid, collaborator_ids))
             threaded_sending.start()

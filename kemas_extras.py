@@ -276,8 +276,9 @@ def convert_hour_format_to_float(hour_str, seconds=False):
     return float(hour) + float(float(minutes) / 60) 
     
 def convert_float_to_hour_format(hour_float, seconds=False):
+    hour_float = float(hour_float)
     hora = str(int(hour_float))
-    minutos = float(hour_float) - float(hora)
+    minutos = hour_float - float(hora)
     minutos = int(round(minutos * 60, 0))
         
     if len(str(hora)) == 1:

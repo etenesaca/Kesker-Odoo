@@ -177,7 +177,6 @@
       <field name="login">test</field>
       <field name="password">6JtigKav8QQkqOpCcE3TMYYKtRtJzGG3hxcIAEe/ywQ=</field>
       <field name="company_id">1</field>
-      <field name="menu_id">1</field>
     </record>
   </data>
 </openerp>

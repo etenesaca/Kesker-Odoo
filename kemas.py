@@ -18,6 +18,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+import logging
+
 from openerp.osv import fields, osv
 from openerp import addons
 from openerp import tools
@@ -46,11 +48,12 @@ from dateutil.parser import  *
 from openerp import SUPERUSER_ID
 
 # from openerp.tools.translate import _
-# _logger = logging.getLogger(__name__)
 # import addons
 # import pooler
 # import tools
 # import tools7
+
+_logger = logging.getLogger(__name__)
     
 class kemas_collaborator_logbook_login(osv.osv):
     def name_get(self, cr, uid, ids, context={}):
@@ -255,7 +258,6 @@ class kemas_func(osv.osv):
                 'name': name,
                 'login': username,
                 'company_id': 1,
-                'menu_id': 1,
                 # 'menu_tips':True,
                 'user_email' : email,
                 'password': unicode(password).lower(),
@@ -3267,12 +3269,12 @@ class kemas_collaborator(osv.osv):
     def send_notification(self, cr, uid, collaborator_id, context={}):
         threaded_sending = threading.Thread(target=self._send_notification, args=(cr.dbname , uid, collaborator_id))
         threaded_sending.start()
-            
-    def create(self, cr, uid, vals, *args, **kwargs):
+    
+    def create(self, cr, uid, vals, context={}):
         vals['email'] = unicode(vals['email']).lower()
             
         if vals.has_key('points'):
-            return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
+            return super(kemas_collaborator, self).create(cr, uid, vals, context)
         
         vals['name'] = unicode(vals['name']).title()
         #----Crear un codigo para la persona que se registre---------------------------------------------
@@ -3338,7 +3340,7 @@ class kemas_collaborator(osv.osv):
         vals['state'] = 'Active'
         
 
-        res_id = super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
+        res_id = super(kemas_collaborator, self).create(cr, uid, vals, context)
         #----Escribir el historial de puntos-----------------------------------------------------------------
         if vals['type'] == 'Collaborator':
             history_points_obj = self.pool.get('kemas.history.points')
@@ -3752,25 +3754,6 @@ class kemas_collaborator(osv.osv):
             result[collaborator_id] = get_days_remaining(collaborator_id)
         return result
     
-    def _create_date(self, cr, uid, ids, name, arg, context={}): 
-        from datetime import datetime
-        result = {}
-        sql = """
-                SELECT cl.id,cl.create_date
-                FROM kemas_collaborator AS cl
-                INNER JOIN res_users AS us ON (cl.create_uid = us.id)
-                WHERE cl.id in (%s)
-            """ % (kemas_extras.convert_to_tuple_str(ids))
-        cr.execute(sql)
-        collaborators = cr.fetchall()
-        for collaborator in collaborators:
-            dt = datetime.strptime(collaborator[1], '%Y-%m-%d %H:%M:%S.%f')
-            create_date = "%s %d:%d:%d" % (dt.date().__str__(), dt.hour, dt.minute, dt.second)
-            tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-            create_date = kemas_extras.convert_to_tz(create_date, tz)
-            result[collaborator[0]] = create_date
-        return result
-    
     def mailing(self, cr, uid, ids, name, arg, context={}):
         result = {}
         mailing = self.pool.get('kemas.func').mailing(cr, uid)
@@ -3948,7 +3931,6 @@ class kemas_collaborator(osv.osv):
             ], 'Notified', select=True, help="Indicates whether the notification email was sent"),
         'last_connection': fields.function(_last_connection, type='char', string='Ultima Conexion'),
         'progress': fields.function(get_percentage, type='float', string='Progress'),
-        'create_date': fields.function(_create_date, type='char', string='Created date'),
         'replacements': fields.function(_replacements, type='integer', string='Replacements avaliable', help="Number of replacements available events this month"),
         #Suspensions----------------------------------------------------------------------------------------------------------
         'suspension_ids': fields.one2many('kemas.suspension', 'collaborator_id', 'Suspensions'),
@@ -4409,7 +4391,6 @@ class kemas_task_assigned(osv.osv):
         'state': fields.related('stage_id', 'state', type="selection", store=True,
                 selection=_TASK_STATE, string="Status", readonly=True),
         'categ_ids': fields.many2many('kemas.task.category', string='Tags'),
-        'create_date': fields.datetime('Create Date', readonly=True, select=True),
         'notes': fields.text('Notes'),
         'user_id': fields.many2one('res.users', 'Assigned to', track_visibility='onchange'),
         'color': fields.integer('Color Index'),
@@ -5587,6 +5568,8 @@ class kemas_event(osv.osv):
         vals['count'] = 1
         #--Crear Date start y date stop---------------------------------------------------------------------------------------------
         service = service_obj.read(cr, uid, vals['service_id'], [])
+        if not context['tz']:
+            context['tz'] = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
         dates_dic = kemas_extras.convert_to_format_date(vals['date_start'], service['time_entry'], service['time_start'], service['time_end'], context['tz'])
         vals['date_start'] = dates_dic['date_start']
         vals['date_stop'] = dates_dic['date_stop']
@@ -6274,7 +6257,7 @@ class kemas_event(osv.osv):
         'min_points':1,
         }
     def validate_date(self, cr, uid, ids):
-        event = self.read(cr, uid, ids[0], [])
+        event = self.read(cr, uid, ids[0], ['date_start', 'date_stop'])
         event_ids = self.search(cr, uid, [('date_start', '<=', event['date_start']), ('date_stop', '>=', event['date_start']), ('state', 'in', ['on_going'])])
         if event_ids and event_ids != ids:
             raise osv.except_osv(_('Error!'), _('This event is crossed with another.'))
@@ -6287,6 +6270,7 @@ class kemas_event(osv.osv):
         #    raise osv.except_osv(_('Error!'), _('Unable to create an event in a past date.')) 
         
         return True
+    
     _constraints = [
         (validate_date, 'inconsistent data.', ['date_start'])
         ] 

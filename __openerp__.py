@@ -45,7 +45,7 @@
         'data/planned_actions.xml',
         'security/kemas_security.xml',
         'security/ir.model.access.csv',
-        #'report/reports.xml',
+        # 'report/reports.xml',
         'kemas_view.xml',
         'controllers/kemas_sequence.xml',
         # 'kemas_installer.xml',
@@ -60,18 +60,11 @@
         'wizard/kemas_report_collaborators_list_wizard_view.xml',
         'wizard/kemas_report_events_list_wizard_view.xml',
         'wizard/kemas_report_attendance_statistics_wizard_view.xml',
+        'views/kemas.xml',
         ],
     'installable': True,
     'application': True,
-    'css': [],
     'js': ['static/src/js/kemas.js'],
-    "css": [ 
-            'static/src/css/project.css',
-            'static/src/css/hr.css',
-            'static/src/css/event.css',
-            'static/src/css/ke.css',
-            'static/src/css/event.css',
-           ],
     }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

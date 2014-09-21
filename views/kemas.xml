@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- vim:fdn=3:
+-->
+<openerp>
+   <data>
+      <template id="assets_backend" name="kemas assets" inherit_id="web.assets_backend">
+         <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/kemas/static/src/css/project.css" />
+            <link rel="stylesheet" href="/kemas/static/src/css/event.css" />
+            <link rel="stylesheet" href="/kemas/static/src/css/ke.css" />
+            <link rel="stylesheet" href="/kemas/static/src/css/kemas.css" />
+            <script type="text/javascript" src="/kemas/static/src/js/kemas.js"></script>
+         </xpath>
+      </template>
+   </data>
+</openerp>

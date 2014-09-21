@@ -22,4 +22,5 @@ encoding//wizard/kemas_suspend_collaborator_wizard.py=utf-8
 encoding/__init__.py=utf-8
 encoding/__openerp__.py=utf-8
 encoding/kemas.py=utf-8
+encoding/kemas_extras.py=utf-8
 encoding/res_users.py=utf-8
