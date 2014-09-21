@@ -111,7 +111,7 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
                 'type': 'ir.actions.act_window',
                 'target':'new',
                 }
-            
+    
     def send_email(self, cr, uid, ids, context={}):
         this = self.read(cr, uid, ids[0])
         wizard_line_obj = self.pool.get('kemas.send.notification.event.line.wizard')
@@ -172,7 +172,6 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
             wizard_id = ids[0]
         else:
             wizard_id = ids
-        import pdb;pdb.set_trace()
         event_id = self.read(cr, uid, wizard_id, ['event_id'])['event_id']
         super(kemas_send_notification_event_wizard, self).write(cr, uid, wizard_id, {'sending_emails':True})
         cr.commit()
