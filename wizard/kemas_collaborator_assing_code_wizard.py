@@ -74,7 +74,7 @@ class kemas_collaborator_assing_code_wizard(osv.osv_memory):
             vals = {
                     'code': str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
                     }
-            super(kemas.kemas.kemas_collaborator, collaborator_obj).write(cr,uid,[collaborator_id],vals)
+            super(addons.kemas.kemas.kemas_collaborator, collaborator_obj).write(cr,uid,[collaborator_id],vals)
         return {}
 
     _name='kemas.collaborator.assing.code.wizard'

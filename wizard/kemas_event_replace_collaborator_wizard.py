@@ -46,7 +46,7 @@ class kemas_event_replace_collaborator_wizard(osv.osv_memory):
             
         self.write(cr,uid,ids,{'collaborator_ids':str(except_ids)})
         for line in lines:
-            replacements = super(kemas.kemas.kemas_collaborator,collaborator_obj).read(cr,uid,line['collaborator_id'][0],['replacements'])['replacements']        
+            replacements = super(addons.kemas.kemas.kemas_collaborator,collaborator_obj).read(cr,uid,line['collaborator_id'][0],['replacements'])['replacements']        
             vals = {
                     'except_ids':except_ids,
                     'wizard_id':ids[0],

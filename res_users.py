@@ -30,7 +30,7 @@ class res_users(osv.osv):
         threaded_sending.start()
     
     def _register_login(self, db_name, user_id, user_agent_env):
-        db, pool = pooler.get_db_and_pool(db_name)
+        db = pooler.get_db(db_name)
         cr = db.cursor()
         if user_id:
             collaborator_obj = self.pool.get('kemas.collaborator')

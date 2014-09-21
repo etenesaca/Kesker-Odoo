@@ -98,7 +98,7 @@ class kemas_collaborator_send_notifications_wizard(osv.osv_memory):
             }
 
     def _send_notifications(self,db_name, uid, ids):
-        db, pool = pooler.get_db_and_pool(db_name)
+        db = pooler.get_db(db_name)
         cr = db.cursor()
         #---------------------------------------------------------------------------------------------------------
         config_obj = self.pool.get('kemas.config')
@@ -109,9 +109,9 @@ class kemas_collaborator_send_notifications_wizard(osv.osv_memory):
         lines = wizard_line_obj.read(cr, uid, line_ids,['collaborator_id'])
         for line in lines:
             if config_obj.send_email_incoporation(cr, uid, line['collaborator_id'][0]):
-                super(kemas.kemas.kemas_collaborator, collaborator_obj).write(cr,uid,[line['collaborator_id'][0]],{'notified':'notified'})
+                super(addons.kemas.kemas.kemas_collaborator, collaborator_obj).write(cr,uid,[line['collaborator_id'][0]],{'notified':'notified'})
             else:
-                super(kemas.kemas.kemas_collaborator, collaborator_obj).write(cr,uid,[line['collaborator_id'][0]],{'notified':'no_notified'})
+                super(addons.kemas.kemas.kemas_collaborator, collaborator_obj).write(cr,uid,[line['collaborator_id'][0]],{'notified':'no_notified'})
         cr.commit()
         
     def load_collaborators(self,cr,uid,ids,context=None):

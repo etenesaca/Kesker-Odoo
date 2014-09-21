@@ -19,22 +19,20 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
-from openerp.tools.translate import _
-from openerp.addons.kemas import kemas_extras
-#from kemas import kemas_extras
+import threading
 import time
 
 from openerp import addons
-#import kemas
-
 from openerp import pooler
-#import pooler
-import threading
+from openerp.addons.kemas import kemas_extras
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+
 
 class kemas_send_notification_event_wizard(osv.osv_memory):
     timeout_send_email = 150
     collaborator_ids_send_email = {}
+    
     def refresh(self, cr, uid, ids, context=None):
         this = self.read(cr, uid, ids[0])
         event_obj = self.pool.get('kemas.event')
@@ -81,7 +79,7 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
         event_obj = self.pool.get('kemas.event')
         event_id = self.read(cr, uid, ids[0], ['event_id'])['event_id']
         vals = {'sending_emails': False}
-        super(kemas.kemas.kemas_event, event_obj).write(cr, uid, [event_id], vals)
+        super(addons.kemas.kemas.kemas_event, event_obj).write(cr, uid, [event_id], vals)
         sql = """DELETE FROM kemas_send_notification_event_line_wizard where wizard_id = %d""" % ids[0]
         cr.execute(sql)
         cr.commit()
@@ -129,7 +127,7 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
         vals = {
                 'collaborator_ids_send_email' : [(6, 0, collaborator_ids_send_email)]
                 }
-        super(kemas.kemas.kemas_event, event_obj).write(cr, uid, this['event_id'], vals)
+        super(addons.kemas.kemas.kemas_event, event_obj).write(cr, uid, this['event_id'], vals)
         if len(_lines) == 0:
             raise osv.except_osv(_('Error!'), _('No staff to send notifications.'))
         
@@ -150,7 +148,7 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
             self._send_email(cr, uid, ids, context)
             
     def _send_email_thr(self, db_name, uid, ids, context={}):
-        db, pool = pooler.get_db_and_pool(db_name)
+        db = pooler.get_db(db_name)
         cr = db.cursor()
         self._send_email(cr, uid, ids, context)
         
@@ -174,10 +172,11 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
             wizard_id = ids[0]
         else:
             wizard_id = ids
+        import pdb;pdb.set_trace()
         event_id = self.read(cr, uid, wizard_id, ['event_id'])['event_id']
         super(kemas_send_notification_event_wizard, self).write(cr, uid, wizard_id, {'sending_emails':True})
         cr.commit()
-        super(kemas.kemas.kemas_event, event_obj).write(cr, uid, event_id, {'sending_emails':True})
+        super(addons.kemas.kemas.kemas_event, event_obj).write(cr, uid, event_id, {'sending_emails':True})
         cr.commit()
 
         line_ids = self.read(cr, uid, wizard_id, ['send_notification_event_line_wizard_ids'])['send_notification_event_line_wizard_ids']
@@ -236,7 +235,7 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
             cr.commit()
         cr.commit()
         super(kemas_send_notification_event_wizard, self).write(cr, uid, wizard_id, {'sending_emails': False})
-        super(kemas.kemas.kemas_event, event_obj).write(cr, uid, event_id, {'sending_emails': False})
+        super(addons.kemas.kemas.kemas_event, event_obj).write(cr, uid, event_id, {'sending_emails': False})
         try:
             del self.collaborator_ids_send_email[event_id]
         except:None

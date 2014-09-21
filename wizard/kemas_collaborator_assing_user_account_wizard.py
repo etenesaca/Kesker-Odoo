@@ -84,7 +84,7 @@ class kemas_collaborator_assing_user_account_wizard(osv.osv_memory):
                     }
             if not collaborator['code']:
                 vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
-            super(kemas.kemas.kemas_collaborator, collaborator_obj).write(cr, uid, [collaborator_id], vals)
+            super(addons.kemas.kemas.kemas_collaborator, collaborator_obj).write(cr, uid, [collaborator_id], vals)
             # Actualizar los datos del Partner
             collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['born_country', 'email', 'born_state', 'born_city', 'photo', 'user_id'])
             partner_obj = self.pool.get('res.partner')

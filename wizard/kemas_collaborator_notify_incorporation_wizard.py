@@ -46,7 +46,7 @@ class kemas_collaborator_notify_incorporation_wizard(osv.osv_memory):
             threaded_sending.start()
     
     def _send_notification(self, db_name, uid, collaborator_ids):
-        db, pool = pooler.get_db_and_pool(db_name)
+        db = pooler.get_db(db_name)
         cr = db.cursor()
         count = 0
         for collaborator_id in collaborator_ids:

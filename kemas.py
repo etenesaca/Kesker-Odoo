@@ -350,7 +350,7 @@ class kemas_massive_email(osv.osv):
             for collaborator in collaborators:
                 send_IM(collaborator)
             
-        db, pool = pooler.get_db_and_pool(db_name)
+        db = pooler.get_db(db_name)
         cr = db.cursor()
         #--------------------------------------------------------------------------------------------
         server_obj = self.pool.get('ir.mail_server')
@@ -2459,7 +2459,7 @@ class kemas_suspension(osv.osv):
         
     def _lift_suspensions_expired(self, db_name, uid, context={}):
         from datetime import datetime
-        db, pool = pooler.get_db_and_pool(db_name)
+        db = pooler.get_db(db_name)
         cr = db.cursor()
         suspension_ids = self.search(cr, uid, [('state', '=', 'on_going')])
         suspensions = self.read(cr, uid, suspension_ids, ['date_end', 'collaborator_id'])
@@ -3086,7 +3086,7 @@ class kemas_collaborator(osv.osv):
         threaded_sending.start()
         
     def _suspend(self, db_name, uid, ids, date_end, description, task_id=False):
-        db, pool = pooler.get_db_and_pool(db_name)
+        db = pooler.get_db(db_name)
         cr = db.cursor()
         def process(collaborator_id, description, date_end):
             vals = {
@@ -3123,7 +3123,7 @@ class kemas_collaborator(osv.osv):
         threaded_sending.start()
         
     def _add_remove_points(self, db_name, uid, ids, points, description, type='increase'):
-        db, pool = pooler.get_db_and_pool(db_name)
+        db = pooler.get_db(db_name)
         cr = db.cursor()
         config_obj = self.pool.get('kemas.config')
         def change(collaborator_id, points, description, type):
@@ -3186,7 +3186,7 @@ class kemas_collaborator(osv.osv):
         threaded_sending.start()
     
     def _send_join_notification(self, db_name, uid):
-        db, pool = pooler.get_db_and_pool(db_name)
+        db = pooler.get_db(db_name)
         cr = db.cursor()
         #--------------------------------------------------------------------------------------------
         collaborator_ids = super(osv.osv, self).search(cr, uid, [('notified', 'in', ['no_notified'])])
@@ -3205,7 +3205,7 @@ class kemas_collaborator(osv.osv):
         threaded_sending.start()
         
     def _update_collaborators_level(self, db_name, uid):
-        db, pool = pooler.get_db_and_pool(db_name)
+        db = pooler.get_db(db_name)
         cr = db.cursor()
         #--------------------------------------------------------------------------------------------
         collaborator_ids = super(osv.osv, self).search(cr, uid, [('type', 'in', ['Collaborator'])])
@@ -3253,7 +3253,7 @@ class kemas_collaborator(osv.osv):
         return super(kemas_collaborator, self).unlink(cr, uid, ids, context)
     
     def _send_notification(self, db_name, uid, collaborator_id):
-        db, pool = pooler.get_db_and_pool(db_name)
+        db = pooler.get_db(db_name)
         cr = db.cursor()
         config_obj = self.pool.get('kemas.config')
         if config_obj.send_email_incoporation(cr, uid, collaborator_id):
@@ -4432,9 +4432,9 @@ class kemas_task_assigned(osv.osv):
         return self.write(cr, uid, ids, {'priority' : '2'})
     
 class kemas_history_points(osv.osv):
-    def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context={}, orderby=False):
+    def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context={}, orderby=False, lazy=True):
         res_ids = self.search(cr, uid, domain, context=context)
-        result = super(kemas_history_points, self).read_group(cr, uid, domain + [('id', 'in', res_ids)], fields, groupby, offset, limit, context, orderby)
+        result = super(kemas_history_points, self).read_group(cr, uid, domain + [('id', 'in', res_ids)], fields, groupby, offset, limit, context, orderby, lazy)
         return result
     
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
@@ -4880,9 +4880,9 @@ class kemas_event_collaborator_line(osv.osv):
         ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
         return self.name_get(cr, uid, ids, context)
     
-    def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context={}, orderby=False):
+    def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context={}, orderby=False, lazy=True):
         res_ids = self.search(cr, uid, domain, context=context)
-        result = super(kemas_event_collaborator_line, self).read_group(cr, uid, domain + [('id', 'in', res_ids)], fields, groupby, offset, limit, context, orderby)
+        result = super(kemas_event_collaborator_line, self).read_group(cr, uid, domain + [('id', 'in', res_ids)], fields, groupby, offset, limit, context, orderby, lazy)
         return result
     
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
@@ -5617,7 +5617,7 @@ class kemas_event(osv.osv):
         threaded_sending.start()
         
     def _close_past_events(self, db_name, uid, context={}):
-        db, pool = pooler.get_db_and_pool(db_name)
+        db = pooler.get_db(db_name)
         cr = db.cursor()
         #--------------------------------------------------------------------------------------------
         event_ids = self.get_past_events(cr, uid, False)
@@ -5639,7 +5639,7 @@ class kemas_event(osv.osv):
     def close_event(self, cr, uid, event_id, context={}):   
         def send_notifications(self):
             def send(self, db_name, uid):
-                db, pool = pooler.get_db_and_pool(db_name)
+                db = pooler.get_db(db_name)
                 cr = db.cursor()
                 cr.commit()
                 config_obj = self.pool.get('kemas.config')
@@ -6294,9 +6294,9 @@ class kemas_attendance(osv.osv):
             res.append((record['id'], name))  
         return res
     
-    def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context={}, orderby=False):
+    def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context={}, orderby=False, lazy=True):
         res_ids = self.search(cr, uid, domain, context=context)
-        result = super(kemas_attendance, self).read_group(cr, uid, domain + [('id', 'in', res_ids)], fields, groupby, offset, limit, context, orderby)
+        result = super(kemas_attendance, self).read_group(cr, uid, domain + [('id', 'in', res_ids)], fields, groupby, offset, limit, context, orderby, lazy)
         return result
     
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
