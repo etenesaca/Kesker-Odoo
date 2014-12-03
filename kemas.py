@@ -18,11 +18,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+##############################################################################
 import logging
 
 from openerp.osv import fields, osv
 from openerp import addons
 from openerp import tools
+from openerp.api import Environment
 
 from openerp.tools.translate import _
 from openerp import pooler
@@ -46,6 +48,7 @@ import openerp
 import math
 from dateutil.parser import  *
 from openerp import SUPERUSER_ID
+from openerp.api import Environment
 
 # from openerp.tools.translate import _
 # import addons
@@ -1118,24 +1121,25 @@ class kemas_config(osv.osv):
             except: 
                 _logger.warning('New Event Notify Failed to send email to: %s', address)
                 return False
-            
-        server_obj = self.pool.get('ir.mail_server')
-        config_obj = self.pool.get('kemas.config')
-        collaborator_obj = self.pool.get('kemas.collaborator')
-        line_obj = self.pool.get('kemas.event.collaborator.line')
-        line = line_obj.read(cr, uid, line_id, ['collaborator_id', 'activity_ids', 'event_id'])
-        collaborator = collaborator_obj.read(cr, uid, line['collaborator_id'][0], ['email', 'im_account'])
-        #------------------------------------------------------------------------------------
-        config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, [])
-        if preferences['mailing'] == False:
-            return False
-        #------------------------------------------------------------------------------------
-        subject = self.build_event_string(cr, uid, preferences['Message_information_event_subject'], line_id)
-        res_send_email = send_email()
-        # if res_send_email:
-        #    send_IM()
-        return res_send_email
+        
+        with Environment.manage():
+            server_obj = self.pool.get('ir.mail_server')
+            config_obj = self.pool.get('kemas.config')
+            collaborator_obj = self.pool.get('kemas.collaborator')
+            line_obj = self.pool.get('kemas.event.collaborator.line')
+            line = line_obj.read(cr, uid, line_id, ['collaborator_id', 'activity_ids', 'event_id'])
+            collaborator = collaborator_obj.read(cr, uid, line['collaborator_id'][0], ['email', 'im_account'])
+            #------------------------------------------------------------------------------------
+            config_id = config_obj.get_correct_config(cr, uid)
+            preferences = config_obj.read(cr, uid, config_id, [])
+            if preferences['mailing'] == False:
+                return False
+            #------------------------------------------------------------------------------------
+            subject = self.build_event_string(cr, uid, preferences['Message_information_event_subject'], line_id)
+            res_send_email = send_email()
+            # if res_send_email:
+            #    send_IM()
+            return res_send_email
             
     def get_correct_config(self, cr, uid, fields_to_read=False):
         config_ids = self.search(cr, uid, [])

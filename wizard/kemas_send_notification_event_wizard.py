@@ -25,6 +25,7 @@ import time
 from openerp import addons
 from openerp import pooler
 from openerp.addons.kemas import kemas_extras
+from openerp.api import Environment
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
 
@@ -162,83 +163,85 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
                     return 'Successful'
             except:
                 return 'Error'
+        
+        with Environment.manage():    
+            config_obj = self.pool.get('kemas.config')
+            wizard_line_obj = self.pool.get('kemas.send.notification.event.line.wizard')
+            line_obj = self.pool.get('kemas.event.collaborator.line') 
+            event_obj = self.pool.get('kemas.event')
+            #-------------------------------------------------------------------------------------------------------------
+            if type(ids).__name__ == 'list':
+                wizard_id = ids[0]
+            else:
+                wizard_id = ids
             
-        config_obj = self.pool.get('kemas.config')
-        wizard_line_obj = self.pool.get('kemas.send.notification.event.line.wizard')
-        line_obj = self.pool.get('kemas.event.collaborator.line') 
-        event_obj = self.pool.get('kemas.event')
-        #-------------------------------------------------------------------------------------------------------------
-        if type(ids).__name__ == 'list':
-            wizard_id = ids[0]
-        else:
-            wizard_id = ids
-        event_id = self.read(cr, uid, wizard_id, ['event_id'])['event_id']
-        super(kemas_send_notification_event_wizard, self).write(cr, uid, wizard_id, {'sending_emails':True})
-        cr.commit()
-        super(addons.kemas.kemas.kemas_event, event_obj).write(cr, uid, event_id, {'sending_emails':True})
-        cr.commit()
-
-        line_ids = self.read(cr, uid, wizard_id, ['send_notification_event_line_wizard_ids'])['send_notification_event_line_wizard_ids']
-        lines = wizard_line_obj.read(cr, uid, line_ids)
-        _lines = []
-        for line in lines:
-            if line['send_email']:
-                _lines.append(line)
-        
-        if len(_lines) == 0:
-            raise osv.except_osv(_('Error!'), _('No staff to send notifications.'))
-        
-        if not self.collaborator_ids_send_email.has_key(event_id):
-            self.collaborator_ids_send_email[event_id] = []
-        for line in _lines:
-            self.collaborator_ids_send_email[event_id].append(line['collaborator_id'][0])
-            line_obj.write(cr, uid, [line['event_line_id']], {
-                                        'send_email_state':'Waiting',
+            event_id = self.read(cr, uid, wizard_id, ['event_id'])['event_id']
+            super(kemas_send_notification_event_wizard, self).write(cr, uid, wizard_id, {'sending_emails':True})
+            cr.commit()
+            super(addons.kemas.kemas.kemas_event, event_obj).write(cr, uid, event_id, {'sending_emails':True})
+            cr.commit()
+    
+            line_ids = self.read(cr, uid, wizard_id, ['send_notification_event_line_wizard_ids'])['send_notification_event_line_wizard_ids']
+            lines = wizard_line_obj.read(cr, uid, line_ids)
+            _lines = []
+            for line in lines:
+                if line['send_email']:
+                    _lines.append(line)
+            
+            if len(_lines) == 0:
+                raise osv.except_osv(_('Error!'), _('No staff to send notifications.'))
+            
+            if not self.collaborator_ids_send_email.has_key(event_id):
+                self.collaborator_ids_send_email[event_id] = []
+            for line in _lines:
+                self.collaborator_ids_send_email[event_id].append(line['collaborator_id'][0])
+                line_obj.write(cr, uid, [long(line['event_line_id'])], {
+                                            'send_email_state':'Waiting',
+                                            })
+            cr.commit()
+            for line in _lines:
+                cr.commit()
+                sending_emails = event_obj.read(cr, uid, event_id, ['sending_emails'])['sending_emails']
+                if sending_emails == False: break
+                res_email = kemas_extras.timeout(send, timeout_duration=self.timeout_send_email, default='Timeout')
+                if res_email == 'Successful':
+                    wizard_line_obj.write(cr, uid, [line['id']], {
+                                        'state':'Successful',
+                                        'send_email': False,
+                                        'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
                                         })
-        cr.commit()
-        for line in _lines:
+                    line_obj.write(cr, uid, [long(line['event_line_id'])], {
+                                        'send_email_state':'Sent',
+                                        'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
+                                        })
+                elif res_email == 'Error':
+                    wizard_line_obj.write(cr, uid, [line['id']], {
+                                        'state':'Error',
+                                        'send_email':True,
+                                        'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
+                                        })
+                    line_obj.write(cr, uid, [long(line['event_line_id'])], {
+                                        'send_email_state':'Error',
+                                        'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
+                                        })
+                elif res_email == 'Timeout':
+                    wizard_line_obj.write(cr, uid, [line['id']], {
+                                        'state':'Timeout',
+                                        'send_email':True,
+                                        'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
+                                        })
+                    line_obj.write(cr, uid, [long(line['event_line_id'])], {
+                                        'send_email_state':'Timeout',
+                                        'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
+                                        })
+                cr.commit()
             cr.commit()
-            sending_emails = event_obj.read(cr, uid, event_id, ['sending_emails'])['sending_emails']
-            if sending_emails == False: break
-            res_email = kemas_extras.timeout(send, timeout_duration=self.timeout_send_email, default='Timeout')
-            if res_email == 'Successful':
-                wizard_line_obj.write(cr, uid, [line['id']], {
-                                    'state':'Successful',
-                                    'send_email': False,
-                                    'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
-                                    })
-                line_obj.write(cr, uid, [line['event_line_id']], {
-                                    'send_email_state':'Sent',
-                                    'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
-                                    })
-            elif res_email == 'Error':
-                wizard_line_obj.write(cr, uid, [line['id']], {
-                                    'state':'Error',
-                                    'send_email':True,
-                                    'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
-                                    })
-                line_obj.write(cr, uid, [line['event_line_id']], {
-                                    'send_email_state':'Error',
-                                    'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
-                                    })
-            elif res_email == 'Timeout':
-                wizard_line_obj.write(cr, uid, [line['id']], {
-                                    'state':'Timeout',
-                                    'send_email':True,
-                                    'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
-                                    })
-                line_obj.write(cr, uid, [line['event_line_id']], {
-                                    'send_email_state':'Timeout',
-                                    'sent_date' : time.strftime("%Y-%m-%d %H:%M:%S")
-                                    })
+            super(kemas_send_notification_event_wizard, self).write(cr, uid, wizard_id, {'sending_emails': False})
+            super(addons.kemas.kemas.kemas_event, event_obj).write(cr, uid, event_id, {'sending_emails': False})
+            try:
+                del self.collaborator_ids_send_email[event_id]
+            except:None
             cr.commit()
-        cr.commit()
-        super(kemas_send_notification_event_wizard, self).write(cr, uid, wizard_id, {'sending_emails': False})
-        super(addons.kemas.kemas.kemas_event, event_obj).write(cr, uid, event_id, {'sending_emails': False})
-        try:
-            del self.collaborator_ids_send_email[event_id]
-        except:None
-        cr.commit()
 
     _name = 'kemas.send.notification.event.wizard'
     _rec_name = 'state'
