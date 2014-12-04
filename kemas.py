@@ -18,43 +18,33 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-##############################################################################
-import logging
 
-from openerp.osv import fields, osv
-from openerp import addons
-from openerp import tools
-from openerp.api import Environment
-
-from openerp.tools.translate import _
-from openerp import pooler
-
-from lxml import etree
-from datetime import *
-from datetime import timedelta
-from datetime import datetime
-import time
-import datetime 
-import kemas_extras
-
-import unicodedata
-import random
-import logging
-import calendar
-import threading
-from mx import DateTime
 import base64
-import openerp
-import math
+import calendar
+from datetime import *
+from datetime import datetime
+from datetime import timedelta
+import datetime 
 from dateutil.parser import  *
-from openerp import SUPERUSER_ID
-from openerp.api import Environment
+import logging
+from lxml import etree
+import math
+from mx import DateTime
+import random
+import threading
+import time
+import unicodedata
 
-# from openerp.tools.translate import _
-# import addons
-# import pooler
-# import tools
-# import tools7
+import kemas_extras
+from openerp import SUPERUSER_ID
+from openerp import addons
+from openerp import pooler
+from openerp import tools
+import openerp
+from openerp.api import Environment
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+
 
 _logger = logging.getLogger(__name__)
     
@@ -192,7 +182,8 @@ class kemas_func(osv.osv):
         if height:options['height'] = height
         if hr:options['humanReadable'] = hr
         try:
-            ret_val = createBarcodeDrawing(code, value=str(value), **options)
+            # ret_val = createBarcodeDrawing(code, value=str(value), **options)
+            ret_val = None
         except Exception, e:
             raise osv.except_osv('Error', e)
             
@@ -1850,7 +1841,7 @@ class kemas_team(osv.osv):
         'logo_medium': fields.binary('Medium Logo'),
         'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='The name of the Team'),
-        'responsible': fields.char('Responsible', size=64, required=False, help='Person in charge of this Team.'),
+        'responsible_id':fields.many2one('res.partner', 'Responsable', help=u'Persona que está a cargo de este equipo'),
         'description': fields.text('Description', help='The description of the Team'),
         #Many to Many Relations----------------------------------------------------------------------------------------------
         'collaborator_ids': fields.one2many('kemas.collaborator', 'team_id', 'Collaborators', help='Collaborators to belong to this Team.', readonly=True),
@@ -1858,6 +1849,7 @@ class kemas_team(osv.osv):
     _sql_constraints = [
         ('team_name', 'unique (name)', "This Team already exist!"),
         ]
+    
     def _get_logo(self, cr, uid, context={}):
         # photo_path = addons.get_module_resource('kemas', 'images', 'team.png')
         # return open(photo_path, 'rb').read().encode('base64')
@@ -2090,7 +2082,7 @@ class kemas_area(osv.osv):
         'logo_medium': fields.binary('Medium Logo'),
         'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='The name of the area'),
-        'responsible': fields.char('Responsible', size=64, required=True, help='Person in charge of this Area.'),
+        'responsible_id':fields.many2one('res.partner', 'Responsable', help=u'Persona que está a cargo de esta Área'),
         'description': fields.text('Description', help='the description of the area'),
         'history': fields.text('History'),
         'activity_ids': fields.one2many('kemas.activity', 'area_id', 'Activities', help='Activities that belong to this area'),

@@ -14,7 +14,7 @@
          <field name="arch" type="xml">
             <form string="Team" version="7.0">
                <sheet string="Level">
-                  <field name="logo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' required='True' on_change="on_change_logo(logo)" />
+                  <field name="logo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' on_change="on_change_logo(logo)" />
                   <div class="oe_title">
                      <div class="oe_edit_only">
                         <label for="name" />
@@ -24,7 +24,7 @@
                      </h1>
                   </div>
                   <group>
-                     <field name="responsible" required="1" />
+                     <field name="responsible_id" placeholder="Responsable del Equipo" required="True" />
                   </group>
                   <notebook colspan="4">
                      <page string="Collaborators">
@@ -131,7 +131,7 @@
             <search string="Search Team">
                <group>
                   <field name="name" default_focus="1" />
-                  <field name="responsible" />
+                  <field name="responsible_id" />
                </group>
             </search>
          </field>
@@ -151,7 +151,7 @@
                <header>
                </header>
                <sheet string="Level">
-                  <field name="logo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' required='True' on_change="on_change_logo(logo)" />
+                  <field name="logo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' on_change="on_change_logo(logo)" />
                   <div class="oe_title">
                      <div class="oe_edit_only">
                         <label for="name" />
@@ -161,7 +161,7 @@
                      </h1>
                   </div>
                   <group>
-                     <field name="responsible" />
+                     <field name="responsible_id" placeholder="Responsable del Área" required="True" />
                   </group>
                   <notebook colspan="4">
                      <page string="Activities">
@@ -287,7 +287,7 @@
             <search string="Areas">
                <group>
                   <field name="name" default_focus="1" />
-                  <field name="responsible" />
+                  <field name="responsible_id" />
                </group>
             </search>
          </field>

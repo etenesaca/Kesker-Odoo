@@ -18,6 +18,9 @@ from SOAPpy import WSDL
 import warnings
 import SOAPpy
 from dateutil.parser import  *
+from PIL import Image, ImageOps
+import io
+import StringIO
 
 try:
     from reportlab.graphics.barcode import createBarcodeDrawing, \
@@ -251,12 +254,29 @@ def do_dic(cad, type_case='lower'):
     
     return delete_except_word(palabras)
         
-def quitar_acentos(cadena):
+def elimina_tildes(data):
     try:
-        cadena = unicode(cadena, 'utf-8')
+        data = unicode(data)
     except:
-        cadena = cadena
-    return normalize('NFKD', cadena).encode('ASCII', 'ignore')
+        try:
+            data = unicode(data, 'utf-8')
+        except:
+            return False
+    
+    acentos = []
+    acentos += [(u'á', u'a'), (u'é', u'e'), (u'í', u'i'), (u'ó', u'o'), (u'ú', u'u')]
+    acentos += [(u'Á', u'A'), (u'É', u'E'), (u'Í', u'I'), (u'Ó', u'O'), (u'Ú', u'U')]
+    
+    acentos += [(u'ä', u'a'), (u'ë', u'e'), (u'ï', u'i'), (u'ö', u'o'), (u'ü', u'u')]
+    acentos += [(u'Ä', u'A'), (u'Ë', u'E'), (u'Ï', u'I'), (u'Ö', u'O'), (u'Ü', u'U')]
+    
+    for item in acentos:
+        data = data.replace(item[0], item[1])
+    data = data.strip()
+    whitespace_char = ' '
+    for i in range(20, 1, -1):
+        data = data.replace(whitespace_char * i, whitespace_char)
+    return data
    
 def buid_username(names):
     dic_name = do_dic(names)
@@ -691,19 +711,15 @@ def crop_image_with_size(photo, photo_path, width, height, remove_file=True):
         os.remove(photo_path)
     return res_image
 
-def crop_image(photo, photo_path, size=False, remove_file=True):
-    from PIL import Image, ImageOps
-    import StringIO
+def crop_image(photo, size=False, encode_b64=True, height_photo=0.0, width_photo=0.0):
+    if photo is None or not photo:
+        return False
     try:
         photo = base64.b64decode(photo)
-    except:
-        if not photo or photo is None:
-            return False
-    output = open(photo_path, 'wb')
-    output.write(photo)
-    output.close()
-    foto = Image.open(photo_path)
-    format = str(foto.format).lower()
+    except: return False
+    image_stream = io.BytesIO(photo)
+    foto = Image.open(image_stream)
+    format_image = str(foto.format).lower()
     if not size:
         width = foto.size[0]
         height = foto.size[1]
@@ -711,31 +727,29 @@ def crop_image(photo, photo_path, size=False, remove_file=True):
         if width != height:
             if width < height:
                 size = width
-                 
-    foto = ImageOps.fit(foto, (size, size), Image.ANTIALIAS)
+    height = int(size + (size * height_photo / 100))
+    width = int(size + (size * width_photo / 100))
+    foto = ImageOps.fit(foto, (width, height), Image.ANTIALIAS, centering=(0.5, 0.15))
     
-    foto.save(photo_path, format=format)
-    res_image = base64.encodestring(open(photo_path, "rb").read())
-    if remove_file:
-        os.remove(photo_path)
-    return res_image
+    background_stream = StringIO.StringIO()
+    foto.save(background_stream, format=format_image)
+    
+    foto = background_stream.getvalue()
+    if encode_b64:
+        foto = foto.encode('base64')
+    return foto
 
-def resize_image(photo, photo_path, size_base=64, remove_file=True):
-    from PIL import Image
-    import StringIO
+def resize_image(photo, size_base=64, encode_b64=True, ignore_original_dimensions=True):
+    if photo is None or not photo:
+        return False
     try:
         photo = base64.b64decode(photo)
-    except:
-        if not photo or photo is None:
-            return False
-    output = open(photo_path, 'wb')
-    output.write(photo)
-    output.close()
-    foto = Image.open(photo_path)
-    
+    except: return False
+    image_stream = io.BytesIO(photo)
+    foto = Image.open(image_stream)
+    format_image = str(foto.format).lower()
     width = foto.size[0]
     height = foto.size[1]
-    format = str(foto.format).lower()
     if width != height:
         if width < height:
             width = width * size_base / height
@@ -746,12 +760,20 @@ def resize_image(photo, photo_path, size_base=64, remove_file=True):
     else:
         height = size_base
         width = size_base
-    foto = foto.resize((width, height), Image.ANTIALIAS)
-    foto.save(photo_path, format=format)
-    res_image = base64.encodestring(open(photo_path, "rb").read())
-    if remove_file:
-        os.remove(photo_path)
-    return res_image
+        
+    if not ignore_original_dimensions:
+        if width > foto.size[0] or height > foto.size[1]:
+            width = foto.size[0]
+            height = foto.size[1]
+    foto = ImageOps.fit(foto, (width, height), Image.ANTIALIAS)
+    
+    background_stream = StringIO.StringIO()
+    foto.save(background_stream, format=format_image)
+    
+    foto = background_stream.getvalue()
+    if encode_b64:
+        foto = foto.encode('base64')
+    return foto
 
 def compress_file(file, path, file_name, encodeb64=True, remove_file=True):
     import zipfile

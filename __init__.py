@@ -19,10 +19,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+
 import kemas
 import kemas_extras
+import res_partner
 import res_users
-#import report
 import wizard
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 
+
+# import report
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
