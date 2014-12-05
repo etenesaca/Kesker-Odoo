@@ -2631,7 +2631,7 @@ class kemas_collaborator_logbook(osv.osv):
     
 class kemas_collaborator(osv.osv):
     def change_to_collaborator(self, cr, uid, ids, context={}):
-        collaborator = super(kemas_collaborator, self).read(cr, uid, ids[0], ['nick_name', 'name', 'email', 'code', 'photo'])
+        collaborator = super(kemas_collaborator, self).read(cr, uid, ids[0], ['nick_name', 'name', 'email', 'code', 'photo_medium'])
         vals = {
                 'type' : 'Collaborator',
                 'notified' : 'notified',
@@ -2643,7 +2643,7 @@ class kemas_collaborator(osv.osv):
         nick_name = unicode(collaborator['nick_name']).title()
         apellido = unicode(kemas_extras.do_dic(collaborator['name'])[0]).title()
         name = u'''%s %s''' % (nick_name, apellido)
-        vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, collaborator['email'], collaborator['code'], groups_ids[0], collaborator['photo'])['user_id']
+        vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, collaborator['email'], collaborator['code'], groups_ids[0], collaborator['photo_medium'])['user_id']
         super(kemas_collaborator, self).write(cr, uid, ids, vals)
         #----Escribir el historial de puntos-----------------------------------------------------
         description = 'Se incorpora el grupo de colaboradores.'
@@ -3184,14 +3184,7 @@ class kemas_collaborator(osv.osv):
         seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Collaborator'), ])[0]
         vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
         
-        # photo_path_male = addons.get_module_resource('kemas', 'images', 'male.png')
-        # photo_male = open(photo_path_male, 'rb').read().encode('base64')
-        photo_path_male = False
         photo_male = False
-        
-        # photo_path_female = addons.get_module_resource('kemas', 'images', 'female.png')
-        # photo_female = open(photo_path_female, 'rb').read().encode('base64')
-        photo_path_female = False
         photo_female = False
         
         if vals['genre'] == 'Male':
@@ -3218,7 +3211,7 @@ class kemas_collaborator(osv.osv):
                 vals['photo_medium'] = extras.crop_image(vals['photo'], 64)
                 vals['photo_small'] = extras.crop_image(vals['photo'], 48)
                 vals['photo_very_small'] = extras.crop_image(vals['photo'], 32)
-                photo = vals['photo']
+                photo = vals['photo_medium']
             else:
                 if vals['genre'] == 'Male':
                     photo = photo_male
@@ -3389,7 +3382,7 @@ class kemas_collaborator(osv.osv):
                     'email' : collaborator['email']
                     }
         if vals.has_key('photo'):
-            vals_user['image'] = vals.get('photo')
+            vals_user['image'] = vals.get('photo_medium')
         user_obj.write(cr, uid, [collaborator['user_id'][0]], vals_user)
         
         # Actualizar los datos del Partner
@@ -3408,7 +3401,6 @@ class kemas_collaborator(osv.osv):
             cr.commit()
             self.send_notification(cr, uid, ids[0])
         return res
-
 
     def _person_age(self, cr, uid, ids, name, arg, context={}):
         result = {}

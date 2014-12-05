@@ -26,10 +26,7 @@ from openerp.osv import osv
 class res_partner(osv.osv):
     def create(self, cr, uid, vals, context={}):
         try:
-            if vals.get('is_company'):
-                vals['image'] = extras.resize_image(vals['image'], 256, ignore_original_dimensions=False)
-            else:
-                vals['image'] = extras.crop_image(vals['image'], 128, height_photo=15)
+            vals['image'] = extras.resize_image(vals['image'], 192, ignore_original_dimensions=False)
         except:
             None
         vals['name'] = extras.elimina_tildes(vals['name'])
@@ -44,10 +41,7 @@ class res_partner(osv.osv):
             records = super(osv.osv, self).read(cr, uid, ids, ['is_company'])
             for record in records:
                 try:
-                    if record['is_company']:
-                        vals2 = {'image': extras.resize_image(vals['image'], 256, ignore_original_dimensions=False)}
-                    else:
-                        vals2 = {'image': extras.crop_image(vals['image'], 128, height_photo=15)}
+                    vals2 = {'image': extras.resize_image(vals['image'], 256, ignore_original_dimensions=False)}
                     super(res_partner, self).write(cr, uid, [record['id']], vals2, context)
                 except:
                     None
