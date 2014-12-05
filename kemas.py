@@ -41,6 +41,7 @@ from openerp import addons
 from openerp import pooler
 from openerp import tools
 import openerp
+from openerp.addons.kemas import kemas_extras as extras
 from openerp.api import Environment
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
@@ -227,7 +228,7 @@ class kemas_func(osv.osv):
     def build_username(self, cr, uid, name):       
         def eliminar_tildes(cad):
             return ''.join((c for c in unicodedata.normalize('NFD', cad) if unicodedata.category(c) != 'Mn'))
-        name = kemas_extras.quitar_acentos(name)
+        name = kemas_extras.elimina_tildes(name)
         username = ''
         try:
             username = kemas_extras.buid_username(name)
@@ -1804,40 +1805,26 @@ class kemas_activity(osv.osv):
 class kemas_team(osv.osv):
     def write(self, cr, uid, ids, vals, context={}):
         result = super(kemas_team, self).write(cr, uid, ids, vals, context)
-        for rec_id in ids:
+        for record_id in ids:
             if vals.get('logo', False):
-                path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'team'
                 vals_write = {}
-                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-                super(kemas_team, self).write(cr, uid, [rec_id], vals_write, context)
+                vals_write['logo'] = extras.crop_image(vals['logo'], 192)
+                vals_write['logo_medium'] = extras.crop_image(vals['logo'], 64)
+                vals_write['logo_small'] = extras.crop_image(vals['logo'], 48)
+                super(kemas_team, self).write(cr, uid, [record_id], vals_write, context)
         return result
     
     def create(self, cr, uid, vals, context={}):
         if vals.get('logo', False):
-            path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'team'
-            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
+            vals['logo'] = extras.crop_image(vals['logo'], 192)
+            vals['logo_medium'] = extras.crop_image(vals['logo'], 64)
+            vals['logo_small'] = extras.crop_image(vals['logo'], 48)
         return super(kemas_team, self).create(cr, uid, vals, context)
     
-    def on_change_logo(self, cr, uid, ids, photo):
-        config_obj = self.pool.get('kemas.config')
-        config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, [])
-        if kemas_extras.restrict_size(photo, preferences['max_size_logos']):
-            return {'value':{}}
-        else:
-            msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
-            msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
-
     _order = 'name'
     _name = 'kemas.team'
     _columns = {
         'logo': fields.binary('Logo', help='The Team Logo.'),
-        'logo_large': fields.binary('Large Logo'),
         'logo_medium': fields.binary('Medium Logo'),
         'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='The name of the Team'),
@@ -1892,17 +1879,6 @@ class kemas_school4d_line(osv.osv):
             args.append(('collaborator_id', 'in', collaborator_ids))
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
     
-    def on_change_photo(self, cr, uid, ids, photo):
-        config_obj = self.pool.get('kemas.config')
-        config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, [])
-        if kemas_extras.restrict_size(photo, preferences['max_size_photos']):
-            return {'value':{}}
-        else:
-            msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the photo can not be greater than'))[0]
-            msg = "%s %s KB..!!" % (msg, str(preferences['max_size_photos']))
-            return {'value':{'photo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
-        
     def write(self, cr, uid, ids, vals, context={}):
         if vals.get('stage_id', False):
             stage_obj = self.pool.get('kemas.event.stage')
@@ -2016,8 +1992,8 @@ class kemas_school4d_line(osv.osv):
         if is_company:
             image = open(openerp.modules.get_module_resource('base', 'static/src/img', 'company_image.png')).read()
         else:
-            image = tools7.image_colorize(open(openerp.modules.get_module_resource('kemas', 'images', 'avatar.png')).read())
-        return tools7.image_resize_image_big(image.encode('base64'))
+            image = tools.image_colorize(open(openerp.modules.get_module_resource('kemas', 'images', 'avatar.png')).read())
+        return tools.image_resize_image_big(image.encode('base64'))
 
     
     _defaults = {  
@@ -2047,38 +2023,24 @@ class kemas_area(osv.osv):
         result = super(kemas_area, self).write(cr, uid, ids, vals, context)
         for record_id in ids:
             if vals.get('logo', False):
-                path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'area'
                 vals_write = {}
-                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
+                vals_write['logo'] = extras.crop_image(vals['logo'], 192)
+                vals_write['logo_medium'] = extras.crop_image(vals['logo'], 64)
+                vals_write['logo_small'] = extras.crop_image(vals['logo'], 48)
                 super(kemas_area, self).write(cr, uid, [record_id], vals_write, context)
         return result
 
     def create(self, cr, uid, vals, context={}):
         if vals.get('logo', False):
-            path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'area'
-            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
+            vals['logo'] = extras.crop_image(vals['logo'], 192)
+            vals['logo_medium'] = extras.crop_image(vals['logo'], 64)
+            vals['logo_small'] = extras.crop_image(vals['logo'], 48)
         return super(kemas_area, self).create(cr, uid, vals, context)
     
-    def on_change_logo(self, cr, uid, ids, photo):
-        config_obj = self.pool.get('kemas.config')
-        config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, [])
-        if kemas_extras.restrict_size(photo, preferences['max_size_logos']):
-            return {'value':{}}
-        else:
-            msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
-            msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
-
     _order = 'name'
     _name = 'kemas.area'
     _columns = {
         'logo': fields.binary('Logo', help='The Area Logo.'),
-        'logo_large': fields.binary('Large Logo'),
         'logo_medium': fields.binary('Medium Logo'),
         'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='The name of the area'),
@@ -2102,17 +2064,6 @@ class kemas_area(osv.osv):
     }
     
 class kemas_level(osv.osv):
-    def on_change_logo(self, cr, uid, ids, photo):
-        config_obj = self.pool.get('kemas.config')
-        config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, [])
-        if kemas_extras.restrict_size(photo, preferences['max_size_logos']):
-            return {'value':{}}
-        else:
-            msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
-            msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
-
     def get_next_level(self, cr, uid, level_id):
         level_ids = self.search(cr, uid, [('previous_id', '=', level_id)])
         if level_ids:
@@ -2172,21 +2123,18 @@ class kemas_level(osv.osv):
         result = super(kemas_level, self).write(cr, uid, ids, vals, context)
         for record_id in ids:
             if vals.get('logo', False):
-                path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'level'
                 vals_write = {}
-                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
+                vals_write['logo'] = extras.crop_image(vals['logo'], 192)
+                vals_write['logo_medium'] = extras.crop_image(vals['logo'], 64)
+                vals_write['logo_small'] = extras.crop_image(vals['logo'], 48)
                 super(kemas_level, self).write(cr, uid, [record_id], vals_write, context)
         return result
 
-
     def create(self, cr, uid, vals, context={}):
         if vals.get('logo', False):
-            path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'level'
-            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
+            vals['logo'] = extras.crop_image(vals['logo'], 192)
+            vals['logo_medium'] = extras.crop_image(vals['logo'], 64)
+            vals['logo_small'] = extras.crop_image(vals['logo'], 48)
             
         if vals.get('first_level', False):
             vals['points'] = 0
@@ -2198,7 +2146,6 @@ class kemas_level(osv.osv):
     _name = 'kemas.level'
     _columns = {
         'logo': fields.binary('Logo'),
-        'logo_large': fields.binary('Large Logo'),
         'logo_medium': fields.binary('Medium Logo'),
         'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='Name of this level.'),
@@ -2296,11 +2243,10 @@ class kemas_web_site(osv.osv):
         result = super(kemas_web_site, self).write(cr, uid, ids, vals, context)
         for record_id in ids:
             if vals.get('logo', False):
-                path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'web_site'
                 vals_write = {}
-                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
+                vals_write['logo'] = extras.crop_image(vals['logo'], 192)
+                vals_write['logo_medium'] = extras.crop_image(vals['logo'], 64)
+                vals_write['logo_small'] = extras.crop_image(vals['logo'], 48)
                 super(kemas_web_site, self).write(cr, uid, [record_id], vals_write, context)
             
             if vals.has_key('allow_get_avatar'):
@@ -2315,23 +2261,11 @@ class kemas_web_site(osv.osv):
 
     def create(self, cr, uid, vals, context={}):
         if vals.get('logo', False):
-            path = addons.kemas.__path__[0] + '/images/tmp/logo' + 'web_site'
-            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
+            vals['logo'] = extras.crop_image(vals['logo'], 192)
+            vals['logo_medium'] = extras.crop_image(vals['logo'], 64)
+            vals['logo_small'] = extras.crop_image(vals['logo'], 48)
         return super(kemas_web_site, self).create(cr, uid, vals, context)
     
-    def on_change_logo(self, cr, uid, ids, photo):
-        config_obj = self.pool.get('kemas.config')
-        config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, [])
-        if kemas_extras.restrict_size(photo, preferences['max_size_logos']):
-            return {'value':{}}
-        else:
-            msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
-            msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
-        
     def on_change_allow_get_avatar(self, cr, uid, ids, allow_get_avatar, context={}):
         values = {}
         if not allow_get_avatar:
@@ -2342,7 +2276,6 @@ class kemas_web_site(osv.osv):
     _name = 'kemas.web.site'
     _columns = {
         'logo': fields.binary('Logo'),
-        'logo_large': fields.binary('Large Logo'),
         'logo_medium': fields.binary('Medium Logo'),
         'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='The name of the Web Site'),
@@ -2698,7 +2631,7 @@ class kemas_collaborator_logbook(osv.osv):
     
 class kemas_collaborator(osv.osv):
     def change_to_collaborator(self, cr, uid, ids, context={}):
-        collaborator = super(kemas_collaborator, self).read(cr, uid, ids[0], ['nick_name', 'name', 'email', 'code', 'photo_large'])
+        collaborator = super(kemas_collaborator, self).read(cr, uid, ids[0], ['nick_name', 'name', 'email', 'code', 'photo'])
         vals = {
                 'type' : 'Collaborator',
                 'notified' : 'notified',
@@ -2710,7 +2643,7 @@ class kemas_collaborator(osv.osv):
         nick_name = unicode(collaborator['nick_name']).title()
         apellido = unicode(kemas_extras.do_dic(collaborator['name'])[0]).title()
         name = u'''%s %s''' % (nick_name, apellido)
-        vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, collaborator['email'], collaborator['code'], groups_ids[0], collaborator['photo_large'])['user_id']
+        vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, collaborator['email'], collaborator['code'], groups_ids[0], collaborator['photo'])['user_id']
         super(kemas_collaborator, self).write(cr, uid, ids, vals)
         #----Escribir el historial de puntos-----------------------------------------------------
         description = 'Se incorpora el grupo de colaboradores.'
@@ -2814,36 +2747,28 @@ class kemas_collaborator(osv.osv):
         return res
     
     def on_change_name(self, cr, uid, ids, name, context={}):
-        dic_name = kemas_extras.do_dic(name)
-        if len(dic_name) < 4:
-            msg = self.pool.get('kemas.func').get_translate(cr, uid, _('At least two valid names must be entered.'))[0]
-            return {'value':{'name':unicode(name).lower()}, 'warning':{'title':'Error', 'message':msg}}
-        else:
-            return {'value':{
-                             'name':unicode(name).title(),
-                             'nick_name':unicode(dic_name[2]).title()
-                             }
-                    }
+        values = {}
+        warning = {}
+        if name:
+            dic_name = kemas_extras.do_dic(name)
+            if len(dic_name) < 4:
+                warning = {'title' : u'¡Advertencia!', 'message' : u'Se debe ingresar por lo menos dos nombres.'}
+            else:
+                values['name'] = unicode(name).title()
+                values['nick_name'] = unicode(dic_name[2]).title()
+        return {'value': values , 'warning': warning}
     
     def on_change_nick_name(self, cr, uid, ids, name, nick_name, context={}):
-        name = unicode(name).lower().strip()
-        nick_name = unicode(nick_name).lower().strip()
-        if nick_name in name:
-            return {'value':{'nick_name':unicode(nick_name).upper()}}
-        else:
-            msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The name entered must be in the long name.'))[0]
-            return {'value':{'nick_name':nick_name}, 'warning':{'title':'Error', 'message':msg}}
-        
-    def on_change_photo(self, cr, uid, ids, photo):
-        config_obj = self.pool.get('kemas.config')
-        config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, [])
-        if kemas_extras.restrict_size(photo, preferences['max_size_photos']):
-            return {'value':{}}
-        else:
-            msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the photo can not be greater than'))[0]
-            msg = "%s %s KB..!!" % (msg, str(preferences['max_size_photos']))
-            return {'value':{'photo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
+        values = {}
+        warning = {}
+        if name and nick_name:
+            name = unicode(name).lower().strip()
+            nick_name = unicode(nick_name).lower().strip()
+            if nick_name in name:
+                values['nick_name'] = unicode(nick_name).upper()
+            else:
+                warning = {'title' : u'¡Advertencia!', 'message' : u'El nombre de pila debe esta dentro del nombre completo.'}
+        return {'value': values , 'warning': warning}
                 
     def on_change_email(self, cr, uid, ids, email):
         if email:
@@ -2865,25 +2790,9 @@ class kemas_collaborator(osv.osv):
         else:
             return True
         
-    def fields_get(self, cr, uid, fields=None, context={}, write_access=True): 
-        result = super(osv.osv, self).fields_get(cr, uid, fields, context, write_access)
-        def_dic = {}
-        def_dic['notified'] = 'notified'
-        def_dic['genre'] = 'Male'
-        def_dic['marital_status'] = 'Single'
-        # def_dic['points'] = self.get_initial_points(cr, uid)
-        def_dic['points'] = 0
-        def_dic['type'] = 'Collaborator'
-        def_dic['state'] = 'creating'
-        def_dic['photo'] = self.get_photo_male()
-        def_dic['level_id'] = self.get_first_level(cr, uid)
-        
-        self._defaults = def_dic
-        return result
-
     def read(self, cr, uid, ids, fields=None, context={}, load='_classic_read'):
         res = super(osv.osv, self).read(cr, uid, ids, fields, context)
-        if fields is None or not list(set(['photo', 'photo_large', 'photo_medium', 'photo_small', 'photo_very_small']) & set(fields)):
+        if fields is None or not list(set(['photo', 'photo_medium', 'photo_small', 'photo_very_small']) & set(fields)):
             return res
           
         '''
@@ -2908,8 +2817,6 @@ class kemas_collaborator(osv.osv):
         photo_field = False
         if 'photo' in fields:
             photo_field = 'photo'
-        elif 'photo_large' in fields:
-            photo_field = 'photo_large'
         elif 'photo_medium' in fields:
             photo_field = 'photo_small'
         elif 'photo_small' in fields:
@@ -3307,12 +3214,11 @@ class kemas_collaborator(osv.osv):
             name = u'''%s %s''' % (nick_name, apellido)
             if vals.get('photo', False):
                 # Crear una imagen pequeña de la foto del colaborador
-                path = addons.kemas.__path__[0] + '/images/tmp/avatar' + "collaborator"
-                vals['photo_large'] = kemas_extras.crop_image(vals['photo'], path, 128)
-                vals['photo_medium'] = kemas_extras.crop_image(vals['photo'], path, 64)
-                vals['photo_small'] = kemas_extras.crop_image(vals['photo'], path, 48)
-                vals['photo_very_small'] = kemas_extras.crop_image(vals['photo'], path, 32)
-                photo = vals['photo_large']
+                vals['photo'] = extras.crop_image(vals['photo'], 192, height_photo=15)
+                vals['photo_medium'] = extras.crop_image(vals['photo'], 64)
+                vals['photo_small'] = extras.crop_image(vals['photo'], 48)
+                vals['photo_very_small'] = extras.crop_image(vals['photo'], 32)
+                photo = vals['photo']
             else:
                 if vals['genre'] == 'Male':
                     photo = photo_male
@@ -3449,12 +3355,11 @@ class kemas_collaborator(osv.osv):
             
         # Crear una imagen pequeña de la foto del colaborador
         if vals.get('photo', False):
-            photo_path = addons.kemas.__path__[0] + '/images/tmp/avatar'
-            vals['photo_large'] = kemas_extras.crop_image(vals['photo'], photo_path, 128)
-            vals['photo_medium'] = kemas_extras.crop_image(vals['photo'], photo_path, 64)
-            vals['photo_small'] = kemas_extras.crop_image(vals['photo'], photo_path, 48)
-            vals['photo_very_small'] = kemas_extras.crop_image(vals['photo'], photo_path, 32)
-            
+            vals['photo'] = extras.crop_image(vals['photo'], 192, height_photo=15)
+            vals['photo_medium'] = extras.crop_image(vals['photo'], 64)
+            vals['photo_small'] = extras.crop_image(vals['photo'], 48)
+            vals['photo_very_small'] = extras.crop_image(vals['photo'], 32)
+        
         res = super(osv.osv, self).write(cr, uid, ids, vals, context)
         if not context is None and context and type(context).__name__ == "dict" and not context.get('no_update_logbook', False):
             # Escribir una linea en la bitacora del Colaborador
@@ -3484,7 +3389,7 @@ class kemas_collaborator(osv.osv):
                     'email' : collaborator['email']
                     }
         if vals.has_key('photo'):
-            vals_user['image'] = vals.get('photo_large')
+            vals_user['image'] = vals.get('photo')
         user_obj.write(cr, uid, [collaborator['user_id'][0]], vals_user)
         
         # Actualizar los datos del Partner
@@ -3871,14 +3776,12 @@ class kemas_collaborator(osv.osv):
             result[record['id']] = res
         return result
     
-    _order = 'name'
     _name = 'kemas.collaborator'
     _columns = {
         'mailing': fields.function(mailing, type='boolean', string='Mailing'),
         'code': fields.char('Code', size=32, help="Code that is assigned to each collaborator"),
         'personal_id' : fields.char('CI/PASS', size=15, help=u"Número de cédula o pasaporte",),
         'photo': fields.binary('Photo', help='The photo of the person'),
-        'photo_large': fields.binary('Large Photo'),
         'photo_medium': fields.binary('Medium Photo'),
         'photo_small': fields.binary('Small Photo'),
         'photo_very_small': fields.binary('Very Small Photo'),
@@ -3944,6 +3847,9 @@ class kemas_collaborator(osv.osv):
         'password': fields.related('user_id', 'password', type='char', string='Password', readonly=1, store=False),
         }
     
+    def _get_photo_collaborator(self, cr, uid, ids, context={}):
+        return extras.crop_image(self.get_photo_male(), 192, height_photo=15)
+    
     def get_photo_male(self):
         photo_path = addons.kemas.__path__[0] + '/images/male.jpg'
         return open(photo_path, 'rb').read().encode('base64')
@@ -3965,7 +3871,18 @@ class kemas_collaborator(osv.osv):
         level_ids = level_obj.search(cr, uid, [('first_level', '=', True)])
         if level_ids:
             return level_ids[0]
-
+    
+    _defaults = {  
+        'notified': 'notified',
+        'genre': 'Male',
+        'marital_status': 'Single',
+        'points': '0',
+        'type': 'Collaborator',
+        'state': 'creating',
+        'photo': _get_photo_collaborator,
+        'level_id': get_first_level,
+        }
+    
     _constraints = [
         (validate_four_names, 'At least two valid names must be entered.', ['name'])
         ]
@@ -3975,6 +3892,7 @@ class kemas_collaborator(osv.osv):
         ('collaborator_name', 'unique (name)', "This Collaborator's already exist!"),
         ('collaborator_user_id', 'unique (user_id)', 'This User already exist!'),
         ]
+    
 
 _TASK_STATE = [('creating', 'Creating'), ('draft', 'New'), ('open', 'In Progress'), ('pending', 'Pending'), ('done', 'Done'), ('cancelled', 'Cancelled')]
 class kemas_task_category(osv.osv):
@@ -4600,17 +4518,6 @@ class kemas_place(osv.osv):
         if context.get('search_all', False) == False:
             args.append(('is_active', '=', True))       
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
-
-    def on_change_photo(self, cr, uid, ids, photo):
-        config_obj = self.pool.get('kemas.config')
-        config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, [])
-        if kemas_extras.restrict_size(photo, preferences['max_size_photos']):
-            return {'value':{}}
-        else:
-            msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the photo can not be greater than'))[0]
-            msg = "%s %s KB..!!" % (msg, str(preferences['max_size_photos']))
-            return {'value':{'photo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
         
     _order = 'name'
     _name = 'kemas.place'

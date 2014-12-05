@@ -1014,3 +1014,5 @@ def get_facebook_info(url, size='large'):
     except:
         None 
     return profile_info
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
