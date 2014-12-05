@@ -26,7 +26,7 @@ from openerp.osv import osv
 class res_partner(osv.osv):
     def create(self, cr, uid, vals, context={}):
         try:
-            vals['image'] = extras.resize_image(vals['image'], 192, ignore_original_dimensions=False)
+            vals['image'] = extras.crop_image(vals['image'], 256)
         except:
             None
         vals['name'] = extras.elimina_tildes(vals['name'])
@@ -35,17 +35,12 @@ class res_partner(osv.osv):
     def write(self, cr, uid, ids, vals, context={}):
         if vals.get('name'):
             vals['name'] = extras.elimina_tildes(vals['name'])
-        result = super(res_partner, self).write(cr, uid, ids, vals, context)
-        
         if vals.get('image'):
-            records = super(osv.osv, self).read(cr, uid, ids, ['is_company'])
-            for record in records:
-                try:
-                    vals2 = {'image': extras.resize_image(vals['image'], 256, ignore_original_dimensions=False)}
-                    super(res_partner, self).write(cr, uid, [record['id']], vals2, context)
-                except:
-                    None
-        return result 
+            try:
+                vals['image'] = extras.crop_image(vals['image'], 256)
+            except:
+                None
+        return super(res_partner, self).write(cr, uid, ids, vals, context) 
     
     _inherit = 'res.partner'
     

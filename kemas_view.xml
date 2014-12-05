@@ -2670,6 +2670,7 @@
                   <group colspan="4" expand="1" col="10">
                      <field name="notified" invisible="1" />
                      <field name="user_id" invisible="1" />
+                     <field name="partner_id" invisible="0" />
 
                      <div align="center" attrs="{'invisible':['|',('code','!=',False),'|',('type','=','Others'),'|',('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
                         <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />

@@ -3346,13 +3346,6 @@ class kemas_collaborator(osv.osv):
         if vals.has_key('points'):
             vals['level_id'] = self.get_corresponding_level(cr, uid, vals['points'])
             
-        # Crear una imagen pequeña de la foto del colaborador
-        if vals.get('photo', False):
-            vals['photo'] = extras.crop_image(vals['photo'], 192, height_photo=15)
-            vals['photo_medium'] = extras.crop_image(vals['photo'], 64)
-            vals['photo_small'] = extras.crop_image(vals['photo'], 48)
-            vals['photo_very_small'] = extras.crop_image(vals['photo'], 32)
-        
         res = super(osv.osv, self).write(cr, uid, ids, vals, context)
         if not context is None and context and type(context).__name__ == "dict" and not context.get('no_update_logbook', False):
             # Escribir una linea en la bitacora del Colaborador
@@ -3370,30 +3363,21 @@ class kemas_collaborator(osv.osv):
                         }
                 self.pool.get('kemas.collaborator.logbook').create(cr, uid, vals_logbook)
         #----Cambiar el nombre al usuario----------------------------------------------------------------
-        collaborator = self.read(cr, uid, ids[0], ['born_country', 'email', 'born_state', 'born_city', 'photo', 'user_id'])
+        collaborator = self.read(cr, uid, ids[0], ['born_country', 'email', 'born_state', 'born_city', 'user_id'])
         if not collaborator['user_id']:
             raise osv.except_osv(_('Error!'), _('Este usuario no tiene una cuenta de Usuario asignada!!'))
-        
-        # Actualizar los datos del USER
-        collaborator_name = self.name_get(cr, uid, ids)[0][1]
-        user_obj = self.pool.get('res.users')
-        vals_user = {
-                    'name': collaborator_name,
-                    'email' : collaborator['email']
-                    }
-        if vals.has_key('photo'):
-            vals_user['image'] = vals.get('photo_medium')
-        user_obj.write(cr, uid, [collaborator['user_id'][0]], vals_user)
         
         # Actualizar los datos del Partner
         partner_obj = self.pool.get('res.partner')
         partner_id = self.pool.get('res.users').read(cr, uid, collaborator['user_id'][0], ['partner_id'])['partner_id'][0]
+        collaborator_name = self.name_get(cr, uid, ids)[0][1]
         vals_partner = {
+                        'name': collaborator_name,
+                        'email' : collaborator['email'],
                         'country_id' : collaborator['born_country'][0],
                         'state_id' : collaborator['born_state'][0],
                         'city' : collaborator['born_city'],
                         }
-        vals_partner.update(vals_user)
         partner_obj.write(cr, uid, [partner_id], vals_partner)
                     
         # Enviar correo de Notificacion de Creacion de Cuenta
@@ -3768,15 +3752,72 @@ class kemas_collaborator(osv.osv):
             result[record['id']] = res
         return result
     
+    def _get_collaborator_photo_inv(self, cr, uid, record_id, name, value, fnct_inv_arg, context):
+        if context is None or not context or not isinstance(context, (dict)): context = {}
+        if not context.get('no_save_photo'):
+            photo = value
+            record = super(osv.osv, self).read(cr, uid, record_id, ['genre', 'partner_id'])
+            if not photo:
+                if record['genre'] == 'Male':
+                    photo = self.get_photo_male()
+                else:
+                    photo = self.get_photo_female()
+            vals = {}
+            vals['photo'] = extras.crop_image(photo, 192, height_photo=15)
+            vals['photo_medium'] = extras.crop_image(photo, 64)
+            vals['photo_small'] = extras.crop_image(photo, 48)
+            vals['photo_very_small'] = extras.crop_image(photo, 32)
+            
+            context['no_save_photo'] = True
+            self.pool.get('res.partner').write(cr, uid, [record['partner_id'][0]], {'image': extras.crop_image(photo, 256)}, context=context)
+            self.write(cr, uid, [record_id], vals, context=context)
+        return True
+    
+    def _get_collaborator_photo(self, cr, uid, ids, name, arg, context={}): 
+        def get_collaborator_photo(record):
+            result = {'photo': False, 'photo_medium': False, 'photo_small': False, 'photo_very_small': False, }
+            
+            photo = False
+            if record['partner_id']:
+                partner = self.pool.get('res.partner').read(cr, uid, record['partner_id'][0], ['image'])
+                photo = partner['image']
+            
+            if not photo:
+                if record['genre'] == 'Male':
+                    photo = self.get_photo_male()
+                else:
+                    photo = self.get_photo_female()
+            if photo:
+                result['photo'] = extras.crop_image(photo, 192, height_photo=15)
+                result['photo_medium'] = extras.crop_image(photo, 64)
+                result['photo_small'] = extras.crop_image(photo, 48)
+                result['photo_very_small'] = extras.crop_image(photo, 32)
+            return result
+             
+        result = {}
+        records = super(osv.osv, self).read(cr, uid, ids, ['partner_id', 'genre'])
+        for record in records:
+            result[record['id']] = get_collaborator_photo(record)
+        return result
+    
+    def _get_collaborator_from_partner(self, cr, uid, ids, context=None):
+        return self.pool['kemas.collaborator'].search(cr, uid, [('partner_id', 'in', ids)], context=context)
+    
+    _photo_store_triggers = {
+        'kemas.collaborator': (lambda s, c, u, i, x: i, ['partner_id'], 10),
+        'res.partner': (_get_collaborator_from_partner, ['image'], 10)
+    }
+    
     _name = 'kemas.collaborator'
     _columns = {
+        'partner_id':fields.many2one('res.partner', 'Partner relacionado', required=True),
         'mailing': fields.function(mailing, type='boolean', string='Mailing'),
         'code': fields.char('Code', size=32, help="Code that is assigned to each collaborator"),
         'personal_id' : fields.char('CI/PASS', size=15, help=u"Número de cédula o pasaporte",),
-        'photo': fields.binary('Photo', help='The photo of the person'),
-        'photo_medium': fields.binary('Medium Photo'),
-        'photo_small': fields.binary('Small Photo'),
-        'photo_very_small': fields.binary('Very Small Photo'),
+        'photo': fields.function(_get_collaborator_photo, fnct_inv=_get_collaborator_photo_inv, multi='all', string="Foto", type="binary", store=_photo_store_triggers),
+        'photo_medium': fields.function(_get_collaborator_photo, multi='all', string="Foto", type="binary", store=_photo_store_triggers),
+        'photo_small': fields.function(_get_collaborator_photo, multi='all', string="Foto", type="binary", store=_photo_store_triggers),
+        'photo_very_small': fields.function(_get_collaborator_photo, multi='all', string="Foto", type="binary", store=_photo_store_triggers),
         'qr_code': fields.function(_get_QR_image, type='binary', string='QR code data'),
         'bar_code': fields.function(_get_barcode_image, type='binary', string='Bar Code data'),
         'name': fields.char('Name', size=128, required=True, help="Full names of collaborator. Example: Rios Abad Juan David"),
