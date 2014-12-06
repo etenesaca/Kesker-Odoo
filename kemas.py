@@ -3924,7 +3924,7 @@ class kemas_collaborator(osv.osv):
         'level_name': fields.related('level_id', 'name', type='char', string='Level name', readonly=1, store=False),
         'username': fields.related('user_id', 'login', type='char', string='Login', readonly=1, store=True),
         'password': fields.related('user_id', 'password', type='char', string='Password', readonly=1, store=False),
-        
+        # Contadores
         'history_points_count': fields.function(_count_all, type='integer', string='Historial de puntos', multi=True),
         'event_count': fields.function(_count_all, type='char', string='Todos los eventos', multi=True),
         'attendance_count': fields.function(_count_all, type='integer', string='Historial de asistencias', multi=True),
@@ -6106,6 +6106,20 @@ class kemas_event(osv.osv):
             result[record['id']] = getcollaborator_ids(record)
         return result
     
+    def _count_all(self, cr, uid, ids, name, arg, context={}): 
+        def count_all(record):
+            result = {'attendance_count': 0}
+            # Contar los registros de asistencias
+            cr.execute("select count(id) from kemas_attendance where event_id = %d" % record['id'])
+            result['logbook_count'] = cr.fetchall()[0][0] 
+            return result
+             
+        result = {}
+        records = super(osv.osv, self).read(cr, uid, ids, ['id'])
+        for record in records:
+            result[record['id']] = count_all(record)
+        return result
+    
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _order = 'date_start DESC,code'
     _name = 'kemas.event'
@@ -6182,6 +6196,8 @@ class kemas_event(osv.osv):
         'time_end_str': fields.function(_get_time_end_str, type='char', string='Time end'),
         'event_date_str': fields.function(_get_event_date_str, type='char', string='Event date'),
         'event_day': fields.function(_event_day, type='char', string='Dia del evento'),
+        # Contadores
+        'attendance_count': fields.function(_count_all, type='integer', string='Asistencias', multi=True),
         }
     _sql_constraints = [
         ('event_code', 'unique (code)', 'This Code already exist!'),

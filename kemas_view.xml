@@ -2625,10 +2625,14 @@
          <field name="arch" type="xml">
             <form string="Collaborator" version="7.0">
                <header>
-                  <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':['|',('type','=','Others'),('state','in',['Active','creating'])]}" confirm="¿Seguro de ACTIVAR a este colaborador?" groups="kemas.group_kemas_manager" />
-                  <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':['|',('type','=','Others'),('state','in',['Inactive','creating'])]}" confirm="¿Seguro de INACTIVAR a este colaborador?" groups="kemas.group_kemas_manager" />
-                  <button name="change_to_collaborator" string="Convetir en Colaborador" type="object" icon="STOCK_CONVERT" attrs="{'invisible':['|',('type','=','Collaborator'),('state','in',['Inactive','creating'])]}" confirm="¿Seguro de CONVERTIR a esta persona en Colaborador?" groups="kemas.group_kemas_manager" />
-                  <field name="state" widget="statusbar" statusbar_visible="Active" statusbar_colors='{"Active":"green","Inactive":"Orange","Locked":"Red","Suspended":"Yellow"}' />
+                  <div>
+                     <field name="state" widget="statusbar" statusbar_visible="Active" />
+                  </div>
+                  <div style="width:60%%">
+                     <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':['|',('type','=','Others'),('state','in',['Active','creating'])]}" confirm="¿Seguro de ACTIVAR a este colaborador?" groups="kemas.group_kemas_manager" />
+                     <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':['|',('type','=','Others'),('state','in',['Inactive','creating'])]}" confirm="¿Seguro de INACTIVAR a este colaborador?" groups="kemas.group_kemas_manager" />
+                     <button name="change_to_collaborator" string="Convetir en Colaborador" type="object" icon="STOCK_CONVERT" attrs="{'invisible':['|',('type','=','Collaborator'),('state','in',['Inactive','creating'])]}" confirm="¿Seguro de CONVERTIR a esta persona en Colaborador?" groups="kemas.group_kemas_manager" />
+                  </div>
                </header>
                <sheet string="Collaborator">
                   <div class="box_red" states="Suspended">
@@ -2740,7 +2744,7 @@
                            </page>
                            <page id="status_info" string="Estado" attrs="{'invisible':[('type','=','Others')]}">
                               <group colspan="4" col="6">
-                                 <field name="team_id" colspan="2" />
+                                 <field name="team_id" colspan="2" placeholder="Equipo" options='{"no_create": True}' />
                                  <field name="join_date" colspan="2" on_change="on_change_join_date(join_date)" attrs="{'required':[('type','=','Collaborator')]}" />
                                  <field name="end_service" readonly="1" widget="char" states="Inactive" colspan="2" />
                                  <field name="age_in_ministry" string="Tiempo de colaboración" colspan="2" attrs="{'required':[('type','=','Collaborator')],'invisible':[('join_date','=',False)]}" readonly="1" />
@@ -4339,8 +4343,18 @@
                   <field name="state" widget="statusbar" statusbar_visible="draft,on_going,closed" statusbar_colors='{"draft":"blue","on_going":"green","closed":"brown","canceled":"red"}' />
                </header>
                <sheet string="Event">
+                  <div class="oe_left oe_inline" states="on_going,creating,draft">
+                     <div class="oe_edit_only" states="creating,draft">
+                        <label for="service_id" />
+                     </div>
+                     <h2>
+                        <field name="service_id" default_focus="1" placeholder="Service Name" />
+                     </h2>
+                  </div>
                   <div class="oe_right oe_button_box" name="buttons" states="on_going,closed,canceled" groups="kemas.group_kemas_manager">
-                     <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_attendance_event)d" string="Attendances" />
+                     <button type="action" icon="fa-clock-o" class="oe_stat_button oe_read_only" name="%(action_kemas_attendance_event)d" help="Ver los registrosde asistencia registrados en este evento">
+                        <field name="attendance_count" widget="statinfo" string="Asistencias" />
+                     </button>
                   </div>
                   <field name="sending_emails" invisible="1" />
                   <div attrs="{'invisible':['|',('mailing','=',False),('state','!=','on_going')]}" groups="kemas.group_kemas_manager">
@@ -4373,14 +4387,6 @@
                            <field name="notification_status" class="oe_inline" />
                         </strong>
                      </div>
-                  </div>
-                  <div states="on_going,creating,draft" class="oe_inline">
-                     <div class="oe_edit_only" states="creating,draft">
-                        <label for="service_id" />
-                     </div>
-                     <h2>
-                        <field name="service_id" default_focus="1" placeholder="Service Name" />
-                     </h2>
                   </div>
                   <notebook colspan="4">
                      <page string="Event Information">
