@@ -3752,6 +3752,52 @@ class kemas_collaborator(osv.osv):
             result[record['id']] = res
         return result
     
+    def _count_all(self, cr, uid, ids, name, arg, context={}): 
+        def count_all(record):
+            result = {'history_points_count': 0, 'event_count': 'Undefined', 'attendance_count': 0, 'suspension_count': 0, 'logbook_count': 0, }
+            # Consultar todos los eventos
+            sql = """
+                select count(ev.id) from kemas_event  as ev
+                join kemas_event_collaborator_line as ln on ev.id = ln.event_id
+                where ln.collaborator_id = %d
+                """ % record['id']
+            cr.execute(sql)
+            old_events = cr.fetchall()[0][0]
+            
+            # Consultar todos los eventos en Curso
+            sql = """
+                select count(ev.id) from kemas_event  as ev
+                join kemas_event_collaborator_line as ln on ev.id = ln.event_id
+                where ln.collaborator_id = %d and state in ('on_going')
+                """ % record['id']
+            cr.execute(sql)
+            new_events = cr.fetchall()[0][0]
+            
+            result['event_count'] = '%d - %d' % (old_events, new_events)
+            
+            # Contar el historial de puntos
+            cr.execute("select count(id) from kemas_history_points where collaborator_id = %d" % record['id'])
+            result['history_points_count'] = cr.fetchall()[0][0]
+            
+            # Contar los registro de asistencias
+            cr.execute("select count(id) from kemas_attendance where collaborator_id = %d" % record['id'])
+            result['attendance_count'] = cr.fetchall()[0][0]
+            
+            # Contar los registro de asistencias
+            cr.execute("select count(id) from kemas_suspension where collaborator_id = %d" % record['id'])
+            result['suspension_count'] = cr.fetchall()[0][0] 
+            
+            # Contar conexiones al sistema
+            cr.execute("select count(id) from kemas_collaborator_logbook_login where collaborator_id = %d" % record['id'])
+            result['logbook_count'] = cr.fetchall()[0][0] 
+            return result
+             
+        result = {}
+        records = super(osv.osv, self).read(cr, uid, ids, ['id'])
+        for record in records:
+            result[record['id']] = count_all(record)
+        return result
+    
     def _get_collaborator_photo_inv(self, cr, uid, record_id, name, value, fnct_inv_arg, context):
         if context is None or not context or not isinstance(context, (dict)): context = {}
         if not context.get('no_save_photo'):
@@ -3878,6 +3924,12 @@ class kemas_collaborator(osv.osv):
         'level_name': fields.related('level_id', 'name', type='char', string='Level name', readonly=1, store=False),
         'username': fields.related('user_id', 'login', type='char', string='Login', readonly=1, store=True),
         'password': fields.related('user_id', 'password', type='char', string='Password', readonly=1, store=False),
+        
+        'history_points_count': fields.function(_count_all, type='integer', string='Historial de puntos', multi=True),
+        'event_count': fields.function(_count_all, type='char', string='Todos los eventos', multi=True),
+        'attendance_count': fields.function(_count_all, type='integer', string='Historial de asistencias', multi=True),
+        'suspension_count': fields.function(_count_all, type='integer', string='Historial de suspensiones', multi=True),
+        'logbook_count': fields.function(_count_all, type='integer', string='Logins', multi=True),
         }
     
     def _get_photo_collaborator(self, cr, uid, ids, context={}):

@@ -2628,7 +2628,7 @@
                   <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':['|',('type','=','Others'),('state','in',['Active','creating'])]}" confirm="¿Seguro de ACTIVAR a este colaborador?" groups="kemas.group_kemas_manager" />
                   <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':['|',('type','=','Others'),('state','in',['Inactive','creating'])]}" confirm="¿Seguro de INACTIVAR a este colaborador?" groups="kemas.group_kemas_manager" />
                   <button name="change_to_collaborator" string="Convetir en Colaborador" type="object" icon="STOCK_CONVERT" attrs="{'invisible':['|',('type','=','Collaborator'),('state','in',['Inactive','creating'])]}" confirm="¿Seguro de CONVERTIR a esta persona en Colaborador?" groups="kemas.group_kemas_manager" />
-                  <field name="state" widget="statusbar" statusbar_visible="Active" statusbar_colors='{"Active":"green","Inactive":"Orange","Locked":"Red","Suspended":"Yellow"}' readonly="1" />
+                  <field name="state" widget="statusbar" statusbar_visible="Active" statusbar_colors='{"Active":"green","Inactive":"Orange","Locked":"Red","Suspended":"Yellow"}' />
                </header>
                <sheet string="Collaborator">
                   <div class="box_red" states="Suspended">
@@ -2646,31 +2646,39 @@
                      <br />
                   </div>
                   <field name="photo" widget='image' class="oe_left oe_avatar" options='{"size": [100, 100]}' />
-                  <div class="oe_title">
-                     <div class="oe_edit_only">
-                        <label for="name" />
-                     </div>
+                  <div class="oe_left oe_title">
+                     <label for="name" class="oe_edit_only" />
                      <h1>
                         <field name="name" default_focus="1" placeholder="Complete name" on_change="on_change_name(name)" />
                      </h1>
-                     <group colspan="4" col="6">
+                     <label for="nick_name" class="oe_edit_only" />
+                     <span>
                         <field name="nick_name" on_change="on_change_nick_name(name,nick_name)" colspan="2" nolabel="1" placeholder="Nickname" />
-                        <group colspan="4" />
-                     </group>
+                     </span>
                      <label for="area_ids" class="oe_edit_only" attrs="{'invisible':[('type','=','Others')]}" />
                      <field name="area_ids" widget="many2many_tags" attrs="{'invisible':[('type','=','Others')]}" placeholder="Áreas" />
                   </div>
                   <div class="oe_right oe_button_box" name="buttons" attrs="{'invisible':['|',('type','=','Others'),('state','=','creating')]}">
-                     <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_history_points_collaborator)d" string="Points" />
-                     <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_event_active_events)d" string="Eventos" />
-                     <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_attendance_collaborator)d" string="Asistencias" />
-                     <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_suspension_collaborator)d" string="Suspensiones" />
-                     <button type="action" icon="gtk-redo" class="oe_link oe_read_only" name="%(action_kemas_collaborator_logbook_login)d" string="Logins" />
+                     <button type="action" icon="fa-star" class="oe_stat_button oe_read_only" name="%(action_kemas_history_points_collaborator)d" help="Ver Historial de Puntos">
+                        <field name="history_points_count" widget="statinfo" string="Puntos- Hist" />
+                     </button>
+                     <button type="action" icon="fa-calendar" class="oe_stat_button oe_read_only" name="%(action_kemas_event_active_events)d" help="Ver eventos en los que se le han asignado actividades">
+                        <field name="event_count" widget="statinfo" string="Eventos" />
+                     </button>
+                     <button type="action" icon=" fa-clock-o" class="oe_stat_button oe_read_only" name="%(action_kemas_attendance_collaborator)d" help="Ver los registros de asistencias">
+                        <field name="attendance_count" widget="statinfo" string="Asistencias" />
+                     </button>
+                     <button type="action" icon="fa-frown-o" class="oe_stat_button oe_read_only" name="%(action_kemas_suspension_collaborator)d" help="Ver el todo el historial de suspensiones">
+                        <field name="suspension_count" widget="statinfo" string="Suspensiones" />
+                     </button>
+                     <button type="action" icon="fa-arrow-right" class="oe_stat_button oe_read_only" name="%(action_kemas_collaborator_logbook_login)d" help="Ver todos las veces que se ha conectado al sistema">
+                        <field name="logbook_count" widget="statinfo" string="Logins" />
+                     </button>
                   </div>
                   <group colspan="4" expand="1" col="10">
                      <field name="notified" invisible="1" />
                      <field name="user_id" invisible="1" />
-                     <field name="partner_id" invisible="0" />
+                     <field name="partner_id" invisible="1" />
 
                      <div align="center" attrs="{'invisible':['|',('code','!=',False),'|',('type','=','Others'),'|',('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
                         <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
