@@ -66,7 +66,6 @@ class kemas_collaborator_assing_code_wizard(osv.osv_memory):
         args = []
         args.append(('id','in',context['active_ids']))
         args.append(('state','in',['Active']))
-        args.append(('type','in',['Collaborator']))
         args.append(('code','=',False))
         collaborator_ids = collaborator_obj.search(cr, uid, args)
         seq_id = self.pool.get('ir.sequence').search(cr,uid,[('name','=','Kemas Collaborator'),])[0]

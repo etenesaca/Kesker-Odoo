@@ -105,7 +105,6 @@ class kemas_collaborator_notify_incorporation_wizard(osv.osv_memory):
         args = []
         args.append(('id', 'in', context['active_ids']))
         args.append(('state', 'in', ['Active']))
-        args.append(('type', 'in', ['Collaborator']))
         args.append(('user_id', '!=', False))
         collaborator_ids = collaborator_obj.search(cr, uid, args)
         self.send_notification(cr, uid, collaborator_ids)

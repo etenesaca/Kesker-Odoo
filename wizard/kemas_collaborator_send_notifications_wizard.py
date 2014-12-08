@@ -118,7 +118,7 @@ class kemas_collaborator_send_notifications_wizard(osv.osv_memory):
         wizard_line_obj = self.pool.get('kemas.collaborator.send.notifications.line.wizard')
         #----------------------------------------------------------------------------------------------------------
         collaborator_obj = self.pool.get('kemas.collaborator')
-        collaborator_ids = collaborator_obj.search(cr,uid,[('type','=','Collaborator'),('state','=','Active'),('notified','=','no_notified')])
+        collaborator_ids = collaborator_obj.search(cr,uid,[('state','=','Active'),('notified','=','no_notified')])
         #Eliminar las lineas que ya se hayan agregado--------------------------------------------------------------
         lines = self.read(cr, uid, ids[0],['line_ids'])['line_ids']
         wizard_line_obj.unlink(cr, uid, lines)

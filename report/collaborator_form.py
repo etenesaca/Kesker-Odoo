@@ -41,8 +41,7 @@ class Parser(report_sxw.rml_parse):
             'time_d': self._get_time,
             'config': self.get_config,
             'state': self.get_state,
-            'telef1': self.get_telef1,
-            'telef2': self.get_telef2,
+            'phone': self.get_phone,
             'mobile': self.get_mobile,
             'personal_id': self.get_personal_id,
             'team': self.get_team,
@@ -78,14 +77,8 @@ class Parser(report_sxw.rml_parse):
         state = selection_dict.get(collaborator['state'])
         return state
     
-    def get_telef1(self, collaborator_id):
-        res = self.pool.get('kemas.collaborator').read(self.cr, self.uid, collaborator_id, ['telef1'])['telef1']
-        if not res or res == '':
-            return ' ---'
-        return res
-    
-    def get_telef2(self, collaborator_id):
-        res = self.pool.get('kemas.collaborator').read(self.cr, self.uid, collaborator_id, ['telef2'])['telef2']
+    def get_phone(self, collaborator_id):
+        res = self.pool.get('kemas.collaborator').read(self.cr, self.uid, collaborator_id, ['phone'])['phone']
         if not res or res == '':
             return ' ---'
         return res

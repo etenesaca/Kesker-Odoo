@@ -25,12 +25,11 @@ from openerp import addons
 class kemas_report_collaborators_list_wizard(osv.osv_memory):
     def on_change_type_collaborators(self, cr, uid, ids, type_collaborators, context={}):
         values={}
-        if type_collaborators == 'other' or type_collaborators == 'collaborators':
-            values['fl_level'] = False
-            values['fl_points'] = False
-            values['fl_state'] = False
-            values['fl_join_date'] = False
-            values['fl_age_in_ministry'] = False
+        values['fl_level'] = False
+        values['fl_points'] = False
+        values['fl_state'] = False
+        values['fl_join_date'] = False
+        values['fl_age_in_ministry'] = False
         return {'value':values}
     
     def call_report(self, cr, uid, ids, context=None):
@@ -53,11 +52,6 @@ class kemas_report_collaborators_list_wizard(osv.osv_memory):
     _columns={
         'logo': fields.binary('img'),
         'team_id': fields.many2one('kemas.team','Team',ondelete='cascade'),
-        'type_collaborators': fields.selection([
-          ('all','All'),
-          ('collaborators','Collaborators'),
-          ('others','Others'),
-         ],    'Type of persons', select=True, readonly=False, required=True),
         'type_collaborators_to_select': fields.selection([
           ('all','All'),
           ('actives','Active'),
@@ -68,8 +62,7 @@ class kemas_report_collaborators_list_wizard(osv.osv_memory):
         'fl_code': fields.boolean('Code'),
         'fl_name': fields.boolean('Name', readonly=True),
         'fl_mobile': fields.boolean('Mobile'),
-        'fl_telef1': fields.boolean('Telephone 1'),
-        'fl_telef2': fields.boolean('telephone 2'),
+        'fl_phone': fields.boolean('Phone'),
         'fl_birth': fields.boolean('Birth'),
         'fl_age': fields.boolean('Age'),
         'fl_email': fields.boolean('Email'),
@@ -88,7 +81,6 @@ class kemas_report_collaborators_list_wizard(osv.osv_memory):
     _defaults = {  
         'logo': _get_logo,
         'fl_name': True,
-        'type_collaborators': 'collaborators',
         'type_collaborators_to_select': 'actives'
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -65,10 +65,7 @@
           		<field name="replaced" invisible="1"/>
           		<field name="collaborator_id" readonly="1" colspan="0"/>
           		<field name="replacements" readonly="1" colspan="0"/>
-          		<field name="collaborator_replacement_id" required="1" domain="[
-										  			  ('state','=','Active'),
-										  			  ('type','=','Collaborator'),
-										  			  ]"
+          		<field name="collaborator_replacement_id" required="1" domain="[('state','=','Active'),]"
 										      context="{
 														'except_ids' : except_ids,							      
 										      			'event_collaborator_line_ids' : [],

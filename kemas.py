@@ -243,7 +243,7 @@ class kemas_func(osv.osv):
                 repetido = False
         return eliminar_tildes(username)
 
-    def create_user(self, cr, uid, name, email, password, group, photo=False):
+    def create_user(self, cr, uid, name, email, password, group, photo=False, partner_id=False):
         username = self.build_username(cr, uid, name)
         user_obj = self.pool.get('res.users')
         groups_obj = self.pool.get('res.groups')
@@ -252,9 +252,9 @@ class kemas_func(osv.osv):
                 'name': name,
                 'login': username,
                 'company_id': 1,
-                # 'menu_tips':True,
                 'user_email' : email,
                 'password': unicode(password).lower(),
+                'partner_id': partner_id,
                 'tz' : self.get_tz_by_uid(cr, uid)
                 }
         user_id = user_obj.create(cr, uid, vals) 
@@ -1969,7 +1969,6 @@ class kemas_school4d_line(osv.osv):
             ('believing', 'Believing'),
             ('preaching', 'Preaching'),
             ], 'State', required=True),
-        'telef': fields.char('Telefone', size=10, help="The number of phone of the person. Example: 072878563"),
         'mobile': fields.char('Mobile', size=10, help="The number of mobile phone of the person. Example: 088729345"),
         'email': fields.char('E-mail', size=128, help="The person email."),
         'web_site': fields.char('Web site', size=128, help="The web site of the person. example: Facebook account."),
@@ -2630,54 +2629,14 @@ class kemas_collaborator_logbook(osv.osv):
         }
     
 class kemas_collaborator(osv.osv):
-    def change_to_collaborator(self, cr, uid, ids, context={}):
-        collaborator = super(kemas_collaborator, self).read(cr, uid, ids[0], ['nick_name', 'name', 'email', 'code', 'photo_medium'])
-        vals = {
-                'type' : 'Collaborator',
-                'notified' : 'notified',
-                'join_date' : time.strftime("%Y-%m-%d")
-                }
-        # Crear cuenta de usuario
-        groups_obj = self.pool.get('res.groups')
-        groups_ids = groups_obj.search(cr, uid, [('name', '=', 'Kemas / Collaborator'), ])
-        nick_name = unicode(collaborator['nick_name']).title()
-        apellido = unicode(kemas_extras.do_dic(collaborator['name'])[0]).title()
-        name = u'''%s %s''' % (nick_name, apellido)
-        vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, collaborator['email'], collaborator['code'], groups_ids[0], collaborator['photo_medium'])['user_id']
-        super(kemas_collaborator, self).write(cr, uid, ids, vals)
-        #----Escribir el historial de puntos-----------------------------------------------------
-        description = 'Se incorpora el grupo de colaboradores.'
-        change_points = str(self.get_initial_points(cr, uid))
-        current_points = str(0)
-        new_points = str(change_points)
-        #---Escribir puntaje-----
-        vals['points'] = new_points
-        #------------------------
-        summary = "+" + change_points + " Puntos. Antes " + current_points + " ahora " + new_points + " Puntos." 
-        self.pool.get('kemas.history.points').create(cr, uid, {
-            'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
-            'collaborator_id': collaborator['id'],
-            'type': 'init',
-            'description': description,
-            'summary': summary,
-            'points': change_points,
-            })
-        #----Asignar Nivel-----------------------------------------------------------------------
-        vals['level_id'] = self.get_first_level(cr, uid)
-        vals['state'] = 'Active'
-        self.send_join_notification(cr, uid)
-        
-        super(kemas_collaborator, self).write(cr, uid, ids, vals)
-        return True
-    
     def do_activate(self, cr, uid, ids, context={}):
-        collaborators = super(kemas_collaborator, self).read(cr, uid, ids, ['user_id', 'state', 'type'])
         vals = {
                 'state':'Active',
                 'end_service': False
                 }
+        collaborators = self.read(cr, uid, ids, ['user_id', 'state', 'type'])
         for collaborator in collaborators:
-            if collaborator['state'] in ['Active'] or collaborator['type'] in ['Others']:
+            if collaborator['state'] in ['Active']:
                 continue
             if not super(kemas_collaborator, self).write(cr, uid, [collaborator['id']], vals):
                 continue
@@ -2694,14 +2653,14 @@ class kemas_collaborator(osv.osv):
         return True
     
     def do_inactivate(self, cr, uid, ids, context={}):
-        collaborators = super(kemas_collaborator, self).read(cr, uid, ids, ['user_id', 'state', 'type'])
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
         vals = {
                 'state':'Inactive',
                 'end_service' : kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz)
                 }
+        collaborators = super(kemas_collaborator, self).read(cr, uid, ids, ['user_id', 'state', 'type'])
         for collaborator in collaborators:
-            if collaborator['state'] in ['Inactive'] or collaborator['type'] in ['Others']:
+            if collaborator['state'] in ['Inactive']:
                 continue
             if not super(kemas_collaborator, self).write(cr, uid, [collaborator['id']], vals):
                 continue
@@ -2730,7 +2689,7 @@ class kemas_collaborator(osv.osv):
             ids = [ids]
         if not len(ids):
             return [] 
-        fields = ['id', 'nick_name', 'name']
+        fields = ['id', 'nick_name', 'last_names']
         if context.get('show_replacements', False):
             replacements_word = self.pool.get('kemas.func').get_translate(cr, uid, _('replacements available'))[0]
             fields.append('replacements')
@@ -2738,7 +2697,7 @@ class kemas_collaborator(osv.osv):
         res = []
         for record in records:
             nick_name = unicode(record['nick_name']).title()
-            apellido = unicode(kemas_extras.do_dic(record['name'])[0]).title()
+            apellido = unicode(kemas_extras.do_dic(record['last_names'])[0]).title()
             if context.get('show_replacements', False):
                 name = u'''%s %s (%d %s)''' % (nick_name, apellido, record['replacements'], replacements_word)
             else:
@@ -2746,28 +2705,40 @@ class kemas_collaborator(osv.osv):
             res.append((record['id'], name))
         return res
     
-    def on_change_name(self, cr, uid, ids, name, context={}):
+    def on_change_first_names(self, cr, uid, ids, first_names, last_names, context={}):
         values = {}
-        warning = {}
-        if name:
-            dic_name = kemas_extras.do_dic(name)
-            if len(dic_name) < 4:
-                warning = {'title' : u'¡Advertencia!', 'message' : u'Se debe ingresar por lo menos dos nombres.'}
-            else:
-                values['name'] = unicode(name).title()
-                values['nick_name'] = unicode(dic_name[2]).title()
-        return {'value': values , 'warning': warning}
+        if first_names:
+            dic_name = kemas_extras.do_dic(first_names)
+            values['nick_name'] = unicode(dic_name[0]).title()
+            values['first_names'] = extras.elimina_tildes(first_names).title()
+        
+        if first_names and last_names:
+            first_names = extras.elimina_tildes(first_names).title()
+            last_names = extras.elimina_tildes(last_names).title()
+            values['name'] = "%s %s" % (first_names, last_names)
+        return {'value': values}
     
-    def on_change_nick_name(self, cr, uid, ids, name, nick_name, context={}):
+    def on_change_last_names(self, cr, uid, ids, first_names, last_names, context={}):
+        values = {}
+        if last_names:
+            values['last_names'] = extras.elimina_tildes(last_names).title()
+        
+        if first_names and last_names:
+            first_names = extras.elimina_tildes(first_names).title()
+            last_names = extras.elimina_tildes(last_names).title()
+            values['name'] = "%s %s" % (first_names, last_names)
+        return {'value': values}
+    
+    def on_change_nick_name(self, cr, uid, ids, first_name, nick_name, context={}):
         values = {}
         warning = {}
-        if name and nick_name:
-            name = unicode(name).lower().strip()
+        if first_name and nick_name:
+            first_name = unicode(first_name).lower().strip()
             nick_name = unicode(nick_name).lower().strip()
-            if nick_name in name:
-                values['nick_name'] = unicode(nick_name).upper()
+            if nick_name in first_name:
+                values['nick_name'] = extras.elimina_tildes(nick_name).upper()
             else:
-                warning = {'title' : u'¡Advertencia!', 'message' : u'El nombre de pila debe esta dentro del nombre completo.'}
+                warning = {'title' : u'¡Advertencia!', 'message' : u'El nombre de pila debe esta contenido en los nombres.'}
         return {'value': values , 'warning': warning}
                 
     def on_change_email(self, cr, uid, ids, email):
@@ -2939,7 +2910,6 @@ class kemas_collaborator(osv.osv):
             args.append(('id', 'not in', collaborator_except_ids))
         
         if context.get('user_collaborator', False):
-            args.append(('type', '=', 'Collaborator'))
             args.append(('state', 'in', ['Active', 'Suspended']))
             
         if context.has_key('birthday'):
@@ -3111,7 +3081,7 @@ class kemas_collaborator(osv.osv):
         db = pooler.get_db(db_name)
         cr = db.cursor()
         #--------------------------------------------------------------------------------------------
-        collaborator_ids = super(osv.osv, self).search(cr, uid, [('type', 'in', ['Collaborator'])])
+        collaborator_ids = super(osv.osv, self).search(cr, uid, [])
         collaborators = super(osv.osv, self).read(cr, uid, collaborator_ids, ['id', 'points'])
         for collaborator in collaborators:
             level_id = self.get_corresponding_level(cr, uid, int(collaborator['points']))
@@ -3137,13 +3107,12 @@ class kemas_collaborator(osv.osv):
                 corresponding_level = level_id
         return corresponding_level
     
-    
     def unlink(self, cr, uid, ids, context={}):
         users_obj = self.pool.get('res.users')
         partner_obj = self.pool.get('res.partner')
         records = self.read(cr, uid, ids, ['user_id', 'type', 'state', 'name_with_nick_name'])
         for record in records:
-            if record['type'] == 'Collaborator' and record['state'] in ['Active']:
+            if record['state'] in ['Active']:
                 raise osv.except_osv(u'¡Error!', u'No se puede borrar a "' + record['name_with_nick_name'] + u'" porque aún esta en estado activo.')
             
             if not record['user_id']:
@@ -3174,84 +3143,69 @@ class kemas_collaborator(osv.osv):
         threaded_sending.start()
     
     def create(self, cr, uid, vals, context={}):
-        vals['email'] = unicode(vals['email']).lower()
-            
         if vals.has_key('points'):
             return super(kemas_collaborator, self).create(cr, uid, vals, context)
         
-        vals['name'] = unicode(vals['name']).title()
+        # Proceasar Nombre
+        vals['first_names'] = extras.elimina_tildes(vals['first_names']).title()
+        vals['last_names'] = extras.elimina_tildes(vals['last_names']).title()
+        vals['name'] = "%s %s" % (vals['first_names'], vals['last_names'],)
+        
+        vals['email'] = unicode(vals['email']).lower()
+        vals['points'] = self.get_initial_points(cr, uid)
+        vals['level_id'] = self.get_corresponding_level(cr, uid, self.get_initial_points(cr, uid))
+        
+        # Crear un partner
+        if not vals.get('partner_id', False):
+            collaborator_category_ids = self.pool.get('res.partner.category').search(cr, uid, [('name', '=', 'Colaborador'), ])
+            vals_partner = {
+                             'comment': vals.get('comment'),
+                             'name': vals.get('name', False),
+                             'image': vals.get('image', False),
+                             'street': vals.get('street', False),
+                             'street2': vals.get('street2', False),
+                             'city': vals.get('city', False),
+                             'state_id': vals.get('state_id', False),
+                             'country_id': vals.get('country_id', False),
+                             'email' :vals.get('email', False),
+                             'phone': vals.get('phone', False),
+                             'fax': vals.get('fax', False),
+                             'mobile': vals.get('mobile', False),
+                             'personal_id': vals.get('personal_id'),
+                             'category_id':[(6, 0, collaborator_category_ids)]
+                             }
+            vals['partner_id'] = self.pool.get('res.partner').create(cr, uid, vals_partner)
+        
         #----Crear un codigo para la persona que se registre---------------------------------------------
         seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Collaborator'), ])[0]
         vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
         
-        photo_male = False
-        photo_female = False
+        # Asignar un usuario al colaborador
+        groups_obj = self.pool.get('res.groups')
+        groups_ids = groups_obj.search(cr, uid, [('name', '=', 'Kemas / Collaborator'), ])
         
-        if vals['genre'] == 'Male':
-            if vals['photo'] == photo_male or vals['photo'] == photo_female:
-                vals['photo'] = False
-        else:
-            if vals['photo'] == photo_male or vals['photo'] == photo_female:
-                vals['photo'] = False
-                
-            
-        if vals['type'] == 'Collaborator':
-            vals['points'] = self.get_initial_points(cr, uid)
-            vals['level_id'] = self.get_corresponding_level(cr, uid, self.get_initial_points(cr, uid))
-            #'----Si la persona que se registra es un Colaborador entonces se le agrega un usuario.-----------
-            groups_obj = self.pool.get('res.groups')
-            groups_ids = groups_obj.search(cr, uid, [('name', '=', 'Kemas / Collaborator'), ])
-            
-            nick_name = unicode(vals['nick_name']).title()
-            apellido = unicode(kemas_extras.do_dic(vals['name'])[0]).title()
-            name = u'''%s %s''' % (nick_name, apellido)
-            if vals.get('photo', False):
-                # Crear una imagen pequeña de la foto del colaborador
-                vals['photo'] = extras.crop_image(vals['photo'], 192, height_photo=15)
-                vals['photo_medium'] = extras.crop_image(vals['photo'], 64)
-                vals['photo_small'] = extras.crop_image(vals['photo'], 48)
-                vals['photo_very_small'] = extras.crop_image(vals['photo'], 32)
-                photo = vals['photo_medium']
-            else:
-                if vals['genre'] == 'Male':
-                    photo = photo_male
-                else:
-                    photo = photo_female
-            
-            vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, vals['email'], vals['code'], groups_ids[0], photo)['user_id']
-            # Actualizar los datos del Partner
-            partner_obj = self.pool.get('res.partner')
-            partner_id = self.pool.get('res.users').read(cr, uid, vals['user_id'], ['partner_id'])['partner_id'][0]
-            vals_partner = {
-                            'country_id' : vals['born_country'],
-                            'state_id' : vals['born_state'],
-                            'city' : vals['born_city'],
-                            'email' : vals['email'],
-                            'image' : photo
-                            }
-            partner_obj.write(cr, uid, [partner_id], vals_partner)
-        else:
-            vals['points'] = 0
+        nick_name = unicode(vals['nick_name']).title()
+        apellido = unicode(kemas_extras.do_dic(vals['last_names'])[0]).title()
+        name = u'''%s %s''' % (nick_name, apellido)
+        vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, vals['email'], vals['code'], groups_ids[0], False, vals['partner_id'])['user_id']
         vals['state'] = 'Active'
-        
 
         res_id = super(kemas_collaborator, self).create(cr, uid, vals, context)
         #----Escribir el historial de puntos-----------------------------------------------------------------
-        if vals['type'] == 'Collaborator':
-            history_points_obj = self.pool.get('kemas.history.points')
-            description = 'Se inicializa el registro.'
-            points = self.get_initial_points(cr, uid)
-            summary = '+' + str(points) + ' Puntos.'
-            history_points_obj.create(cr, uid, {
-                        'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
-                        'collaborator_id': res_id,
-                        'type': 'init',
-                        'description': description,
-                        'summary': summary,
-                        'points': points,
-                        })
-            cr.commit()
-            self.send_notification(cr, uid, res_id)
+        history_points_obj = self.pool.get('kemas.history.points')
+        description = 'Se inicializa el registro.'
+        points = vals['points']
+        summary = '+' + str(points) + ' Puntos.'
+        history_points_obj.create(cr, uid, {
+                    'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
+                    'collaborator_id': res_id,
+                    'type': 'init',
+                    'description': description,
+                    'summary': summary,
+                    'points': points,
+                    })
+        cr.commit()
+        self.send_notification(cr, uid, res_id)
         
         # Escribir una linea en la bitacora del Colaborador
         vals = {
@@ -3259,95 +3213,24 @@ class kemas_collaborator(osv.osv):
                 'description' : 'Creacion del Colaborador.',
                 'type' : 'important',
                 }
-        
         self.pool.get('kemas.collaborator.logbook').create(cr, uid, vals)
         return res_id
     
     def write(self, cr, uid, ids, vals, context={}):
-        collaborator = super(osv.osv, self).read(cr, uid, ids[0], ['user_id', 'points', 'id', 'name', 'code', 'email'])
-        if context.get('is_collaborator', False):
-            if uid != collaborator['user_id'][0]:
-                raise osv.except_osv(_('Error!'), _('You can not change information that is not yours!'))
-            
-        send_email = False
-
-        #--Si la  persona ya no es colaborador se le quita el usuario------------------------------------
-        if vals.has_key('type'):
-            history_points_obj = self.pool.get('kemas.history.points')
-            users_obj = self.pool.get('res.users')
-            
-            if vals['type'] == 'Others':
-                vals['state'] = 'creating'
-                vals['notified'] = 'no_notified'
-                try:
-                    user_id = collaborator['user_id'][0]
-                    users_obj.unlink(cr, uid, [user_id])
-                except: None
-                #----Escribir el historial de puntos-----------------------------------------------------
-                change_points = str(collaborator['points'])
-                current_points = str(collaborator['points'])
-                new_points = str(0)
-                #---Escribir puntaje-----
-                vals['points'] = new_points
-                #------------------------
-                description = 'Ya no pertenece al grupo de Colaboradores, por lo tanto se restan todos los puntos.'
-                summary = "-" + change_points + " Puntos. Antes " + current_points + " ahora " + new_points + " Puntos."
-                history_points_obj.create(cr, uid, {
-                    'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
-                    'collaborator_id': collaborator['id'],
-                    'type': 'decrease',
-                    'description': description,
-                    'summary': summary,
-                    'points': change_points * -1,
-                    })
-            else:
-                vals['notified'] = 'notified'
-                #----Escribir el historial de puntos-----------------------------------------------------
-                description = 'Se incorpora el grupo de colaboradores.'
-                change_points = str(self.get_initial_points(cr, uid))
-                current_points = str(0)
-                new_points = str(change_points)
-                #---Escribir puntaje-----
-                vals['points'] = new_points
-                #------------------------
-                summary = "+" + change_points + " Puntos. Antes " + current_points + " ahora " + new_points + " Puntos." 
-                history_points_obj.create(cr, uid, {
-                    'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
-                    'collaborator_id': collaborator['id'],
-                    'type': 'init',
-                    'description': description,
-                    'summary': summary,
-                    'points': change_points,
-                    })
-                #----Asignar Nivel-----------------------------------------------------------------------
-                vals['level_id'] = self.get_first_level(cr, uid)
-                vals['state'] = 'Active'
-                
-                groups_obj = self.pool.get('res.groups')
-                groups_ids = groups_obj.search(cr, uid, [('name', '=', 'Kemas / Collaborator'), ])
-                
-                if vals.has_key('name'):
-                    nick_name = unicode(vals['nick_name']).title()
-                    apellido = unicode(kemas_extras.do_dic(vals['name'])[0]).title()
-                    name = u'''%s %s''' % (nick_name, apellido)
-                else:
-                    if vals.has_key('nick_name') == False:
-                        nick_name = unicode(super(osv.osv, self).read(cr, uid, ids[0], ['nick_name'])['nick_name']).title()
-                        apellido = unicode(kemas_extras.do_dic(collaborator['name'])[0]).title()
-                    else:
-                        nick_name = unicode(vals['nick_name']).title()
-                        apellido = unicode(kemas_extras.do_dic(collaborator['name'])[0]).title()
-                    name = u'''%s %s''' % (nick_name, apellido)
-                    
-                vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, collaborator['email'], collaborator['code'], groups_ids[0])['user_id']
-                send_email = True
-            
+        if context is None or not context or not isinstance(context, (dict)): context = {}
+        
         #----Cambiar el Puntaje y establecer Nivel-------------------------------------------------------
         if vals.has_key('points'):
             vals['level_id'] = self.get_corresponding_level(cr, uid, vals['points'])
             
-        res = super(osv.osv, self).write(cr, uid, ids, vals, context)
-        if not context is None and context and type(context).__name__ == "dict" and not context.get('no_update_logbook', False):
+        collaborators = self.read(cr, uid, ids, ['user_id', 'first_names', 'last_names'])
+        for collaborator in collaborators:
+            if context.get('is_collaborator', False):
+                if collaborator['user_id'] and uid != collaborator['user_id'][0]:
+                    raise osv.except_osv(_('Error!'), _('You can not change information that is not yours!'))
+                
+            if context.get('no_update_logbook'):
+                continue
             # Escribir una linea en la bitacora del Colaborador
             if not vals is None and not vals.has_key('level_id') and not vals.has_key('points'): 
                 modify = ''
@@ -3362,16 +3245,7 @@ class kemas_collaborator(osv.osv):
                         'type' : 'low_importance',
                         }
                 self.pool.get('kemas.collaborator.logbook').create(cr, uid, vals_logbook)
-        #----Cambiar el nombre al usuario----------------------------------------------------------------
-        collaborator = self.read(cr, uid, ids[0], ['born_country', 'email', 'born_state', 'born_city', 'user_id'])
-        if not collaborator['user_id']:
-            raise osv.except_osv(_('Error!'), _('Este usuario no tiene una cuenta de Usuario asignada!!'))
-                    
-        # Enviar correo de Notificacion de Creacion de Cuenta
-        if res and send_email:
-            cr.commit()
-            self.send_notification(cr, uid, ids[0])
-        return res
+        return super(kemas_collaborator, self).write(cr, uid, ids, vals, context)
 
     def _person_age(self, cr, uid, ids, name, arg, context={}):
         result = {}
@@ -3397,19 +3271,6 @@ class kemas_collaborator(osv.osv):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
         return int(config_obj.read(cr, uid, config_id, ['default_points'])['default_points'])
-    
-    def validate_four_names(self, cr, uid, ids):
-        collaborator = super(osv.osv, self).read(cr, uid, ids[0], ['name', 'nick_name'])
-        nombres = kemas_extras.do_dic(collaborator['name'])
-        if len(nombres) < 4:
-            raise osv.except_osv(_('Error!'), _('At least four valid names must be entered.'))
-        else:
-            name = unicode(collaborator['name']).lower().strip()
-            nick_name = unicode(collaborator['nick_name']).lower().strip()
-            if not nick_name in name:
-                raise osv.except_osv(_('Error!'), _('The name entered must be in the long name.'))
-            else:
-                return True
     
     def get_percentage(self, cr, uid, ids, name, arg, context={}):
         def get_percent_progress_level(collaborator_id):
@@ -3491,9 +3352,9 @@ class kemas_collaborator(osv.osv):
         
     def _get_nick_name(self, cr, uid, ids, name, arg, context={}):
         def get_nick_name(collaborator_id):
-            collaborator = super(osv.osv, self).read(cr, uid, collaborator_id, ['nick_name', 'name'])
+            collaborator = super(osv.osv, self).read(cr, uid, collaborator_id, ['nick_name', 'last_names'])
             nick_name = unicode(collaborator['nick_name']).title()
-            apellido = unicode(kemas_extras.do_dic(collaborator['name'])[0]).title()
+            apellido = unicode(kemas_extras.do_dic(collaborator['last_names'])[0]).title()
             name = u'''%s %s''' % (nick_name, apellido)
             return name
                 
@@ -3514,7 +3375,7 @@ class kemas_collaborator(osv.osv):
         return result
     
     def build_QR_text(self, cr, uid, message, collaborator_id):
-        fields = ['code', 'name', 'birth', 'genre', 'marital_status', 'telef1', 'telef2', 'mobile', 'email', 'address', 'join_date', 'type', 'username', 'level_name']
+        fields = ['code', 'name', 'birth', 'genre', 'marital_status', 'phone', 'mobile', 'email', 'address', 'join_date', 'type', 'username', 'level_name']
         collaborator = super(osv.osv, self).read(cr, uid, collaborator_id, fields)
         #------------------------------------------------------------------------------------
         message = message
@@ -3548,17 +3409,11 @@ class kemas_collaborator(osv.osv):
             else:
                 message = message.replace('%ms', 'Viuda')
         #-------------------------------------------------------------------------
-        message = message.replace('%t1', unicode(collaborator['telef1']))
-        message = message.replace('%t2', unicode(collaborator['telef2']))
+        message = message.replace('%t1', unicode(collaborator['phone']))
         message = message.replace('%mb', unicode(collaborator['mobile']))
         message = message.replace('%em', unicode(collaborator['email']))
         message = message.replace('%ad', unicode(collaborator['address']))
         message = message.replace('%jd', unicode(kemas_extras.convert_date_to_dmy(collaborator['join_date'])))
-        #----Type-----------------------------------------------------------------
-        if collaborator['type'].lower() == 'collaborator':
-            message = message.replace('%tp', 'Colaborador')
-        else:
-            message = message.replace('%tp', 'Invitado')
         #-------------------------------------------------------------------------
         message = message.replace('%us', unicode(collaborator['username']))
         message = message.replace('%lv', unicode(collaborator['level_name']))
@@ -3878,7 +3733,7 @@ class kemas_collaborator(osv.osv):
     
     _name = 'kemas.collaborator'
     _columns = {
-        'partner_id':fields.many2one('res.partner', 'Partner relacionado', required=True),
+        'partner_id':fields.many2one('res.partner', 'Partner relacionado', required=True, ondelete='cascade'),
         'mailing': fields.function(mailing, type='boolean', string='Mailing'),
         'code': fields.char('Code', size=32, help="Code that is assigned to each collaborator"),
         'personal_id' : fields.char('CI/PASS', size=15, help=u"Número de cédula o pasaporte",),
@@ -3888,6 +3743,8 @@ class kemas_collaborator(osv.osv):
         'photo_very_small': fields.function(_get_collaborator_photo, multi='all', string="Foto", type="binary", store=_photo_store_triggers),
         'qr_code': fields.function(_get_QR_image, type='binary', string='QR code data'),
         'bar_code': fields.function(_get_barcode_image, type='binary', string='Bar Code data'),
+        'first_names':fields.char('Nombres', size=64, required=True),
+        'last_names':fields.char('Apellidos', size=64, required=True),
         'name': fields.function(_get_name, fnct_inv=_get_name_inv, string="Nombres", type="char", store=_name_store_triggers, required=True, help="Full names of collaborator. Example: Rios Abad Juan David"),
         'nick_name': fields.char('Nick name', size=32, required=True, help="Name you want to use the collaborator."),
         'name_with_nick_name': fields.function(_get_nick_name, type='char', string='Name'),
@@ -3905,9 +3762,9 @@ class kemas_collaborator(osv.osv):
         'country_id': fields.related('partner_id', 'country_id', type='many2one', string=u'País', relation="res.country", store=False),
         
         'phone': fields.related('partner_id', 'phone', type='char', string=u'Teléfono', store=False),
+        'fax': fields.related('partner_id', 'fax', type='char', string=u'Fax', store=False),
         'mobile': fields.related('partner_id', 'mobile', type='char', string=u'Móvil', store=False),
         'email': fields.related('partner_id', 'email', type='char', string='Email', store=False),
-        'telef2': fields.char('Telefone 2', size=10, help="The number of phone of the collaborator. Example: 072878563"),
         
         'web_site_ids': fields.one2many('kemas.collaborator.web.site', 'collaborator_id', 'Web sites', help='Web site of this collaborator'),
         'join_date': fields.date('Join date', help="Date on which the collaborator joined the Ministry."),
@@ -3921,9 +3778,6 @@ class kemas_collaborator(osv.osv):
             ('Active', 'Active'),
             ('Suspended', 'Suspended'),
             ], 'State', select=True, help="State in which the collaborator is currently"),
-        'type': fields.selection([
-            ('Collaborator', 'Collaborator'),
-            ('Others', 'Others')], 'Type', help="Type of person to be registered"),
         'born_country': fields.many2one('res.country', 'Born Country', required=False, help="the born country of the collaborator"),
         'born_state': fields.many2one('res.country.state', 'Born State', required=False, help="The born state of the collaborator"),
         'born_city': fields.char('Born City', size=255, required=True, help="The born city of the collaborator"),
@@ -3992,22 +3846,16 @@ class kemas_collaborator(osv.osv):
         'genre': 'Male',
         'marital_status': 'Single',
         'points': '0',
-        'type': 'Collaborator',
         'state': 'creating',
         'photo': _get_photo_collaborator,
         'level_id': get_first_level,
         }
-    
-    _constraints = [
-        (validate_four_names, 'At least two valid names must be entered.', ['name'])
-        ]
     
     _sql_constraints = [
         ('collaborator_code', 'unique (code)', 'This Code already exist!'),
         ('collaborator_name', 'unique (name)', "This Collaborator's already exist!"),
         ('collaborator_user_id', 'unique (user_id)', 'This User already exist!'),
         ]
-    
 
 _TASK_STATE = [('creating', 'Creating'), ('draft', 'New'), ('open', 'In Progress'), ('pending', 'Pending'), ('done', 'Done'), ('cancelled', 'Cancelled')]
 class kemas_task_category(osv.osv):
@@ -6255,7 +6103,6 @@ class kemas_event(osv.osv):
         line_obj.unlink(cr, uid, line_ids)
         args = []
         args.append(('state', '=', 'Active'))
-        args.append(('type', '=', 'Collaborator'))
         args.append(('points', '>', int(event['min_points'])))
             
         if event['team_id']:
@@ -6334,6 +6181,8 @@ class kemas_attendance(osv.osv):
         return result
     
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
+        if context is None or not context or not isinstance(context, (dict)): context = {}
+        
         collaborator_obj = self.pool.get('kemas.collaborator')
         user_obj = self.pool.get('res.users')
         group_obj = self.pool.get('res.groups')
@@ -6348,6 +6197,7 @@ class kemas_attendance(osv.osv):
             limit = context.get('limit_records', None)
             order = 'date desc'
         
+        context['tz'] = context.get('tz', False) or self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
         if context.get('search_this_month', False):
             range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))

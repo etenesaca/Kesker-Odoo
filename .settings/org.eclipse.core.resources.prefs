@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//report/attendance_statistics.py=utf-8
+encoding//report/collaborator_form.py=utf-8
 encoding//report/collaborator_list.py=utf-8
 encoding//report/team_list.py=utf-8
 encoding//wizard/__init__.py=utf-8

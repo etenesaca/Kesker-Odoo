@@ -518,7 +518,7 @@
                            <field name="max_size_logos" colspan="2" />
                         </group>
                         <group colspan="2" expand="1" col="4" string="System logo">
-                           <field name="system_logo" align="10.10" class="oe_left oe_avatar" widget='image' options='{"size": [180, 180]}' colspan="1" nolabel="1" required='True' />
+                           <field name="system_logo" align="10.10" class="oe_left oe_avatar" widget='image' options='{"size": [180, 180]}' colspan="1" nolabel="1" />
                         </group>
                      </group>
                   </page>
@@ -700,7 +700,7 @@
                         </page>
                         <page string="Reports logo">
                            <group colspan="4" string="Reports logo">
-                              <field name="logo" align="10.10" class="oe_left oe_avatar" widget='image' options='{"size": [180, 180]}' nolabel="1" required='True' />
+                              <field name="logo" align="10.10" class="oe_left oe_avatar" widget='image' options='{"size": [180, 180]}' nolabel="1" />
                            </group>
                         </page>
                      </notebook>
@@ -1668,11 +1668,6 @@
                               <div class="oe_kanban_left">
                                  <div class="oe_kanban_details">
                                     <div class="oe_kanban_details">
-                                       <li t-if="record.telef.raw_value">
-                                          <b>Teléfono: </b>
-                                          <field name="telef" />
-                                          <br />
-                                       </li>
                                        <li t-if="record.mobile.raw_value">
                                           <b>Celular: </b>
                                           <field name="mobile" />
@@ -1729,7 +1724,6 @@
                   <group colspan="9" col="8">
                      <field name="collaborator_id" select="1" colspan="8" />
                      <field name="name" colspan="8" />
-                     <field name="telef" colspan="2" />
                      <field name="mobile" colspan="2" />
                      <field name="birth" colspan="2" on_change="on_change_birth(birth)" />
                      <field name="age" colspan="2" attrs="{'invisible':[('birth','=',False)]}" />
@@ -1764,7 +1758,6 @@
                   <group colspan="4" col="10">
                   <group colspan="9" col="8">
                   <field name="name" colspan="8"/>
-                  <field name="telef" colspan="2"/>
                   <field name="mobile" colspan="2"/>
                   <field name="birth" colspan="2" on_change="on_change_birth(birth)"/>
                   <field name="age" colspan="2" attrs="{'invisible':[('birth','=',False)]}"/>
@@ -2237,7 +2230,7 @@
                   </div>
                   <group>
                      <group>
-                        <field name="collaborator_id" placeholder="Assigned to..." attrs="{'readonly':[('state','in',['done', 'cancelled'])]}" options='{"no_open": True}' domain="[('state','=','Active'),('type','=','Collaborator'),]" />
+                        <field name="collaborator_id" placeholder="Assigned to..." attrs="{'readonly':[('state','in',['done', 'cancelled'])]}" options='{"no_open": True}' domain="[('state','=','Active')]" />
                         <field name="date_limit" />
                      </group>
                      <group>
@@ -2628,14 +2621,14 @@
                <field name="notified" invisible="1" />
                <field name="user_id" invisible="1" />
                <field name="integrate_collaborators_with_partners" invisible="1" />
+               <field name="name" invisible="1" />
                <header>
                   <div>
                      <field name="state" widget="statusbar" statusbar_visible="Active" />
                   </div>
                   <div style="width:60%%">
-                     <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':['|',('type','=','Others'),('state','in',['Active','creating'])]}" confirm="¿Seguro de ACTIVAR a este colaborador?" groups="kemas.group_kemas_manager" />
-                     <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':['|',('type','=','Others'),('state','in',['Inactive','creating'])]}" confirm="¿Seguro de INACTIVAR a este colaborador?" groups="kemas.group_kemas_manager" />
-                     <button name="change_to_collaborator" string="Convetir en Colaborador" type="object" icon="STOCK_CONVERT" attrs="{'invisible':['|',('type','=','Collaborator'),('state','in',['Inactive','creating'])]}" confirm="¿Seguro de CONVERTIR a esta persona en Colaborador?" groups="kemas.group_kemas_manager" />
+                     <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('state','in',['Active','creating'])]}" confirm="¿Seguro de ACTIVAR a este colaborador?" groups="kemas.group_kemas_manager" />
+                     <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('state','in',['Inactive','creating'])]}" confirm="¿Seguro de INACTIVAR a este colaborador?" groups="kemas.group_kemas_manager" />
                   </div>
                </header>
                <sheet string="Collaborator">
@@ -2655,18 +2648,22 @@
                   </div>
                   <field name="photo" widget='image' class="oe_left oe_avatar" options='{"size": [100, 100]}' />
                   <div class="oe_left oe_title">
-                     <label for="name" class="oe_edit_only" />
+                     <label for="first_names" class="oe_edit_only" />
                      <h1>
-                        <field name="name" default_focus="1" placeholder="Complete name" on_change="on_change_name(name)" />
+                        <field name="first_names" default_focus="1" placeholder="Nombres" on_change="on_change_first_names(first_names,last_names)" />
+                     </h1>
+                     <label for="last_names" class="oe_edit_only" />
+                     <h1>
+                        <field name="last_names" placeholder="Apellidos" on_change="on_change_last_names(first_names,last_names)" />
                      </h1>
                      <label for="nick_name" class="oe_edit_only" />
                      <span>
-                        <field name="nick_name" on_change="on_change_nick_name(name,nick_name)" colspan="2" nolabel="1" placeholder="Nickname" />
+                        <field name="nick_name" on_change="on_change_nick_name(first_names,nick_name)" colspan="2" nolabel="1" placeholder="Nickname" />
                      </span>
-                     <label for="area_ids" class="oe_edit_only" attrs="{'invisible':[('type','=','Others')]}" />
-                     <field name="area_ids" widget="many2many_tags" attrs="{'invisible':[('type','=','Others')]}" placeholder="Áreas" />
+                     <label for="area_ids" class="oe_edit_only" />
+                     <field name="area_ids" widget="many2many_tags" placeholder="Áreas" options='{"no_open": True, "no_create": True}' />
                   </div>
-                  <div class="oe_right oe_button_box" name="buttons" attrs="{'invisible':['|',('type','=','Others'),('state','=','creating')]}">
+                  <div class="oe_right oe_button_box" name="buttons" attrs="{'invisible':[('state','=','creating')]}">
                      <button type="action" icon="fa-star" class="oe_stat_button oe_read_only" name="%(action_kemas_history_points_collaborator)d" help="Ver Historial de Puntos">
                         <field name="history_points_count" widget="statinfo" string="Puntos- Hist" />
                      </button>
@@ -2684,7 +2681,7 @@
                      </button>
                   </div>
                   <group colspan="4" expand="1" col="10">
-                     <div align="center" attrs="{'invisible':['|',('code','!=',False),'|',('type','=','Others'),'|',('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
+                     <div align="center" attrs="{'invisible':['|',('code','!=',False),('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
                         <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
                         <font color="red">
                            <b>
@@ -2692,7 +2689,7 @@
                            </b>
                         </font>
                      </div>
-                     <div align="center" attrs="{'invisible':['|',('user_id','!=',False),'|',('type','=','Others'),'|',('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
+                     <div align="center" attrs="{'invisible':['|',('user_id','!=',False),('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
                         <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
                         <font color="red">
                            <b>
@@ -2700,7 +2697,7 @@
                            </b>
                         </font>
                      </div>
-                     <div align="center" attrs="{'invisible':['|',('notified','=','notified'),'|',('type','=','Others'),'|',('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
+                     <div align="center" attrs="{'invisible':['|',('notified','=','notified'),('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
                         <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
                         <font color="red">
                            <b>
@@ -2711,54 +2708,51 @@
                      <group colspan="10" expand="1" col="4">
                         <notebook colspan="4">
                            <page id="personal_info" string="Personal Information">
-                              <group colspan="4" expand="1" col="4">
-                                 <field name="partner_id" invisible="0" placeholder="Partner relacionado" attrs="{'invisible':[('integrate_collaborators_with_partners','=',False)]}" />
-                                 <newline />
-                                 <field name="code" readonly="1" colspan="2" />
-                                 <newline />
-                                 <field name="type" required="1" colspan="2" />
-                                 <field name="personal_id" on_change="on_change_personal_id(personal_id)" colspan="2" placeholder="CI/PASS" />
-                                 <field name="marital_status" required="1" colspan="2" />
-                                 <field name="genre" required="1" colspan="2" />
-                                 <field name="birth" on_change="on_change_birth(birth)" required="1" colspan="2" />
-                                 <field name="age" required="1" readonly="1" colspan="2" />
-                                 <newline />
-                                 <label for="street" string="Address" />
-                                 <div>
-                                    <field name="street" placeholder="Street..." />
-                                    <field name="street2" />
-                                    <div class="address_format">
-                                       <field name="state_id" class="oe_no_button" placeholder="State" style="width: 50%%" options='{"no_open": True, "no_create": True}' />
-                                       <field name="city" placeholder="City" style="width: 50%%" />
+                              <group>
+                                 <group>
+                                    <field name="partner_id" invisible="0" required="0" placeholder="Partner relacionado" attrs="{'invisible':[('integrate_collaborators_with_partners','=',False)]}" />
+                                    <field name="code" readonly="1" />
+                                    <field name="marital_status" required="1" />
+                                    <field name="personal_id" on_change="on_change_personal_id(personal_id)" placeholder="CI/PASS" />
+                                 </group>
+                                 <group>
+                                    <field name="birth" on_change="on_change_birth(birth)" required="1" />
+                                    <field name="age" required="1" readonly="1" />
+                                    <field name="genre" required="1" />
+                                 </group>
+                                 <group>
+                                    <label for="street" string="Address" />
+                                    <div>
+                                       <field name="street" placeholder="Street..." />
+                                       <field name="street2" />
+                                       <field name="country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True}' />
+                                       <div class="address_format">
+                                          <field name="state_id" class="oe_no_button" placeholder="State" style="width: 50%%" options='{"no_open": True}' />
+                                          <field name="city" placeholder="City" style="width: 50%%" />
+                                       </div>
                                     </div>
-                                    <field name="country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True, "no_create": True}' />
-                                 </div>
-                              </group>
-                              <group colspan="4" expand="1" col="6">
-                                 <separator string="Contact" colspan="6" />
-                                 <field name="mobile" colspan="2" attrs="{'required':[('phone','=',False)]}" placeholder="ex: 0985146325" />
-                                 <group colspan="4" />
-                                 <field name="phone" colspan="2" attrs="{'required':[('mobile','=',False),('phone','=',False)]}" placeholder="ex: 072561374" />
-                                 <field name="telef2" colspan="2" placeholder="ex: 072561374" attrs="{'invisible':[('phone','=',False)]}" />
-                                 <group colspan="4" />
-                                 <group colspan="2" />
-                                 <newline />
-                                 <field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..." />
-                                 <group colspan="2" />
-                              </group>
-                              <group colspan="4" col="4">
-                                 <separator string="Born Information" colspan="4" />
-                                 <field name="born_country" colspan="2" required="1" string="Country" placeholder="Born Country" options='{"no_open": True}' />
-                                 <field name="born_state" colspan="2" required="1" placeholder="Born State" domain="[('country_id','=',born_country)]" options='{"no_open": True}' />
-                                 <field name="born_city" colspan="2" required="1" ired="1" placeholder="Born City" />
+                                 </group>
+                                 <group>
+                                    <field name="phone" placeholder="e.g. +32.81.81.37.00" />
+                                    <field name="mobile" />
+                                    <field name="fax" />
+                                    <field name="email" widget="email" />
+                                 </group>
+                                 <group>
+                                    <separator string="Információn de procedencia" colspan="4" />
+                                    <field name="born_country" required="1" string="país" placeholder="Born Country" options='{"no_open": True}' />
+                                    <field name="born_state" required="1" string="Provincia" placeholder="Born State" domain="[('country_id','=',born_country)]" options='{"no_open": True}' />
+                                    <field name="born_city" required="1" string="Ciudad" placeholder="Born City" />
+                                 </group>
+                                 <group />
                               </group>
                            </page>
-                           <page id="status_info" string="Estado" attrs="{'invisible':[('type','=','Others')]}">
+                           <page id="status_info" string="Estado">
                               <group colspan="4" col="6">
                                  <field name="team_id" colspan="2" placeholder="Equipo" options='{"no_create": True}' />
-                                 <field name="join_date" colspan="2" on_change="on_change_join_date(join_date)" attrs="{'required':[('type','=','Collaborator')]}" />
+                                 <field name="join_date" colspan="2" on_change="on_change_join_date(join_date)" />
                                  <field name="end_service" readonly="1" widget="char" states="Inactive" colspan="2" />
-                                 <field name="age_in_ministry" string="Tiempo de colaboración" colspan="2" attrs="{'required':[('type','=','Collaborator')],'invisible':[('join_date','=',False)]}" readonly="1" />
+                                 <field name="age_in_ministry" string="Tiempo de colaboración" required="True" colspan="2" attrs="{'invisible':[('join_date','=',False)]}" readonly="1" />
                                  <newline />
                                  <field name="points" colspan="2" readonly="1" states="Active,Inactive" />
                                  <field name="level_id" colspan="2" readonly="1" states="Active,Inactive" />
@@ -2855,7 +2849,6 @@
                      <notebook colspan="4">
                         <page string="Personal Information">
                            <group colspan="4" expand="1" col="6">
-                              <field name="type" required="1" />
                               <newline />
                               <field name="name" default_focus="1" on_change="on_change_name(name)" colspan="4" />
                               <field name="nick_name" on_change="on_change_nick_name(name,nick_name)" colspan="2" />
@@ -2876,7 +2869,6 @@
                               </div>
                               <separator string="Contact" colspan="6" />
                               <field name="phone" colspan="2" attrs="{'required':[('mobile','=',False),('phone','=',False)]}" />
-                              <field name="telef2" colspan="2" />
                               <field name="mobile" colspan="2" attrs="{'required':[('phone','=',False)]}" />
                               <field name="email" colspan="6" widget="email" on_change="on_change_email(email)" />
                               <group colspan="6" col="4">
@@ -2908,18 +2900,18 @@
                               </field>
                            </group>
                         </page>
-                        <page string="Areas" attrs="{'invisible':[('type','=','Others')]}">
+                        <page string="Areas">
                            <group colspan="4" expand="1" col="4">
                               <field name="area_ids" colspan="4" nolabel="1" context="{'tree_view_ref' : 'kemas.kemas_area_tree_view2',}" />
                            </group>
                         </page>
                      </notebook>
-                     <group colspan="4" expand="1" col="4" attrs="{'invisible':[('type','=','Others')]}">
+                     <group colspan="4" expand="1" col="4">
                         <notebook colspan="4">
                            <page string="Collaborator information">
                               <group colspan="4" expand="1" col="21">
                                  <field name="team_id" colspan="21" />
-                                 <field name="join_date" colspan="6" attrs="{'required':[('type','=','Collaborator')]}" on_change="on_change_join_date(join_date)" />
+                                 <field name="join_date" colspan="6" required="1" on_change="on_change_join_date(join_date)" />
                                  <field name="age_in_ministry" string="Tiempo de colaboración" colspan="15" readonly="1" />
                                  <field name="login" colspan="6" readonly="1" attrs="{'invisible':[('state','=','creating')]}" />
                                  <field name="points" colspan="2" readonly="1" />
@@ -2930,7 +2922,7 @@
                      </group>
                   </group>
                   <group colspan="1" col="2">
-                     <field name="state" widget="statusbar" statusbar_visible="Active" statusbar_colors='{"Active":"green","Inactive":"Orange","Suspended":"Red"}' attrs="{'invisible':[('type','!=','Collaborator')]}" />
+                     <field name="state" widget="statusbar" statusbar_visible="Active" statusbar_colors='{"Active":"green","Inactive":"Orange","Suspended":"Red"}' />
                      <field name="photo" widget="image" width="90" colspan="1" nolabel="1" />
                   </group>
                </group>
@@ -2955,7 +2947,6 @@
          <field name="arch" type="xml">
             <kanban>
                <field name="marital_status" />
-               <field name="type" />
                <field name="code" />
                <field name="points" />
                <field name="notified" />
@@ -2976,7 +2967,7 @@
                               </a>
                            </h4>
                            <ul>
-                              <li t-if="record.type.raw_value == 'Collaborator'">
+                              <li>
                                  <i>
                                     <b>
                                        Points:
@@ -2991,7 +2982,7 @@
                               </li>
                            </ul>
                            <ul>
-                              <li t-if="record.type.raw_value == 'Collaborator' and record.user_id.raw_value == '' or record.code.raw_value == '' or record.notified.raw_value == 'no_notified'">
+                              <li t-if="record.user_id.raw_value == '' or record.code.raw_value == '' or record.notified.raw_value == 'no_notified'">
                                  <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
                               </li>
                            </ul>
@@ -3037,7 +3028,6 @@
          <field name="arch" type="xml">
             <kanban>
                <field name="marital_status" />
-               <field name="type" />
                <field name="code" />
                <field name="points" />
                <field name="notified" />
@@ -3054,7 +3044,7 @@
                               <field name="name_with_nick_name" />
                            </h4>
                            <ul>
-                              <li t-if="record.type.raw_value == 'Collaborator'">
+                              <li>
                                  <i>
                                     <b>
                                        <field name="team_id" />
@@ -3080,7 +3070,7 @@
          <field name="model">kemas.collaborator</field>
          <field name="type">calendar</field>
          <field name="arch" type="xml">
-            <calendar string="Birthdays" date_start="birthday" color="type">
+            <calendar string="Birthdays" date_start="birthday" color="team_id">
                <field name="name_with_nick_name" />
             </calendar>
          </field>
@@ -3125,7 +3115,6 @@
                <field name="born_state" invisible="1" />
                <field name="born_city" invisible="1" />
                <field name="state" invisible="1" />
-               <field name="type" invisible="1" />
                <field name="team_id" invisible="1" />
             </tree>
          </field>
@@ -3148,7 +3137,6 @@
                <field name="born_state" invisible="1" />
                <field name="born_city" invisible="1" />
                <field name="state" invisible="1" />
-               <field name="type" invisible="1" />
             </tree>
          </field>
       </record>
@@ -3169,7 +3157,6 @@
                <field name="born_state" invisible="1" />
                <field name="born_city" invisible="1" />
                <field name="state" invisible="1" />
-               <field name="type" invisible="1" />
                <field name="team_id" invisible="1" />
             </tree>
          </field>
@@ -3192,7 +3179,6 @@
                <field name="born_state" invisible="1" />
                <field name="born_city" invisible="1" />
                <field name="state" invisible="1" />
-               <field name="type" invisible="1" />
             </tree>
          </field>
       </record>
@@ -3214,7 +3200,6 @@
                <field name="born_state" invisible="1" />
                <field name="born_city" invisible="1" />
                <field name="state" invisible="1" />
-               <field name="type" invisible="1" />
             </tree>
          </field>
       </record>
@@ -3225,9 +3210,6 @@
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <search string="search collaborator">
-               <filter name="collaborator" string="Collaborator" domain="[('type','=','Collaborator')]" icon="terp-personal" />
-               <filter name="others" string="Others" domain="[('type','=','Others')]" icon="terp-personal" />
-               <separator />
                <filter name="active" string="Active" domain="[('state','=','Active')]" icon="STOCK_YES" />
                <filter name="suspended" string="Suspended" domain="[('state','=','Suspended')]" icon="STOCK_NO" />
                <filter name="inactive" string="Inactive" domain="[('state','=','Inactive')]" icon="kanban-stop" />
@@ -3246,7 +3228,6 @@
                   <separator />
                   <filter string="state" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}" />
                   <filter string="Points" icon="star-on" domain="[]" context="{'group_by':'points'}" />
-                  <filter string="Type" icon="terp-personal" domain="[]" context="{'group_by':'type'}" />
                   <filter string="Level" icon="star-on" domain="[]" context="{'group_by':'level_id'}" />
                   <filter string="Team" icon="terp-partner" domain="[]" context="{'group_by':'team_id'}" />
                </group>
@@ -3273,7 +3254,6 @@
                   <separator />
                   <filter string="state" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}" />
                   <filter string="Points" icon="star-on" domain="[]" context="{'group_by':'points'}" />
-                  <filter string="Type" icon="terp-personal" domain="[]" context="{'group_by':'type'}" />
                   <filter string="Level" icon="star-on" domain="[]" context="{'group_by':'level_id'}" />
                   <filter string="Team" icon="terp-partner" domain="[]" context="{'group_by':'team_id'}" />
                </group>
@@ -4062,7 +4042,6 @@
                   <h1>
                      <field name="collaborator_id" colspan="4" select="1" placeholder="Name of the collaborator..." domain="[
 																		  			  ('state','=','Active'),
-																		  			  ('type','=','Collaborator'),
 																		  			  ]" context="{
 																	      			'event_collaborator_line_ids' : context['line_ids'],
 			      																	'search_view_ref' : 'kemas.kemas_collaborator_search_view2',
@@ -4096,7 +4075,6 @@
 
                <field name="collaborator_id" domain="[
 										  			  ('state','=','Active'),
-										  			  ('type','=','Collaborator'),
 										  			  ]" />
                <field name="activity_ids" context="{
                                                       'event_collaborator_line_id': active_id,
@@ -4458,7 +4436,6 @@
       <record model="ir.ui.view" id="kemas_event_calendar_view">
          <field name="name">kemas.event.calendar</field>
          <field name="model">kemas.event</field>
-         <field name="type">calendar</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <calendar string="Events" date_start="date_start" date_stop="date_stop" color="state" mode="month">
@@ -4469,7 +4446,7 @@
       <record model="ir.ui.view" id="kemas_event_calendar_view2">
          <field name="name">kemas.event.calendar2</field>
          <field name="model">kemas.event</field>
-         <field name="type">calendar</field>
+
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <calendar string="Events" date_start="date_start" date_stop="date_stop" color="service_id" mode="week">
@@ -5173,7 +5150,7 @@
          <field name="type">ir.actions.act_window</field>
          <field name="res_model">kemas.collaborator</field>
          <field name="view_mode">kanban,tree,form</field>
-         <field name="domain">[('state','=','Active'),('type','=','Collaborator')]</field>
+         <field name="domain">[('state','=','Active')]</field>
          <field name="context">{'all_collaborators':1,'search_default_active': 1,'search_default_collaborator': 1,'no_name_get':True,'search_view_ref':'kemas.kemas_collaborator_search_view3','kanban_view_ref':'kemas.kemas_collaborator_kanban_view3',}</field>
          <field name="help">All collaborators who are actively involved in ministry.</field>
       </record>
@@ -5648,7 +5625,7 @@
       <record model="ir.ui.view" id="kemas_event_calendar_view_collaborator">
          <field name="name">kemas.event.calendar.calendar</field>
          <field name="model">kemas.event</field>
-         <field name="type">calendar</field>
+
          <field name="priority" eval="3" />
          <field name="arch" type="xml">
             <calendar string="Events" date_start="date_start" date_stop="date_stop" color="service_id" mode="week">
@@ -5797,7 +5774,7 @@
       <record model="ir.ui.view" id="kemas_event_calendar_view2">
          <field name="name">kemas.event.calendar2</field>
          <field name="model">kemas.event</field>
-         <field name="type">calendar</field>
+
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
             <calendar string="Events" date_start="date_start" date_stop="date_stop" color="service_id" mode="week">

@@ -20,11 +20,13 @@
 #
 ##############################################################################
 import re
-from report import report_sxw
-from osv import osv
-from openerp.tools.translate import _
-import kemas
+
 from kemas import kemas_extras
+import kemas
+from openerp.tools.translate import _
+from osv import osv
+from report import report_sxw
+
 
 headers = []
 datas = []
@@ -48,7 +50,7 @@ class Parser(report_sxw.rml_parse):
         else:
             raise osv.except_osv(_('Error!'), _('No settings available. Please create a setting.'))
 
-    def build_report(self,wizard):
+    def build_report(self, wizard):
         global headers
         global datas
         headers = []
@@ -62,8 +64,7 @@ class Parser(report_sxw.rml_parse):
         if wizard.fl_code: fields.append('code')
         if wizard.fl_name: fields.append('name')
         if wizard.fl_mobile: fields.append('mobile')
-        if wizard.fl_telef1: fields.append('telef1')
-        if wizard.fl_telef2: fields.append('telef2')
+        if wizard.fl_phone: fields.append('phone')
         if wizard.fl_birth: fields.append('birth')
         if wizard.fl_age: fields.append('age')
         if wizard.fl_address: fields.append('address')
@@ -75,26 +76,18 @@ class Parser(report_sxw.rml_parse):
         if wizard.fl_level: fields.append('level_id')
         if wizard.fl_state: fields.append('state')
         #-------------------------------------------------
-        collaborator_obj = self.pool.get('kemas.collaborator')
+        search_args = []
+        if wizard.type_collaborators_to_select == 'actives':
+            search_args.append(('state', '=', 'Active'))
+        elif wizard.type_collaborators_to_select == 'inactives':
+            search_args.append(('state', '=', 'Inactive'))
+        elif wizard.type_collaborators_to_select == 'lockeds':
+            search_args.append(('state', '=', 'Locked'))
+        if wizard.team_id:
+            search_args.append(('team_id', '=', 'wizard.team_id.id'))
         
-        if wizard.type_collaborators == 'all':
-            collaborator_ids = collaborator_obj.search(cr, uid, [])
-        elif wizard.type_collaborators == 'collaborators':
-            if wizard.type_collaborators_to_select == 'all':
-                collaborator_ids = collaborator_obj.search(cr, uid, [('type','in',['Collaborator'])])
-            elif wizard.type_collaborators_to_select == 'actives':
-                collaborator_ids = collaborator_obj.search(cr, uid, [('type','in',['Collaborator']),('state','=','Active')])
-            elif wizard.type_collaborators_to_select == 'inactives':
-                collaborator_ids = collaborator_obj.search(cr, uid, [('type','in',['Collaborator']),('state','=','Inactive')])
-            elif wizard.type_collaborators_to_select == 'lockeds':
-                collaborator_ids = collaborator_obj.search(cr, uid, [('type','in',['Collaborator']),('state','=','Locked')])
-            
-            if wizard.team_id:
-                 collaborator_ids_A = collaborator_obj.search(cr, uid, [('team_id','=',wizard.team_id.id)])
-                 collaborator_ids = list(set(collaborator_ids) & set(collaborator_ids_A))
-        elif wizard.type_collaborators == 'others':
-            collaborator_ids = collaborator_obj.search(cr, uid, [('type','in',['Others'])])
-    
+        collaborator_obj = self.pool.get('kemas.collaborator')
+        collaborator_ids = collaborator_obj.search(cr, uid, search_args)
         collaborators = collaborator_obj.read(cr, uid, collaborator_ids, fields)
         
         global headers
@@ -104,7 +97,7 @@ class Parser(report_sxw.rml_parse):
         for collaborator in collaborators:
             data = []
             count += 1
-            data.append(kemas_extras.completar_cadena(str(count),len(str(len(collaborator_ids)))))
+            data.append(kemas_extras.completar_cadena(str(count), len(str(len(collaborator_ids)))))
             for field in fields:
                 if field == 'join_date':
                     data.append(kemas_extras.convert_date_to_dmy(collaborator[field]))
@@ -140,8 +133,7 @@ class Parser(report_sxw.rml_parse):
             if field == 'code': headers.append(u'CÓDIGO')
             if field == 'name': headers.append(u'NOMBRE')
             if field == 'mobile': headers.append(u'CELULAR')
-            if field == 'telef1': headers.append(u'TELÉFONO 1')
-            if field == 'telef2': headers.append(u'TELÉFONO 2')
+            if field == 'phone': headers.append(u'TELÉFONO 1')
             if field == 'birth': headers.append(u'FECHA DE NAC')
             if field == 'age': headers.append(u'EDAD')
             if field == 'email': headers.append(u'CORREO ELECTRÓNICO')

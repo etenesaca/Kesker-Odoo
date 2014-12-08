@@ -82,7 +82,7 @@ class Parser(report_sxw.rml_parse):
             for collaborator in wizard.collaborator_ids:
                 collaborator_ids.append(collaborator.id)
         else:
-            collaborator_ids = collaborator_obj.search(cr, uid, [('state', '=', 'Active'), ('type', '=', 'Collaborator')])
+            collaborator_ids = collaborator_obj.search(cr, uid, [('state', '=', 'Active')])
         
         args_attendance.append(('collaborator_id', 'in', collaborator_ids))
         args_connections.append(('collaborator_id', 'in', collaborator_ids))
