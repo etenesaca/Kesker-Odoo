@@ -28,7 +28,6 @@ import datetime
 from dateutil.parser import  *
 import logging
 from lxml import etree
-import math
 from mx import DateTime
 import random
 import threading
@@ -1293,6 +1292,7 @@ class kemas_config(osv.osv):
         'bc_width': fields.integer('Ancho', required=True),
         'bc_height': fields.integer('Alto', required=True),
         'bc_hr_form': fields.boolean("Human Readable", help="Legible para lectura?"),
+        'integrate_collaborators_with_partners':fields.boolean('Integrar colaboradores con partners', required=False),
         }
 
     def _get_logo(self, cr, uid, context={}):
@@ -2734,9 +2734,9 @@ class kemas_collaborator(osv.osv):
         if context.get('show_replacements', False):
             replacements_word = self.pool.get('kemas.func').get_translate(cr, uid, _('replacements available'))[0]
             fields.append('replacements')
-        reads = super(osv.osv, self).read(cr, uid, ids, fields)
+        records = super(osv.osv, self).read(cr, uid, ids, fields)
         res = []
-        for record in reads:
+        for record in records:
             nick_name = unicode(record['nick_name']).title()
             apellido = unicode(kemas_extras.do_dic(record['name'])[0]).title()
             if context.get('show_replacements', False):
@@ -3366,19 +3366,6 @@ class kemas_collaborator(osv.osv):
         collaborator = self.read(cr, uid, ids[0], ['born_country', 'email', 'born_state', 'born_city', 'user_id'])
         if not collaborator['user_id']:
             raise osv.except_osv(_('Error!'), _('Este usuario no tiene una cuenta de Usuario asignada!!'))
-        
-        # Actualizar los datos del Partner
-        partner_obj = self.pool.get('res.partner')
-        partner_id = self.pool.get('res.users').read(cr, uid, collaborator['user_id'][0], ['partner_id'])['partner_id'][0]
-        collaborator_name = self.name_get(cr, uid, ids)[0][1]
-        vals_partner = {
-                        'name': collaborator_name,
-                        'email' : collaborator['email'],
-                        'country_id' : collaborator['born_country'][0],
-                        'state_id' : collaborator['born_state'][0],
-                        'city' : collaborator['born_city'],
-                        }
-        partner_obj.write(cr, uid, [partner_id], vals_partner)
                     
         # Enviar correo de Notificacion de Creacion de Cuenta
         if res and send_email:
@@ -3798,9 +3785,20 @@ class kemas_collaborator(osv.osv):
             result[record['id']] = count_all(record)
         return result
     
+    def _integrate_collaborators_with_partners(self, cr, uid, ids, name, arg, context={}): 
+        result = {}
+        config = self.pool.get('kemas.config').get_correct_config(cr, uid, ['integrate_collaborators_with_partners'])
+        if not config:
+            raise osv.except_osv(u'¡Advertencia!', u"No hay realizado las configuraciones del sistema.")
+        
+        res_config = {'integrate_collaborators_with_partners': config['integrate_collaborators_with_partners']}
+        for record_id in ids:
+            result[record_id] = res_config
+        return result
+    
     def _get_collaborator_photo_inv(self, cr, uid, record_id, name, value, fnct_inv_arg, context):
         if context is None or not context or not isinstance(context, (dict)): context = {}
-        if not context.get('no_save_photo'):
+        if not context.get('no_save_inv'):
             photo = value
             record = super(osv.osv, self).read(cr, uid, record_id, ['genre', 'partner_id'])
             if not photo:
@@ -3814,7 +3812,7 @@ class kemas_collaborator(osv.osv):
             vals['photo_small'] = extras.crop_image(photo, 48)
             vals['photo_very_small'] = extras.crop_image(photo, 32)
             
-            context['no_save_photo'] = True
+            context['no_save_inv'] = True
             self.pool.get('res.partner').write(cr, uid, [record['partner_id'][0]], {'image': extras.crop_image(photo, 256)}, context=context)
             self.write(cr, uid, [record_id], vals, context=context)
         return True
@@ -3854,6 +3852,30 @@ class kemas_collaborator(osv.osv):
         'res.partner': (_get_collaborator_from_partner, ['image'], 10)
     }
     
+    def _get_name_inv(self, cr, uid, record_id, name, value, fnct_inv_arg, context):
+        record = super(osv.osv, self).read(cr, uid, record_id, ['partner_id'])
+        collaborator_name = self.name_get(cr, uid, [record_id])[0][1]
+        return self.pool.get('res.partner').write(cr, uid, [record['partner_id'][0]], {'name': collaborator_name})
+    
+    def _get_name(self, cr, uid, ids, name, arg, context={}): 
+        def get_name(record):
+            result = ' -- '
+            if record['partner_id']:
+                partner = self.pool.get('res.partner').read(cr, uid, record['partner_id'][0], ['name'])
+                result = partner['name']
+            return result
+             
+        result = {}
+        records = super(osv.osv, self).read(cr, uid, ids, ['partner_id'])
+        for record in records:
+            result[record['id']] = get_name(record)
+        return result
+    
+    _name_store_triggers = {
+        'kemas.collaborator': (lambda s, c, u, i, x: i, ['partner_id'], 10),
+        'res.partner': (_get_collaborator_from_partner, ['name'], 10)
+    }
+    
     _name = 'kemas.collaborator'
     _columns = {
         'partner_id':fields.many2one('res.partner', 'Partner relacionado', required=True),
@@ -3866,7 +3888,7 @@ class kemas_collaborator(osv.osv):
         'photo_very_small': fields.function(_get_collaborator_photo, multi='all', string="Foto", type="binary", store=_photo_store_triggers),
         'qr_code': fields.function(_get_QR_image, type='binary', string='QR code data'),
         'bar_code': fields.function(_get_barcode_image, type='binary', string='Bar Code data'),
-        'name': fields.char('Name', size=128, required=True, help="Full names of collaborator. Example: Rios Abad Juan David"),
+        'name': fields.function(_get_name, fnct_inv=_get_name_inv, string="Nombres", type="char", store=_name_store_triggers, required=True, help="Full names of collaborator. Example: Rios Abad Juan David"),
         'nick_name': fields.char('Nick name', size=32, required=True, help="Name you want to use the collaborator."),
         'name_with_nick_name': fields.function(_get_nick_name, type='char', string='Name'),
         'birth': fields.date('Birth', help="Collaborator birthday date."),
@@ -3875,12 +3897,18 @@ class kemas_collaborator(osv.osv):
         'age' : fields.function(_ff_age, type='char', string='Edad', help="Edad del colaborador"),
         'genre': fields.selection([('Male', 'Male'), ('Female', 'Female'), ], 'Genre', required=True, help="The genre of the collaborator",),
         'marital_status': fields.selection([('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced'), ('Widower', 'Widower')], 'Marital status', help="Marital Status of the collaborator"),
-        'telef1': fields.char('Telefone 1', size=10, help="The number of phone of the collaborator. Example: 072878563"),
+        
+        'street': fields.related('partner_id', 'street', type='char', string='Calle 1', store=False),
+        'street2': fields.related('partner_id', 'street2', type='char', string='Calle 2', store=False),
+        'city': fields.related('partner_id', 'city', type='char', string='Ciudad', store=False),
+        'state_id': fields.related('partner_id', 'state_id', type='many2one', string='Ciudad', relation="res.country.state", store=False),
+        'country_id': fields.related('partner_id', 'country_id', type='many2one', string=u'País', relation="res.country", store=False),
+        
+        'phone': fields.related('partner_id', 'phone', type='char', string=u'Teléfono', store=False),
+        'mobile': fields.related('partner_id', 'mobile', type='char', string=u'Móvil', store=False),
+        'email': fields.related('partner_id', 'email', type='char', string='Email', store=False),
         'telef2': fields.char('Telefone 2', size=10, help="The number of phone of the collaborator. Example: 072878563"),
-        'mobile': fields.char('Mobile', size=10, help="The number of mobile phone of the collaborator. Example: 088729345"),
-        'email': fields.char('E-mail', size=128, required=True, help="The collaborator email."),
-        'im_account': fields.char('IM account', size=128, required=False, help="IM account with which you can communicate with your collaborator."),
-        'address': fields.char('Address', size=255, required=True, help="The collaborator address."),
+        
         'web_site_ids': fields.one2many('kemas.collaborator.web.site', 'collaborator_id', 'Web sites', help='Web site of this collaborator'),
         'join_date': fields.date('Join date', help="Date on which the collaborator joined the Ministry."),
         'age_in_ministry' : fields.function(_ff_age_in_ministry, type='char', string='Tiempo de colaboración'),
@@ -3910,6 +3938,8 @@ class kemas_collaborator(osv.osv):
         'last_connection': fields.function(_last_connection, type='char', string='Ultima Conexion'),
         'progress': fields.function(get_percentage, type='float', string='Progress'),
         'replacements': fields.function(_replacements, type='integer', string='Replacements avaliable', help="Number of replacements available events this month"),
+        'integrate_collaborators_with_partners' : fields.function(_integrate_collaborators_with_partners, multi='all', type='boolean', string='integrate_collaborators_with_partners'),
+        
         #Suspensions----------------------------------------------------------------------------------------------------------
         'suspension_ids': fields.one2many('kemas.suspension', 'collaborator_id', 'Suspensions'),
         'day_remaining_suspension': fields.function(_get_days_remaining, type='char', string='Days remaining'),

@@ -710,6 +710,7 @@
                         <button string="Cortar fotos y logos" name="crop_photo" type="object" icon="gtk-cut" />
                      </div>
                      <group colspan="4" col="6">
+                        <field name="integrate_collaborators_with_partners" colspan="6" />
                         <field name="default_points" colspan="2" />
                         <field name="number_replacements" colspan="2" />
                         <group colspan="2" />
@@ -2624,6 +2625,9 @@
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Collaborator" version="7.0">
+               <field name="notified" invisible="1" />
+               <field name="user_id" invisible="1" />
+               <field name="integrate_collaborators_with_partners" invisible="1" />
                <header>
                   <div>
                      <field name="state" widget="statusbar" statusbar_visible="Active" />
@@ -2680,10 +2684,6 @@
                      </button>
                   </div>
                   <group colspan="4" expand="1" col="10">
-                     <field name="notified" invisible="1" />
-                     <field name="user_id" invisible="1" />
-                     <field name="partner_id" invisible="1" />
-
                      <div align="center" attrs="{'invisible':['|',('code','!=',False),'|',('type','=','Others'),'|',('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
                         <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
                         <font color="red">
@@ -2712,6 +2712,8 @@
                         <notebook colspan="4">
                            <page id="personal_info" string="Personal Information">
                               <group colspan="4" expand="1" col="4">
+                                 <field name="partner_id" invisible="0" placeholder="Partner relacionado" attrs="{'invisible':[('integrate_collaborators_with_partners','=',False)]}" />
+                                 <newline />
                                  <field name="code" readonly="1" colspan="2" />
                                  <newline />
                                  <field name="type" required="1" colspan="2" />
@@ -2721,14 +2723,23 @@
                                  <field name="birth" on_change="on_change_birth(birth)" required="1" colspan="2" />
                                  <field name="age" required="1" readonly="1" colspan="2" />
                                  <newline />
-                                 <field name="address" colspan="4" placeholder="Dirección exacta..." />
+                                 <label for="street" string="Address" />
+                                 <div>
+                                    <field name="street" placeholder="Street..." />
+                                    <field name="street2" />
+                                    <div class="address_format">
+                                       <field name="state_id" class="oe_no_button" placeholder="State" style="width: 50%%" options='{"no_open": True, "no_create": True}' />
+                                       <field name="city" placeholder="City" style="width: 50%%" />
+                                    </div>
+                                    <field name="country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True, "no_create": True}' />
+                                 </div>
                               </group>
                               <group colspan="4" expand="1" col="6">
                                  <separator string="Contact" colspan="6" />
-                                 <field name="mobile" colspan="2" attrs="{'required':[('telef1','=',False)]}" placeholder="ex: 0985146325" />
+                                 <field name="mobile" colspan="2" attrs="{'required':[('phone','=',False)]}" placeholder="ex: 0985146325" />
                                  <group colspan="4" />
-                                 <field name="telef1" colspan="2" attrs="{'required':[('mobile','=',False),('telef1','=',False)]}" placeholder="ex: 072561374" />
-                                 <field name="telef2" colspan="2" placeholder="ex: 072561374" attrs="{'invisible':[('telef1','=',False)]}" />
+                                 <field name="phone" colspan="2" attrs="{'required':[('mobile','=',False),('phone','=',False)]}" placeholder="ex: 072561374" />
+                                 <field name="telef2" colspan="2" placeholder="ex: 072561374" attrs="{'invisible':[('phone','=',False)]}" />
                                  <group colspan="4" />
                                  <group colspan="2" />
                                  <newline />
@@ -2826,169 +2837,6 @@
          <field name="priority" eval="10" />
          <field name="arch" type="xml">
             <form string="Collaborator" version="7.0" delete="0" create="0">
-               <header>
-                  <field name="state" widget="statusbar" statusbar_visible="Active" statusbar_colors='{"Active":"green","Inactive":"Orange","Locked":"Red","Suspended":"Yellow"}' readonly="1" />
-               </header>
-               <sheet string="Collaborator">
-                  <div align="center" class="box_tip oe_edit_only">
-                     <img src="/web/static/src/img/icons/gtk-info.png" />
-                     <i>
-                        <label string="If you decide to change the data points out that the information should be entered responsibly." />
-                     </i>
-                  </div>
-                  <br />
-                  <div class="box_red" states="Suspended">
-                     <group colspan="4" col="10">
-                        <group colspan="3">
-                           <h1>
-                              <label string="Suspension" />
-                           </h1>
-                        </group>
-                        <field name="day_remaining_suspension" />
-                        <button name="lift_suspension" confirm="Are you sure you lift the suspension before it has finished?" icon="terp-stage" type="object" string="Lift suspension" />
-                     </group>
-                  </div>
-                  <div states="Suspended">
-                     <br />
-                  </div>
-                  <field name="photo" widget='image' class="oe_left oe_avatar" options='{"size": [100, 100]}' />
-                  <div class="oe_title">
-                     <div class="oe_edit_only">
-                        <label for="name" />
-                     </div>
-                     <h1>
-                        <field name="name" default_focus="1" placeholder="Complete name" on_change="on_change_name(name)" />
-                     </h1>
-                     <group colspan="4" col="6">
-                        <field name="nick_name" on_change="on_change_nick_name(name,nick_name)" colspan="2" nolabel="1" placeholder="Nickname" />
-                        <group colspan="4" />
-                     </group>
-                     <label for="area_ids" class="oe_edit_only" attrs="{'invisible':[('type','=','Others')]}" />
-                     <field name="area_ids" widget="many2many_tags" attrs="{'invisible':[('type','=','Others')]}" readonly="1" />
-                  </div>
-                  <group colspan="4" expand="1" col="10">
-                     <field name="notified" invisible="1" />
-                     <field name="user_id" invisible="1" />
-
-                     <div align="center" attrs="{'invisible':['|',('code','!=',False),'|',('type','=','Others'),'|',('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
-                        <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
-                        <font color="red">
-                           <b>
-                              <label string="Este colaborador no tiene un Codigo Asignado" />
-                           </b>
-                        </font>
-                     </div>
-                     <div align="center" attrs="{'invisible':['|',('user_id','!=',False),'|',('type','=','Others'),'|',('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
-                        <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
-                        <font color="red">
-                           <b>
-                              <label string="Este colaborador no tiene cuenta de usuario" />
-                           </b>
-                        </font>
-                     </div>
-                     <div align="center" attrs="{'invisible':['|',('notified','=','notified'),'|',('type','=','Others'),'|',('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
-                        <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
-                        <font color="red">
-                           <b>
-                              <label string="Este colaborador no fue notificado son sus credenciales de Usuario" />
-                           </b>
-                        </font>
-                     </div>
-                     <group colspan="10" expand="1" col="4">
-                        <notebook colspan="4">
-                           <page id="personal_info" string="Personal Information">
-                              <group colspan="4" expand="1" col="4">
-                                 <field name="code" readonly="1" colspan="2" />
-                                 <field name="type" required="1" colspan="2" groups="kemas.group_kemas_manager" />
-                                 <field name="personal_id" on_change="on_change_personal_id(personal_id)" colspan="2" placeholder="CI/PASS" />
-                                 <field name="marital_status" required="1" colspan="2" />
-                                 <field name="genre" required="1" colspan="2" />
-                                 <field name="birth" on_change="on_change_birth(birth)" required="1" colspan="2" />
-                                 <field name="age" required="1" readonly="1" colspan="2" />
-                                 <newline />
-                                 <field name="address" colspan="4" />
-                              </group>
-                              <group colspan="4" expand="1" col="6">
-                                 <separator string="Contact" colspan="6" />
-                                 <field name="mobile" colspan="2" attrs="{'required':[('telef1','=',False)]}" placeholder="ex: 0985146325" />
-                                 <group colspan="4" />
-                                 <field name="telef1" colspan="2" attrs="{'required':[('mobile','=',False),('telef1','=',False)]}" placeholder="ex: 072561374" />
-                                 <field name="telef2" colspan="2" placeholder="ex: 072561374" attrs="{'invisible':[('telef1','=',False)]}" />
-                                 <group colspan="4" />
-                                 <group colspan="2" />
-                                 <newline />
-                                 <field name="email" colspan="4" widget="email" on_change="on_change_email(email)" placeholder="Dirección de correo electrónico para envío de notificaciones..." />
-                                 <group colspan="2" />
-                              </group>
-                              <group colspan="4" col="4">
-                                 <separator string="Born Information" colspan="4" />
-                                 <field name="born_country" colspan="2" required="1" string="Country" placeholder="Born Country" options='{"no_open": True}' />
-                                 <field name="born_state" colspan="2" required="1" placeholder="Born State" domain="[('country_id','=',born_country)]" options='{"no_open": True}' />
-                                 <field name="born_city" colspan="2" required="1" ired="1" placeholder="Born City" />
-                              </group>
-                           </page>
-                           <page id="status_info" string="Estado" attrs="{'invisible':[('type','=','Others')]}">
-                              <group colspan="4" col="6">
-                                 <field name="team_id" colspan="2" />
-                                 <field name="join_date" colspan="2" on_change="on_change_join_date(join_date)" attrs="{'required':[('type','=','Collaborator')]}" />
-                                 <field name="end_service" readonly="1" widget="char" states="Inactive" colspan="2" />
-                                 <field name="age_in_ministry" string="Tiempo de colaboración" colspan="2" attrs="{'required':[('type','=','Collaborator')],'invisible':[('join_date','=',False)]}" readonly="1" />
-                                 <newline />
-                                 <field name="points" colspan="2" readonly="1" states="Active,Inactive" />
-                                 <field name="level_id" colspan="2" readonly="1" states="Active,Inactive" options='{"no_open": True, "no_create": True}' />
-                                 <newline />
-                                 <field name="login" colspan="2" readonly="1" states="Active,Inactive" />
-                                 <field name="replacements" colspan="2" readonly="1" states="Active,Inactive" />
-                              </group>
-                           </page>
-                           <page string="Web Sites">
-                              <table>
-                                 <tr height="24px">
-                                    <td background="/kemas/static/src/img/social/facebook_.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/twitter_.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/youtube.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/linkedin.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/myspace.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/blogger.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/feed.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/reddit.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/github.png" width="23px" />
-                                    <td width="4px" />
-                                 </tr>
-                              </table>
-                              <field name="web_site_ids">
-                                 <form>
-                                    <field name="allow_get_avatar" invisible="1" />
-                                    <group col="4">
-                                       <field name="web_site_id" on_change="on_change_web_site_id(web_site_id)" default_focus="1" options='{"no_open": True}' colspan="2" />
-                                       <group colspan="2" />
-                                       <field name="get_avatar_from_website" attrs="{'invisible':[('allow_get_avatar','=',False)]}" colspan="4" />
-                                       <field name="url" widget="url" colspan="4" string="URL o E-mail" />
-                                    </group>
-                                 </form>
-                                 <tree>
-                                    <field name="web_site_id" default_focus="1" />
-                                    <field name="url" widget="url" string="URL o E-mail" />
-                                    <field name="get_avatar_from_website" />
-                                    <button string="Actualizar" name="reload_info" type="object" icon="gtk-refresh" attrs="{'invisible':[('get_avatar_from_website','=',False)]}" />
-                                 </tree>
-                              </field>
-                           </page>
-                           <page string="Logbook" groups="kemas.group_kemas_manager">
-                              <field name="logbook_ids" readonly="1" options='{"no_open": True}' />
-                           </page>
-                        </notebook>
-                     </group>
-                  </group>
-               </sheet>
             </form>
          </field>
       </record>
@@ -3016,11 +2864,20 @@
                               <field name="genre" colspan="2" required="1" />
                               <field name="birth" colspan="2" on_change="on_change_birth(birth)" required="1" />
                               <field name="age" colspan="2" required="1" readonly="1" />
-                              <field name="address" colspan="6" />
+                              <label for="street" string="Address" />
+                              <div>
+                                 <field name="street" placeholder="Street..." />
+                                 <field name="street2" />
+                                 <div class="address_format">
+                                    <field name="state_id" class="oe_no_button" placeholder="State" style="width: 48%%" options='{"no_open": True}' />
+                                    <field name="city" placeholder="City" style="width: 50%%" />
+                                 </div>
+                                 <field name="country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True}' />
+                              </div>
                               <separator string="Contact" colspan="6" />
-                              <field name="telef1" colspan="2" attrs="{'required':[('mobile','=',False),('telef1','=',False)]}" />
+                              <field name="phone" colspan="2" attrs="{'required':[('mobile','=',False),('phone','=',False)]}" />
                               <field name="telef2" colspan="2" />
-                              <field name="mobile" colspan="2" attrs="{'required':[('telef1','=',False)]}" />
+                              <field name="mobile" colspan="2" attrs="{'required':[('phone','=',False)]}" />
                               <field name="email" colspan="6" widget="email" on_change="on_change_email(email)" />
                               <group colspan="6" col="4">
                                  <separator string="Born Information" colspan="4" />
@@ -4343,7 +4200,7 @@
                   <field name="state" widget="statusbar" statusbar_visible="draft,on_going,closed" statusbar_colors='{"draft":"blue","on_going":"green","closed":"brown","canceled":"red"}' />
                </header>
                <sheet string="Event">
-                  <div class="oe_left oe_inline" states="on_going,creating,draft">
+                  <div class="oe_title" states="on_going,creating,draft">
                      <div class="oe_edit_only" states="creating,draft">
                         <label for="service_id" />
                      </div>
@@ -4357,7 +4214,7 @@
                      </button>
                   </div>
                   <field name="sending_emails" invisible="1" />
-                  <div attrs="{'invisible':['|',('mailing','=',False),('state','!=','on_going')]}" groups="kemas.group_kemas_manager">
+                  <div attrs="{'invisible':['|',('mailing','=',False),('state','!=','on_going')]}" groups="kemas.group_kemas_manager" style="margin-top: 10px">
                      <div>
                         <br />
                         <br />
