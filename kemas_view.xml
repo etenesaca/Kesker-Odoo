@@ -590,7 +590,7 @@
                                  <td width="5%%">
                                     <b>%%gn</b>
                                  </td>
-                                 <td width="28.33%%">Genre</td>
+                                 <td width="28.33%%">Gender</td>
                                  <td width="5%%">
                                     <b>%%ms</b>
                                  </td>
@@ -2718,7 +2718,7 @@
                                  <group>
                                     <field name="birth" on_change="on_change_birth(birth)" required="1" />
                                     <field name="age" required="1" readonly="1" />
-                                    <field name="genre" required="1" />
+                                    <field name="gender" required="1" />
                                  </group>
                                  <group>
                                     <label for="street" string="Address" />
@@ -2854,7 +2854,7 @@
                               <field name="nick_name" on_change="on_change_nick_name(name,nick_name)" colspan="2" />
                               <field name="code" colspan="2" readonly="1" />
                               <field name="marital_status" colspan="2" required="1" />
-                              <field name="genre" colspan="2" required="1" />
+                              <field name="gender" colspan="2" required="1" />
                               <field name="birth" colspan="2" on_change="on_change_birth(birth)" required="1" />
                               <field name="age" colspan="2" required="1" readonly="1" />
                               <label for="street" string="Address" />
@@ -2950,7 +2950,7 @@
                <field name="code" />
                <field name="points" />
                <field name="notified" />
-               <field name="genre" />
+               <field name="gender" />
                <field name="notified" />
                <field name="user_id" />
                <field name="user_id" />
@@ -3031,7 +3031,7 @@
                <field name="code" />
                <field name="points" />
                <field name="notified" />
-               <field name="genre" />
+               <field name="gender" />
                <field name="notified" />
                <field name="user_id" />
                <field name="user_id" />
@@ -3090,7 +3090,7 @@
                <field name="state" />
                <!-- Group by -->
                <field name="notified" invisible="1" />
-               <field name="genre" invisible="1" />
+               <field name="gender" invisible="1" />
                <field name="marital_status" invisible="1" />
                <field name="born_country" invisible="1" />
                <field name="born_state" invisible="1" />
@@ -3109,7 +3109,7 @@
                <field name="progress" widget="progressbar" />
                <!-- Group by -->
                <field name="notified" invisible="1" />
-               <field name="genre" invisible="1" />
+               <field name="gender" invisible="1" />
                <field name="marital_status" invisible="1" />
                <field name="born_country" invisible="1" />
                <field name="born_state" invisible="1" />
@@ -3131,7 +3131,7 @@
                <field name="notified" invisible="1" />
                <field name="points" invisible="1" />
                <field name="level_id" invisible="1" />
-               <field name="genre" invisible="1" />
+               <field name="gender" invisible="1" />
                <field name="marital_status" invisible="1" />
                <field name="born_country" invisible="1" />
                <field name="born_state" invisible="1" />
@@ -3151,7 +3151,7 @@
                <field name="notified" invisible="1" />
                <field name="points" invisible="1" />
                <field name="level_id" invisible="1" />
-               <field name="genre" invisible="1" />
+               <field name="gender" invisible="1" />
                <field name="marital_status" invisible="1" />
                <field name="born_country" invisible="1" />
                <field name="born_state" invisible="1" />
@@ -3173,7 +3173,7 @@
                <field name="notified" invisible="1" />
                <field name="points" invisible="1" />
                <field name="level_id" invisible="1" />
-               <field name="genre" invisible="1" />
+               <field name="gender" invisible="1" />
                <field name="marital_status" invisible="1" />
                <field name="born_country" invisible="1" />
                <field name="born_state" invisible="1" />
@@ -3194,7 +3194,7 @@
                <field name="team_id" />
                <!-- Group by -->
                <field name="notified" invisible="1" />
-               <field name="genre" invisible="1" />
+               <field name="gender" invisible="1" />
                <field name="marital_status" invisible="1" />
                <field name="born_country" invisible="1" />
                <field name="born_state" invisible="1" />
@@ -3219,7 +3219,7 @@
                <field name="team_id" />
                <field name="code" />
                <group string="Agrupar por...">
-                  <filter string="Genre" icon="terp-face-plain" domain="[]" context="{'group_by':'genre'}" />
+                  <filter string="Gender" icon="terp-face-plain" domain="[]" context="{'group_by':'gender'}" />
                   <filter string="Marital Status" icon="terp-partner" domain="[]" context="{'group_by':'marital_status'}" />
                   <separator />
                   <filter string="Country" icon="gtk-home" domain="[]" context="{'group_by':'born_country'}" />
@@ -3245,7 +3245,7 @@
                <field name="team_id" />
                <field name="code" />
                <group string="Group by...">
-                  <filter string="Genre" icon="terp-personal" domain="[]" context="{'group_by':'genre'}" />
+                  <filter string="Gender" icon="terp-personal" domain="[]" context="{'group_by':'gender'}" />
                   <filter string="Marital Status" icon="terp-partner" domain="[]" context="{'group_by':'marital_status'}" />
                   <separator />
                   <filter string="Country" icon="gtk-home" domain="[]" context="{'group_by':'born_country'}" />
@@ -3269,7 +3269,7 @@
                <field name="name" default_focus="1" />
                <field name="level_id" widget="selection" />
                <group string="Agrupar por...">
-                  <filter string="Genre" icon="terp-personal" domain="[]" context="{'group_by':'genre'}" />
+                  <filter string="Gender" icon="terp-personal" domain="[]" context="{'group_by':'gender'}" />
                   <filter string="Marital Status" icon="terp-partner" domain="[]" context="{'group_by':'marital_status'}" />
                   <separator />
                   <filter string="Country" icon="gtk-home" domain="[]" context="{'group_by':'born_country'}" />

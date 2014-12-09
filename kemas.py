@@ -588,7 +588,7 @@ class kemas_config(osv.osv):
     
     def build_add_remove_points_string(self, cr, uid, message, collaborator_id, description, points):
         collaborator_obj = self.pool.get('kemas.collaborator')
-        collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email', 'name', 'nick_name', 'genre', 'points', 'level_name'])
+        collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email', 'name', 'nick_name', 'gender', 'points', 'level_name'])
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
         preferences = config_obj.read(cr, uid, config_id, [])
@@ -602,7 +602,7 @@ class kemas_config(osv.osv):
         message = message.replace('%se', unicode(preferences['system_email']).lower())
         message = message.replace('%hs', unicode(preferences['url_system']))
         message = message.replace('%na', unicode(preferences['name_submitting']))
-        if collaborator['genre'].lower() == 'male':
+        if collaborator['gender'].lower() == 'male':
             message = message.replace('%gn', 'o')
         else:
             message = message.replace('%gn', 'a')
@@ -704,7 +704,7 @@ class kemas_config(osv.osv):
     
     def build_incorporation_string(self, cr, uid, message, collaborator_id):
         collaborator_obj = self.pool.get('kemas.collaborator')
-        collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email', 'name', 'nick_name', 'genre', 'code', 'points', 'level_name', 'username', 'password'])
+        collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email', 'name', 'nick_name', 'gender', 'code', 'points', 'level_name', 'username', 'password'])
         #------------------------------------------------------------------------------------
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
@@ -725,7 +725,7 @@ class kemas_config(osv.osv):
         message = message.replace('%sd', unicode(cr.dbname))
         message = message.replace('%ns', unicode(preferences['name_submitting']))
         message = message.replace('%na', unicode(preferences['name_system']))
-        if collaborator['genre'].lower() == 'male':
+        if collaborator['gender'].lower() == 'male':
             message = message.replace('%gn', 'o')
         else:
             message = message.replace('%gn', 'a')
@@ -821,7 +821,7 @@ class kemas_config(osv.osv):
         event_obj = self.pool.get('kemas.event')
         event = event_obj.read(cr, uid, event_id, ['date_start', 'service_id', 'place_id', 'attend_on_time_points', 'late_points', 'not_attend_points'])
         collaborator_obj = self.pool.get('kemas.collaborator')
-        collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email', 'name', 'nick_name', 'genre', 'points', 'level_name'])
+        collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email', 'name', 'nick_name', 'gender', 'points', 'level_name'])
         #------------------------------------------------------------------------------------
         """
         %%na - Name of system
@@ -856,7 +856,7 @@ class kemas_config(osv.osv):
         message = message.replace('%lv', unicode(collaborator['level_name']))
         message = message.replace('%em', unicode(collaborator['email']).lower())
         message = message.replace('%cl', unicode(kemas_extras.get_standard_names(collaborator['name'])))
-        if collaborator['genre'].lower() == 'male':
+        if collaborator['gender'].lower() == 'male':
             message = message.replace('%gn', 'o')
         else:
             message = message.replace('%gn', 'a')
@@ -914,7 +914,7 @@ class kemas_config(osv.osv):
         line = line_obj.read(cr, uid, line_id, ['collaborator_id', 'activity_ids', 'event_id'])
         event = event_obj.read(cr, uid, line['event_id'][0], ['date_start', 'service_id', 'place_id', 'attend_on_time_points', 'late_points', 'not_attend_points', 'information'])
         service = service_obj.read(cr, uid, event['service_id'][0], ['time_start', 'time_end', 'time_entry', 'time_limit', 'time_register'])
-        collaborator = collaborator_obj.read(cr, uid, line['collaborator_id'][0], ['email', 'name', 'nick_name', 'genre', 'code', 'points', 'level_name', 'username', 'password'])
+        collaborator = collaborator_obj.read(cr, uid, line['collaborator_id'][0], ['email', 'name', 'nick_name', 'gender', 'code', 'points', 'level_name', 'username', 'password'])
         #------------------------------------------------------------------------------------
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
@@ -934,7 +934,7 @@ class kemas_config(osv.osv):
         message = message.replace('%sd', unicode(cr.dbname))
         message = message.replace('%ns', unicode(preferences['name_submitting']))
         message = message.replace('%na', unicode(preferences['name_system']))
-        if collaborator['genre'].lower() == 'male':
+        if collaborator['gender'].lower() == 'male':
             message = message.replace('%gn', 'o')
         else:
             message = message.replace('%gn', 'a')
@@ -2526,9 +2526,9 @@ class kemas_collaborator_web_site(osv.osv):
                 vals = {'photo': profile['photo']}
                 if profile.get('gender', False):
                     if profile['gender'] == 'male':
-                        vals['genre'] = 'Male'
+                        vals['gender'] = 'Male'
                     else:
-                        vals['genre'] = 'Female'
+                        vals['gender'] = 'Female'
             
         if web_site['get_avatar_method'] == 'gravatar':
             photo = kemas_extras.get_avatar(wsline['url'], 120)
@@ -2796,30 +2796,30 @@ class kemas_collaborator(osv.osv):
         if photo_field:
             if type(res).__name__ == 'list':
                 for read_dict in res:
-                    collaborator = super(osv.osv, self).read(cr, uid, read_dict['id'], ['genre'])
+                    collaborator = super(osv.osv, self).read(cr, uid, read_dict['id'], ['gender'])
                     if read_dict.has_key(photo_field):
                         if read_dict[photo_field] == False:
-                            if collaborator['genre'] == 'Male':
+                            if collaborator['gender'] == 'Male':
                                 read_dict[photo_field] = self.get_photo_male()
                             else:
                                 read_dict[photo_field] = self.get_photo_female()
                         else:
                             continue
                     else:
-                        if collaborator['genre'] == 'Male':
+                        if collaborator['gender'] == 'Male':
                             read_dict[photo_field] = self.get_photo_male()
                         else:
                             read_dict[photo_field] = self.get_photo_female()
             else:
-                collaborator = super(osv.osv, self).read(cr, uid, ids, ['genre'])
+                collaborator = super(osv.osv, self).read(cr, uid, ids, ['gender'])
                 if res.has_key(photo_field):
                     if res[photo_field] == False:
-                        if collaborator['genre'] == 'Male':
+                        if collaborator['gender'] == 'Male':
                             res[photo_field] = self.get_photo_male()
                         else:
                             res[photo_field] = self.get_photo_female()               
                 else:
-                    if collaborator['genre'] == 'Male':
+                    if collaborator['gender'] == 'Male':
                         res[photo_field] = self.get_photo_male()
                     else:
                         res[photo_field] = self.get_photo_female()
@@ -2828,30 +2828,30 @@ class kemas_collaborator(osv.osv):
         elif 'photo_medium' in fields:
             if type(res).__name__ == 'list':
                 for read_dict in res:
-                    collaborator = super(osv.osv, self).read(cr, uid, read_dict['id'], ['genre'])
+                    collaborator = super(osv.osv, self).read(cr, uid, read_dict['id'], ['gender'])
                     if read_dict.has_key('photo_medium'):
                         if read_dict['photo_medium'] == False:
-                            if collaborator['genre'] == 'Male':
+                            if collaborator['gender'] == 'Male':
                                 read_dict['photo_medium'] = self.get_photo_small_male()
                             else:
                                 read_dict['photo_medium'] = self.get_photo_small_female()
                         else:
                             continue
                     else:
-                        if collaborator['genre'] == 'Male':
+                        if collaborator['gender'] == 'Male':
                             read_dict['photo_medium'] = self.get_photo_small_male()
                         else:
                             read_dict['photo_medium'] = self.get_photo_small_female()
             else:
-                collaborator = super(osv.osv, self).read(cr, uid, ids, ['genre'])
+                collaborator = super(osv.osv, self).read(cr, uid, ids, ['gender'])
                 if res.has_key('photo_medium'):
                     if res['photo_medium'] == False:
-                        if collaborator['genre'] == 'Male':
+                        if collaborator['gender'] == 'Male':
                             res['photo_medium'] = self.get_photo_small_male()
                         else:
                             res['photo_medium'] = self.get_photo_small_female()               
                 else:
-                    if collaborator['genre'] == 'Male':
+                    if collaborator['gender'] == 'Male':
                         res['photo_medium'] = self.get_photo_small_male()
                     else:
                         res['photo_medium'] = self.get_photo_small_female()
@@ -3375,7 +3375,7 @@ class kemas_collaborator(osv.osv):
         return result
     
     def build_QR_text(self, cr, uid, message, collaborator_id):
-        fields = ['code', 'name', 'birth', 'genre', 'marital_status', 'phone', 'mobile', 'email', 'address', 'join_date', 'type', 'username', 'level_name']
+        fields = ['code', 'name', 'birth', 'gender', 'marital_status', 'phone', 'mobile', 'email', 'address', 'join_date', 'type', 'username', 'level_name']
         collaborator = super(osv.osv, self).read(cr, uid, collaborator_id, fields)
         #------------------------------------------------------------------------------------
         message = message
@@ -3383,28 +3383,28 @@ class kemas_collaborator(osv.osv):
         message = message.replace('%cl', unicode(collaborator['name']))
         message = message.replace('%bt', kemas_extras.convert_date_to_dmy(unicode(collaborator['birth'])))
         #----Genero-----------------------------------------------------------------
-        if collaborator['genre'].lower() == 'male':
+        if collaborator['gender'].lower() == 'male':
             message = message.replace('%gn', 'Hombre')
         else:
             message = message.replace('%gn', 'Mujer')
         #----Estado Civil-----------------------------------------------------------
         if collaborator['marital_status'].lower() == 'single':
-            if collaborator['genre'].lower() == 'male':
+            if collaborator['gender'].lower() == 'male':
                 message = message.replace('%ms', 'Soltero')
             else:
                 message = message.replace('%ms', 'Soltera')
         elif collaborator['marital_status'].lower() == 'married':
-            if collaborator['genre'].lower() == 'male':
+            if collaborator['gender'].lower() == 'male':
                 message = message.replace('%ms', 'Casado')
             else:
                 message = message.replace('%ms', 'Casada')
         elif collaborator['marital_status'].lower() == 'divorced':
-            if collaborator['genre'].lower() == 'male':
+            if collaborator['gender'].lower() == 'male':
                 message = message.replace('%ms', 'Divorsiado')
             else:
                 message = message.replace('%ms', 'Divorsiada')
         elif collaborator['marital_status'].lower() == 'widower':
-            if collaborator['genre'].lower() == 'male':
+            if collaborator['gender'].lower() == 'male':
                 message = message.replace('%ms', 'Viudo')
             else:
                 message = message.replace('%ms', 'Viuda')
@@ -3655,9 +3655,9 @@ class kemas_collaborator(osv.osv):
         if context is None or not context or not isinstance(context, (dict)): context = {}
         if not context.get('no_save_inv'):
             photo = value
-            record = super(osv.osv, self).read(cr, uid, record_id, ['genre', 'partner_id'])
+            record = super(osv.osv, self).read(cr, uid, record_id, ['gender', 'partner_id'])
             if not photo:
-                if record['genre'] == 'Male':
+                if record['gender'] == 'Male':
                     photo = self.get_photo_male()
                 else:
                     photo = self.get_photo_female()
@@ -3682,7 +3682,7 @@ class kemas_collaborator(osv.osv):
                 photo = partner['image']
             
             if not photo:
-                if record['genre'] == 'Male':
+                if record['gender'] == 'Male':
                     photo = self.get_photo_male()
                 else:
                     photo = self.get_photo_female()
@@ -3694,7 +3694,7 @@ class kemas_collaborator(osv.osv):
             return result
              
         result = {}
-        records = super(osv.osv, self).read(cr, uid, ids, ['partner_id', 'genre'])
+        records = super(osv.osv, self).read(cr, uid, ids, ['partner_id', 'gender'])
         for record in records:
             result[record['id']] = get_collaborator_photo(record)
         return result
@@ -3752,7 +3752,7 @@ class kemas_collaborator(osv.osv):
         'birthday_date': fields.function(_get_birthday, type='char', string='Name'),
         'birthday': fields.function(_cal_birthday, type='datetime', string='Name'),
         'age' : fields.function(_ff_age, type='char', string='Edad', help="Edad del colaborador"),
-        'genre': fields.selection([('Male', 'Male'), ('Female', 'Female'), ], 'Genre', required=True, help="The genre of the collaborator",),
+        'gender': fields.selection([('Male', 'Male'), ('Female', 'Female'), ], 'Gender', required=True, help="The gender of the collaborator",),
         'marital_status': fields.selection([('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced'), ('Widower', 'Widower')], 'Marital status', help="Marital Status of the collaborator"),
         
         'street': fields.related('partner_id', 'street', type='char', string='Calle 1', store=False),
@@ -3843,7 +3843,7 @@ class kemas_collaborator(osv.osv):
     
     _defaults = {  
         'notified': 'notified',
-        'genre': 'Male',
+        'gender': 'Male',
         'marital_status': 'Single',
         'points': '0',
         'state': 'creating',
@@ -4811,7 +4811,7 @@ class kemas_event_collaborator_line(osv.osv):
         #Related-----------------------------------------------------------------------------------------------------------------------------
         'team_id': fields.related('collaborator_id', 'team_id', type="many2one", relation="kemas.team", string="Team"),
         'level_id': fields.related('collaborator_id', 'level_id', type="many2one", relation="kemas.level", string="Level"),
-        'genre': fields.related('collaborator_id', 'genre', type='selection', selection=[('Male', 'Male'), ('Female', 'Female'), ], string='Genre'),
+        'gender': fields.related('collaborator_id', 'gender', type='selection', selection=[('Male', 'Male'), ('Female', 'Female'), ], string='Gender'),
         'points': fields.related('collaborator_id', 'points', type='integer', string='points', readonly=1, store=False),
         'collaborator_state': fields.related('collaborator_id', 'state', type='selection', selection=[
                                                                                          ('creating', 'Creating'),
