@@ -389,7 +389,7 @@ msgid "Points earned"
 msgstr "Puntos ganados"
 
 #. module: kemas
-#: help:kemas.service,is_active:0
+#: help:kemas.service,active:0
 msgid "Indicates whether this service is active or not"
 msgstr "Indica si este Servicio esta Activo o No."
 
@@ -2395,7 +2395,7 @@ msgid "Report footer"
 msgstr "Pie del reporte"
 
 #. module: kemas
-#: field:kemas.task.assigned,is_active:0
+#: field:kemas.task.assigned,active:0
 msgid "Is active"
 msgstr "Está activo"
 
@@ -3151,7 +3151,7 @@ msgid "Send an IM?"
 msgstr "¿Enviar mensaje por Chat?"
 
 #. module: kemas
-#: help:kemas.task,is_active:0
+#: help:kemas.task,active:0
 msgid "Indicates whether this work is active or not"
 msgstr "Indica si esta la tarea esta activa o no"
 
@@ -4994,7 +4994,7 @@ msgid "Report header"
 msgstr "Cabecera del reporte"
 
 #. module: kemas
-#: help:kemas.place,is_active:0
+#: help:kemas.place,active:0
 msgid "Indicates whether this place is active or not"
 msgstr "Indica si el Lugar está Activo o No"
 
@@ -5008,12 +5008,12 @@ msgstr "Expositores"
 #: selection:kemas.collaborator,state:0
 #: selection:kemas.event.collaborator.line,collaborator_state:0
 #: view:kemas.place:0
-#: field:kemas.place,is_active:0
+#: field:kemas.place,active:0
 #: selection:kemas.report.collaborators.list.wizard,type_collaborators_to_select:0
 #: view:kemas.service:0
-#: field:kemas.service,is_active:0
+#: field:kemas.service,active:0
 #: view:kemas.task:0
-#: field:kemas.task,is_active:0
+#: field:kemas.task,active:0
 #: view:kemas.task.assigned:0
 msgid "Active"
 msgstr "Activo"

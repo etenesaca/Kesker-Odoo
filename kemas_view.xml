@@ -2214,8 +2214,8 @@
          <field name="arch" type="xml">
             <form string="Task Assigned" version="7.0">
                <header>
-                  <button name="do_close" class="oe_highlight" string="Close" type="object" icon="kanban-apply" attrs="{'invisible':['|',('is_active','=',False),('state','=','creating')]}" confirm="Are you Close sure This Task now? This action is irreversible." groups="kemas.group_kemas_manager" />
-                  <button name="do_cancel" string="Cancel" type="object" icon="gtk-cancel" attrs="{'invisible':['|',('is_active','=',False),('state','=','creating')]}" confirm="Are you Cancel sure This Task now? This action is irreversible." groups="kemas.group_kemas_manager" />
+                  <button name="do_close" class="oe_highlight" string="Close" type="object" icon="kanban-apply" attrs="{'invisible':['|',('active','=',False),('state','=','creating')]}" confirm="Are you Close sure This Task now? This action is irreversible." groups="kemas.group_kemas_manager" />
+                  <button name="do_cancel" string="Cancel" type="object" icon="gtk-cancel" attrs="{'invisible':['|',('active','=',False),('state','=','creating')]}" confirm="Are you Cancel sure This Task now? This action is irreversible." groups="kemas.group_kemas_manager" />
                   <field name="stage_id" widget="statusbar" clickable="True" attrs="{'invisible':[('state','=','creating')]}" />
                   <field name="state" widget="statusbar" statusbar_visible="creating" attrs="{'invisible':[('state','!=','creating')]}" />
                </header>
@@ -2248,23 +2248,23 @@
                      <page string="Extra Info" attrs="{'readonly':[('state','=','done')]}" groups="kemas.kemas_group_manager">
                         <group>
                            <field name="state" invisible="1" />
-                           <field name="is_active" invisible="1" />
+                           <field name="active" invisible="1" />
                            <field name="priority" />
                            <field name="date_created" readonly="1" />
-                           <field name="date_closing" readonly="1" attrs="{'invisible':['|',('is_active','=',True),('state','!=','done')]}" />
-                           <field name="date_cancelled" readonly="1" attrs="{'invisible':['|',('is_active','=',True),('state','!=','cancelled')]}" />
+                           <field name="date_closing" readonly="1" attrs="{'invisible':['|',('active','=',True),('state','!=','done')]}" />
+                           <field name="date_cancelled" readonly="1" attrs="{'invisible':['|',('active','=',True),('state','!=','cancelled')]}" />
                            <field name="date_start" />
                            <field name="date_end" />
                         </group>
                      </page>
                   </notebook>
                </sheet>
-               <group attrs="{'invisible':['|',('is_active','=',True),('state','=','creating')]}">
+               <group attrs="{'invisible':['|',('active','=',True),('state','=','creating')]}">
                   <div class="oe_chatter">
                      <field name="message_ids" readonly="1" widget="mail_thread" />
                   </div>
                </group>
-               <group attrs="{'invisible':['|',('is_active','=',False),('state','=','creating')]}">
+               <group attrs="{'invisible':['|',('active','=',False),('state','=','creating')]}">
                   <div class="oe_chatter">
                      <field name="message_follower_ids" widget="mail_followers" />
                      <field name="message_ids" widget="mail_thread" />
@@ -2339,8 +2339,8 @@
                <field name="collaborator_id" string="Tasks" />
                <field name="categ_ids" />
                <separator />
-               <filter name="active" string="Active" domain="[('is_active','=',True)]" />
-               <filter name="inactive" string="Inactive" domain="[('is_active','=',False)]" />
+               <filter name="active" string="Active" domain="[('active','=',True)]" />
+               <filter name="inactive" string="Inactive" domain="[('active','=',False)]" />
                <separator />
                <field name="search_start" context="{'search_start':True}" />
                <field name="search_end" context="{'search_end':True}" />
@@ -2406,7 +2406,7 @@
                   <br />
                   <group colspan="4">
                      <field name="points" />
-                     <field name="is_active" />
+                     <field name="active" />
                      <field name="description" placeholder="Description of the Task" />
                   </group>
                </sheet>
@@ -2419,11 +2419,11 @@
          <field name="model">kemas.task</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
-            <tree string="Tasks" colors="gray:is_active==False">
-               <field name="is_active" invisible="1" />
+            <tree string="Tasks" colors="gray:active==False">
+               <field name="active" invisible="1" />
                <field name="name" />
                <field name="points" />
-               <field name="is_active" />
+               <field name="active" />
             </tree>
          </field>
       </record>
@@ -2433,8 +2433,8 @@
          <field name="model">kemas.task</field>
          <field name="arch" type="xml">
             <search string="Search Task">
-               <filter name="active" string="Active" domain="[('is_active','=',True)]" icon="STOCK_YES" />
-               <filter name="inactive" string="Inactive" domain="[('is_active','=',False)]" icon="STOCK_NO" />
+               <filter name="active" string="Active" domain="[('active','=',True)]" icon="STOCK_YES" />
+               <filter name="inactive" string="Inactive" domain="[('active','=',False)]" icon="STOCK_NO" />
                <separator />
                <field name="name" default_focus="1" />
             </search>
@@ -3542,8 +3542,8 @@
          <field name="arch" type="xml">
             <form string="Place" version="7.0">
                <header>
-                  <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('is_active','=',True)]}" groups="kemas.group_kemas_manager" />
-                  <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('is_active','=',False)]}" groups="kemas.group_kemas_manager" />
+                  <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('active','=',True)]}" groups="kemas.group_kemas_manager" />
+                  <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('active','=',False)]}" groups="kemas.group_kemas_manager" />
                </header>
                <sheet string="Level">
                   <field name="photo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' />
@@ -3556,7 +3556,7 @@
                      </h1>
                   </div>
                   <group>
-                     <field name="is_active" />
+                     <field name="active" />
                      <field name="address" placeholder="The exact direction of the place.." />
                   </group>
                   <label for="map_url" string="Mapa" />
@@ -3571,8 +3571,8 @@
          <field name="model">kemas.place</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
-            <tree string="Places" colors="gray:is_active==False">
-               <field name="is_active" invisible="1" />
+            <tree string="Places" colors="gray:active==False">
+               <field name="active" invisible="1" />
                <field name="name" />
                <field name="address" />
             </tree>
@@ -3584,13 +3584,13 @@
          <field name="model">kemas.place</field>
          <field name="arch" type="xml">
             <search string="search place">
-               <filter name="active" string="Active" domain="[('is_active','=',True)]" icon="STOCK_YES" />
-               <filter name="inactive" string="Inactive" domain="[('is_active','=',False)]" icon="STOCK_NO" />
+               <filter name="active" string="Active" domain="[('active','=',True)]" icon="STOCK_YES" />
+               <filter name="inactive" string="Inactive" domain="[('active','=',False)]" icon="STOCK_NO" />
                <separator />
                <field name="name" default_focus="1" />
                <field name="address" />
                <group expand="0" string="Group by">
-                  <filter string="State" domain="[]" context="{'group_by':'is_active'}" />
+                  <filter string="State" domain="[]" context="{'group_by':'active'}" />
                </group>
             </search>
          </field>
@@ -3831,8 +3831,8 @@
          <field name="arch" type="xml">
             <form string="Service" version="7.0">
                <header>
-                  <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('is_active','=',True)]}" groups="kemas.group_kemas_manager" />
-                  <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('is_active','=',False)]}" groups="kemas.group_kemas_manager" />
+                  <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('active','=',True)]}" groups="kemas.group_kemas_manager" />
+                  <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('active','=',False)]}" groups="kemas.group_kemas_manager" />
                </header>
                <sheet string="Service">
                   <label for="name" class="oe_edit_only" />
@@ -3841,7 +3841,7 @@
                   </h1>
                   <br />
                   <group colspan="4" col="6">
-                     <field name="is_active" />
+                     <field name="active" />
                      <group colspan="4" />
                      <field name="time_start" widget="float_time" colspan="2" />
                      <field name="time_end" widget="float_time" colspan="2" />
@@ -3866,8 +3866,8 @@
          <field name="model">kemas.service</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
-            <tree string="Services" colors="gray:is_active==False">
-               <field name="is_active" invisible="1" />
+            <tree string="Services" colors="gray:active==False">
+               <field name="active" invisible="1" />
                <field name="name" />
                <field name="time_start" widget="float_time" />
                <field name="time_end" widget="float_time" />
@@ -3883,8 +3883,8 @@
          <field name="model">kemas.service</field>
          <field name="arch" type="xml">
             <search string="Search Service">
-               <filter name="active" string="Active" domain="[('is_active','=',True)]" icon="STOCK_YES" />
-               <filter name="inactive" string="Inactive" domain="[('is_active','=',False)]" icon="STOCK_NO" />
+               <filter name="active" string="Active" domain="[('active','=',True)]" icon="STOCK_YES" />
+               <filter name="inactive" string="Inactive" domain="[('active','=',False)]" icon="STOCK_NO" />
                <separator />
                <field name="name" default_focus="1" />
             </search>

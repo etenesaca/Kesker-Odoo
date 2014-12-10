@@ -3905,16 +3905,11 @@ class kemas_task(osv.osv):
         ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
         return self.name_get(cr, uid, ids, context)
     
-    def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
-        if context.get('search_all', False) == False:
-            args.append(('is_active', '=', True))       
-        return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
-    
     _name = 'kemas.task'
     _columns = {
         'name': fields.char('Name', size=200, help="Work Name", required=True),
         'points': fields.integer('Points', required=True, help='Points that he will add the collaborator to fulfill the work'),
-        'is_active': fields.boolean('Active', required=False, help='Indicates whether this work is active or not'),
+        'active': fields.boolean('Active', required=False, help='Indicates whether this work is active or not'),
         'description': fields.text('Description', required=True),
         }
     _sql_constraints = [
@@ -3922,7 +3917,7 @@ class kemas_task(osv.osv):
         ]
     _defaults = {  
         'points': 1000,
-        'is_active':True
+        'active':True
         }
 
 class kemas_task_assigned(osv.osv):
@@ -4085,9 +4080,6 @@ class kemas_task_assigned(osv.osv):
             collaborator_ids = super(kemas_collaborator, collaborator_obj).search(cr, uid, [('user_id', '=', uid)])
             args.append(('collaborator_id', 'in', collaborator_ids))
         
-        if context.get('search_all', False) == False:
-            args.append(('is_active', '=', True))  
-            
         # Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month', False):
             range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
@@ -4134,7 +4126,7 @@ class kemas_task_assigned(osv.osv):
         vals = {
                 'date_closing' :time.strftime("%Y-%m-%d %H:%M:%S"),
                 'state' : 'done',
-                'is_active': False
+                'active': False
                 }
         stage_ids = self.pool.get('kemas.task.type').search(cr, uid, [('state', '=', 'done'), ('name', '!=', 'Completed')])
         if stage_ids:
@@ -4151,7 +4143,7 @@ class kemas_task_assigned(osv.osv):
         vals = {
                 'date_cancelled' :time.strftime("%Y-%m-%d %H:%M:%S"),
                 'state' : 'cancelled',
-                'is_active': False
+                'active': False
                 }
         stage_ids = self.pool.get('kemas.task.type').search(cr, uid, [('state', '=', 'cancelled')])
         if stage_ids:
@@ -4180,8 +4172,8 @@ class kemas_task_assigned(osv.osv):
     def write(self, cr, uid, ids, vals, context={}):
         if type(ids).__name__ == 'int' : 
             ids = [ids] 
-        for task_assigned in super(osv.osv, self).read(cr, uid, ids, ['state', 'stage_id', 'is_active', 'message_follower_ids']):
-            if not task_assigned['is_active']:
+        for task_assigned in super(osv.osv, self).read(cr, uid, ids, ['state', 'stage_id', 'active', 'message_follower_ids']):
+            if not task_assigned['active']:
                 raise osv.except_osv(_('Error!'), _('No se puede modificar una tarea Cerrada o Cancelada.'))
             
             if vals.get('stage_id'):
@@ -4268,7 +4260,7 @@ class kemas_task_assigned(osv.osv):
         'user_id': fields.many2one('res.users', 'Assigned to', track_visibility='onchange'),
         'color': fields.integer('Color Index'),
         'user_email': fields.related('user_id', 'email', type='char', string='User Email', readonly=True),
-        'is_active': fields.boolean('Is active', required=False),
+        'active': fields.boolean('Is active', required=False),
         'date_created': fields.datetime('Creation date', help='Date of creation of this task'),
         'date_closing': fields.datetime('Closing date', help='Closing date for This Task'),
         'date_cancelled': fields.datetime('Cancellation date', help='Cancellation date of This Task'),
@@ -4294,7 +4286,7 @@ class kemas_task_assigned(osv.osv):
         'state': 'creating',
         'priority': '2',
         'sequence': 10,
-        'is_active': True,
+        'active': True,
         'user_id': lambda obj, cr, uid, ctx = None: uid,
     }
     
@@ -4451,11 +4443,11 @@ class kemas_history_points(osv.osv):
     
 class kemas_place(osv.osv):
     def do_activate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'is_active' : True})
+        super(osv.osv, self).write(cr, uid, ids, {'active' : True})
         return True
     
     def do_inactivate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'is_active': False})
+        super(osv.osv, self).write(cr, uid, ids, {'active': False})
         return True
     
     def __fields_view_get(self, cr, uid, view_id=None, view_type='form', context={}, toolbar=True, submenu=False):       
@@ -4477,11 +4469,6 @@ class kemas_place(osv.osv):
         ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
         return self.name_get(cr, uid, ids, context)
     
-    def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
-        if context.get('search_all', False) == False:
-            args.append(('is_active', '=', True))       
-        return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
-        
     _order = 'name'
     _name = 'kemas.place'
     _columns = {
@@ -4489,14 +4476,14 @@ class kemas_place(osv.osv):
         'address': fields.text('Address'),
         'Map': fields.text('Mapa'),
         'photo': fields.binary('Photo', help='the photo of the place'),
-        'is_active': fields.boolean('Active', required=False, help='Indicates whether this place is active or not'),
+        'active': fields.boolean('Active', required=False, help='Indicates whether this place is active or not'),
         'map_url':fields.char('URL del mapa', size=400, required=False, readonly=False),
         }
     _sql_constraints = [
         ('place_name', 'unique (name)', 'This Name already exist!'),
         ]
     _defaults = {  
-        'is_active':True 
+        'active':True 
         }
 
 class kemas_repository_category(osv.osv):
@@ -4658,11 +4645,11 @@ class kemas_repository(osv.osv):
 
 class kemas_service(osv.osv):
     def do_activate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'is_active' : True})
+        super(osv.osv, self).write(cr, uid, ids, {'active' : True})
         return True
     
     def do_inactivate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'is_active': False})
+        super(osv.osv, self).write(cr, uid, ids, {'active': False})
         return True
     
     def name_search(self, cr, uid, name, args=None, operator='ilike', context={}, limit=100):
@@ -4673,11 +4660,6 @@ class kemas_service(osv.osv):
         ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
         return self.name_get(cr, uid, ids, context)
     
-    def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
-        if context.get('search_all', False) == False:
-            args.append(('is_active', '=', True))       
-        return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
-
     def write(self, cr, uid, ids, vals, context={}):
         if super(osv.osv, self).write(cr, uid, ids, vals, context):
             event_obj = self.pool.get('kemas.event')
@@ -4715,7 +4697,7 @@ class kemas_service(osv.osv):
         'time_register': fields.float('Time register', required=True, help='End time of service'),
         'time_limit': fields.float('Time limit', required=True, help='Limit time to register attendance'),
         'description': fields.text('Description'),
-        'is_active': fields.boolean('Active', required=False, help='Indicates whether this service is active or not'),
+        'active': fields.boolean('Active', required=False, help='Indicates whether this service is active or not'),
         }
     _sql_constraints = [
         ('service_name', 'unique (name)', 'This Name already exist!'),
@@ -4729,7 +4711,7 @@ class kemas_service(osv.osv):
         'time_entry': float(7 + (0.30 * 100 / 60)),
         'time_register': float(0.30 * 100 / 60),
         'time_limit' : 1.00,
-        'is_active':True
+        'active':True
         }
     
 class kemas_event_collaborator_line(osv.osv):
