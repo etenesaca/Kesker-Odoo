@@ -2680,147 +2680,137 @@
                         <field name="logbook_count" widget="statinfo" string="Logins" />
                      </button>
                   </div>
-                  <group colspan="4" expand="1" col="10">
-                     <div align="center" attrs="{'invisible':['|',('code','!=',False),('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
-                        <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
-                        <font color="red">
-                           <b>
-                              <label string="Este colaborador no tiene un Codigo Asignado" />
-                           </b>
-                        </font>
-                     </div>
-                     <div align="center" attrs="{'invisible':['|',('user_id','!=',False),('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
-                        <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
-                        <font color="red">
-                           <b>
-                              <label string="Este colaborador no tiene cuenta de usuario" />
-                           </b>
-                        </font>
-                     </div>
-                     <div align="center" attrs="{'invisible':['|',('notified','=','notified'),('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
-                        <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
-                        <font color="red">
-                           <b>
-                              <label string="Este colaborador no fue notificado son sus credenciales de Usuario" />
-                           </b>
-                        </font>
-                     </div>
-                     <group colspan="10" expand="1" col="4">
-                        <notebook colspan="4">
-                           <page id="personal_info" string="Personal Information">
-                              <group>
-                                 <group>
-                                    <field name="partner_id" invisible="0" required="0" placeholder="Partner relacionado" attrs="{'invisible':[('integrate_collaborators_with_partners','=',False)]}" />
-                                    <field name="code" readonly="1" />
-                                    <field name="marital_status" required="1" />
-                                    <field name="personal_id" on_change="on_change_personal_id(personal_id)" placeholder="CI/PASS" />
-                                 </group>
-                                 <group>
-                                    <field name="birth" on_change="on_change_birth(birth)" required="1" />
-                                    <field name="age" required="1" readonly="1" />
-                                    <field name="gender" required="1" />
-                                 </group>
-                                 <group>
-                                    <label for="street" string="Address" />
-                                    <div>
-                                       <field name="street" placeholder="Street..." />
-                                       <field name="street2" />
-                                       <field name="country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True}' />
-                                       <div class="address_format">
-                                          <field name="state_id" class="oe_no_button" placeholder="State" style="width: 50%%" options='{"no_open": True}' />
-                                          <field name="city" placeholder="City" style="width: 50%%" />
-                                       </div>
-                                    </div>
-                                 </group>
-                                 <group>
-                                    <field name="phone" placeholder="e.g. +32.81.81.37.00" />
-                                    <field name="mobile" />
-                                    <field name="fax" />
-                                    <field name="email" widget="email" />
-                                 </group>
-                                 <group>
-                                    <separator string="Információn de procedencia" colspan="4" />
-                                    <field name="born_country" required="1" string="país" placeholder="Born Country" options='{"no_open": True}' />
-                                    <field name="born_state" required="1" string="Provincia" placeholder="Born State" domain="[('country_id','=',born_country)]" options='{"no_open": True}' />
-                                    <field name="born_city" required="1" string="Ciudad" placeholder="Born City" />
-                                 </group>
-                                 <group />
-                              </group>
-                           </page>
-                           <page id="status_info" string="Estado">
-                              <group colspan="4" col="6">
-                                 <field name="team_id" colspan="2" placeholder="Equipo" options='{"no_create": True}' />
-                                 <field name="join_date" colspan="2" on_change="on_change_join_date(join_date)" />
-                                 <field name="end_service" readonly="1" widget="char" states="Inactive" colspan="2" />
-                                 <field name="age_in_ministry" string="Tiempo de colaboración" required="True" colspan="2" attrs="{'invisible':[('join_date','=',False)]}" readonly="1" />
-                                 <newline />
-                                 <field name="points" colspan="2" readonly="1" states="Active,Inactive" />
-                                 <field name="level_id" colspan="2" readonly="1" states="Active,Inactive" />
-                                 <newline />
-                                 <field name="login" colspan="2" readonly="1" states="Active,Inactive" />
-                                 <field name="replacements" colspan="2" readonly="1" states="Active,Inactive" />
-                              </group>
+                  <div align="center" attrs="{'invisible':['|',('code','!=',False),('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
+                     <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
+                     <font color="red">
+                        <b>
+                           <label string="Este colaborador no tiene un Codigo Asignado" />
+                        </b>
+                     </font>
+                  </div>
+                  <div align="center" attrs="{'invisible':['|',('user_id','!=',False),('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
+                     <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
+                     <font color="red">
+                        <b>
+                           <label string="Este colaborador no tiene cuenta de usuario" />
+                        </b>
+                     </font>
+                  </div>
+                  <div align="center" attrs="{'invisible':['|',('notified','=','notified'),('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
+                     <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
+                     <font color="red">
+                        <b>
+                           <label string="Este colaborador no fue notificado son sus credenciales de Usuario" />
+                        </b>
+                     </font>
+                  </div>
+                  <notebook colspan="4">
+                     <page id="personal_info" string="Personal Information">
+                        <group style="margin-bottom: -8px">
+                           <group>
+                              <field name="partner_id" invisible="0" required="0" placeholder="Partner relacionado" attrs="{'invisible':[('integrate_collaborators_with_partners','=',False)]}" />
+                              <field name="code" readonly="1" />
+                              <field name="marital_status" required="1" />
+                              <field name="personal_id" on_change="on_change_personal_id(personal_id)" placeholder="CI/PASS" />
+                           </group>
+                           <group>
+                              <field name="birth" on_change="on_change_birth(birth)" required="1" />
+                              <field name="age" required="1" readonly="1" />
+                              <field name="gender" required="1" />
+                           </group>
+                           <group>
+                              <label for="street" string="Dirección" />
                               <div>
-                                 <br />
-                                 <label for="last_connection" />
-                                 <div>
-                                    <field name="last_connection" string="Última conexión" readonly="1" />
+                                 <field name="street" placeholder="Street..." />
+                                 <field name="street2" />
+                                 <field name="country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True}' />
+                                 <div class="address_format">
+                                    <field name="state_id" class="oe_no_button" placeholder="State" style="width: 50%%" options='{"no_open": True}' />
+                                    <field name="city" placeholder="City" style="width: 50%%" />
                                  </div>
                               </div>
-                           </page>
-                           <page string="Web Sites">
-                              <table>
-                                 <tr height="24px">
-                                    <td background="/kemas/static/src/img/social/facebook_.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/twitter_.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/youtube.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/linkedin.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/myspace.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/blogger.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/feed.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/reddit.png" width="24px" />
-                                    <td width="4px" />
-                                    <td background="/kemas/static/src/img/social/github.png" width="23px" />
-                                    <td width="4px" />
-                                 </tr>
-                              </table>
-                              <field name="web_site_ids">
-                                 <form>
-                                    <field name="allow_get_avatar" invisible="1" />
-                                    <group col="4">
-                                       <field name="web_site_id" on_change="on_change_web_site_id(web_site_id)" default_focus="1" options='{"no_open": True}' colspan="2" />
-                                       <group colspan="2" />
-                                       <field name="get_avatar_from_website" attrs="{'invisible':[('allow_get_avatar','=',False)]}" colspan="4" />
-                                       <field name="url" widget="url" colspan="4" string="URL o E-mail" />
-                                    </group>
-                                 </form>
-                                 <tree>
-                                    <field name="web_site_id" default_focus="1" />
-                                    <field name="url" widget="url" string="URL o E-mail" />
-                                    <field name="get_avatar_from_website" />
-                                    <button string="Actualizar" name="reload_info" type="object" icon="gtk-refresh" attrs="{'invisible':[('get_avatar_from_website','=',False)]}" />
-                                 </tree>
-                              </field>
-                           </page>
-                           <page string="Logbook">
-                              <field name="logbook_ids" readonly="1" options='{"no_open": True}' />
-                           </page>
-                        </notebook>
-                     </group>
-                     <group colspan="1" col="2">
-                        <!--
-                           <newline/>
-                           <field name="qr_code" widget="image" width="150" height="150" colspan="1" nolabel="1" readonly="1"/>
-                        -->
-                     </group>
-                  </group>
+                           </group>
+                           <group>
+                              <field name="phone" placeholder="e.g. +32.81.81.37.00" />
+                              <field name="mobile" />
+                              <field name="fax" />
+                              <field name="email" widget="email" />
+                           </group>
+                           <group style="margin-top: -15px">
+                              <separator string="Információn de procedencia" colspan="4" />
+                              <field name="born_country" required="1" string="País" placeholder="Born Country" options='{"no_open": True}' />
+                              <field name="born_state" required="1" string="Provincia" placeholder="Born State" domain="[('country_id','=',born_country)]" options='{"no_open": True}' />
+                              <field name="born_city" required="1" string="Ciudad" placeholder="Born City" />
+                           </group>
+                           <group />
+                        </group>
+                     </page>
+                     <page id="status_info" string="Estado">
+                        <group colspan="4" col="6">
+                           <field name="team_id" colspan="2" placeholder="Equipo" options='{"no_create": True}' />
+                           <field name="join_date" colspan="2" on_change="on_change_join_date(join_date)" />
+                           <field name="end_service" readonly="1" widget="char" states="Inactive" colspan="2" />
+                           <field name="age_in_ministry" string="Tiempo de colaboración" required="True" colspan="2" attrs="{'invisible':[('join_date','=',False)]}" readonly="1" />
+                           <newline />
+                           <field name="points" colspan="2" readonly="1" states="Active,Inactive" />
+                           <field name="level_id" colspan="2" readonly="1" states="Active,Inactive" />
+                           <newline />
+                           <field name="login" colspan="2" readonly="1" states="Active,Inactive" />
+                           <field name="replacements" colspan="2" readonly="1" states="Active,Inactive" />
+                        </group>
+                        <div>
+                           <br />
+                           <label for="last_connection" />
+                           <div>
+                              <field name="last_connection" string="Última conexión" readonly="1" />
+                           </div>
+                        </div>
+                     </page>
+                     <page string="Web Sites">
+                        <table>
+                           <tr height="24px">
+                              <td background="/kemas/static/src/img/social/facebook_.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/twitter_.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/youtube.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/linkedin.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/myspace.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/blogger.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/feed.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/reddit.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/github.png" width="23px" />
+                              <td width="4px" />
+                           </tr>
+                        </table>
+                        <field name="web_site_ids">
+                           <form>
+                              <field name="allow_get_avatar" invisible="1" />
+                              <group col="4">
+                                 <field name="web_site_id" on_change="on_change_web_site_id(web_site_id)" default_focus="1" options='{"no_open": True}' colspan="2" />
+                                 <group colspan="2" />
+                                 <field name="get_avatar_from_website" attrs="{'invisible':[('allow_get_avatar','=',False)]}" colspan="4" />
+                                 <field name="url" widget="url" colspan="4" string="URL o E-mail" />
+                              </group>
+                           </form>
+                           <tree>
+                              <field name="web_site_id" default_focus="1" />
+                              <field name="url" widget="url" string="URL o E-mail" />
+                              <field name="get_avatar_from_website" />
+                              <button string="Actualizar" name="reload_info" type="object" icon="gtk-refresh" attrs="{'invisible':[('get_avatar_from_website','=',False)]}" />
+                           </tree>
+                        </field>
+                     </page>
+                     <page string="Logbook">
+                        <field name="logbook_ids" readonly="1" options='{"no_open": True}' />
+                     </page>
+                  </notebook>
                </sheet>
             </form>
          </field>
