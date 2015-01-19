@@ -38,10 +38,11 @@
         'web_kanban',
     ],
     'category':'Accounting & Finance',
-    'init_xml': [],
-    'data': [
+    'init_xml': [
         'data/res.country.state.csv',
-        'data/kemas_data.xml',
+    ],
+    'data': [
+        'data/kemas_event_stage.xml',
         'data/planned_actions.xml',
         'security/kemas_security.xml',
         'security/ir.model.access.csv',

@@ -3565,6 +3565,31 @@
             </form>
          </field>
       </record>
+      <record model="ir.ui.view" id="kemas_place_event_form_view">
+         <field name="name">kemas.place.event.form</field>
+         <field name="model">kemas.place</field>
+         <field name="priority" eval="2" />
+         <field name="arch" type="xml">
+            <form string="Place" version="7.0" create="0" edit="0" delete="0">
+               <sheet string="Level">
+                  <field name="photo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' readonly="1" />
+                  <div class="oe_title">
+                     <div class="oe_edit_only">
+                        <label for="name" />
+                     </div>
+                     <h1>
+                        <field name="name" readonly="1" />
+                     </h1>
+                  </div>
+                  <group>
+                     <field name="address" readonly="1" />
+                  </group>
+                  <label for="map_url" string="Mapa" />
+                  <field name="map_url" widget="gmap" readonly="1" />
+               </sheet>
+            </form>
+         </field>
+      </record>
       <!--____________________________________________________Vista de Arbol -->
       <record model="ir.ui.view" id="kemas_place_tree_view">
          <field name="name">kemas.place.tree</field>
@@ -4217,7 +4242,7 @@
                      <page string="Event Information">
                         <group colspan="4" expand="1" states="on_going,creating,draft">
                            <group colspan="4" col="2">
-                              <field name="place_id" placeholder="Event Location" colspan="2" />
+                              <field name="place_id" placeholder="Event Location" colspan="2" context="{'form_view_ref' : 'kemas.kemas_place_event_form_view'}" />
                               <field name="date_start" colspan="2" widget="date" placeholder="Fecha..." />
                               <field name="close_to_end" colspan="2" />
                            </group>
@@ -5821,35 +5846,32 @@
          >>>>>>>>>>>>Areas
       -->
       <menuitem id="menu_kemas_collaborator_areas_management" name="Areas" parent="" sequence="1" />
+      <!--_____________Collaborator -->
+      <menuitem action="action_kemas_collaborator" name="Collaborators" id="menu_kemas_collaborator" parent="menu_kemas_collaborator_management" sequence="1" />
       <!--_____________Area -->
-      <menuitem action="action_kemas_area" name="Areas" id="menu_kemas_area" parent="menu_kemas_collaborator_management" sequence="1" />
+      <menuitem action="action_kemas_area" name="Areas" id="menu_kemas_area" parent="menu_kemas_collaborator_management" sequence="2" />
+      <!--_____________Teams -->
+      <menuitem action="action_kemas_team" name="Teams" id="menu_kemas_team" parent="menu_kemas_collaborator_management" sequence="3" />
       <!--_____________History Points -->
-      <menuitem action="kemas_history_points_form_action" name="History Points" id="menu_kemas_history_points_mn" parent="menu_kemas_collaborator_management" sequence="2" />
+      <menuitem action="kemas_history_points_form_action" name="History Points" id="menu_kemas_history_points_mn" parent="menu_kemas_collaborator_management" sequence="4" />
       <!--_____________Suspensions -->
-      <menuitem action="action_kemas_suspension" name="Suspensions" id="menu_kemas_suspension" parent="menu_kemas_collaborator_management" sequence="3" />
-
+      <menuitem action="action_kemas_suspension" name="Suspensions" id="menu_kemas_suspension" parent="menu_kemas_collaborator_management" sequence="5" />
       <!--
          >>>>>>>>>>>Collaborator
       -->
       <!--_____________School4d
          <menuitem action="kemas_school4d_line_form_action" name="School4D" id="menu_kemas_school4d" parent="menu_kemas_collaborator_management" sequence="1" />
       -->
-      <!--_____________Teams -->
-      <menuitem action="action_kemas_team" name="Teams" id="menu_kemas_team" parent="menu_kemas_collaborator_management" sequence="6" />
-      <!--_____________Web Sites -->
-      <menuitem action="action_kemas_web_site" name="Web sites" id="menu_kemas_web_site" parent="menu_kemas_collaborator_management" sequence="7" />
-      <!--_____________Collaborator -->
-      <menuitem action="action_kemas_collaborator" name="Collaborators" id="menu_kemas_collaborator" parent="menu_kemas_collaborator_management" sequence="8" />
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Calendar
       -->
       <menuitem id="menu_kemas_calendar_menu" name="Calendar" parent="menu_kemas_manager_root" sequence="2" groups="group_kemas_manager,group_kemas_admin,group_kemas_register_attedance" />
-      <!--_____________Places -->
-      <menuitem action="action_kemas_place" name="Places" id="menu_kemas_place" parent="menu_kemas_calendar_menu" sequence="1" />
+      <!--_____________Event -->
+      <menuitem action="action_kemas_event" name="Events" id="menu_kemas_event" parent="menu_kemas_calendar_menu" sequence="1" />
       <!--_____________Service -->
       <menuitem action="action_kemas_service" name="Services" id="menu_kemas_service_category" parent="menu_kemas_calendar_menu" sequence="2" />
-      <!--_____________Event -->
-      <menuitem action="action_kemas_event" name="Events" id="menu_kemas_event" parent="menu_kemas_calendar_menu" sequence="3" />
+      <!--_____________Places -->
+      <menuitem action="action_kemas_place" name="Places" id="menu_kemas_place" parent="menu_kemas_calendar_menu" sequence="3" />
       <!--_____________Registros de asistencia -->
       <menuitem action="kemas_attendance_form_action" name="Asistencias" id="menu_kemas_attendance" parent="menu_kemas_calendar_menu" sequence="4" />
       <!--_____________Replacements -->
@@ -5926,11 +5948,15 @@
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Configuration
       -->
-      <menuitem id="menu_kemas_config_form_action" name="Configuration" parent="menu_kemas_manager_root" sequence="7" groups="group_kemas_manager,group_kemas_admin" />
-      <!-- Niveles -->
-      <menuitem action="action_kemas_level" name="Levels" id="menu_kemas_level" parent="menu_kemas_config_form_action" />
+      <menuitem id="menu_kemas_configurations" name="Configuration" parent="menu_kemas_manager_root" sequence="7" />
       <!-- Configuraciones -->
-      <menuitem action="action_kemas_config" name="Configurations" id="menu_kemas_config" parent="menu_kemas_config_form_action" />
+      <menuitem action="action_kemas_config" name="Preferencias" id="menu_kemas_config" parent="menu_kemas_configurations" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
+
+      <menuitem id="menu_kemas_config_collaborator" name="Colaboraadores" parent="menu_kemas_configurations" sequence="2" />
+      <!-- Niveles -->
+      <menuitem action="action_kemas_level" name="Niveles" id="menu_kemas_level" parent="menu_kemas_config_collaborator" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
+      <!--Web Sites -->
+      <menuitem action="action_kemas_web_site" name="Web sites" id="menu_kemas_web_site" parent="menu_kemas_config_collaborator" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
 
       <!--
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

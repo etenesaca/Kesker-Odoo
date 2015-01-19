@@ -3,7 +3,7 @@
    <data>
       <!--
          ====================
-         KEMAS MANAGER
+         KEMAS EVENT STAGE
          ====================
       -->
       <record id="kemas_stage_new" model="kemas.task.type">

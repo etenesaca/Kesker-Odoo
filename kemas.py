@@ -22,8 +22,7 @@
 import base64
 import calendar
 from datetime import *
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 import datetime 
 from dateutil.parser import  *
 import logging
@@ -34,11 +33,7 @@ import threading
 import time
 import unicodedata
 
-import kemas_extras
-from openerp import SUPERUSER_ID
-from openerp import addons
-from openerp import pooler
-from openerp import tools
+from openerp import addons, tools, pooler, SUPERUSER_ID
 import openerp
 from openerp.addons.kemas import kemas_extras as extras
 from openerp.api import Environment
@@ -60,19 +55,19 @@ class kemas_collaborator_logbook_login(osv.osv):
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
         # Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month', False):
-            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            range_dates = extras.get_dates_range_this_month(context['tz'])
             args.append(('datetime', '>=', range_dates['date_start']))
             args.append(('datetime', '<=', range_dates['date_stop']))    
         elif context.get('search_this_week', False):
-            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            range_dates = extras.get_dates_range_this_week(context['tz'])
             args.append(('datetime', '>=', range_dates['date_start']))
             args.append(('datetime', '<=', range_dates['date_stop']))
         elif context.get('search_today', False):
-            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            range_dates = extras.get_dates_range_today(context['tz'])
             args.append(('datetime', '>=', range_dates['date_start']))
             args.append(('datetime', '<=', range_dates['date_stop']))  
         elif context.get('search_yesterday', False):
-            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            range_dates = extras.get_dates_range_yesterday(context['tz'])
             args.append(('datetime', '>=', range_dates['date_start']))
             args.append(('datetime', '<=', range_dates['date_stop']))  
         
@@ -82,11 +77,11 @@ class kemas_collaborator_logbook_login(osv.osv):
             for arg in args:
                 try:
                     if arg[0] == 'search_start':
-                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
+                        start = extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
                         args.append(('datetime', '>=', start))
                         items_to_remove.append(arg)
                     if arg[0] == 'search_end':
-                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
+                        end = extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
                         args.append(('datetime', '<=', end))
                         items_to_remove.append(arg)
                 except:None
@@ -227,10 +222,10 @@ class kemas_func(osv.osv):
     def build_username(self, cr, uid, name):       
         def eliminar_tildes(cad):
             return ''.join((c for c in unicodedata.normalize('NFD', cad) if unicodedata.category(c) != 'Mn'))
-        name = kemas_extras.elimina_tildes(name)
+        name = extras.elimina_tildes(name)
         username = ''
         try:
-            username = kemas_extras.buid_username(name)
+            username = extras.buid_username(name)
         except: None
         '''----------------------------Verificar si el username generado ya existe, entonces le genra otro con un numero aleatorio al final'''
         user_obj = self.pool.get('res.users')
@@ -279,7 +274,7 @@ class kemas_func(osv.osv):
 class kemas_massive_email_line(osv.osv):
     def on_change_email(self, cr, uid, ids, email):
         if email:
-            if kemas_extras.validate_mail(email):
+            if extras.validate_mail(email):
                 return {'value':{}}
             else:
                 msg = self.pool.get('kemas.func').get_translate(cr, uid, _('E-mail format invalid..!!'))[0]
@@ -442,19 +437,19 @@ class kemas_massive_email(osv.osv):
     
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
         if context.get('search_this_month', False):
-            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            range_dates = extras.get_dates_range_this_month(context['tz'])
             args.append(('date_create', '>=', range_dates['date_start']))
             args.append(('date_create', '<=', range_dates['date_stop']))    
         elif context.get('search_this_week', False):
-            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            range_dates = extras.get_dates_range_this_week(context['tz'])
             args.append(('date_create', '>=', range_dates['date_start']))
             args.append(('date_create', '<=', range_dates['date_stop']))
         elif context.get('search_today', False):
-            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            range_dates = extras.get_dates_range_today(context['tz'])
             args.append(('date_create', '>=', range_dates['date_start']))
             args.append(('date_create', '<=', range_dates['date_stop']))  
         elif context.get('search_yesterday', False):
-            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            range_dates = extras.get_dates_range_yesterday(context['tz'])
             args.append(('date_create', '>=', range_dates['date_start']))
             args.append(('date_create', '<=', range_dates['date_stop']))  
                 
@@ -463,11 +458,11 @@ class kemas_massive_email(osv.osv):
             for arg in args:
                 try:
                     if arg[0] == 'search_start':
-                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
+                        start = extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
                         args.append(('date_create', '>=', start))
                         items_to_remove.append(arg)
                     if arg[0] == 'search_end':
-                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
+                        end = extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
                         args.append(('date_create', '<=', end))
                         items_to_remove.append(arg)
                 except:None
@@ -556,7 +551,7 @@ class kemas_config(osv.osv):
         """
         records = super(osv.osv, obj).read(cr, uid, obj.search(cr, uid, []), [field_name, 'url'])
         for record in records:
-            youtube_thumbnail = kemas_extras.get_thumbnail_youtube_video(record['url'])
+            youtube_thumbnail = extras.get_thumbnail_youtube_video(record['url'])
             if youtube_thumbnail and not record[field_name]:
                 obj.write(cr, uid, [record['id']], {field_name: youtube_thumbnail})
             elif record[field_name]:
@@ -579,7 +574,7 @@ class kemas_config(osv.osv):
         string = string.replace('%se', unicode(preferences['system_email']).lower())
         string = string.replace('%ns', unicode(preferences['name_submitting']))
         
-        now = kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
+        now = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
         now = datetime.datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
         string = string.replace('%da', unicode(now.strftime("%Y-%m-%d")))
         string = string.replace('%tm', unicode(now.strftime("%H:%M:%S")))
@@ -593,7 +588,7 @@ class kemas_config(osv.osv):
         config_id = config_obj.get_correct_config(cr, uid)
         preferences = config_obj.read(cr, uid, config_id, [])
         message = message.replace('%nk', unicode(collaborator['nick_name']).title())
-        message = message.replace('%cl', unicode(kemas_extras.get_standard_names(collaborator['name'])))
+        message = message.replace('%cl', unicode(extras.get_standard_names(collaborator['name'])))
         message = message.replace('%pt', unicode(collaborator['points']))
         message = message.replace('%lv', unicode(collaborator['level_name']))
         message = message.replace('%em', unicode(collaborator['email']).lower())
@@ -615,7 +610,7 @@ class kemas_config(osv.osv):
         
         message = message.replace('%mp', unicode(points))
         
-        now = kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
+        now = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
         now = datetime.datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
         message = message.replace('%da', unicode(now.strftime("%Y-%m-%d")))
         message = message.replace('%tm', unicode(now.strftime("%H:%M:%S")))
@@ -712,7 +707,7 @@ class kemas_config(osv.osv):
         #------------------------------------------------------------------------------------
         message = message
         message = message.replace('%nk', unicode(collaborator['nick_name']).title())
-        message = message.replace('%cl', unicode(kemas_extras.get_standard_names(collaborator['name'])))
+        message = message.replace('%cl', unicode(extras.get_standard_names(collaborator['name'])))
         message = message.replace('%cd', unicode(collaborator['code']))
         message = message.replace('%pt', unicode(collaborator['points']))
         message = message.replace('%lv', unicode(collaborator['level_name']))
@@ -729,7 +724,7 @@ class kemas_config(osv.osv):
             message = message.replace('%gn', 'o')
         else:
             message = message.replace('%gn', 'a')
-        now = kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
+        now = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
         now = datetime.datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
         message = message.replace('%da', unicode(now.strftime("%Y-%m-%d")))
         message = message.replace('%tm', unicode(now.strftime("%H:%M:%S")))
@@ -850,31 +845,31 @@ class kemas_config(osv.osv):
         message = message.replace('%hs', unicode(preferences['url_system']))
         message = message.replace('%na', unicode(preferences['name_submitting']))
         
-        message = message.replace('%cl', unicode(kemas_extras.get_standard_names(collaborator['name'])))
+        message = message.replace('%cl', unicode(extras.get_standard_names(collaborator['name'])))
         message = message.replace('%nk', unicode(collaborator['nick_name']).title())
         message = message.replace('%pt', unicode(collaborator['points']))
         message = message.replace('%lv', unicode(collaborator['level_name']))
         message = message.replace('%em', unicode(collaborator['email']).lower())
-        message = message.replace('%cl', unicode(kemas_extras.get_standard_names(collaborator['name'])))
+        message = message.replace('%cl', unicode(extras.get_standard_names(collaborator['name'])))
         if collaborator['gender'].lower() == 'male':
             message = message.replace('%gn', 'o')
         else:
             message = message.replace('%gn', 'a')
-        now = kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
+        now = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
         now = datetime.datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
         message = message.replace('%da', unicode(now.strftime("%Y-%m-%d")))
         message = message.replace('%tm', unicode(now.strftime("%H:%M:%S")))
         message = message.replace('%dt', unicode(now.strftime("%Y-%m-%d %H:%M:%S")))
         
-        message = message.replace('%ds', unicode(kemas_extras.convert_date_format_short_str(event['date_start'])))
-        message = message.replace('%dy', unicode(kemas_extras.convert_date_format_long(event['date_start']), 'utf8'))
+        message = message.replace('%ds', unicode(extras.convert_date_format_short_str(event['date_start'])))
+        message = message.replace('%dy', unicode(extras.convert_date_format_long(event['date_start']), 'utf8'))
         message = message.replace('%sr', unicode(event['service_id'][1]).title())
         message = message.replace('%sp', unicode(event['place_id'][1]))
-        message = message.replace('%st', unicode(kemas_extras.convert_float_to_hour_format(service['time_start'])))
-        message = message.replace('%fn', unicode(kemas_extras.convert_float_to_hour_format(service['time_end'])))
-        message = message.replace('%te', unicode(kemas_extras.convert_float_to_hour_format(service['time_entry'])))
-        message = message.replace('%tl', unicode(kemas_extras.convert_float_to_hour_format(service['time_limit'])))
-        message = message.replace('%tr', unicode(kemas_extras.convert_float_to_hour_format(service['time_register'])))
+        message = message.replace('%st', unicode(extras.convert_float_to_hour_format(service['time_start'])))
+        message = message.replace('%fn', unicode(extras.convert_float_to_hour_format(service['time_end'])))
+        message = message.replace('%te', unicode(extras.convert_float_to_hour_format(service['time_entry'])))
+        message = message.replace('%tl', unicode(extras.convert_float_to_hour_format(service['time_limit'])))
+        message = message.replace('%tr', unicode(extras.convert_float_to_hour_format(service['time_register'])))
         
         if type_attend == 'just_time':
             message = message.replace('%pe', unicode(event['attend_on_time_points']))
@@ -920,7 +915,7 @@ class kemas_config(osv.osv):
         config_id = config_obj.get_correct_config(cr, uid)
         preferences = config_obj.read(cr, uid, config_id, [])
         #------------------------------------------------------------------------------------
-        message = message.replace('%cl', unicode(kemas_extras.get_standard_names(collaborator['name'])))
+        message = message.replace('%cl', unicode(extras.get_standard_names(collaborator['name'])))
         message = message.replace('%nk', unicode(collaborator['nick_name']).title())
         message = message.replace('%cd', unicode(collaborator['code']))
         message = message.replace('%pt', unicode(collaborator['points']))
@@ -938,19 +933,19 @@ class kemas_config(osv.osv):
             message = message.replace('%gn', 'o')
         else:
             message = message.replace('%gn', 'a')
-        now = kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
+        now = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
         now = datetime.datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
         message = message.replace('%da', unicode(now.strftime("%Y-%m-%d")))
         message = message.replace('%tm', unicode(now.strftime("%H:%M:%S")))
         message = message.replace('%dt', unicode(now.strftime("%Y-%m-%d %H:%M:%S")))
         
-        message = message.replace('%ds', unicode(kemas_extras.convert_date_format_short_str(event['date_start'])))
+        message = message.replace('%ds', unicode(extras.convert_date_format_short_str(event['date_start'])))
         
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        fecha_del_evento = kemas_extras.convert_to_tz(event['date_start'], tz)        
+        fecha_del_evento = extras.convert_to_tz(event['date_start'], tz)        
         try:
-            try:message = message.replace('%dy', unicode(kemas_extras.convert_date_format_long(fecha_del_evento), 'utf8'))
-            except:message = message.replace('%dy', unicode(kemas_extras.convert_date_format_long(fecha_del_evento)))
+            try:message = message.replace('%dy', unicode(extras.convert_date_format_long(fecha_del_evento), 'utf8'))
+            except:message = message.replace('%dy', unicode(extras.convert_date_format_long(fecha_del_evento)))
         except:None
         try:
             event_information = ''
@@ -960,11 +955,11 @@ class kemas_config(osv.osv):
         except:None
         message = message.replace('%sr', unicode(event['service_id'][1]).title())
         message = message.replace('%sp', unicode(event['place_id'][1]))
-        message = message.replace('%st', unicode(kemas_extras.convert_float_to_hour_format(service['time_start'])))
-        message = message.replace('%es', unicode(kemas_extras.convert_float_to_hour_format(service['time_end'])))
-        message = message.replace('%te', unicode(kemas_extras.convert_float_to_hour_format(service['time_entry'])))
-        message = message.replace('%tl', unicode(kemas_extras.convert_float_to_hour_format(service['time_limit'])))
-        message = message.replace('%tr', unicode(kemas_extras.convert_float_to_hour_format(service['time_register'])))
+        message = message.replace('%st', unicode(extras.convert_float_to_hour_format(service['time_start'])))
+        message = message.replace('%es', unicode(extras.convert_float_to_hour_format(service['time_end'])))
+        message = message.replace('%te', unicode(extras.convert_float_to_hour_format(service['time_entry'])))
+        message = message.replace('%tl', unicode(extras.convert_float_to_hour_format(service['time_limit'])))
+        message = message.replace('%tr', unicode(extras.convert_float_to_hour_format(service['time_register'])))
         message = message.replace('%at', unicode(event['attend_on_time_points']))
         message = message.replace('%lt', unicode(event['late_points']))
         message = message.replace('%ab', unicode(event['not_attend_points']))
@@ -984,7 +979,7 @@ class kemas_config(osv.osv):
             activities += unicode(u'''</ul>''')
         message = message.replace('%ac', unicode(activities))
         
-        message = kemas_extras.cambiar_meses_a_espaniol(message)
+        message = extras.cambiar_meses_a_espaniol(message)
         return message
  
     def send_email_event_completed(self, cr, uid, service_id, event_id, collaborator_id, type_attend, context={}):        
@@ -1942,7 +1937,7 @@ class kemas_school4d_line(osv.osv):
         def do(person_id):
             try:
                 birth = super(osv.osv, self).read(cr, uid, person_id, ['birth'])['birth']
-                age = kemas_extras.calcular_edad(birth)
+                age = extras.calcular_edad(birth)
                 return age
             except: return ""
                 
@@ -1953,7 +1948,7 @@ class kemas_school4d_line(osv.osv):
     
     def on_change_birth(self, cr, uid, ids, birth, context={}):
         values = {}
-        values['age'] = kemas_extras.calcular_edad(birth)
+        values['age'] = extras.calcular_edad(birth)
         return {'value':values}
     
     _order = 'name'
@@ -2294,8 +2289,8 @@ class kemas_suspension(osv.osv):
     def get_end_date(self, cr, uid, days, day1, day2, day3, day4, day5, day6, day7, context={}):
         from datetime import datetime
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        now = datetime.strptime(kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz), '%Y-%m-%d %H:%M:%S')
-        date_today = "%s-%s-%s" % (kemas_extras.completar_cadena(now.year, 4), kemas_extras.completar_cadena(now.month), kemas_extras.completar_cadena(now.day))
+        now = datetime.strptime(extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz), '%Y-%m-%d %H:%M:%S')
+        date_today = "%s-%s-%s" % (extras.completar_cadena(now.year, 4), extras.completar_cadena(now.month), extras.completar_cadena(now.day))
         
         days_str = {
                     'LUN':True,
@@ -2350,7 +2345,7 @@ class kemas_suspension(osv.osv):
         if days_str['SAB']:workdays.append('SAB')
         if days_str['DOM']:workdays.append('DOM')
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        return kemas_extras.get_end_date(date_today, int(days), tz, workdays=tuple(workdays))
+        return extras.get_end_date(date_today, int(days), tz, workdays=tuple(workdays))
     
     def lift(self, cr, uid, ids, context={}):
         collaborator_obj = self.pool.get('kemas.collaborator')
@@ -2394,7 +2389,7 @@ class kemas_suspension(osv.osv):
         count = 0
         for suspension in suspensions:
             tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-            now = datetime.strptime(kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz), '%Y-%m-%d %H:%M:%S')
+            now = datetime.strptime(extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz), '%Y-%m-%d %H:%M:%S')
             end_suspension = datetime.strptime(suspension['date_end'], '%Y-%m-%d %H:%M:%S')
             date_start = now.date().__str__()
             date_end = end_suspension.date().__str__()         
@@ -2415,7 +2410,7 @@ class kemas_suspension(osv.osv):
             if suspension['state'] == 'on_going':
                 from datetime import datetime
                 tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-                now = datetime.strptime(kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz), '%Y-%m-%d %H:%M:%S')
+                now = datetime.strptime(extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz), '%Y-%m-%d %H:%M:%S')
                 end_suspension = datetime.strptime(suspension['date_end'], '%Y-%m-%d %H:%M:%S')    
                 date_start = now.date().__str__()
                 date_end = end_suspension.date().__str__()                
@@ -2440,19 +2435,19 @@ class kemas_suspension(osv.osv):
         
         # Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month', False):
-            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            range_dates = extras.get_dates_range_this_month(context['tz'])
             args.append(('date_create', '>=', range_dates['date_start']))
             args.append(('date_create', '<=', range_dates['date_stop']))    
         elif context.get('search_this_week', False):
-            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            range_dates = extras.get_dates_range_this_week(context['tz'])
             args.append(('date_create', '>=', range_dates['date_start']))
             args.append(('date_create', '<=', range_dates['date_stop']))
         elif context.get('search_today', False):
-            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            range_dates = extras.get_dates_range_today(context['tz'])
             args.append(('date_create', '>=', range_dates['date_start']))
             args.append(('date_create', '<=', range_dates['date_stop']))  
         elif context.get('search_yesterday', False):
-            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            range_dates = extras.get_dates_range_yesterday(context['tz'])
             args.append(('date_create', '>=', range_dates['date_start']))
             args.append(('date_create', '<=', range_dates['date_stop']))  
         
@@ -2462,11 +2457,11 @@ class kemas_suspension(osv.osv):
             for arg in args:
                 try:
                     if arg[0] == 'search_start':
-                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
+                        start = extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
                         args.append(('date_create', '>=', start))
                         items_to_remove.append(arg)
                     if arg[0] == 'search_end':
-                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
+                        end = extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
                         args.append(('date_create', '<=', end))
                         items_to_remove.append(arg)
                 except:None
@@ -2521,7 +2516,7 @@ class kemas_collaborator_web_site(osv.osv):
         
         vals = {}
         if web_site['get_avatar_method'] == 'facebook':
-            profile = kemas_extras.get_facebook_info(wsline['url'], 'large')
+            profile = extras.get_facebook_info(wsline['url'], 'large')
             if profile:
                 vals = {'photo': profile['photo']}
                 if profile.get('gender', False):
@@ -2531,7 +2526,7 @@ class kemas_collaborator_web_site(osv.osv):
                         vals['gender'] = 'Female'
             
         if web_site['get_avatar_method'] == 'gravatar':
-            photo = kemas_extras.get_avatar(wsline['url'], 120)
+            photo = extras.get_avatar(wsline['url'], 120)
             if photo:
                 vals = {'photo': photo}
         
@@ -2656,7 +2651,7 @@ class kemas_collaborator(osv.osv):
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
         vals = {
                 'state':'Inactive',
-                'end_service' : kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz)
+                'end_service' : extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz)
                 }
         collaborators = super(kemas_collaborator, self).read(cr, uid, ids, ['user_id', 'state', 'type'])
         for collaborator in collaborators:
@@ -2697,7 +2692,7 @@ class kemas_collaborator(osv.osv):
         res = []
         for record in records:
             nick_name = unicode(record['nick_name']).title()
-            apellido = unicode(kemas_extras.do_dic(record['last_names'])[0]).title()
+            apellido = unicode(extras.do_dic(record['last_names'])[0]).title()
             if context.get('show_replacements', False):
                 name = u'''%s %s (%d %s)''' % (nick_name, apellido, record['replacements'], replacements_word)
             else:
@@ -2708,7 +2703,7 @@ class kemas_collaborator(osv.osv):
     def on_change_first_names(self, cr, uid, ids, first_names, last_names, context={}):
         values = {}
         if first_names:
-            dic_name = kemas_extras.do_dic(first_names)
+            dic_name = extras.do_dic(first_names)
             values['nick_name'] = unicode(dic_name[0]).title()
             values['first_names'] = extras.elimina_tildes(first_names).title()
         
@@ -2743,7 +2738,7 @@ class kemas_collaborator(osv.osv):
                 
     def on_change_email(self, cr, uid, ids, email):
         if email:
-            if kemas_extras.validate_mail(email):
+            if extras.validate_mail(email):
                 return {'value':{}}
             else:
                 msg = self.pool.get('kemas.func').get_translate(cr, uid, _('E-mail format invalid..!!'))[0]
@@ -2753,7 +2748,7 @@ class kemas_collaborator(osv.osv):
     
     def on_change_im_account(self, cr, uid, ids, chat_account):
         if chat_account:
-            if kemas_extras.validate_mail(chat_account):
+            if extras.validate_mail(chat_account):
                 return {'value':{}}
             else:
                 msg = self.pool.get('kemas.func').get_translate(cr, uid, _('IM account format invalid..!!'))[0]
@@ -2916,7 +2911,7 @@ class kemas_collaborator(osv.osv):
             if context['birthday']:
                 args = []
                 desde = time.strftime("%Y-%m-") + '01'
-                hasta = time.strftime("%Y-%m-") + unicode(kemas_extras.dias_de_este_mes())
+                hasta = time.strftime("%Y-%m-") + unicode(extras.dias_de_este_mes())
                 args.append(('birthday', '>=', desde))       
                 args.append(('birthday', '<=', hasta))       
         
@@ -2940,7 +2935,7 @@ class kemas_collaborator(osv.osv):
                 nick_name = arg[2]
                 break
         if use_ilike:   
-            nick_name_words = kemas_extras.do_dic(nick_name)
+            nick_name_words = extras.do_dic(nick_name)
             my_args = []
             for nick_name_word in nick_name_words:
                 my_args.append(('name', 'ilike', '%s' % unicode(nick_name_word)))
@@ -3185,7 +3180,7 @@ class kemas_collaborator(osv.osv):
         groups_ids = groups_obj.search(cr, uid, [('name', '=', 'Kemas / Collaborator'), ])
         
         nick_name = unicode(vals['nick_name']).title()
-        apellido = unicode(kemas_extras.do_dic(vals['last_names'])[0]).title()
+        apellido = unicode(extras.do_dic(vals['last_names'])[0]).title()
         name = u'''%s %s''' % (nick_name, apellido)
         vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, vals['email'], vals['code'], groups_ids[0], False, vals['partner_id'])['user_id']
         vals['state'] = 'Active'
@@ -3251,7 +3246,7 @@ class kemas_collaborator(osv.osv):
         result = {}
         collaborators = super(osv.osv, self).read(cr, uid, ids, ['id', 'birth'], context=context)
         for collaborator in collaborators:
-            result[collaborator['id']] = kemas_extras.calcular_edad(collaborator['birth'], 3)
+            result[collaborator['id']] = extras.calcular_edad(collaborator['birth'], 3)
         return result
     
     def _dummy_age(self, cr, uid, ids, name, value, arg, context={}):
@@ -3259,12 +3254,12 @@ class kemas_collaborator(osv.osv):
        
     def on_change_join_date(self, cr, uid, ids, join_date, context={}):
         values = {}
-        values['age_in_ministry'] = kemas_extras.calcular_edad(join_date, 4)
+        values['age_in_ministry'] = extras.calcular_edad(join_date, 4)
         return {'value':values}
     
     def on_change_birth(self, cr, uid, ids, birth, context={}):
         values = {}
-        values['age'] = kemas_extras.calcular_edad(birth, 3)
+        values['age'] = extras.calcular_edad(birth, 3)
         return {'value':values}
     
     def get_initial_points(self, cr, uid, context={}):
@@ -3305,7 +3300,7 @@ class kemas_collaborator(osv.osv):
         try:
             res = "%s-%s-%s 08:00:00" % (time.strftime("%Y"), birth.month, birth.day)
             tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-            res = kemas_extras.convert_to_tz(res, tz)
+            res = extras.convert_to_tz(res, tz)
             return datetime.datetime.strptime(res, "%Y-%m-%d %H:%M:%S")
         except: return None
         
@@ -3354,7 +3349,7 @@ class kemas_collaborator(osv.osv):
         def get_nick_name(collaborator_id):
             collaborator = super(osv.osv, self).read(cr, uid, collaborator_id, ['nick_name', 'last_names'])
             nick_name = unicode(collaborator['nick_name']).title()
-            apellido = unicode(kemas_extras.do_dic(collaborator['last_names'])[0]).title()
+            apellido = unicode(extras.do_dic(collaborator['last_names'])[0]).title()
             name = u'''%s %s''' % (nick_name, apellido)
             return name
                 
@@ -3368,9 +3363,9 @@ class kemas_collaborator(osv.osv):
         collaborators = super(osv.osv, self).read(cr, uid, ids, ['id', 'join_date', 'state', 'end_service'], context=context)
         for collaborator in collaborators:
             if collaborator['state'] != 'Active':
-                res = kemas_extras.calcular_edad(collaborator['join_date'], 4, collaborator['end_service'])
+                res = extras.calcular_edad(collaborator['join_date'], 4, collaborator['end_service'])
             else:
-                res = kemas_extras.calcular_edad(collaborator['join_date'], 4)
+                res = extras.calcular_edad(collaborator['join_date'], 4)
             result[collaborator['id']] = res
         return result
     
@@ -3381,7 +3376,7 @@ class kemas_collaborator(osv.osv):
         message = message
         message = message.replace('%cd', unicode(collaborator['code']))
         message = message.replace('%cl', unicode(collaborator['name']))
-        message = message.replace('%bt', kemas_extras.convert_date_to_dmy(unicode(collaborator['birth'])))
+        message = message.replace('%bt', extras.convert_date_to_dmy(unicode(collaborator['birth'])))
         #----Genero-----------------------------------------------------------------
         if collaborator['gender'].lower() == 'male':
             message = message.replace('%gn', 'Hombre')
@@ -3413,12 +3408,12 @@ class kemas_collaborator(osv.osv):
         message = message.replace('%mb', unicode(collaborator['mobile']))
         message = message.replace('%em', unicode(collaborator['email']))
         message = message.replace('%ad', unicode(collaborator['address']))
-        message = message.replace('%jd', unicode(kemas_extras.convert_date_to_dmy(collaborator['join_date'])))
+        message = message.replace('%jd', unicode(extras.convert_date_to_dmy(collaborator['join_date'])))
         #-------------------------------------------------------------------------
         message = message.replace('%us', unicode(collaborator['username']))
         message = message.replace('%lv', unicode(collaborator['level_name']))
         #---Fecha y hora---------------------------------------------------------- 
-        now = kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
+        now = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
         now = datetime.datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
         message = message.replace('%da', unicode(now.strftime("%Y-%m-%d")))
         message = message.replace('%tm', unicode(now.strftime("%H:%M:%S")))
@@ -3436,7 +3431,7 @@ class kemas_collaborator(osv.osv):
         
         def get_barcode_image(collaborator):
             bc_text = preferences['bc_text'].replace('%cd', unicode(collaborator['code']))
-            return kemas_extras.get_image_code(bc_text, width, height, hr_form, image_type)
+            return extras.get_image_code(bc_text, width, height, hr_form, image_type)
 
         result = {}
         collaborators = super(osv.osv, self).read(cr, uid, ids, ['id', 'code'])
@@ -3453,7 +3448,7 @@ class kemas_collaborator(osv.osv):
         
         def get_QR_image(collaborator_id):
             value = self.build_QR_text(cr, uid, preferences['qr_text'], collaborator_id)
-            return kemas_extras.get_image_code(value, width, height, False, "QR")
+            return extras.get_image_code(value, width, height, False, "QR")
 
         result = {}
         for collaborator_id in ids:
@@ -3501,12 +3496,12 @@ class kemas_collaborator(osv.osv):
         config_obj = self.pool.get('kemas.config')
         preferences = config_obj.get_correct_config(cr, uid, ['number_replacements'])           
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        now = kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz)
+        now = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz)
         now = datetime.strptime(now, '%Y-%m-%d %H:%M:%S')
-        start = "%s-%s-%s 00:00:00" % (now.year, kemas_extras.completar_cadena(now.month), '01')
-        end = "%s-%s-%s 23:59:59" % (now.year, now.month, kemas_extras.dias_de_este_mes())
-        start = kemas_extras.convert_to_UTC_tz(start, tz)
-        end = kemas_extras.convert_to_UTC_tz(end, tz)
+        start = "%s-%s-%s 00:00:00" % (now.year, extras.completar_cadena(now.month), '01')
+        end = "%s-%s-%s 23:59:59" % (now.year, now.month, extras.dias_de_este_mes())
+        start = extras.convert_to_UTC_tz(start, tz)
+        end = extras.convert_to_UTC_tz(end, tz)
         
         def replacements(collaborator_id):
             sql = """
@@ -3548,7 +3543,7 @@ class kemas_collaborator(osv.osv):
                 return 'Nunca Conectado'
             
             login_date = parse(login_date)
-            now = kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
+            now = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
             now = parse(now)
             diff = datetime.datetime.now() - login_date
             days = diff.days
@@ -3571,7 +3566,7 @@ class kemas_collaborator(osv.osv):
         values = {}
         warning = {}
         if personal_id:
-            if not kemas_extras.validar_cedula_ruc(personal_id):
+            if not extras.validar_cedula_ruc(personal_id):
                 values['personal_id'] = False
                 warning = {'title' : u'¡Error!', 'message' : u"Número de Cédula Incorrecto. \nEn el caso de ser un Pasaporte ingrese la 'P' antes del número."}
         return {'value': values , 'warning': warning}
@@ -3580,7 +3575,7 @@ class kemas_collaborator(osv.osv):
         result = {}
         records = super(osv.osv, self).read(cr, uid, ids, ['id', 'birth'])
         for record in records:
-            result[record['id']] = kemas_extras.calcular_edad(record['birth'], 3)
+            result[record['id']] = extras.calcular_edad(record['birth'], 3)
         return result
     
     def _ff_age_in_ministry(self, cr, uid, ids, name, arg, context={}): 
@@ -3588,9 +3583,9 @@ class kemas_collaborator(osv.osv):
         records = super(osv.osv, self).read(cr, uid, ids, ['id', 'join_date', 'end_service', 'state'])
         for record in records:
             if record['state'] != 'Active':
-                res = kemas_extras.calcular_edad(record['join_date'], 4, record['end_service'])
+                res = extras.calcular_edad(record['join_date'], 4, record['end_service'])
             else:
-                res = kemas_extras.calcular_edad(record['join_date'], 4)
+                res = extras.calcular_edad(record['join_date'], 4)
             result[record['id']] = res
         return result
     
@@ -3754,6 +3749,7 @@ class kemas_collaborator(osv.osv):
         'age' : fields.function(_ff_age, type='char', string='Edad', help="Edad del colaborador"),
         'gender': fields.selection([('Male', 'Male'), ('Female', 'Female'), ], 'Gender', required=True, help="The gender of the collaborator",),
         'marital_status': fields.selection([('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced'), ('Widower', 'Widower')], 'Marital status', help="Marital Status of the collaborator"),
+        'skill_ids': fields.many2many('kemas.skill', 'kemas_collaborator_skill_rel', 'collaborator_id', 'skill_id', 'skills', help="Habilidades que tiene este colaborador"),
         
         'street': fields.related('partner_id', 'street', type='char', string='Calle 1', store=False),
         'street2': fields.related('partner_id', 'street2', type='char', string='Calle 2', store=False),
@@ -3927,9 +3923,9 @@ class kemas_task_assigned(osv.osv):
         if task_ids:
             print '    >>Cerrando tareas Caducadas'
             context['tz'] = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-            now = unicode(kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), context['tz']))
+            now = unicode(extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), context['tz']))
             for task in tasks:
-                date_limit = kemas_extras.convert_to_UTC_tz(task['date_limit'], context['tz'])
+                date_limit = extras.convert_to_UTC_tz(task['date_limit'], context['tz'])
                 if now > date_limit:
                     self.do_cancel(cr, uid, [task['id']], context, True)        
         return True
@@ -4082,19 +4078,19 @@ class kemas_task_assigned(osv.osv):
         
         # Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month', False):
-            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            range_dates = extras.get_dates_range_this_month(context['tz'])
             args.append(('date_created', '>=', range_dates['date_start']))
             args.append(('date_created', '<=', range_dates['date_stop']))    
         elif context.get('search_this_week', False):
-            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            range_dates = extras.get_dates_range_this_week(context['tz'])
             args.append(('date_created', '>=', range_dates['date_start']))
             args.append(('date_created', '<=', range_dates['date_stop']))
         elif context.get('search_today', False):
-            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            range_dates = extras.get_dates_range_today(context['tz'])
             args.append(('date_created', '>=', range_dates['date_start']))
             args.append(('date_created', '<=', range_dates['date_stop']))  
         elif context.get('search_yesterday', False):
-            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            range_dates = extras.get_dates_range_yesterday(context['tz'])
             args.append(('date_created', '>=', range_dates['date_start']))
             args.append(('date_created', '<=', range_dates['date_stop']))  
         
@@ -4104,11 +4100,11 @@ class kemas_task_assigned(osv.osv):
             for arg in args:
                 try:
                     if arg[0] == 'search_start':
-                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
+                        start = extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
                         args.append(('date_created', '>=', start))
                         items_to_remove.append(arg)
                     if arg[0] == 'search_end':
-                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
+                        end = extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
                         args.append(('date_created', '<=', end))
                         items_to_remove.append(arg)
                 except:None
@@ -4323,19 +4319,19 @@ class kemas_history_points(osv.osv):
         
         # Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month', False):
-            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            range_dates = extras.get_dates_range_this_month(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))    
         elif context.get('search_this_week', False):
-            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            range_dates = extras.get_dates_range_this_week(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))
         elif context.get('search_today', False):
-            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            range_dates = extras.get_dates_range_today(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))  
         elif context.get('search_yesterday', False):
-            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            range_dates = extras.get_dates_range_yesterday(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))  
         
@@ -4345,11 +4341,11 @@ class kemas_history_points(osv.osv):
             for arg in args:
                 try:
                     if arg[0] == 'search_start':
-                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
+                        start = extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
                         args.append(('date', '>=', start))
                         items_to_remove.append(arg)
                     if arg[0] == 'search_end':
-                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
+                        end = extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
                         args.append(('date', '<=', end))
                         items_to_remove.append(arg)
                 except:None
@@ -4573,19 +4569,19 @@ class kemas_repository(osv.osv):
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
         # Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month', False):
-            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            range_dates = extras.get_dates_range_this_month(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))    
         elif context.get('search_this_week', False):
-            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            range_dates = extras.get_dates_range_this_week(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))
         elif context.get('search_today', False):
-            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            range_dates = extras.get_dates_range_today(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))  
         elif context.get('search_yesterday', False):
-            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            range_dates = extras.get_dates_range_yesterday(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))  
         
@@ -4595,11 +4591,11 @@ class kemas_repository(osv.osv):
             for arg in args:
                 try:
                     if arg[0] == 'search_start':
-                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
+                        start = extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
                         args.append(('date', '>=', start))
                         items_to_remove.append(arg)
                     if arg[0] == 'search_end':
-                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
+                        end = extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
                         args.append(('date', '<=', end))
                         items_to_remove.append(arg)
                 except:None
@@ -4740,19 +4736,19 @@ class kemas_event_collaborator_line(osv.osv):
         
         # Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month', False):
-            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            range_dates = extras.get_dates_range_this_month(context['tz'])
             args.append(('event_id.date_start', '>=', range_dates['date_start']))
             args.append(('event_id.date_stop', '<=', range_dates['date_stop']))    
         elif context.get('search_this_week', False):
-            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            range_dates = extras.get_dates_range_this_week(context['tz'])
             args.append(('event_id.date_start', '>=', range_dates['date_start']))
             args.append(('event_id.date_stop', '<=', range_dates['date_stop']))
         elif context.get('search_today', False):
-            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            range_dates = extras.get_dates_range_today(context['tz'])
             args.append(('event_id.date_start', '>=', range_dates['date_start']))
             args.append(('event_id.date_stop', '<=', range_dates['date_stop']))  
         elif context.get('search_yesterday', False):
-            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            range_dates = extras.get_dates_range_yesterday(context['tz'])
             args.append(('event_id.date_start', '>=', range_dates['date_start']))
             args.append(('event_id.date_stop', '<=', range_dates['date_stop']))  
         
@@ -4762,11 +4758,11 @@ class kemas_event_collaborator_line(osv.osv):
             for arg in args:
                 try:
                     if arg[0] == 'search_start':
-                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
+                        start = extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
                         args.append(('event_id.date_start', '>=', start))
                         items_to_remove.append(arg)
                     if arg[0] == 'search_end':
-                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
+                        end = extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
                         args.append(('event_id.date_stop', '<=', end))
                         items_to_remove.append(arg)
                 except:None
@@ -4880,7 +4876,7 @@ class kemas_event(osv.osv):
                 group by c.res_id
                 """ % (partner_id)
                 cr.execute(sql)
-                l2 = kemas_extras.convert_result_query_to_list(cr.fetchall())
+                l2 = extras.convert_result_query_to_list(cr.fetchall())
                 l3 = super(osv.osv, self).search(cr, uid, args + [('message_follower_ids', 'in', [partner_id])])
                 event_ids = list(set(l1 + l2 + l3))
                 args.append(('id', 'in', event_ids))
@@ -4898,19 +4894,19 @@ class kemas_event(osv.osv):
         
         # Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month', False):
-            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            range_dates = extras.get_dates_range_this_month(context['tz'])
             args.append(('date_start', '>=', range_dates['date_start']))
             args.append(('date_start', '<=', range_dates['date_stop']))    
         elif context.get('search_this_week', False):
-            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            range_dates = extras.get_dates_range_this_week(context['tz'])
             args.append(('date_start', '>=', range_dates['date_start']))
             args.append(('date_start', '<=', range_dates['date_stop']))
         elif context.get('search_today', False):
-            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            range_dates = extras.get_dates_range_today(context['tz'])
             args.append(('date_start', '>=', range_dates['date_start']))
             args.append(('date_start', '<=', range_dates['date_stop']))  
         elif context.get('search_yesterday', False):
-            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            range_dates = extras.get_dates_range_yesterday(context['tz'])
             args.append(('date_start', '>=', range_dates['date_start']))
             args.append(('date_start', '<=', range_dates['date_stop']))  
         
@@ -4920,11 +4916,11 @@ class kemas_event(osv.osv):
             for arg in args:
                 try:
                     if arg[0] == 'search_start':
-                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
+                        start = extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
                         args.append(('date_start', '>=', start))
                         items_to_remove.append(arg)
                     if arg[0] == 'search_end':
-                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
+                        end = extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
                         args.append(('date_start', '<=', end))
                         items_to_remove.append(arg)
                 except:None
@@ -4937,9 +4933,9 @@ class kemas_event(osv.osv):
                 select e.id from kemas_event as e
                 join kemas_event_collaborator_line as l on (l.event_id = e.id)
                 where l.collaborator_id = %d and e.id in %s
-                """ % (collaborator_id, kemas_extras.convert_to_tuple_str(res_ids))
+                """ % (collaborator_id, extras.convert_to_tuple_str(res_ids))
             cr.execute(sql)
-            res_ids = list(set(kemas_extras.convert_result_query_to_list(cr.fetchall())))
+            res_ids = list(set(extras.convert_result_query_to_list(cr.fetchall())))
         
         for arg in args:
             if str(arg) in ["['message_unread', '=', True]", "('message_unread', '=', True)"]:
@@ -4963,14 +4959,14 @@ class kemas_event(osv.osv):
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
         for record in reads:   
             if record.state in ['on_going', 'draft']:
-                date = str(kemas_extras.convert_to_tz(record.date_start, tz))[:16]
-                name = (unicode(record.service_id.name) + ' | ' + date + '-' + str(kemas_extras.convert_float_to_hour_format(record.service_id.time_end)))
+                date = str(extras.convert_to_tz(record.date_start, tz))[:16]
+                name = (unicode(record.service_id.name) + ' | ' + date + '-' + str(extras.convert_float_to_hour_format(record.service_id.time_end)))
             elif record.state in ['creating']:
-                date = str(kemas_extras.convert_to_tz(record.date_start, tz))[:16]
+                date = str(extras.convert_to_tz(record.date_start, tz))[:16]
                 name = name = (unicode(record.service_id.name) + ' | ' + str(date))
             else:                
-                date = str(kemas_extras.convert_to_tz(record.rm_date, tz))[:16]
-                name = (record.rm_service + ' | ' + str(date) + ' - ' + str(kemas_extras.convert_float_to_hour_format(record.rm_time_end)))
+                date = str(extras.convert_to_tz(record.rm_date, tz))[:16]
+                name = (record.rm_service + ' | ' + str(date) + ' - ' + str(extras.convert_float_to_hour_format(record.rm_time_end)))
             res.append((record.id, name))
         return res
     
@@ -5102,8 +5098,8 @@ class kemas_event(osv.osv):
     def get_next_event(self, cr, uid):
         from datetime import datetime
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        now = datetime.strptime(kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz), '%Y-%m-%d %H:%M:%S')
-        date_today = "%s-%s-%s %s" % (kemas_extras.completar_cadena(now.year, 4), kemas_extras.completar_cadena(now.month), kemas_extras.completar_cadena(now.day), "00:00:00")
+        now = datetime.strptime(extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz), '%Y-%m-%d %H:%M:%S')
+        date_today = "%s-%s-%s %s" % (extras.completar_cadena(now.year, 4), extras.completar_cadena(now.month), extras.completar_cadena(now.day), "00:00:00")
         def get_event(except_list):
             # [0] Event_id
             # [1] Service name
@@ -5121,7 +5117,7 @@ class kemas_event(osv.osv):
                     ev.id NOT IN %s
                 ORDER BY ev.date_start
                 LIMIT 1
-            """ % (date_today, kemas_extras.convert_to_tuple_str(except_list))
+            """ % (date_today, extras.convert_to_tuple_str(except_list))
             cr.execute(sql)
             result_query = cr.fetchall()
             res = []
@@ -5138,8 +5134,8 @@ class kemas_event(osv.osv):
             if event == []:
                 valid = True
             else:
-                dt = datetime.strptime(kemas_extras.convert_to_tz(event[2], tz), '%Y-%m-%d %H:%M:%S')
-                date_event = "%s-%s-%s %s" % (kemas_extras.completar_cadena(dt.year, 4), kemas_extras.completar_cadena(dt.month), kemas_extras.completar_cadena(dt.day), "00:00:00")
+                dt = datetime.strptime(extras.convert_to_tz(event[2], tz), '%Y-%m-%d %H:%M:%S')
+                date_event = "%s-%s-%s %s" % (extras.completar_cadena(dt.year, 4), extras.completar_cadena(dt.month), extras.completar_cadena(dt.day), "00:00:00")
                 if date_event == date_today:
                     if event[3] > float(now.hour) + float(now.minute) / 60:
                         valid = True
@@ -5149,9 +5145,9 @@ class kemas_event(osv.osv):
                 else:
                     valid = True
         if event:  
-            date = datetime.strptime(kemas_extras.convert_to_tz(event[2], tz), '%Y-%m-%d %H:%M:%S')
-            time_entry = kemas_extras.convert_float_to_hour_format(event[3], True)
-            date = "%s-%s-%s %s" % (kemas_extras.completar_cadena(date.year, 4), kemas_extras.completar_cadena(date.month), kemas_extras.completar_cadena(date.day), time_entry)
+            date = datetime.strptime(extras.convert_to_tz(event[2], tz), '%Y-%m-%d %H:%M:%S')
+            time_entry = extras.convert_float_to_hour_format(event[3], True)
+            date = "%s-%s-%s %s" % (extras.completar_cadena(date.year, 4), extras.completar_cadena(date.month), extras.completar_cadena(date.day), time_entry)
             date = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
             res_date = date - now
             res = {
@@ -5181,7 +5177,7 @@ class kemas_event(osv.osv):
             res = [] 
             for event in result_query:
                 tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-                if kemas_extras.convert_to_tz(event[1], tz, res=1) == kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz, res=1):
+                if extras.convert_to_tz(event[1], tz, res=1) == extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz, res=1):
                     event_ent = {
                                  'id': event[0],
                                  'date_start': event[1],
@@ -5200,7 +5196,7 @@ class kemas_event(osv.osv):
             line_event['name'] = service['name']
             
             #----Hora de Entrada-----------------------------------------------------------------
-            time_entry = kemas_extras.convert_float_to_hour_format(service['time_entry'])
+            time_entry = extras.convert_float_to_hour_format(service['time_entry'])
             line_event['time_entry'] = time_entry
             hour = str(time_entry)[:2]
             minutes = str(time_entry)[3:5]
@@ -5208,7 +5204,7 @@ class kemas_event(osv.osv):
             line_event['time_entry_int'] = time_entry
             
             #----Hora Limite de Registro a Tiempo------------------------------------------------
-            time_register = kemas_extras.convert_float_to_hour_format(service['time_register'])
+            time_register = extras.convert_float_to_hour_format(service['time_register'])
             line_event['time_register'] = time_register
             hour = str(time_register)[:2]
             minutes = str(time_register)[3:5]
@@ -5216,7 +5212,7 @@ class kemas_event(osv.osv):
             line_event['time_register_int'] = time_entry + time_register
             
             #----Hora Limite de Registro---------------------------------------------------------
-            time_limit = kemas_extras.convert_float_to_hour_format(service['time_limit'])
+            time_limit = extras.convert_float_to_hour_format(service['time_limit'])
             line_event['time_limit'] = time_limit
             hour = str(time_limit)[:2]
             minutes = str(time_limit)[3:5]
@@ -5224,7 +5220,7 @@ class kemas_event(osv.osv):
             line_event['time_limit_int'] = time_entry + time_limit
             
             #----Hora de Inicio------------------------------------------------------------------
-            time_start = kemas_extras.convert_float_to_hour_format(service['time_start'])
+            time_start = extras.convert_float_to_hour_format(service['time_start'])
             line_event['time_start'] = time_start
             hour = str(time_start)[:2]
             minutes = str(time_start)[3:5]
@@ -5232,7 +5228,7 @@ class kemas_event(osv.osv):
             line_event['time_start_int'] = time_start
             
             #----Hora de Finalizacion------------------------------------------------------------
-            time_end = kemas_extras.convert_float_to_hour_format(service['time_end'])
+            time_end = extras.convert_float_to_hour_format(service['time_end'])
             line_event['time_end'] = time_end
             hour = str(time_end)[:2]
             minutes = str(time_end)[3:5]
@@ -5256,23 +5252,23 @@ class kemas_event(osv.osv):
                 event = self.read(cr, uid, event_id, ['service_id'])
                 service = service_obj.read(cr, uid, event['service_id'][0], [])
                 #----Convertir la hora de entrada a Entero---------------------------------------
-                time_entry = kemas_extras.convert_float_to_hour_format(service['time_entry'])
+                time_entry = extras.convert_float_to_hour_format(service['time_entry'])
                 hour = str(time_entry)[:2]
                 minutes = str(time_entry)[3:5]
                 time_entry = int(minutes) + int(hour) * 60
                 #----Convertir la hora actual a Entero-------------------------------------------
                 tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-                now = kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz)
+                now = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz)
                 hour = str(now)[11:13]
                 minutes = str(now)[14:16]
                 now = int(minutes) + int(hour) * 60
                 #----Genrar la hora limite-------------------------------------------------------
-                time_limit = kemas_extras.convert_float_to_hour_format(service['time_limit'])
+                time_limit = extras.convert_float_to_hour_format(service['time_limit'])
                 hour = str(time_limit)[:2]
                 minutes = str(time_limit)[3:5]
                 time_limit = int(minutes) + int(hour) * 60
                 #----Genrar la hora para registro puntual de puntos------------------------------
-                time_register = kemas_extras.convert_float_to_hour_format(service['time_register'])
+                time_register = extras.convert_float_to_hour_format(service['time_register'])
                 hour = str(time_register)[:2]
                 minutes = str(time_register)[3:5]
                 time_register = int(minutes) + int(hour) * 60
@@ -5356,14 +5352,14 @@ class kemas_event(osv.osv):
             if vals['service_id']:
                 service = service_obj.read(cr, uid, vals['service_id'], [])   
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        date_start = kemas_extras.convert_to_tz(event['date_start'], tz)
+        date_start = extras.convert_to_tz(event['date_start'], tz)
         if vals.has_key('date_start'):
             if vals['date_start']:
                 if vals['date_start'] < time.strftime("%Y-%m-%d %H:%M:%S"):
                     raise osv.except_osv(_('Error!'), _('Unable to move an event in a past date.'))
                 date_start = vals['date_start']
         tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        dates_dic = kemas_extras.convert_to_format_date(date_start, service['time_entry'], service['time_start'], service['time_end'], tz)
+        dates_dic = extras.convert_to_format_date(date_start, service['time_entry'], service['time_start'], service['time_end'], tz)
         vals['date_start'] = dates_dic['date_start']
         vals['date_stop'] = dates_dic['date_stop']
         vals['date_init'] = dates_dic['date_init']
@@ -5414,7 +5410,7 @@ class kemas_event(osv.osv):
         service = service_obj.read(cr, uid, vals['service_id'], [])
         if not context['tz']:
             context['tz'] = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        dates_dic = kemas_extras.convert_to_format_date(vals['date_start'], service['time_entry'], service['time_start'], service['time_end'], context['tz'])
+        dates_dic = extras.convert_to_format_date(vals['date_start'], service['time_entry'], service['time_start'], service['time_end'], context['tz'])
         vals['date_start'] = dates_dic['date_start']
         vals['date_stop'] = dates_dic['date_stop']
         vals['date_init'] = dates_dic['date_init']
@@ -5435,7 +5431,7 @@ class kemas_event(osv.osv):
             user_id = super(kemas_collaborator, self.pool.get('kemas.collaborator')).read(cr, uid, collaborator_id, ['user_id'])['user_id'][0]
             members.append(user_id)
         vals = {'members' : [(6, 0, members)]}
-        super(osv.osv, self).write(cr, uid, [res_id], vals)
+        super(kemas_event, self).write(cr, uid, [res_id], vals)
         
         # Escribir log
         self.write_log_create(cr, uid, res_id)
@@ -5483,7 +5479,7 @@ class kemas_event(osv.osv):
         print """
     
                      [%d] Past events successfully closed: %s
-                 -------------------------------------------------------------------------------------------------------------------------\n""" % (cont, kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz))
+                 -------------------------------------------------------------------------------------------------------------------------\n""" % (cont, extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz))
     def close_event(self, cr, uid, event_id, context={}):   
         def send_notifications(self):
             def send(self, db_name, uid):
@@ -5582,8 +5578,8 @@ class kemas_event(osv.osv):
             
             nombre_del_evento = unicode(event['service_id'][1])
             time_start = self.pool.get('kemas.service').read(cr, uid, event['service_id'][0], ['time_start'])['time_start']
-            time_start = kemas_extras.convert_float_to_hour_format(time_start)
-            description = "Inasistencia al Servicio: '%s' del %s, programado para las %s." % (nombre_del_evento, kemas_extras.convert_date_format_long_str(event['date_start']), time_start)
+            time_start = extras.convert_float_to_hour_format(time_start)
+            description = "Inasistencia al Servicio: '%s' del %s, programado para las %s." % (nombre_del_evento, extras.convert_date_format_long_str(event['date_start']), time_start)
             new_points = int(current_points) - int(event['not_attend_points'])
             change_points = str(event['not_attend_points'])
             
@@ -5810,12 +5806,12 @@ class kemas_event(osv.osv):
             service = service_obj.read(cr, uid, event['service_id'][0], ['time_entry', 'time_start', 'time_end'])
             fecha_evento = datetime.datetime.strptime(event['date_start'], '%Y-%m-%d %H:%M:%S')
             tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-            # if event['state']=='on_going' and fecha_evento.date().__str__() <= kemas_extras.convert_to_tz(datetime.datetime.now().__str__(),tz,res=1):
+            # if event['state']=='on_going' and fecha_evento.date().__str__() <= extras.convert_to_tz(datetime.datetime.now().__str__(),tz,res=1):
             if event['state'] == 'on_going' and fecha_evento.date().__str__() <= datetime.datetime.now().__str__():
                 try:
                     total_minutes = service['time_end'] - service['time_start']
-                    now_UTC = kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz)
-                    now_minutes = kemas_extras.convert_hour_format_to_float(now_UTC[-8:])
+                    now_UTC = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz)
+                    now_minutes = extras.convert_hour_format_to_float(now_UTC[-8:])
                     after_minutes = now_minutes - service['time_start']
                     progress = float(after_minutes * 100) / float(total_minutes)
                     if progress < 0: 
@@ -5868,22 +5864,22 @@ class kemas_event(osv.osv):
         result = {}
         records = super(osv.osv, self).read(cr, uid, ids, ['time_start'])
         for record in records:
-            result[record['id']] = kemas_extras.convert_float_to_hour_format(record['time_start'])
+            result[record['id']] = extras.convert_float_to_hour_format(record['time_start'])
         return result
     
     def _get_time_end_str(self, cr, uid, ids, name, arg, context={}): 
         result = {}
         records = super(osv.osv, self).read(cr, uid, ids, ['time_end'])
         for record in records:
-            result[record['id']] = kemas_extras.convert_float_to_hour_format(record['time_end'])
+            result[record['id']] = extras.convert_float_to_hour_format(record['time_end'])
         return result
     
     def _get_event_date_str(self, cr, uid, ids, name, arg, context={}): 
         result = {}
         records = super(osv.osv, self).read(cr, uid, ids, ['time_start', 'time_end', 'date_start'])
         for record in records:
-            time_start = kemas_extras.convert_float_to_hour_format(record['time_start'])
-            time_end = kemas_extras.convert_float_to_hour_format(record['time_end'])
+            time_start = extras.convert_float_to_hour_format(record['time_start'])
+            time_end = extras.convert_float_to_hour_format(record['time_end'])
             result[record['id']] = "%s - %s" % (time_start, time_end)
         return result
     
@@ -5927,7 +5923,7 @@ class kemas_event(osv.osv):
     
     def _event_day(self, cr, uid, ids, name, arg, context={}): 
         def event_day(date_start):
-            date_start = kemas_extras.convert_to_tz(date_start, self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
+            date_start = extras.convert_to_tz(date_start, self.pool.get('kemas.func').get_tz_by_uid(cr, uid))
             date_start = parse(date_start)
             day_number = int(date_start.strftime('%u'))
             if day_number == 1:
@@ -6048,7 +6044,7 @@ class kemas_event(osv.osv):
         #-----KANBAN METHOD
         'priority': fields.selection([('4', 'Very Low'), ('3', 'Low'), ('2', 'Medium'), ('1', 'Important'), ('0', 'Very important')], 'Priority', select=True),
         'color': fields.integer('Color Index'),
-        'stage_id': fields.many2one('kemas.event.stage', 'Stage'),
+        'stage_id': fields.many2one('kemas.event.stage', 'Stage', required=False),
         'photo_place': fields.related('place_id', 'photo', type='binary', store=True, string='photo'),
         'members': fields.many2many('res.users', 'event_user_rel', 'event_id', 'uid', 'Event Members', help=""),
         # Campos para cuando un evento finalice alamacer los datos que tenia el servicio en ese entoces
@@ -6102,18 +6098,26 @@ class kemas_event(osv.osv):
         collaborator_ids = line_obj.read(cr, uid, line_ids, ['collaborator_id'])
         self.write(cr, uid, ids, {'line_ids': collaborator_ids}, context)       
     
+    def _get_def_stage(self, cr, uid, context={}):
+        stage_obj = self.pool.get('kemas.event.stage')
+        stage_ids = stage_obj.search(cr, uid, [('sequence', '=', 1)])
+        result = stage_ids and stage_ids[0] or False
+        if not result:
+            raise osv.except_osv(u'¡Advertencia!', u"No se han definido las etapas 'Stages'. para los eventos")
+        return result
+    
     _defaults = {
         'state':'creating',
-        'attend_on_time_points':get_default_attend_on_time_points,
-        'late_points':get_default_late_points,
-        'not_attend_points':get_default_not_attend_points,
-        'progress':200,
+        'attend_on_time_points': get_default_attend_on_time_points,
+        'late_points': get_default_late_points,
+        'not_attend_points': get_default_not_attend_points,
+        'progress': 200,
         
         'priority': '2',
-        'stage_id': 1,
-        'color':6,
+        'stage_id': _get_def_stage,
+        'color': 6,
         'collaborators_loaded': True,
-        'min_points':1,
+        'min_points': 1,
         }
     def validate_date(self, cr, uid, ids):
         event = self.read(cr, uid, ids[0], ['date_start', 'date_stop'])
@@ -6125,7 +6129,7 @@ class kemas_event(osv.osv):
         if event_ids and event_ids != ids:
             raise osv.except_osv(_('Error!'), _('This event is crossed with another.'))
         # tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        # if kemas_extras.convert_to_tz(event['date_start'],tz) <= kemas_extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"),tz)[:10] + ' 00:00:00': 
+        # if extras.convert_to_tz(event['date_start'],tz) <= extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"),tz)[:10] + ' 00:00:00': 
         #    raise osv.except_osv(_('Error!'), _('Unable to create an event in a past date.')) 
         
         return True
@@ -6181,19 +6185,19 @@ class kemas_attendance(osv.osv):
         
         context['tz'] = context.get('tz', False) or self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
         if context.get('search_this_month', False):
-            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            range_dates = extras.get_dates_range_this_month(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))    
         elif context.get('search_this_week', False):
-            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            range_dates = extras.get_dates_range_this_week(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))
         elif context.get('search_today', False):
-            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            range_dates = extras.get_dates_range_today(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))  
         elif context.get('search_yesterday', False):
-            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            range_dates = extras.get_dates_range_yesterday(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))  
         
@@ -6202,11 +6206,11 @@ class kemas_attendance(osv.osv):
             for arg in args:
                 try:
                     if arg[0] == 'search_start':
-                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
+                        start = extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
                         args.append(('date', '>=', start))
                         items_to_remove.append(arg)
                     if arg[0] == 'search_end':
-                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
+                        end = extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
                         args.append(('date', '<=', end))
                         items_to_remove.append(arg)
                 except:None
@@ -6328,7 +6332,7 @@ class kemas_attendance(osv.osv):
         if (time_entry + time_register) < now:
             type = 'late'
             minutos_tarde = now - (time_entry + time_register)
-            tiempo_de_atraso = kemas_extras.convert_minutes_to_hour_format(minutos_tarde)
+            tiempo_de_atraso = extras.convert_minutes_to_hour_format(minutos_tarde)
             summary = "Asistencia Inpuntual, %s minutos tarde." % (tiempo_de_atraso)
         
         vals['type'] = type
@@ -6344,15 +6348,15 @@ class kemas_attendance(osv.osv):
         
         nombre_del_evento = unicode(event['service_id'][1])
         time_start = self.pool.get('kemas.service').read(cr, uid, event['service_id'][0], ['time_start'])['time_start']
-        time_start = kemas_extras.convert_float_to_hour_format(time_start)
-        description = "Asistencia Puntual al Servicio: '%s' del %s, programado para las %s." % (nombre_del_evento, kemas_extras.convert_date_format_long_str(event['date_start']), time_start)
+        time_start = extras.convert_float_to_hour_format(time_start)
+        description = "Asistencia Puntual al Servicio: '%s' del %s, programado para las %s." % (nombre_del_evento, extras.convert_date_format_long_str(event['date_start']), time_start)
                     
         new_points = int(current_points) + int(event['attend_on_time_points'])
         change_points = abs(int(event['attend_on_time_points']))
         if type != 'just_time':
             history_type = 'decrease'
             operator = '-'
-            description = unicode("""Asistencia Inpuntual,%s minutos tarde al Servicio:'%s' del %s.""", 'utf-8') % (tiempo_de_atraso, unicode(event['service_id'][1]), kemas_extras.convert_date_format_long_str(event['date_start']))
+            description = unicode("""Asistencia Inpuntual,%s minutos tarde al Servicio:'%s' del %s.""", 'utf-8') % (tiempo_de_atraso, unicode(event['service_id'][1]), extras.convert_date_format_long_str(event['date_start']))
             new_points = int(current_points) - int(event['late_points'])
             change_points = abs(int(event['late_points'])) * -1
             
@@ -6429,19 +6433,19 @@ class kemas_event_replacement(osv.osv):
             
         # Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month', False):
-            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            range_dates = extras.get_dates_range_this_month(context['tz'])
             args.append(('datetime', '>=', range_dates['date_start']))
             args.append(('datetime', '<=', range_dates['date_stop']))    
         elif context.get('search_this_week', False):
-            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            range_dates = extras.get_dates_range_this_week(context['tz'])
             args.append(('datetime', '>=', range_dates['date_start']))
             args.append(('datetime', '<=', range_dates['date_stop']))
         elif context.get('search_today', False):
-            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            range_dates = extras.get_dates_range_today(context['tz'])
             args.append(('datetime', '>=', range_dates['date_start']))
             args.append(('datetime', '<=', range_dates['date_stop']))  
         elif context.get('search_yesterday', False):
-            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            range_dates = extras.get_dates_range_yesterday(context['tz'])
             args.append(('datetime', '>=', range_dates['date_start']))
             args.append(('datetime', '<=', range_dates['date_stop']))  
         
@@ -6451,11 +6455,11 @@ class kemas_event_replacement(osv.osv):
             for arg in args:
                 try:
                     if arg[0] == 'search_start':
-                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
+                        start = extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
                         args.append(('datetime', '>=', start))
                         items_to_remove.append(arg)
                     if arg[0] == 'search_end':
-                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
+                        end = extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
                         args.append(('datetime', '<=', end))
                         items_to_remove.append(arg)
                 except:None
@@ -6537,4 +6541,17 @@ class kemas_event_replacement(osv.osv):
         'search_start': fields.date('Desde', help='Buscar desde'),
         'search_end': fields.date('Hasta', help='Buscar hasta'),
         }
+
+class kemas_skill(osv.osv):
+    _name = 'kemas.skill'
+    _columns = {
+        'name': fields.char('Name', size=64, required=True),
+        'collaborator_ids': fields.one2many('kemas.collaborator', 'skill_id', 'collaborators', help='Colaboradores que tiene esta habilidad'),
+        'skill_ids': fields.many2many('kemas.skill', 'kemas_collaborator_skill_rel', 'collaborator_id', 'skill_id', 'skills', help="Habilidades que tiene este colaborador"),
+        
+        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_collaborator_skill_rel', 'skill_id', 'collaborator_id', 'collaborators', help='description'),
+        }
+    _sql_constraints = [
+        ('u_name', 'unique (name)', u'¡Este nombre ya existe!'),
+        ]
 # vim:expandtab:smartind:tabstop=4:softtabstop=4:shiftwidth=4:
