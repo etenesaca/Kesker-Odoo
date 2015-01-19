@@ -2622,7 +2622,62 @@ class kemas_collaborator_logbook(osv.osv):
             ('bad', 'Bad'),
              ], 'Type'),
         }
+
+class kemas_skill(osv.osv):
+    def do_activate(self, cr, uid, ids, context={}):
+        super(osv.osv, self).write(cr, uid, ids, {'active' : True})
+        return True
     
+    def do_inactivate(self, cr, uid, ids, context={}):
+        super(osv.osv, self).write(cr, uid, ids, {'active': False})
+        return True
+    
+    def _get_collaborators(self, cr, uid, ids, name, arg, context={}): 
+        def get_collaborators(skill_id):
+            skill_line_obj = self.pool['kemas.skill.line']
+            
+            skill_line_ids = skill_line_obj.search(cr, uid, [('skill_id', '=', skill_id)])
+            skill_lines = skill_line_obj.read(cr, uid, skill_line_ids, ['collaborator_id'])
+            
+            collaborator_ids = []
+            for skill_line in skill_lines:
+                collaborator_ids.append(skill_line['collaborator_id'][0])
+            return collaborator_ids
+             
+        result = {}
+        for record_id in ids:
+            result[record_id] = get_collaborators(record_id)
+        return result
+    
+    _name = 'kemas.skill'
+    _columns = {
+        'name': fields.char('Nombre', size=64, required=True),
+        'active': fields.boolean('Active', required=False, help='Indicates whether this place is active or not'),
+        'skill_ids': fields.many2many('kemas.skill', 'kemas_collaborator_skill_rel', 'collaborator_id', 'skill_id', 'Habilidades', help="Habilidades que tiene este colaborador"),
+        # 'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_collaborator_skill_rel', 'skill_id', 'collaborator_id', 'Colaboraroes', help='Colaboraradores que tienen esta habilidad'),
+        'collaborator_ids' : fields.function(_get_collaborators, type='many2many', relation="kemas.collaborator", string='collaborator'),
+        }
+    _sql_constraints = [
+        ('u_name', 'unique (name)', u'¡Este nombre ya existe!'),
+        ]
+    _defaults = {  
+        'active': True 
+        }
+
+class kemas_skill_line(osv.osv):
+    _name = 'kemas.skill.line'
+    _columns = {
+        'skill_id':fields.many2one('kemas.skill', 'Habilidad', required=True),
+        'collaborator_id':fields.many2one('kemas.collaborator', 'Colaborador', required=True),
+        'description': fields.text(u'Descripción'),
+        }
+    _sql_constraints = [
+        ('u_skill_line', 'unique (skill_id,collaborator_id)', u'¡Esta habilidad ya se le registro a este colaborador!'),
+        ]
+    _defaults = {  
+        'date': lambda *a: time.strftime('%Y-%m-%d'),
+        }    
+
 class kemas_collaborator(osv.osv):
     def do_activate(self, cr, uid, ids, context={}):
         vals = {
@@ -3749,7 +3804,7 @@ class kemas_collaborator(osv.osv):
         'age' : fields.function(_ff_age, type='char', string='Edad', help="Edad del colaborador"),
         'gender': fields.selection([('Male', 'Male'), ('Female', 'Female'), ], 'Gender', required=True, help="The gender of the collaborator",),
         'marital_status': fields.selection([('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced'), ('Widower', 'Widower')], 'Marital status', help="Marital Status of the collaborator"),
-        'skill_ids': fields.many2many('kemas.skill', 'kemas_collaborator_skill_rel', 'collaborator_id', 'skill_id', 'skills', help="Habilidades que tiene este colaborador"),
+        'skill_line_ids': fields.one2many('kemas.skill.line', 'collaborator_id', 'skill_lines', help='Habilidades que tiene este colaborador'),
         
         'street': fields.related('partner_id', 'street', type='char', string='Calle 1', store=False),
         'street2': fields.related('partner_id', 'street2', type='char', string='Calle 2', store=False),
@@ -4479,7 +4534,7 @@ class kemas_place(osv.osv):
         ('place_name', 'unique (name)', 'This Name already exist!'),
         ]
     _defaults = {  
-        'active':True 
+        'active': True
         }
 
 class kemas_repository_category(osv.osv):
@@ -6542,16 +6597,4 @@ class kemas_event_replacement(osv.osv):
         'search_end': fields.date('Hasta', help='Buscar hasta'),
         }
 
-class kemas_skill(osv.osv):
-    _name = 'kemas.skill'
-    _columns = {
-        'name': fields.char('Name', size=64, required=True),
-        'collaborator_ids': fields.one2many('kemas.collaborator', 'skill_id', 'collaborators', help='Colaboradores que tiene esta habilidad'),
-        'skill_ids': fields.many2many('kemas.skill', 'kemas_collaborator_skill_rel', 'collaborator_id', 'skill_id', 'skills', help="Habilidades que tiene este colaborador"),
-        
-        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_collaborator_skill_rel', 'skill_id', 'collaborator_id', 'collaborators', help='description'),
-        }
-    _sql_constraints = [
-        ('u_name', 'unique (name)', u'¡Este nombre ya existe!'),
-        ]
 # vim:expandtab:smartind:tabstop=4:softtabstop=4:shiftwidth=4:

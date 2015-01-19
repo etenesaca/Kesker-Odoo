@@ -27,48 +27,8 @@
                      <field name="responsible_id" placeholder="Responsable del Equipo" required="True" />
                   </group>
                   <notebook colspan="4">
-                     <page string="Collaborators">
-                        <field name="collaborator_ids" widget="many2many_kanban">
-                           <kanban quick_create="false" create="true">
-                              <field name="name_with_nick_name" />
-                              <templates>
-                                 <t t-name="kanban-box">
-                                    <div style="position: relative">
-                                       <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block">
-                                          <img src="/kemas/static/src/img/icons/delete_red.png" alt="Eliminar" />
-                                       </a>
-                                       <div class="oe_module_vignette">
-                                          <a type="open">
-                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
-                                          </a>
-                                          <div class="oe_module_desc">
-                                             <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
-                                                <table class="oe_kanban_table">
-                                                   <tr>
-                                                      <td class="oe_kanban_title1" align="left" valign="middle">
-                                                         <h4>
-                                                            <a type="open">
-                                                               <field name="name_with_nick_name" />
-                                                            </a>
-                                                         </h4>
-                                                         <div>
-                                                            <a t-if="record.email.raw_value" title="Mail" t-att-href="'mailto:'+record.email.value">
-                                                               <i>
-                                                                  <field name="email" />
-                                                               </i>
-                                                            </a>
-                                                         </div>
-                                                      </td>
-                                                   </tr>
-                                                </table>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </t>
-                              </templates>
-                           </kanban>
-                        </field>
+                     <page string="Colaboradores">
+                        <field name="collaborator_ids" widget="many2many_kanban" context="{'kanban_view_ref': 'kemas.kemas_collaborator_kanban_view4'}" />
                      </page>
                      <page string="Description">
                         <group colspan="4" expand="1">
@@ -2553,6 +2513,103 @@
       </record>
       <!--
          ====================
+         KEMAS SKILLS
+         ====================
+      -->
+      <!--____________________________________________________Vista de Formulario -->
+      <record model="ir.ui.view" id="kemas_skill_form">
+         <field name="name">kemas.skill.form</field>
+         <field name="model">kemas.skill</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="Habilidad" version="7.0">
+               <header>
+                  <div>
+                     <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('active','=',True)]}" groups="kemas.group_kemas_manager" />
+                     <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('active','=',False)]}" groups="kemas.group_kemas_manager" />
+                  </div>
+               </header>
+               <sheet string="Habilidad">
+                  <div>
+                     <div class="oe_edit_only">
+                        <label for="name" />
+                     </div>
+                     <h1>
+                        <field name="name" default_focus="1" placeholder="Nombre de la habilidad" />
+                     </h1>
+                  </div>
+                  <group>
+                     <field name="active" readonly="1" />
+                  </group>
+                  <notebook>
+                     <page string="Colaboradores">
+                        <field name="collaborator_ids" widget="many2many_kanban" context="{'kanban_view_ref': 'kemas.kemas_collaborator_kanban_view4'}" />
+                     </page>
+                  </notebook>
+               </sheet>
+            </form>
+         </field>
+      </record>
+      <!--____________________________________________________Vista de Arbol -->
+      <record model="ir.ui.view" id="kemas_skill_tree">
+         <field name="name">kemas.skill.tree</field>
+         <field name="model">kemas.skill</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <tree string="Habilidades" colors="gray:active==False;">
+               <field name="name" />
+               <field name="active" invisible="1" />
+            </tree>
+         </field>
+      </record>
+      <!--____________________________________________________Vista de Busqueda -->
+      <record model="ir.ui.view" id="kemas_skill_search">
+         <field name="name">kemas.skill.search</field>
+         <field name="model">kemas.skill</field>
+         <field name="arch" type="xml">
+            <search string="Buscar Habilidad">
+               <filter name="active" string="Activos" domain="[('active','=',True)]" />
+               <filter name="inactive" string="Inactivos" domain="[('active','=',False)]" />
+               <group>
+                  <field name="name" default_focus="1" />
+               </group>
+            </search>
+         </field>
+      </record>
+
+      <!--
+         ====================
+         KEMAS SKILL LINE
+         ====================
+      -->
+      <!--____________________________________________________Vista de Formulario -->
+      <record model="ir.ui.view" id="kemas_skill_line_form">
+         <field name="name">kemas.skill.line.form</field>
+         <field name="model">kemas.skill.line</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="Habilidad" version="7.0">
+               <group>
+                  <field name="skill_id" placeholder="Seleccione la habilidad" options='{"no_open": True, "no_create": True}' />
+                  <field name="description" placeholder="Descripción" />
+               </group>
+            </form>
+         </field>
+      </record>
+      <!--____________________________________________________Vista de Arbol -->
+      <record model="ir.ui.view" id="kemas_skill_line_tree">
+         <field name="name">kemas.skill.line.tree</field>
+         <field name="model">kemas.skill.line</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <tree string="Habilidades" editable="bottom">
+               <field name="skill_id" options='{"no_open": True, "no_create": True}' />
+               <field name="description" />
+            </tree>
+         </field>
+      </record>
+      <!--
+         ====================
          COLLABORATOR
          ====================
       -->
@@ -2744,6 +2801,9 @@
                            </group>
                            <group />
                         </group>
+                     </page>
+                     <page id="skills" string="Habilidades">
+                        <field name="skill_line_ids" />
                      </page>
                      <page id="status_info" string="Estado">
                         <group colspan="4" col="6">
@@ -3047,6 +3107,52 @@
                                  </a>
                               </li>
                            </ul>
+                        </div>
+                     </div>
+                  </t>
+               </templates>
+            </kanban>
+         </field>
+      </record>
+      <record model="ir.ui.view" id="kemas_collaborator_kanban_view4">
+         <field name="name">kemas.collaborator.kanban4</field>
+         <field name="model">kemas.collaborator</field>
+         <field name="priority" eval="4" />
+         <field name="arch" type="xml">
+            <kanban quick_create="false" create="true">
+               <field name="name_with_nick_name" />
+               <templates>
+                  <t t-name="kanban-box">
+                     <div style="position: relative">
+                        <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block">
+                           <img src="/kemas/static/src/img/icons/delete_red.png" alt="Eliminar" />
+                        </a>
+                        <div class="oe_module_vignette">
+                           <a type="open">
+                              <img t-att-src="kanban_image('kemas.collaborator', 'photo_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                           </a>
+                           <div class="oe_module_desc">
+                              <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
+                                 <table class="oe_kanban_table">
+                                    <tr>
+                                       <td class="oe_kanban_title1" align="left" valign="middle">
+                                          <h4>
+                                             <a type="open">
+                                                <field name="name_with_nick_name" />
+                                             </a>
+                                          </h4>
+                                          <div>
+                                             <a t-if="record.email.raw_value" title="Mail" t-att-href="'mailto:'+record.email.value">
+                                                <i>
+                                                   <field name="email" />
+                                                </i>
+                                             </a>
+                                          </div>
+                                       </td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
                         </div>
                      </div>
                   </t>
@@ -3609,8 +3715,8 @@
          <field name="model">kemas.place</field>
          <field name="arch" type="xml">
             <search string="search place">
-               <filter name="active" string="Active" domain="[('active','=',True)]" icon="STOCK_YES" />
-               <filter name="inactive" string="Inactive" domain="[('active','=',False)]" icon="STOCK_NO" />
+               <filter name="active" string="Activos" domain="[('active','=',True)]" />
+               <filter name="inactive" string="Inactivos" domain="[('active','=',False)]" />
                <separator />
                <field name="name" default_focus="1" />
                <field name="address" />
@@ -4879,6 +4985,21 @@
          ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::ACTIONS::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       -->
+      <!--____________________________________________________Habilidads -->
+      <record model="ir.actions.act_window" id="kemas_skill_action">
+         <field name="name">Habilidades</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">kemas.skill</field>
+         <field name="view_mode">tree,form</field>
+         <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+               De click aquí para agregar un Nueva Habilidad.
+            </p>
+            <p>
+
+            </p>
+         </field>
+      </record>
       <!--____________________________________________________Inicios de Sesión -->
       <record model="ir.actions.act_window" id="kemas_collaborator_logbook_login_action">
          <field name="name">Logins</field>
@@ -5952,11 +6073,13 @@
       <!-- Configuraciones -->
       <menuitem action="action_kemas_config" name="Preferencias" id="menu_kemas_config" parent="menu_kemas_configurations" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
 
-      <menuitem id="menu_kemas_config_collaborator" name="Colaboraadores" parent="menu_kemas_configurations" sequence="2" />
+      <menuitem id="menu_kemas_config_collaborator" name="Colaboradores" parent="menu_kemas_configurations" sequence="2" />
       <!-- Niveles -->
       <menuitem action="action_kemas_level" name="Niveles" id="menu_kemas_level" parent="menu_kemas_config_collaborator" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
-      <!--Web Sites -->
+      <!-- Web Sites -->
       <menuitem action="action_kemas_web_site" name="Web sites" id="menu_kemas_web_site" parent="menu_kemas_config_collaborator" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
+      <!-- Habilidades -->
+      <menuitem action="kemas_skill_action" id="kemas_skill_menu" parent="menu_kemas_config_collaborator" sequence="3" groups="group_kemas_manager,group_kemas_admin" />
 
       <!--
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
