@@ -1036,21 +1036,22 @@ class kemas_config(osv.osv):
             except: 
                 _logger.warning('Event completed Notify Failed to send email to: %s', address)
                 return False
-            
-        server_obj = self.pool.get('ir.mail_server')
-        config_obj = self.pool.get('kemas.config')
-        collaborator_obj = self.pool.get('kemas.collaborator')
-        collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email', 'im_account'])
-        #------------------------------------------------------------------------------------
-        config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, [])
-        if preferences['mailing'] == False:
-            return False
-        #------------------------------------------------------------------------------------
-        subject = self._build_event_completed_string(cr, uid, preferences, preferences['message_event_completon_subject'], event_id, service_id, collaborator_id, type_attend)
-        res_send_email = send_email()
-        # if res_send_email:
-        #    send_IM()
+        
+        with Environment.manage():
+            server_obj = self.pool.get('ir.mail_server')
+            config_obj = self.pool.get('kemas.config')
+            collaborator_obj = self.pool.get('kemas.collaborator')
+            collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email', 'im_account'])
+            #------------------------------------------------------------------------------------
+            config_id = config_obj.get_correct_config(cr, uid)
+            preferences = config_obj.read(cr, uid, config_id, [])
+            if preferences['mailing'] == False:
+                return False
+            #------------------------------------------------------------------------------------
+            subject = self._build_event_completed_string(cr, uid, preferences, preferences['message_event_completon_subject'], event_id, service_id, collaborator_id, type_attend)
+            res_send_email = send_email()
+            # if res_send_email:
+            #    send_IM()
         return res_send_email
     
     def send_email_event(self, cr, uid, line_id, context={}):
@@ -4084,7 +4085,6 @@ class kemas_task_assigned(osv.osv):
                         'model' : 'kemas.task.assigned',
                         'record_name' : task_name,
                         'res_id' : task_id,
-                        'partner_id' : partner_id,
                         'type' : 'notification',
                         'author_id' : partner_id,
                         }
@@ -4408,45 +4408,6 @@ class kemas_history_points(osv.osv):
                 args.remove(item)
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
     
-    def write_log_create(self, cr, uid, res_id, notify_partner_ids=[]):
-        body = u'''
-        <div>
-            <span>
-                • <b>Modificacion de Puntos</b>
-            </span>
-        </div>
-        '''
-        # Borrar los logs que creados por defecto
-        self.pool.get('mail.message').unlink(cr, SUPERUSER_ID, self.pool.get('mail.message').search(cr, uid, [('res_id', '=', res_id)]))
-        return self.write_log_update(cr, uid, res_id, body, notify_partner_ids) 
-    
-    def write_log_update(self, cr, uid, res_id, body, notify_partner_ids=[]):
-        # --Escribir un mensaje con un registro de que se paso Estado en Curso
-        user_obj = self.pool.get('res.users')
-        message_obj = self.pool.get('mail.message')
-        
-        res_name = self.name_get(cr, uid, [res_id])[0][1]
-        partner_id = user_obj.read(cr, uid, uid, ['partner_id'])['partner_id'][0]
-        vals_message = {
-                        'body' : body,
-                        'model' : 'kemas.history.points',
-                        'record_name' : res_name,
-                        'res_id' : res_id,
-                        'partner_id' : partner_id,
-                        'type' : 'notification',
-                        'author_id' : partner_id,
-                        }
-        message_id = message_obj.create(cr, uid, vals_message)
-        for notify_partner_id in notify_partner_ids:
-            vals_notication = {
-                               'message_id' : message_id,
-                               'partner_id' : notify_partner_id,
-                               'read': False,
-                               'starred': False,
-                               }
-            self.pool.get('mail.notification').create(cr, uid, vals_notication)
-        return message_id
-    
     def create(self, cr, uid, vals, context={}):
         if not vals.get('code', False):
             seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas History Points'), ])[0]
@@ -4458,12 +4419,23 @@ class kemas_history_points(osv.osv):
         vals['message_follower_ids'] = [(6, 0, follower_ids)]
 
         # Guardar el registro        
+        context['mail_create_nolog'] = True
         res_id = super(osv.osv, self).create(cr, uid, vals, context)
         
         partner_id = self.pool.get('res.users').read(cr, uid, uid, ['partner_id'])['partner_id'][0]
         if partner_id in follower_ids:
             follower_ids.remove(partner_id)
-        self.write_log_create(cr, uid, res_id, follower_ids)
+        
+        body = u'''
+        <div>
+            <span>
+                • <b>Modificacion de Puntos</b>
+            </span>
+        </div>
+        '''
+        context['notify_all_followers'] = True
+        context['delete_uid_followers'] = True
+        self.pool['mail.th'].log_create(cr, uid, res_id, self._name, body, context=context)
         return res_id
     
     _order = 'date DESC'
@@ -4581,7 +4553,6 @@ class kemas_repository(osv.osv):
                         'model' : 'kemas.repository',
                         'record_name' : res_name,
                         'res_id' : res_id,
-                        'partner_id' : partner_id,
                         'type' : 'notification',
                         'author_id' : partner_id,
                         }
@@ -5518,23 +5489,25 @@ class kemas_event(osv.osv):
     def _close_past_events(self, db_name, uid, context={}):
         db = pooler.get_db(db_name)
         cr = db.cursor()
-        #--------------------------------------------------------------------------------------------
-        event_ids = self.get_past_events(cr, uid, False)
-        print """\n
-                 -------------------------------------------------------------------------------------------------------------------------
-                 ***************************************CLOSE PAST EVENTS*****************************************************************"""
-        cont = 0
-        for event_id in event_ids:
-            cont += 1
-            self.close_event(cr, uid, event_id)
-            event_name = self.name_get(cr, uid, [event_id])[0][1]
-            cr.commit()
-            print """\t\t\t* Closed: %s """ % (event_name)
-        tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        print """
-    
-                     [%d] Past events successfully closed: %s
-                 -------------------------------------------------------------------------------------------------------------------------\n""" % (cont, extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz))
+        
+        with Environment.manage():
+            event_ids = self.get_past_events(cr, uid, False)
+            print """\n
+                     -------------------------------------------------------------------------------------------------------------------------
+                     ***************************************CLOSE PAST EVENTS*****************************************************************"""
+            cont = 0
+            for event_id in event_ids:
+                cont += 1
+                self.close_event(cr, uid, event_id)
+                event_name = self.name_get(cr, uid, [event_id])[0][1]
+                cr.commit()
+                print """\t\t\t* Closed: %s """ % (event_name)
+            tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
+            print """
+        
+                         [%d] Past events successfully closed: %s
+                         
+                     -------------------------------------------------------------------------------------------------------------------------\n""" % (cont, extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz))
     def close_event(self, cr, uid, event_id, context={}):   
         def send_notifications(self):
             def send(self, db_name, uid):
@@ -5554,116 +5527,117 @@ class kemas_event(osv.osv):
                  
             threaded_sending = threading.Thread(target=send, args=(self, cr.dbname, uid))
             threaded_sending.start()
-                  
-        service_obj = self.pool.get('kemas.service')
-        line_obj = self.pool.get('kemas.event.collaborator.line')
-        attendance_obj = self.pool.get('kemas.attendance')
-        collaborator_obj = self.pool.get('kemas.collaborator')
-        history_points_obj = self.pool.get('kemas.history.points')
-        #------------------------------------------------------------------------------
-        event = self.read(cr, uid, event_id, ['place_id', 'service_id', 'date_start', 'not_attend_points', 'close_to_end', 'message_follower_ids'])
-        service_id = event['service_id'][0]
-        service = service_obj.read(cr, uid, service_id, [])
-        date_start = self.read(cr, uid, event_id, ['date_start'])['date_start'] 
-        # Verificar si el evento esta configurado para inactivar el servicio al finalizar
-        if event['close_to_end']:
-            service_obj.do_inactivate(cr, uid, [service_id])
-        vals = {
-                'state' : 'closed',
-                'color' : 5,
-                'date_close' : str(time.strftime("%Y-%m-%d %H:%M:%S")),
-                #--Summary----------------------------------------------
-                'rm_service': service['name'],
-                'rm_close_to_end' : event['close_to_end'],
-                'rm_place': event['place_id'][1],
-                'rm_date': date_start,
-                'rm_time_start': service['time_start'],
-                'rm_time_end': service['time_end'],
-                'rm_time_entry': service['time_entry'],
-                'rm_time_register': service['time_register'],
-                'rm_time_limit': service['time_limit'],
-                }
-        stage_obj = self.pool.get('kemas.event.stage')
-        stage_ids = stage_obj.search(cr, uid, [('sequence', '=', 3)])
-        if stage_ids:
-            vals['stage_id'] = stage_ids[0]
-        super(osv.osv, self).write(cr, uid, [event_id], vals)
-        #---Verificar las personas que asistieron al servicio-----------------------------
-        # Armar una lista de los colaboradores que debian asistir.
-        programados = []
-        line_ids = self.read(cr, uid, event_id, ['event_collaborator_line_ids'])['event_collaborator_line_ids']
-        lines = line_obj.read(cr, uid, line_ids, ['collaborator_id'])
-        for line in lines:
-            programados.append(line['collaborator_id'][0])
-        # Armar una lista de los colaboradores que asistiron.
-        noticaciones = {}
-        noticaciones['event_id'] = event_id
-        noticaciones['service_id'] = service_id
-        noticaciones['collaborators'] = []
         
-        asistentes = []
-        attendance_ids = attendance_obj.search(cr, uid, [('event_id', '=', event_id)])
-        attendances = attendance_obj.read(cr, uid, attendance_ids, ['collaborator_id', 'type'])
-        for attendance in attendances:
-            asistentes.append(attendance['collaborator_id'][0])
-            #---Agregar un colaborador a la lista de notificationes
-            collaborator = {
-                            'id': attendance['collaborator_id'][0],
-                            'type':attendance['type']
-                            }
-            noticaciones['collaborators'].append(collaborator)
-        
-        inasistentes = list(set(programados) - set(asistentes))
-        for inasistente in inasistentes:
-            #---Escribir registro de Asitencia-----
-            vals = {}
-            seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Attendance'), ])[0]
-            summary = 'Inasistencia.'
+        with Environment.manage():
+            service_obj = self.pool.get('kemas.service')
+            line_obj = self.pool.get('kemas.event.collaborator.line')
+            attendance_obj = self.pool.get('kemas.attendance')
+            collaborator_obj = self.pool.get('kemas.collaborator')
+            history_points_obj = self.pool.get('kemas.history.points')
+            #------------------------------------------------------------------------------
+            event = self.read(cr, uid, event_id, ['place_id', 'service_id', 'date_start', 'not_attend_points', 'close_to_end', 'message_follower_ids'])
+            service_id = event['service_id'][0]
+            service = service_obj.read(cr, uid, service_id, [])
+            date_start = self.read(cr, uid, event_id, ['date_start'])['date_start'] 
+            # Verificar si el evento esta configurado para inactivar el servicio al finalizar
+            if event['close_to_end']:
+                service_obj.do_inactivate(cr, uid, [service_id])
+            vals = {
+                    'state' : 'closed',
+                    'color' : 5,
+                    'date_close' : str(time.strftime("%Y-%m-%d %H:%M:%S")),
+                    #--Summary----------------------------------------------
+                    'rm_service': service['name'],
+                    'rm_close_to_end' : event['close_to_end'],
+                    'rm_place': event['place_id'][1],
+                    'rm_date': date_start,
+                    'rm_time_start': service['time_start'],
+                    'rm_time_end': service['time_end'],
+                    'rm_time_entry': service['time_entry'],
+                    'rm_time_register': service['time_register'],
+                    'rm_time_limit': service['time_limit'],
+                    }
+            stage_obj = self.pool.get('kemas.event.stage')
+            stage_ids = stage_obj.search(cr, uid, [('sequence', '=', 3)])
+            if stage_ids:
+                vals['stage_id'] = stage_ids[0]
+            super(osv.osv, self).write(cr, uid, [event_id], vals)
+            #---Verificar las personas que asistieron al servicio-----------------------------
+            # Armar una lista de los colaboradores que debian asistir.
+            programados = []
+            line_ids = self.read(cr, uid, event_id, ['event_collaborator_line_ids'])['event_collaborator_line_ids']
+            lines = line_obj.read(cr, uid, line_ids, ['collaborator_id'])
+            for line in lines:
+                programados.append(line['collaborator_id'][0])
+            # Armar una lista de los colaboradores que asistiron.
+            noticaciones = {}
+            noticaciones['event_id'] = event_id
+            noticaciones['service_id'] = service_id
+            noticaciones['collaborators'] = []
             
-            vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
-            vals['collaborator_id'] = inasistente
-            vals['type'] = 'absence'
-            vals['event_id'] = event_id
-            vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
-            vals['summary'] = summary
-            attendance_id = super(osv.osv, attendance_obj).create(cr, uid, vals)
+            asistentes = []
+            attendance_ids = attendance_obj.search(cr, uid, [('event_id', '=', event_id)])
+            attendances = attendance_obj.read(cr, uid, attendance_ids, ['collaborator_id', 'type'])
+            for attendance in attendances:
+                asistentes.append(attendance['collaborator_id'][0])
+                #---Agregar un colaborador a la lista de notificationes
+                collaborator = {
+                                'id': attendance['collaborator_id'][0],
+                                'type':attendance['type']
+                                }
+                noticaciones['collaborators'].append(collaborator)
             
-            collaborator = collaborator_obj.read(cr, uid, inasistente, ['points'])
-            current_points = str(collaborator['points'])
-            
-            nombre_del_evento = unicode(event['service_id'][1])
-            time_start = self.pool.get('kemas.service').read(cr, uid, event['service_id'][0], ['time_start'])['time_start']
-            time_start = extras.convert_float_to_hour_format(time_start)
-            description = "Inasistencia al Servicio: '%s' del %s, programado para las %s." % (nombre_del_evento, extras.convert_date_format_long_str(event['date_start']), time_start)
-            new_points = int(current_points) - int(event['not_attend_points'])
-            change_points = str(event['not_attend_points'])
-            
-            #---Escribir puntaje-----
-            super(osv.osv, collaborator_obj).write(cr, uid, [inasistente], {
-                                'points':int(new_points)
-                                })
-            #------------------------
-            history_summary = '-' + str(change_points) + " Puntos. Antes " + str(current_points) + " ahora " + str(new_points) + " Puntos."
-            history_points_obj.create(cr, uid, {
-                'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
-                'event_id': event_id,
-                'attendance_id': attendance_id,
-                'collaborator_id': inasistente,
-                'type': 'decrease',
-                'description': description,
-                'summary': history_summary,
-                'points': abs(int(change_points)) * -1,
-                })
-            #---Agregar un colaborador a la lista de notificationes (Inasistente)
-            collaborator = {
-                            'id': inasistente,
-                            'type':'absence'
-                            }
-            noticaciones['collaborators'].append(collaborator)
+            inasistentes = list(set(programados) - set(asistentes))
+            for inasistente in inasistentes:
+                #---Escribir registro de Asitencia-----
+                vals = {}
+                seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Attendance'), ])[0]
+                summary = 'Inasistencia.'
+                
+                vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
+                vals['collaborator_id'] = inasistente
+                vals['type'] = 'absence'
+                vals['event_id'] = event_id
+                vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
+                vals['summary'] = summary
+                attendance_id = super(kemas_attendance, attendance_obj).create(cr, uid, vals)
+                
+                collaborator = collaborator_obj.read(cr, uid, inasistente, ['points'])
+                current_points = str(collaborator['points'])
+                
+                nombre_del_evento = unicode(event['service_id'][1])
+                time_start = self.pool.get('kemas.service').read(cr, uid, event['service_id'][0], ['time_start'])['time_start']
+                time_start = extras.convert_float_to_hour_format(time_start)
+                description = "Inasistencia al Servicio: '%s' del %s, programado para las %s." % (nombre_del_evento, extras.convert_date_format_long_str(event['date_start']), time_start)
+                new_points = int(current_points) - int(event['not_attend_points'])
+                change_points = str(event['not_attend_points'])
+                
+                #---Escribir puntaje-----
+                super(kemas_collaborator, collaborator_obj).write(cr, uid, [inasistente], {
+                                    'points':int(new_points)
+                                    })
+                #------------------------
+                history_summary = '-' + str(change_points) + " Puntos. Antes " + str(current_points) + " ahora " + str(new_points) + " Puntos."
+                vals_history_points = {
+                    'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
+                    'attendance_id': attendance_id,
+                    'collaborator_id': inasistente,
+                    'type': 'decrease',
+                    'description': description,
+                    'summary': history_summary,
+                    'points': abs(int(change_points)) * -1,
+                    }
+                history_points_obj.create(cr, uid, vals_history_points)
+                #---Agregar un colaborador a la lista de notificationes (Inasistente)
+                collaborator = {
+                                'id': inasistente,
+                                'type':'absence'
+                                }
+                noticaciones['collaborators'].append(collaborator)
+                cr.commit()
             cr.commit()
-        cr.commit()
-        self.write_log_closed(cr, uid, event_id, event['message_follower_ids'])
-        send_notifications(self)
+            self.write_log_closed(cr, uid, event_id, event['message_follower_ids'])
+            send_notifications(self)
             
     def cancel_event(self, cr, uid, ids, context={}): 
         event = self.read(cr, uid, ids[0], ['place_id', 'message_follower_ids'])
@@ -5794,7 +5768,6 @@ class kemas_event(osv.osv):
                         'model' : 'kemas.event',
                         'record_name' : event_name,
                         'res_id' : event_id,
-                        'partner_id' : partner_id,
                         'type' : 'notification',
                         'author_id' : partner_id,
                         }
@@ -6022,7 +5995,7 @@ class kemas_event(osv.osv):
             result = {'attendance_count': 0}
             # Contar los registros de asistencias
             cr.execute("select count(id) from kemas_attendance where event_id = %d" % record['id'])
-            result['logbook_count'] = cr.fetchall()[0][0] 
+            result['attendance_count'] = cr.fetchall()[0][0] 
             return result
              
         result = {}

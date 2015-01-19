@@ -24,6 +24,7 @@ import kemas
 import kemas_extras
 import res_partner
 import res_users
+import mail_th
 import wizard
 
 
