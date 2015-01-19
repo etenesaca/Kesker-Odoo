@@ -3101,9 +3101,11 @@ class kemas_collaborator(osv.osv):
                 except:
                     error = True
             config_obj.send_email_add_remove_points(cr, uid, collaborator_id, description, points, type, {})
-        for collaborator_id in ids:
-            change(collaborator_id, points, description, type)
-        cr.commit()        
+        
+        with Environment.manage():
+            for collaborator_id in ids:
+                change(collaborator_id, points, description, type)
+            cr.commit()        
             
     def send_join_notification(self, cr, uid):
         threaded_sending = threading.Thread(target=self._send_join_notification, args=(cr.dbname , uid))

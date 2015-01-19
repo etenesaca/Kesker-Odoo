@@ -26,82 +26,75 @@ from openerp.tools.translate import _
 class kemas_set_points_step1_wizard(osv.osv_memory):
     def do_next(self, cr, uid, ids, context={}):
         wizard = self.read(cr, uid, ids[0])
+        step2_obj = self.pool['kemas.set.points.step2.wizard']
+        
         if wizard['collaborator_ids'] == []:
             raise osv.except_osv(_('Error!'), _('First select the collaborators.'))
-        dict_header={}    
-        dict_header['type'] = wizard['type']
-        dict_header['collaborator_ids'] = wizard['collaborator_ids']        
         
-        context={'dict_header':dict_header}
+        vals = {
+                'collaborator_ids': wizard['collaborator_ids'],
+                'type': wizard['type'],
+                'state': wizard['state'],
+                }
+        res_id = step2_obj.create(cr, uid, vals)
+
         if wizard['type'] == 'increase':
             wizard_title = self.pool.get('kemas.func').get_translate(cr, uid, _('Increase Points'))[0]
         else:
             wizard_title = self.pool.get('kemas.func').get_translate(cr, uid, _('Decrease Points'))[0]
         return {                                  
+            'name': wizard_title,
+            'res_id': res_id,
             'context':context,
             'view_type': 'form',
-            'name': wizard_title, 
-            'view_mode': 'form', 
-            'res_model': 'kemas.set.points.step2.wizard', 
+            'view_mode': 'form',
+            'res_model': step2_obj._name,
             'type': 'ir.actions.act_window',
             'target':'new',
             }
         
-    _name='kemas.set.points.step1.wizard'
-    _columns={
-        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_set_points_collaborator_rel',  'collaborator_id',  'set_points_id', 'collaborators',help='Collaborators who are going to modify the points'),
-        'type': fields.selection([('increase','Increase'),('decrease','Decrease')],'Type',required=True),
+    _name = 'kemas.set.points.step1.wizard'
+    _columns = {
+        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_set_points_collaborator_rel', 'collaborator_id', 'set_points_id', 'collaborators', help='Collaborators who are going to modify the points'),
+        'type': fields.selection([('increase', 'Increase'), ('decrease', 'Decrease')], 'Type', required=True),
         'state': fields.selection([
-            ('step1','Step 1'),
-            ('step2','Step 2'),
-        ],    'State', select=True, readonly=True),
+            ('step1', 'Step 1'),
+            ('step2', 'Step 2'),
+        ], 'State', select=True, readonly=True),
         }
-    _defaults={
+    _defaults = {
         'type' : 'increase',
-        'state':'step1'
+        'state': 'step1'
         }
 
 class kemas_set_points_step2_wizard(osv.osv_memory):
-    def validate_points_zero(self,cr,uid,ids):
-        level = self.read(cr, uid, ids[0],[])
-        if level['new_points']<=0:
+    def validate_points_zero(self, cr, uid, ids):
+        level = self.read(cr, uid, ids[0], [])
+        if level['new_points'] <= 0:
             raise osv.except_osv(_('Error!'), _('The points must be greater than zero.'))
         return True
     
-    def save(self,cr,uid,ids,context=None):
-        wizard = self.read(cr, uid, ids[0],[])
+    def save(self, cr, uid, ids, context={}):
+        wizard = self.read(cr, uid, ids[0], [])
         collaborator_obj = self.pool.get('kemas.collaborator')
         collaborator_ids = eval(wizard['collaborator_ids'])
         collaborator_obj.add_remove_points(cr, uid, collaborator_ids, int(wizard['new_points']), unicode(wizard['description']), unicode(wizard['type']))
         return True
-        
-    def fields_get(self, cr, uid, fields=None, context={}, write_access=True):   
-        result = super(kemas_set_points_step2_wizard, self).fields_get(cr, uid,fields, context, write_access)
-        if context is None or not context or type(context).__name__!="dict" or not context.has_key('dict_header'):
-            return result
-        
-        dict_def={}
-        dict_def.update(context['dict_header'])
-        dict_def['type'] = dict_def['type']
-        dict_def['state'] = 'step2'
-        dict_def['collaborator_ids'] = dict_def['collaborator_ids']
-        self._defaults = dict_def
-        return result
     
-    _name='kemas.set.points.step2.wizard'
-    _columns={
+    _name = 'kemas.set.points.step2.wizard'
+    _columns = {
         'collaborator_ids': fields.text('Collaborators'),
-        'type': fields.selection([('increase','Increase'),('decrease','Decrease')],'Type'),
-        'new_points': fields.integer('Points', required=True, help=""),
-        'description': fields.text('Description', required=True),
+        'type': fields.selection([('increase', 'Increase'), ('decrease', 'Decrease')], 'Type'),
+        'new_points': fields.integer('Points', required=False, help=""),
+        'description': fields.text('Description', required=False),
         'state': fields.selection([
-            ('step1','Step 1'),
-            ('step2','Step 2'),
-        ],    'State', select=True, readonly=True),
+            ('step1', 'Step 1'),
+            ('step2', 'Step 2'),
+            ], 'State', select=True, readonly=True),
         }
 
-    _constraints=[
-        (validate_points_zero,'The points must be greater than zero.',['new_points']),
+    _constraints = [
+        (validate_points_zero, 'The points must be greater than zero.', ['new_points']),
         ]
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 
