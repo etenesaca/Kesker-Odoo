@@ -3150,6 +3150,9 @@ class kemas_collaborator(osv.osv):
     def get_corresponding_level(self, cr, uid, points):
         level_obj = self.pool.get('kemas.level')
         level_ids = level_obj.get_order_levels(cr, uid)
+        if not level_ids:
+            raise osv.except_osv(u'¡Advertencia!', u"No se han definido los Niveles en las configuraciones.")
+        
         first_level_ids = level_obj.search(cr, uid, [('first_level', '=', True)])
         corresponding_level = None
         if first_level_ids:
@@ -3323,6 +3326,8 @@ class kemas_collaborator(osv.osv):
     def get_initial_points(self, cr, uid, context={}):
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
+        if not config_id:
+            raise osv.except_osv(u'¡Advertencia!', u"El Sistema no tiene definidas las configuraciones.")
         return int(config_obj.read(cr, uid, config_id, ['default_points'])['default_points'])
     
     def get_percentage(self, cr, uid, ids, name, arg, context={}):

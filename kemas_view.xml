@@ -5057,7 +5057,7 @@
          ====================
       -->
       <record id="action_kemas_config" model="ir.actions.act_window">
-         <field name="name">Configurations</field>
+         <field name="name">Preferencias</field>
          <field name="res_model">kemas.config</field>
          <field name="view_type">form</field>
          <field name="view_id" eval="False" />
