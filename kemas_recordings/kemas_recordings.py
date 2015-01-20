@@ -18,139 +18,17 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import base64
-import calendar
-from datetime import *
-from datetime import datetime
-from datetime import timedelta
-import datetime 
-from dateutil.parser import  *
 import logging
-from lxml import etree
-import math
-from mx import DateTime
-from mx import DateTime
-import random
-import threading
 import time
-import unicodedata
 
-import addons
-from kemas import kemas_extras
-from openerp import SUPERUSER_ID
+from openerp import addons, tools, SUPERUSER_ID
 import openerp
-from osv import fields, osv
-import pooler
-import tools
-from tools.translate import _
+from openerp.addons.kemas import kemas_extras as extras
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
 
 
 _logger = logging.getLogger(__name__)
-
-class kemas_expositor(osv.osv):
-    def do_activate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'active' : True})
-        return True
-    
-    def do_inactivate(self, cr, uid, ids, context={}):
-        super(osv.osv, self).write(cr, uid, ids, {'active': False})
-        return True
-    
-    def _person_age(self, cr, uid, ids, name, arg, context={}):
-        result = {}
-        collaborators = super(osv.osv, self).read(cr, uid, ids, ['id', 'birth'], context=context)
-        for collaborator in collaborators:
-            result[collaborator['id']] = kemas_extras.calcular_edad(collaborator['birth'], 3)
-        return result
-    
-    def write(self, cr, uid, ids, vals, context={}):
-        result = super(kemas_expositor, self).write(cr, uid, ids, vals, context)
-        for id in ids:
-            if vals.get('photo', False):
-                path = addons.__path__[0] + '/web/static/src/img/photo' + 'expositor'
-                vals_write = {}
-                vals_write['photo_large'] = kemas_extras.crop_image(vals['photo'], path, 128)
-                vals_write['photo_medium'] = kemas_extras.crop_image(vals['photo'], path, 64)
-                vals_write['photo_small'] = kemas_extras.crop_image(vals['photo'], path, 48)
-                super(kemas_expositor, self).write(cr, uid, [id], vals_write, context)
-        return result
-
-    def create(self, cr, uid, vals, context={}):
-        if vals.get('photo', False):
-            path = addons.__path__[0] + '/web/static/src/img/photo' + 'expositor'
-            vals['photo_large'] = kemas_extras.crop_image(vals['photo'], path, 128)
-            vals['photo_medium'] = kemas_extras.crop_image(vals['photo'], path, 64)
-            vals['photo_small'] = kemas_extras.crop_image(vals['photo'], path, 48)
-        return super(kemas_expositor, self).create(cr, uid, vals, context)
-    
-    def on_change_photo(self, cr, uid, ids, photo):
-        config_obj = self.pool.get('kemas.config')
-        config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, [])
-        #------------------------------------------------------------------------------------
-        values = {} 
-        if kemas_extras.restrict_size(photo, preferences['max_size_photos']):
-            return {'value':{}}
-        else:
-            return {'value':{'image': False}, 'warning':{'title':_('Error!'), 'message':_('The size of the photo can not be greater than %s KB..!!') % str(preferences['max_size_photos'])}}
-
-    def on_change_birth(self, cr, uid, ids, birth, context={}):
-        values = {}
-        if birth:
-            values['age'] = kemas_extras.calcular_edad(birth, 3)
-        return {'value':values}
-    
-    def on_change_email(self, cr, uid, ids, email):
-        if email:
-            if kemas_extras.validate_mail(email):
-                return {'value':{}}
-            else:
-                msg = self.pool.get('kemas.func').get_translate(cr, uid, _('E-mail format invalid..!!'))[0]
-                return {'value':{'email':''}, 'warning':{'title':'Error', 'message':msg}}
-        else:
-            return True
-    
-    def _ff_age(self, cr, uid, ids, name, arg, context={}): 
-        result = {}
-        records = super(osv.osv, self).read(cr, uid, ids, ['id', 'birth'])
-        for record in records:
-            result[record['id']] = kemas_extras.calcular_edad(record['birth'], 3)
-        return result
-    
-    _order = 'name'
-    _name = 'kemas.expositor'
-    _columns = {
-        'name': fields.char('Name', size=64, required=True, help='The name of the expositor'),
-        'email': fields.char('Email', size=64),
-        'active': fields.boolean(u'¿Activo?', required=False),
-        'photo': fields.binary("Photo", help="This field holds the image used as avatar for the expositor, limited to 1024x1024px"),
-        'photo_large': fields.binary('Large Photo'),
-        'photo_medium': fields.binary('Medium Photo'),
-        'photo_small': fields.binary('Small Photo'),
-        'birth': fields.date('Fecha de Nacimiento'),
-        'age': fields.function(_ff_age, type='char', string='Edad'),
-        'telef1': fields.char(u'Teléfono 1', size=10, help=u"Numero telefónico. Example: 072878563"),
-        'telef2': fields.char(u'Teléfono 2', size=10, help=u"Numero telefónico. Example: 072878563"),
-        'kemas_mobile': fields.char('Celular', size=10, help=u"Número de celular. Example: 088729345"),
-        'address': fields.text(u'Dirección'),
-        'details': fields.text('Details'),
-        }
-    
-    _sql_constraints = [
-        ('expositor_cname', 'unique (name)', 'This Name already exist!'),
-        ]
-    
-    def _get_default_image(self, cr, uid, is_company, context=None, colorize=False):
-        if is_company:
-            image = open(openerp.modules.get_module_resource('base', 'static/src/img', 'company_image.png')).read()
-        else:
-            image = tools.image_colorize(open(openerp.modules.get_module_resource('base', 'static/src/img', 'avatar.png')).read())
-        return tools.image_resize_image_big(image.encode('base64')
-                                            )
-    _defaults = {
-        'photo': lambda self, cr, uid, ctx: self._get_default_image(cr, uid, ctx.get('default_is_company', False), ctx),
-        'active': True,
-    }
 
 class kemas_recording_type(osv.osv):
     def do_activate(self, cr, uid, ids, context={}):
@@ -181,14 +59,14 @@ class kemas_recording_type(osv.osv):
 class kemas_recording_series(osv.osv):
     def write(self, cr, uid, ids, vals, context={}):
         result = super(kemas_recording_series, self).write(cr, uid, ids, vals, context)
-        for id in ids:
+        for record_id in ids:
             if vals.get('logo', False):
                 path = addons.__path__[0] + '/web/static/src/img/logo' + 'recording_series'
                 vals_write = {}
-                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-                super(kemas_recording_series, self).write(cr, uid, [id], vals_write, context)
+                vals_write['logo_large'] = extras.crop_image(vals['logo'], path, 128)
+                vals_write['logo_medium'] = extras.crop_image(vals['logo'], path, 64)
+                vals_write['logo_small'] = extras.crop_image(vals['logo'], path, 48)
+                super(kemas_recording_series, self).write(cr, uid, [record_id], vals_write, context)
         return result
     
     def create(self, cr, uid, vals, *args, **kwargs):
@@ -196,9 +74,9 @@ class kemas_recording_series(osv.osv):
         vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
         if vals.get('logo', False):
             path = addons.__path__[0] + '/web/static/src/img/logo' + 'recording_series'
-            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
+            vals['logo_large'] = extras.crop_image(vals['logo'], path, 128)
+            vals['logo_medium'] = extras.crop_image(vals['logo'], path, 64)
+            vals['logo_small'] = extras.crop_image(vals['logo'], path, 48)
         return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
     
     def on_change_logo(self, cr, uid, ids, photo):
@@ -206,8 +84,7 @@ class kemas_recording_series(osv.osv):
         config_id = config_obj.get_correct_config(cr, uid)
         preferences = config_obj.read(cr, uid, config_id, [])
         #------------------------------------------------------------------------------------
-        values = {} 
-        if kemas_extras.restrict_size(photo, preferences['max_size_logos']):
+        if extras.restrict_size(photo, preferences['max_size_logos']):
             return {'value':{}}
         else:
             msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
@@ -341,15 +218,15 @@ class kemas_recording(osv.osv):
     
     def write(self, cr, uid, ids, vals, context={}):
         result = super(kemas_recording, self).write(cr, uid, ids, vals, context)
-        for id in ids:
+        for record_id in ids:
             if vals.get('logo', False):
                 path = addons.__path__[0] + '/web/static/src/img/logo' + 'recording'
                 vals_write = {}
-                vals_write['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-                vals_write['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-                vals_write['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-                vals_write['logo_landscape'] = kemas_extras.crop_image_with_size(vals['logo'], path, 112, 64)
-                super(kemas_recording, self).write(cr, uid, [id], vals_write, context)
+                vals_write['logo_large'] = extras.crop_image(vals['logo'], path, 128)
+                vals_write['logo_medium'] = extras.crop_image(vals['logo'], path, 64)
+                vals_write['logo_small'] = extras.crop_image(vals['logo'], path, 48)
+                vals_write['logo_landscape'] = extras.crop_image_with_size(vals['logo'], path, 112, 64)
+                super(kemas_recording, self).write(cr, uid, [record_id], vals_write, context)
         return result
     
     def create(self, cr, uid, vals, *args, **kwargs):
@@ -357,10 +234,10 @@ class kemas_recording(osv.osv):
         vals['create_user_id'] = uid
         if vals.get('logo', False):
             path = addons.__path__[0] + '/web/static/src/img/logo' + 'recording'
-            vals['logo_large'] = kemas_extras.crop_image(vals['logo'], path, 128)
-            vals['logo_medium'] = kemas_extras.crop_image(vals['logo'], path, 64)
-            vals['logo_small'] = kemas_extras.crop_image(vals['logo'], path, 48)
-            vals['logo_landscape'] = kemas_extras.crop_image_with_size(vals['logo'], path, 112, 64)
+            vals['logo_large'] = extras.crop_image(vals['logo'], path, 128)
+            vals['logo_medium'] = extras.crop_image(vals['logo'], path, 64)
+            vals['logo_small'] = extras.crop_image(vals['logo'], path, 48)
+            vals['logo_landscape'] = extras.crop_image_with_size(vals['logo'], path, 112, 64)
         res_id = super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
         # Escribir log
         self.write_log_create(cr, uid, res_id)
@@ -374,19 +251,19 @@ class kemas_recording(osv.osv):
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
         # Busqueda de registros en el caso de que en el Contexto llegue algunos de los argumentos: Ayer, Hoy, Esta semana o Este mes
         if context.get('search_this_month', False):
-            range_dates = kemas_extras.get_dates_range_this_month(context['tz'])
+            range_dates = extras.get_dates_range_this_month(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))    
         elif context.get('search_this_week', False):
-            range_dates = kemas_extras.get_dates_range_this_week(context['tz'])
+            range_dates = extras.get_dates_range_this_week(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))
         elif context.get('search_today', False):
-            range_dates = kemas_extras.get_dates_range_today(context['tz'])
+            range_dates = extras.get_dates_range_today(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))  
         elif context.get('search_yesterday', False):
-            range_dates = kemas_extras.get_dates_range_yesterday(context['tz'])
+            range_dates = extras.get_dates_range_yesterday(context['tz'])
             args.append(('date', '>=', range_dates['date_start']))
             args.append(('date', '<=', range_dates['date_stop']))  
         
@@ -396,11 +273,11 @@ class kemas_recording(osv.osv):
             for arg in args:
                 try:
                     if arg[0] == 'search_start':
-                        start = kemas_extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
+                        start = extras.convert_to_UTC_tz(arg[2] + ' 00:00:00', context['tz'])
                         args.append(('date', '>=', start))
                         items_to_remove.append(arg)
                     if arg[0] == 'search_end':
-                        end = kemas_extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
+                        end = extras.convert_to_UTC_tz(arg[2] + ' 23:59:59', context['tz'])
                         args.append(('date', '<=', end))
                         items_to_remove.append(arg)
                 except:None
@@ -410,7 +287,7 @@ class kemas_recording(osv.osv):
     
     def on_change_url(self, cr, uid, ids, url, context={}):
         values = {}
-        youtube_thumbnail = kemas_extras.get_thumbnail_youtube_video(url)
+        youtube_thumbnail = extras.get_thumbnail_youtube_video(url)
         if youtube_thumbnail:
             values['logo'] = youtube_thumbnail
         return {'value': values}
@@ -437,7 +314,7 @@ class kemas_recording(osv.osv):
         'duration': fields.float('Duration', required=True, help='Duration recording', states={'done':[('readonly', True)]}),
         'details': fields.text('Details', states={'done':[('readonly', True)]}),
         'url': fields.char('URL', size=255, help='Dirección en la que se encuentra almacenado el archivo', states={'done':[('readonly', True)]}),
-        'expositor_ids': fields.many2many('kemas.expositor', 'kemas_recording_expositor_rel', 'recording_id', 'expositor_id', 'Expositores', states={'done':[('readonly', True)]}),
+        'expositor_ids': fields.many2many('res.partner', 'kemas_recording_expositor_partner_rel', 'recording_id', 'expositor_id', 'Expositores', states={'done':[('readonly', True)]}),
         # One to Many Relations
         'event_id': fields.many2one('kemas.event', 'Evento', help='Servicio en el cual se realizó ésta grabación', states={'done':[('readonly', True)]}),
         'recording_type_id': fields.many2one('kemas.recording.type', 'recording type', required=True, ondelete="restrict", states={'done':[('readonly', True)]}),
