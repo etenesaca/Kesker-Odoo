@@ -1965,7 +1965,7 @@ class kemas_school4d_line(osv.osv):
             ('believing', 'Believing'),
             ('preaching', 'Preaching'),
             ], 'State', required=True),
-        'kemas_mobile': fields.char('Mobile', size=10, help="The number of kemas_mobile phone of the person. Example: 088729345"),
+        'mobile': fields.char('Mobile', size=10, help="The number of mobile phone of the person. Example: 088729345"),
         'email': fields.char('E-mail', size=128, help="The person email."),
         'web_site': fields.char('Web site', size=128, help="The web site of the person. example: Facebook account."),
         'address': fields.char('Address', size=255, help="The person address."),
@@ -3226,7 +3226,7 @@ class kemas_collaborator(osv.osv):
                              'email' :vals.get('email', False),
                              'phone': vals.get('phone', False),
                              'fax': vals.get('fax', False),
-                             'kemas_mobile': vals.get('kemas_mobile', False),
+                             'mobile': vals.get('mobile', False),
                              'personal_id': vals.get('personal_id'),
                              'category_id':[(6, 0, collaborator_category_ids)]
                              }
@@ -3433,7 +3433,7 @@ class kemas_collaborator(osv.osv):
         return result
     
     def build_QR_text(self, cr, uid, message, collaborator_id):
-        fields = ['code', 'name', 'birth', 'gender', 'marital_status', 'phone', 'kemas_mobile', 'email', 'address', 'join_date', 'type', 'username', 'level_name']
+        fields = ['code', 'name', 'birth', 'gender', 'marital_status', 'phone', 'mobile', 'email', 'address', 'join_date', 'type', 'username', 'level_name']
         collaborator = super(osv.osv, self).read(cr, uid, collaborator_id, fields)
         #------------------------------------------------------------------------------------
         message = message
@@ -3468,7 +3468,7 @@ class kemas_collaborator(osv.osv):
                 message = message.replace('%ms', 'Viuda')
         #-------------------------------------------------------------------------
         message = message.replace('%t1', unicode(collaborator['phone']))
-        message = message.replace('%mb', unicode(collaborator['kemas_mobile']))
+        message = message.replace('%mb', unicode(collaborator['mobile']))
         message = message.replace('%em', unicode(collaborator['email']))
         message = message.replace('%ad', unicode(collaborator['address']))
         message = message.replace('%jd', unicode(extras.convert_date_to_dmy(collaborator['join_date'])))
@@ -3822,7 +3822,7 @@ class kemas_collaborator(osv.osv):
         
         'phone': fields.related('partner_id', 'phone', type='char', string=u'Teléfono', store=False),
         'fax': fields.related('partner_id', 'fax', type='char', string=u'Fax', store=False),
-        'kemas_mobile': fields.related('partner_id', 'kemas_mobile', type='char', string=u'Móvil', store=False),
+        'mobile': fields.related('partner_id', 'mobile', type='char', string=u'Móvil', store=False),
         'email': fields.related('partner_id', 'email', type='char', string='Email', store=False),
         
         'web_site_ids': fields.one2many('kemas.collaborator.web.site', 'collaborator_id', 'Web sites', help='Web site of this collaborator'),

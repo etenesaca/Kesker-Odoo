@@ -63,7 +63,7 @@ class Parser(report_sxw.rml_parse):
         fields = ['id']
         if wizard.fl_code: fields.append('code')
         if wizard.fl_name: fields.append('name')
-        if wizard.fl_mobile: fields.append('kemas_mobile')
+        if wizard.fl_mobile: fields.append('mobile')
         if wizard.fl_phone: fields.append('phone')
         if wizard.fl_birth: fields.append('birth')
         if wizard.fl_age: fields.append('age')
@@ -132,7 +132,7 @@ class Parser(report_sxw.rml_parse):
         for field in fields:
             if field == 'code': headers.append(u'CÓDIGO')
             if field == 'name': headers.append(u'NOMBRE')
-            if field == 'kemas_mobile': headers.append(u'CELULAR')
+            if field == 'mobile': headers.append(u'CELULAR')
             if field == 'phone': headers.append(u'TELÉFONO 1')
             if field == 'birth': headers.append(u'FECHA DE NAC')
             if field == 'age': headers.append(u'EDAD')
