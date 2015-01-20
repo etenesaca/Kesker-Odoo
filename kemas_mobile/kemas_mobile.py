@@ -18,31 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import base64
-import calendar
-from datetime import *
-from datetime import datetime
-from datetime import timedelta
-import datetime 
-from dateutil.parser import  *
 import logging
-from lxml import etree
-import math
-from mx import DateTime
-from mx import DateTime
-import random
-import threading
-import time
-import unicodedata
 
-import addons
-from kemas import kemas_extras
-from openerp import SUPERUSER_ID
-import openerp
-from osv import fields, osv
-import pooler
-import tools
-from tools.translate import _
+from openerp.addons.kemas import kemas_extras as extras
+from openerp.osv import fields, osv
 
 
 _logger = logging.getLogger(__name__)
@@ -266,12 +245,12 @@ class kemas_collaborator(osv.osv):
                 collaborator['marital_status'] = 'Casad' + lgenre[collaborator['genre']]
                     
             # Calcular la edad
-            collaborator['age'] = kemas_extras.calcular_edad(collaborator['birth'])
-            collaborator['birth'] = kemas_extras.convert_date_format_short_str(collaborator['birth'])
+            collaborator['age'] = extras.calcular_edad(collaborator['birth'])
+            collaborator['birth'] = extras.convert_date_format_short_str(collaborator['birth'])
             
             # Calcular edad en el ministerio
-            collaborator['age_in_ministry'] = kemas_extras.calcular_edad(collaborator['join_date'], 4)
-            collaborator['join_date'] = kemas_extras.convert_date_format_short_str(collaborator['join_date'])
+            collaborator['age_in_ministry'] = extras.calcular_edad(collaborator['join_date'], 4)
+            collaborator['join_date'] = extras.convert_date_format_short_str(collaborator['join_date'])
             
             
             for field in collaborator:
