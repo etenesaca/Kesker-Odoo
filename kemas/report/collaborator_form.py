@@ -42,7 +42,7 @@ class Parser(report_sxw.rml_parse):
             'config': self.get_config,
             'state': self.get_state,
             'phone': self.get_phone,
-            'mobile': self.get_mobile,
+            'kemas_mobile': self.get_mobile,
             'personal_id': self.get_personal_id,
             'team': self.get_team,
             'birth': self.get_collaborator_birth,
@@ -84,7 +84,7 @@ class Parser(report_sxw.rml_parse):
         return res
     
     def get_mobile(self, collaborator_id):
-        res = self.pool.get('kemas.collaborator').read(self.cr, self.uid, collaborator_id, ['mobile'])['mobile']
+        res = self.pool.get('kemas.collaborator').read(self.cr, self.uid, collaborator_id, ['kemas_mobile'])['kemas_mobile']
         if not res or res == '':
             return ' ---'
         return res
