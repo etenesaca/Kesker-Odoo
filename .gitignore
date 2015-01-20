@@ -32,4 +32,5 @@ install/win32/meta.py
 # Eclipse project files
 .classpath
 .project
+.pydevproject
 .settings/
