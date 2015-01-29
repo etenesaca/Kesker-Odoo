@@ -2760,8 +2760,9 @@ class kemas_collaborator(osv.osv):
         values = {}
         if first_names:
             dic_name = extras.do_dic(first_names)
-            values['nick_name'] = unicode(dic_name[0]).title()
-            values['first_names'] = extras.elimina_tildes(first_names).title()
+            if dic_name:
+                values['nick_name'] = unicode(dic_name[0]).title()
+                values['first_names'] = extras.elimina_tildes(first_names).title()
         
         if first_names and last_names:
             first_names = extras.elimina_tildes(first_names).title()
@@ -2791,27 +2792,19 @@ class kemas_collaborator(osv.osv):
             else:
                 warning = {'title' : u'¡Advertencia!', 'message' : u'El nombre de pila debe esta contenido en los nombres.'}
         return {'value': values , 'warning': warning}
-                
-    def on_change_email(self, cr, uid, ids, email):
-        if email:
-            if extras.validate_mail(email):
-                return {'value':{}}
-            else:
-                msg = self.pool.get('kemas.func').get_translate(cr, uid, _('E-mail format invalid..!!'))[0]
-                return {'value':{'email':''}, 'warning':{'title':'Error', 'message':msg}}
-        else:
-            return True
     
-    def on_change_im_account(self, cr, uid, ids, chat_account):
-        if chat_account:
-            if extras.validate_mail(chat_account):
-                return {'value':{}}
+    def on_change_email(self, cr, uid, ids, email, context={}):
+        values = {}
+        warning = {}
+        if email:
+            email = unicode(email).lower().replace(' ', '')
+            if not extras.validate_mail(email):
+                values['email'] = False
+                warning = {'title' : '¡Advertencia!', u'message' : u'Formato de correo electrónico no válido'}
             else:
-                msg = self.pool.get('kemas.func').get_translate(cr, uid, _('IM account format invalid..!!'))[0]
-                return {'value':{'im_account':''}, 'warning':{'title':'Error', 'message':msg}}
-        else:
-            return True
-        
+                values['email'] = email
+        return {'value': values , 'warning': warning}            
+    
     def read(self, cr, uid, ids, fields=None, context={}, load='_classic_read'):
         res = super(osv.osv, self).read(cr, uid, ids, fields, context)
         if fields is None or not list(set(['photo', 'photo_medium', 'photo_small', 'photo_very_small']) & set(fields)):
@@ -2908,15 +2901,16 @@ class kemas_collaborator(osv.osv):
                         res['photo_medium'] = self.get_photo_small_female()
         return res 
 
-    def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):
-        if not args:
-            args = []
-        if not context:
-            context = {}
+    def name_search(self, cr, uid, name, args=None, operator='ilike', context={}, limit=100):
+        if context is None or not context or not isinstance(context, (dict)): context = {}
+        if args is None or not args or not isinstance(args, (list)): args = []
+        
         ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
         return self.name_get(cr, uid, ids, context)
     
     def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
+        if context is None or not context or not isinstance(context, (dict)): context = {}
+        
         collaborator_except_ids = []
         if context.get('min_points', False):
             args.append(('points', '>', context['min_points']))
@@ -3202,12 +3196,12 @@ class kemas_collaborator(osv.osv):
         if vals.has_key('points'):
             return super(kemas_collaborator, self).create(cr, uid, vals, context)
         
-        # Proceasar Nombre
+        # Procesar Nombre
         vals['first_names'] = extras.elimina_tildes(vals['first_names']).title()
         vals['last_names'] = extras.elimina_tildes(vals['last_names']).title()
         vals['name'] = "%s %s" % (vals['first_names'], vals['last_names'],)
         
-        vals['email'] = unicode(vals['email']).lower()
+        vals['email'] = vals['email'] and unicode(vals['email']).lower().replace(' ', '') or ''
         vals['points'] = self.get_initial_points(cr, uid)
         vals['level_id'] = self.get_corresponding_level(cr, uid, self.get_initial_points(cr, uid))
         
@@ -3315,12 +3309,18 @@ class kemas_collaborator(osv.osv):
        
     def on_change_join_date(self, cr, uid, ids, join_date, context={}):
         values = {}
-        values['age_in_ministry'] = extras.calcular_edad(join_date, 4)
+        age = extras.calcular_edad(join_date, 3)
+        if not age or age == '0':
+            age = u'Sin fecha de ingreso'
+        values['age_in_ministry'] = age
         return {'value':values}
     
     def on_change_birth(self, cr, uid, ids, birth, context={}):
         values = {}
-        values['age'] = extras.calcular_edad(birth, 3)
+        age = extras.calcular_edad(birth, 3)
+        if not age or age == '0':
+            age = u'Sin fecha de nacimiento'
+        values['age'] = age
         return {'value':values}
     
     def get_initial_points(self, cr, uid, context={}):
@@ -3810,7 +3810,7 @@ class kemas_collaborator(osv.osv):
         'birthday_date': fields.function(_get_birthday, type='char', string='Name'),
         'birthday': fields.function(_cal_birthday, type='datetime', string='Name'),
         'age' : fields.function(_ff_age, type='char', string='Edad', help="Edad del colaborador"),
-        'gender': fields.selection([('Male', 'Male'), ('Female', 'Female'), ], 'Gender', required=True, help="The gender of the collaborator",),
+        'gender': fields.selection([('Male', 'Hombre'), ('Female', 'Mujer'), ], 'Gender', required=True, help="The gender of the collaborator",),
         'marital_status': fields.selection([('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced'), ('Widower', 'Widower')], 'Marital status', help="Marital Status of the collaborator"),
         'skill_line_ids': fields.one2many('kemas.skill.line', 'collaborator_id', 'skill_lines', help='Habilidades que tiene este colaborador'),
         
@@ -3908,6 +3908,7 @@ class kemas_collaborator(osv.osv):
         'state': 'creating',
         'photo': _get_photo_collaborator,
         'level_id': get_first_level,
+        'join_date': time.strftime("%Y-%m-%d"),
         }
     
     _sql_constraints = [

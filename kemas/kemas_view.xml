@@ -2550,6 +2550,28 @@
             </form>
          </field>
       </record>
+      <record model="ir.ui.view" id="kemas_skill_form2">
+         <field name="name">kemas.skill.form</field>
+         <field name="model">kemas.skill</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="Habilidad" version="7.0">
+               <div>
+                  <div class="oe_edit_only">
+                     <label for="name" />
+                  </div>
+                  <h1>
+                     <field name="name" default_focus="1" placeholder="Nombre de la habilidad" />
+                  </h1>
+                  <notebook>
+                     <page string="Colaboradores">
+                        <field name="collaborator_ids" widget="many2many_kanban" context="{'kanban_view_ref': 'kemas.kemas_collaborator_kanban_view4'}" />
+                     </page>
+                  </notebook>
+               </div>
+            </form>
+         </field>
+      </record>
       <!--____________________________________________________Vista de Arbol -->
       <record model="ir.ui.view" id="kemas_skill_tree">
          <field name="name">kemas.skill.tree</field>
@@ -2590,7 +2612,7 @@
          <field name="arch" type="xml">
             <form string="Habilidad" version="7.0">
                <group>
-                  <field name="skill_id" placeholder="Seleccione la habilidad" options='{"no_open": True, "no_create": True}' />
+                  <field name="skill_id" placeholder="Seleccione la habilidad" />
                   <field name="description" placeholder="Descripción" />
                </group>
             </form>
@@ -2603,7 +2625,7 @@
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <tree string="Habilidades" editable="bottom">
-               <field name="skill_id" options='{"no_open": True, "no_create": True}' />
+               <field name="skill_id" context="{'form_view_ref': 'kemas.kemas_skill_form2'}" />
                <field name="description" />
             </tree>
          </field>
@@ -2771,7 +2793,7 @@
                               <field name="personal_id" on_change="on_change_personal_id(personal_id)" placeholder="CI/PASS" />
                            </group>
                            <group>
-                              <field name="birth" on_change="on_change_birth(birth)" required="1" />
+                              <field name="birth" on_change="on_change_birth(birth)" required="1" placeholder="Fecha" />
                               <field name="age" required="1" readonly="1" />
                               <field name="gender" required="1" />
                            </group>
@@ -2791,7 +2813,7 @@
                               <field name="phone" placeholder="e.g. +32.81.81.37.00" />
                               <field name="mobile" />
                               <field name="fax" />
-                              <field name="email" widget="email" />
+                              <field name="email" widget="email" on_change="on_change_email(email)" placeholder="Correo electrónico" />
                            </group>
                            <group style="margin-top: -15px">
                               <separator string="Információn de procedencia" colspan="4" />
@@ -2808,7 +2830,7 @@
                      <page id="status_info" string="Estado">
                         <group colspan="4" col="6">
                            <field name="team_id" colspan="2" placeholder="Equipo" options='{"no_create": True}' />
-                           <field name="join_date" colspan="2" on_change="on_change_join_date(join_date)" />
+                           <field name="join_date" colspan="2" on_change="on_change_join_date(join_date)" required="True" placeholder="Fecha de ingreso" />
                            <field name="end_service" readonly="1" widget="char" states="Inactive" colspan="2" />
                            <field name="age_in_ministry" string="Tiempo de colaboración" required="True" colspan="2" attrs="{'invisible':[('join_date','=',False)]}" readonly="1" />
                            <newline />
@@ -5858,7 +5880,7 @@
             </p>
          </field>
       </record>
-      <menuitem web_icon="images/kemas.png" web_icon_hover="images/kemas-hover.png" id="menu_kemas_collaborator_root" action="kemas_collaborator_dashboard_form_action" name="ke+" sequence="2" groups="group_kemas_collaborator" />
+      <menuitem web_icon="images/kemas.png" web_icon_hover="images/kemas-hover.png" id="menu_kemas_collaborator_root" action="kemas_collaborator_dashboard_form_action" name="Kester" sequence="2" groups="group_kemas_collaborator" />
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Menu
       -->

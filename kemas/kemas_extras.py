@@ -67,10 +67,11 @@ def get_dates_range_this_month(tz):
     return {'date_start' : date_start, 'date_stop' : date_stop}
 
 def validate_mail(email):
+    result = False
     if len(email) > 7:
         if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) != None: 
-            return 1
-    return 0
+            result = True
+    return result
 
 # Extraer numero de una cadena
 def extraer_numeros(cadena):
