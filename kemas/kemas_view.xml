@@ -457,46 +457,731 @@
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Configuration" version="7.0">
-               <notebook colspan="4">
-                  <page string="Basic configurations">
-                     <div class="oe_title">
-                        <div class="oe_edit_only">
-                           <label for="name_system" />
-                        </div>
-                        <h1>
-                           <field name="name_system" default_focus="1" placeholder="Name of system" />
-                        </h1>
-                     </div>
-                     <newline />
-                     <group colspan="4">
-                        <field name="url_system" widget="url" />
-                     </group>
-                     <separator string="Images and logos" colspan="4" />
-                     <group colspan="4" expand="1" col="10">
-                        <group colspan="8">
-                           <field name="max_size_photos" colspan="2" />
-                           <field name="max_size_logos" colspan="2" />
-                        </group>
-                        <group colspan="2" expand="1" col="4" string="System logo">
-                           <field name="system_logo" align="10.10" class="oe_left oe_avatar" widget='image' options='{"size": [180, 180]}' colspan="1" nolabel="1" />
-                        </group>
-                     </group>
-                  </page>
-                  <page id="attendance_records" string="Registro de Asistencia">
-                     <group>
-                        <field name="frequency_program_client" />
-                        <field name="allow_checkout_registers" />
-                     </group>
+               <sheet>
+                  <div>
+                     <field name="logo" widget="image" class="oe_avatar oe_left" />
+                  </div>
+                  <div class="oe_title">
                      <div class="oe_edit_only">
-                        <label for="logo_program_client" />
+                        <label for="name_system" />
                      </div>
-                     <separator string="Imagen del Cliente de Registro de Asistencia" colspan="4" />
-                     <group colspan="4">
+                     <h1>
+                        <field name="name_system" default_focus="1" placeholder="Nombre del sistema" />
+                     </h1>
+                     <div class="oe_edit_only">
+                        <label for="url_system" />
+                     </div>
+                     <field name="url_system" widget="url" />
+                  </div>
+                  <notebook colspan="4">
+                     <page string="Emails and notifications">
+                        <group colspan="4" expand="1" col="10">
+                           <field name="mailing" colspan="4" />
+                           <field name="use_attachments_in_im" colspan="4" attrs="{'invisible':[('mailing','=',False)]}" />
+                           <group colspan="2" />
+                           <field name="use_subject_in_im" colspan="2" attrs="{'invisible':[('mailing','=',False)]}" />
+                           <group colspan="8" />
+                        </group>
+                        <group colspan="4" attrs="{'invisible':[('mailing','=',False)]}">
+                           <notebook colspan="4">
+                              <page string="Basic Information">
+                                 <group colspan="4" expand="1" col="4">
+                                    <field name="name_submitting" colspan="4" attrs="{'required':[('mailing','=',True)]}" />
+                                    <field name="reply_email" colspan="4" widget="email" attrs="{'required':[('mailing','=',True)]}" />
+                                    <field name="system_email" colspan="4" widget="email" attrs="{'required':[('mailing','=',True)]}" />
+                                    <field name="collaborator_manual" colspan="4" />
+                                 </group>
+                                 <separator string="Legend of variables you can use" colspan="4" />
+                                 <table border="0" width="100%%" colspan="4">
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%da</b>
+                                       </td>
+                                       <td width="28.33%%">Date</td>
+                                       <td width="5%%">
+                                          <b>%%tm</b>
+                                       </td>
+                                       <td width="28.33%%">Time</td>
+                                       <td width="5%%">
+                                          <b>%%dt</b>
+                                       </td>
+                                       <td width="28.33%%">Date and Time</td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%es</b>
+                                       </td>
+                                       <td width="28.33%%">System e-mail</td>
+                                       <td width="5%%">
+                                          <b>%%ns</b>
+                                       </td>
+                                       <td width="28.33%%">Submmiting's name</td>
+                                       <td width="5%%">
+                                          <b>%%hs</b>
+                                       </td>
+                                       <td width="28.33%%">Host name</td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%re</b>
+                                       </td>
+                                       <td width="28.33%%">Replay e-mail</td>
+                                       <td width="5%%">
+                                          <b></b>
+                                       </td>
+                                       <td width="28.33%%"></td>
+                                       <td width="5%%">
+                                          <b></b>
+                                       </td>
+                                       <td width="28.33%%"></td>
+                                    </tr>
+                                 </table>
+                                 <notebook colspan="4">
+                                    <page string="Header e-mail">
+                                       <field name="header_email" widget="html" colspan="4" nolabel="1" />
+                                    </page>
+                                 </notebook>
+                                 <notebook colspan="4">
+                                    <page string="Footer e-mail">
+                                       <field name="footer_email" widget="html" colspan="4" nolabel="1" />
+                                    </page>
+                                 </notebook>
+                              </page>
+                              <page string="Incorporation">
+                                 <group colspan="4" col="4">
+                                    <field name="use_message_incorporation" colspan="4" />
+                                    <field name="use_header_message_incorporation" colspan="4" attrs="{'invisible':[('use_message_incorporation','=',False)]}" />
+                                    <field name="use_message_im_incorporation" colspan="4" attrs="{'invisible':[('use_message_incorporation','=',False)]}" />
+                                 </group>
+                                 <separator string="Legend of variables you can use" colspan="4" attrs="{'invisible':[('use_message_incorporation','=',False)]}" />
+                                 <table border="0" width="100%%" colspan="4" attrs="{'invisible':[('use_message_incorporation','=',False)]}">
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%cd</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's Code</td>
+                                       <td width="5%%">
+                                          <b>%%cl</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's Name</td>
+                                       <td width="5%%">
+                                          <b>%%nk</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's Nick name</td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%pt</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's Points</td>
+                                       <td width="5%%">
+                                          <b>%%lv</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's Level</td>
+                                       <td width="5%%">
+                                          <b>%%em</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's E-mail</td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%us</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's Usernam</td>
+                                       <td width="5%%">
+                                          <b>%%ps</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's Password</td>
+                                       <td width="5%%">
+                                          <b>%%gn</b>
+                                       </td>
+                                       <td width="28.33%%">('o'=male, 'a'=female)</td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%na</b>
+                                       </td>
+                                       <td width="28.33%%">Name System</td>
+                                       <td width="5%%">
+                                          <b>%%hs</b>
+                                       </td>
+                                       <td width="28.33%%">Host name</td>
+                                       <td width="5%%">
+                                          <b>%%re</b>
+                                       </td>
+                                       <td width="28.33%%">Replay e-mail</td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%se</b>
+                                       </td>
+                                       <td width="28.33%%">System e-mail</td>
+                                       <td width="5%%">
+                                          <b>%%ds</b>
+                                       </td>
+                                       <td width="28.33%%">System database</td>
+                                       <td width="5%%">
+                                          <b>%%ns</b>
+                                       </td>
+                                       <td width="28.33%%">Summiting's name</td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%da</b>
+                                       </td>
+                                       <td width="28.33%%">Date</td>
+                                       <td width="5%%">
+                                          <b>%%tm</b>
+                                       </td>
+                                       <td width="28.33%%">Time</td>
+                                       <td width="5%%">
+                                          <b>%%dt</b>
+                                       </td>
+                                       <td width="28.33%%">Date and Time</td>
+                                    </tr>
+                                 </table>
+                                 <group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_message_incorporation','=',False)]}">
+                                    <field name="Message_information_incorporation_subject" colspan="4" attrs="{'required':[('use_message_incorporation','=',True)],}" />
+                                    <notebook colspan="4">
+                                       <page string="E-mail">
+                                          <field name="Message_information_incorporation" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_incorporation','=',True)],}" />
+                                       </page>
+                                       <page string="IM" attrs="{'invisible':[('use_message_im_incorporation','=',False)]}">
+                                          <field name="Message_im_information_incorporation" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_incorporation','=',True)],}" />
+                                       </page>
+                                    </notebook>
+                                 </group>
+                              </page>
+                              <page string="Event">
+                                 <notebook colspan="4">
+                                    <page string="Creation">
+                                       <group colspan="4" col="4">
+                                          <field name="use_message_event" colspan="4" />
+                                          <field name="use_header_message_event" colspan="4" attrs="{'invisible':[('use_message_event','=',False)]}" />
+                                          <field name="use_message_im_event" colspan="4" attrs="{'invisible':[('use_message_event','=',False)]}" />
+                                          <field name="work_in_background_event" colspan="4" attrs="{'invisible':[('use_message_event','=',False)]}" />
+                                       </group>
+                                       <separator string="Legend of variables you can use" colspan="4" attrs="{'invisible':[('use_message_event','=',False)]}" />
+                                       <table border="0" width="100%%" colspan="4" attrs="{'invisible':[('use_message_event','=',False)]}">
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%ds</b>
+                                             </td>
+                                             <td width="28.33%%">Date of service</td>
+                                             <td width="5%%">
+                                                <b>%%dy</b>
+                                             </td>
+                                             <td width="28.33%%">Day of service</td>
+                                             <td width="5%%">
+                                                <b>%%sr</b>
+                                             </td>
+                                             <td width="28.33%%">Service's name</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%sp</b>
+                                             </td>
+                                             <td width="28.33%%">Service Place</td>
+                                             <td width="5%%">
+                                                <b>%%st</b>
+                                             </td>
+                                             <td width="28.33%%">Time Start</td>
+                                             <td width="5%%">
+                                                <b>%%fn</b>
+                                             </td>
+                                             <td width="28.33%%">Time End</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%te</b>
+                                             </td>
+                                             <td width="28.33%%">Time of entry</td>
+                                             <td width="5%%">
+                                                <b>%%tl</b>
+                                             </td>
+                                             <td width="28.33%%">Time Limit</td>
+                                             <td width="5%%">
+                                                <b>%%tr</b>
+                                             </td>
+                                             <td width="28.33%%">Time register</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%ac</b>
+                                             </td>
+                                             <td width="28.33%%">Activities asigned</td>
+                                             <td width="5%%">
+                                                <b>%%in</b>
+                                             </td>
+                                             <td width="28.33%%">Information</td>
+                                             <td width="5%%">
+                                                <b>%%nk</b>
+                                             </td>
+                                             <td width="28.33%%">Collaborator's Nick name</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%cl</b>
+                                             </td>
+                                             <td width="28.33%%">Collaborator's Name</td>
+                                             <td width="5%%">
+                                                <b>%%cd</b>
+                                             </td>
+                                             <td width="28.33%%">Collaborator's Code</td>
+                                             <td width="5%%">
+                                                <b>%%em</b>
+                                             </td>
+                                             <td width="28.33%%">Collaborator's E-mail</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%pt</b>
+                                             </td>
+                                             <td width="28.33%%">Collaborator's Points</td>
+                                             <td width="5%%">
+                                                <b>%%lv</b>
+                                             </td>
+                                             <td width="28.33%%">Collaborator's Level</td>
+                                             <td width="5%%">
+                                                <b>%%gn</b>
+                                             </td>
+                                             <td width="28.33%%">('o'=male, 'a'=female)</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%at</b>
+                                             </td>
+                                             <td width="28.33%%">Attend on time points</td>
+                                             <td width="5%%">
+                                                <b>%%lt</b>
+                                             </td>
+                                             <td width="28.33%%">Late points</td>
+                                             <td width="5%%">
+                                                <b>%%ab</b>
+                                             </td>
+                                             <td width="28.33%%">Absence points</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%na</b>
+                                             </td>
+                                             <td width="28.33%%">Name System</td>
+                                             <td width="5%%">
+                                                <b>%%hs</b>
+                                             </td>
+                                             <td width="28.33%%">Host name</td>
+                                             <td width="5%%">
+                                                <b>%%re</b>
+                                             </td>
+                                             <td width="28.33%%">Replay e-mail</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%se</b>
+                                             </td>
+                                             <td width="28.33%%">System e-mail</td>
+                                             <td width="5%%">
+                                                <b>%%sd</b>
+                                             </td>
+                                             <td width="28.33%%">System database</td>
+                                             <td width="5%%">
+                                                <b>%%ns</b>
+                                             </td>
+                                             <td width="28.33%%">Summiting's name</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%da</b>
+                                             </td>
+                                             <td width="28.33%%">Date</td>
+                                             <td width="5%%">
+                                                <b>%%tm</b>
+                                             </td>
+                                             <td width="28.33%%">Time</td>
+                                             <td width="5%%">
+                                                <b>%%dt</b>
+                                             </td>
+                                             <td width="28.33%%">Date and Time</td>
+                                          </tr>
+                                       </table>
+                                       <group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_message_event','=',False)]}">
+                                          <field name="Message_information_event_subject" colspan="4" attrs="{'required':[('use_message_event','=',True)],}" />
+                                          <notebook colspan="4">
+                                             <page string="E-mail">
+                                                <field name="Message_information_event" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_event','=',True)],}" />
+                                             </page>
+                                             <page string="IM" attrs="{'invisible':[('use_message_im_event','=',False)]}">
+                                                <field name="Message_im_information_event" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_event','=',True)],}" />
+                                             </page>
+                                          </notebook>
+                                       </group>
+                                    </page>
+                                    <page string="Completion">
+                                       <group colspan="4" col="4">
+                                          <field name="use_event_completion" colspan="4" />
+                                          <field name="use_header_message_event_completion" colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}" />
+                                          <field name="use_im_event_completion" colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}" />
+                                       </group>
+                                       <separator string="Legend of variables you can use" colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}" />
+                                       <table border="0" width="100%%" colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}">
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%ds</b>
+                                             </td>
+                                             <td width="28.33%%">Date of service</td>
+                                             <td width="5%%">
+                                                <b>%%dy</b>
+                                             </td>
+                                             <td width="28.33%%">Day of service</td>
+                                             <td width="5%%">
+                                                <b>%%sr</b>
+                                             </td>
+                                             <td width="28.33%%">Service's name</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%sp</b>
+                                             </td>
+                                             <td width="28.33%%">Service Place</td>
+                                             <td width="5%%">
+                                                <b>%%st</b>
+                                             </td>
+                                             <td width="28.33%%">Time Start</td>
+                                             <td width="5%%">
+                                                <b>%%te</b>
+                                             </td>
+                                             <td width="28.33%%">Time End</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%te</b>
+                                             </td>
+                                             <td width="28.33%%">Time of entry</td>
+                                             <td width="5%%">
+                                                <b>%%tl</b>
+                                             </td>
+                                             <td width="28.33%%">Time Limit</td>
+                                             <td width="5%%">
+                                                <b>%%tr</b>
+                                             </td>
+                                             <td width="28.33%%">Time register</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%nk</b>
+                                             </td>
+                                             <td width="28.33%%">Collaborator's Nick name</td>
+                                             <td width="5%%">
+                                                <b>%%cl</b>
+                                             </td>
+                                             <td width="28.33%%">Collaborator's Name</td>
+                                             <td width="5%%">
+                                                <b>%%em</b>
+                                             </td>
+                                             <td width="28.33%%">Collaborator's E-mail</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%pt</b>
+                                             </td>
+                                             <td width="28.33%%">Collaborator's Points</td>
+                                             <td width="5%%">
+                                                <b>%%lv</b>
+                                             </td>
+                                             <td width="28.33%%">Collaborator's Level</td>
+                                             <td width="5%%">
+                                                <b>%%gn</b>
+                                             </td>
+                                             <td width="28.33%%">('o'=male, 'a'=female)</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%pe</b>
+                                             </td>
+                                             <td width="28.33%%">Points earned</td>
+                                             <td width="5%%">
+                                                <b>%%pl</b>
+                                             </td>
+                                             <td width="28.33%%">Lost points</td>
+                                             <td width="5%%">
+                                                <b>%%na</b>
+                                             </td>
+                                             <td width="28.33%%">Name System</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%da</b>
+                                             </td>
+                                             <td width="28.33%%">Date</td>
+                                             <td width="5%%">
+                                                <b>%%tm</b>
+                                             </td>
+                                             <td width="28.33%%">Time</td>
+                                             <td width="5%%">
+                                                <b>%%dt</b>
+                                             </td>
+                                             <td width="28.33%%">Date and Time</td>
+                                          </tr>
+                                          <tr>
+                                             <td width="5%%">
+                                                <b>%%hs</b>
+                                             </td>
+                                             <td width="28.33%%">Dirección del Sistema</td>
+                                             <td width="5%%">
+                                                <b></b>
+                                             </td>
+                                             <td width="28.33%%"></td>
+                                             <td width="5%%">
+                                                <b></b>
+                                             </td>
+                                             <td width="28.33%%"></td>
+                                          </tr>
+                                       </table>
+                                       <group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_event_completion','=',False)]}">
+                                          <field name="message_event_completon_subject" colspan="4" attrs="{'required':[('use_event_completion','=',True)],}" />
+                                          <notebook colspan="4">
+                                             <page string="Attendance on time">
+                                                <group colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}">
+                                                   <separator string="Email notification" colspan="4" />
+                                                   <field name="message_event_completon_on_time" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_event_completion','=',True)],}" />
+                                                   <group colspan="4" attrs="{'invisible':[('use_im_event_completion','=',False)],}">
+                                                      <separator string="Instant message" colspan="4" />
+                                                      <field name="message_im_event_completon_on_time" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion','=',True)],}" />
+                                                   </group>
+                                                </group>
+                                             </page>
+                                             <page string="Attendance late">
+                                                <group colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}">
+                                                   <separator string="Email notification" colspan="4" />
+                                                   <field name="message_event_completon_late" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_event_completion','=',True)],}" />
+                                                   <group colspan="4" attrs="{'invisible':[('use_im_event_completion','=',False)],}">
+                                                      <separator string="Instant message" colspan="4" />
+                                                      <field name="message_im_event_completon_late" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion','=',True)],}" />
+                                                   </group>
+                                                </group>
+                                             </page>
+                                             <page string="Absence">
+                                                <group colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}">
+                                                   <separator string="Email notification" colspan="4" />
+                                                   <field name="message_event_completon_absence" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_event_completion','=',True)],}" />
+                                                   <group colspan="4" attrs="{'invisible':[('use_im_event_completion','=',False)],}">
+                                                      <separator string="Instant message" colspan="4" />
+                                                      <field name="message_im_event_completon_absence" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion','=',True)],}" />
+                                                   </group>
+                                                </group>
+                                             </page>
+                                          </notebook>
+                                       </group>
+                                    </page>
+                                    <page string="Event canceled">
+                                       <!--
+                                          <group colspan="4" col="4">
+                                          <field name="use_mail_event_completion_canceled" colspan="4"/>
+                                          <group colspan="4" attrs="{'invisible':[('use_mail_event_completion_canceled','=',False)]}">
+                                          <separator string="Email notification" colspan="4"/>
+                                          <field name="message_event_completon_canceled_subject" colspan="4" attrs="{'required':[('use_mail_event_completion_canceled','=',True)],}"/>
+                                          <notebook colspan="4">
+                                          <page string="Message">
+                                          <field name="message_event_completon_canceled" widget="text_WYSIWYG" colspan="4" nolabel="1" attrs="{'required':[('use_mail_event_completion_canceled','=',True)],}"/>
+                                          </page>
+                                          </notebook>
+                                          <group colspan="4" col="30">
+                                          <field name="use_im_event_completion_canceled" nolabel="1"/>
+                                          <separator string="IM message notification" colspan="29"/>
+                                          </group>
+                                          <group colspan="4" attrs="{'invisible':[('use_im_event_completion_canceled','=',False)],}">
+                                          <notebook colspan="4">
+                                          <page string="Message">
+                                          <field name="message_im_event_completon_canceled" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion_canceled','=',True)],}"/>
+                                          </page>
+                                          </notebook>
+                                          </group>
+                                          </group>
+                                          </group>
+                                       -->
+                                    </page>
+                                 </notebook>
+                              </page>
+                              <page string="Massive email">
+                                 <group colspan="4" col="4">
+                                    <field name="send_IM_massive_email" colspan="4" />
+                                    <field name="massive_mail_use_header" colspan="4" />
+                                 </group>
+                                 <separator string="Legend of variables you can use" colspan="4" attrs="{'invisible':[('send_IM_massive_email','=',False)]}" />
+                                 <table border="0" width="100%%" colspan="4" attrs="{'invisible':[('send_IM_massive_email','=',False)]}">
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%cl</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's Name</td>
+                                       <td width="5%%">
+                                          <b>%%nk</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's Nick name</td>
+                                       <td width="5%%">
+                                          <b>%%em</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's E-mail</td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%gn</b>
+                                       </td>
+                                       <td width="28.33%%">('o'=male, 'a'=female)</td>
+                                       <td width="5%%">
+                                          <b>%%da</b>
+                                       </td>
+                                       <td width="28.33%%">Date</td>
+                                       <td width="5%%">
+                                          <b>%%tm</b>
+                                       </td>
+                                       <td width="28.33%%">Time</td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%dt</b>
+                                       </td>
+                                       <td width="28.33%%">Date and Time</td>
+                                       <td width="5%%">
+                                          <b></b>
+                                       </td>
+                                       <td width="28.33%%"></td>
+                                       <td width="5%%">
+                                          <b></b>
+                                       </td>
+                                       <td width="28.33%%"></td>
+                                    </tr>
+                                 </table>
+                                 <group colspan="4" col="4" expand="1" attrs="{'invisible':[('send_IM_massive_email','=',False)]}">
+                                    <notebook colspan="4">
+                                       <page string="Mensaje que se envia por chat">
+                                          <field name="Message_information_massive_email" colspan="4" widget="html" nolabel="1" attrs="{'required':[('send_IM_massive_email','=',True)],}" />
+                                       </page>
+                                       <page string="Cuenta de Correo por defecto">
+                                          <field name="massive_mail_body_default" colspan="4" widget="html" nolabel="1" attrs="{'required':[('send_IM_massive_email','=',True)],}" />
+                                       </page>
+                                    </notebook>
+                                 </group>
+                              </page>
+                              <page string="Manually modifying points">
+                                 <group colspan="4" col="4">
+                                    <field name="use_message_add_remove_points" colspan="4" />
+                                    <field name="use_header_message_add_remove_points" colspan="4" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}" />
+                                 </group>
+                                 <separator string="Legend of variables you can use" colspan="4" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}" />
+                                 <table border="0" width="100%%" colspan="4" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}">
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%gn</b>
+                                       </td>
+                                       <td width="28.33%%">('o'=male, 'a'=female)</td>
+                                       <td width="5%%">
+                                          <b>%%nk</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's Nick name</td>
+                                       <td width="5%%">
+                                          <b>%%cl</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's Name</td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%em</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's E-mail</td>
+                                       <td width="5%%">
+                                          <b>%%pt</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's Points</td>
+                                       <td width="5%%">
+                                          <b>%%lv</b>
+                                       </td>
+                                       <td width="28.33%%">Collaborator's Level</td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%ds</b>
+                                       </td>
+                                       <td width="28.33%%">Descripción</td>
+                                       <td width="5%%">
+                                          <b>%%mp</b>
+                                       </td>
+                                       <td width="28.33%%">Modified points</td>
+                                       <td width="5%%">
+                                          <b>%%se</b>
+                                       </td>
+                                       <td width="28.33%%">Correo del Sistema</td>
+                                    </tr>
+                                    <tr>
+                                       <td width="5%%">
+                                          <b>%%na</b>
+                                       </td>
+                                       <td width="28.33%%">Nombre del Sistema</td>
+                                       <td width="5%%">
+                                          <b>%%hs</b>
+                                       </td>
+                                       <td width="28.33%%">Dirección del Sistema</td>
+                                       <td width="5%%">
+                                          <b></b>
+                                       </td>
+                                       <td width="28.33%%"></td>
+                                    </tr>
+                                 </table>
+                                 <group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}">
+                                    <field name="Message_add_remove_points_subject" colspan="4" attrs="{'required':[('use_message_add_remove_points','=',True)],}" />
+                                    <notebook colspan="4">
+                                       <page string="Add Points">
+                                          <group colspan="4" col="4">
+                                             <field name="use_message_im_add_points" colspan="4" />
+                                          </group>
+                                          <group colspan="4" expand="1" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}">
+                                             <notebook colspan="4">
+                                                <page string="Email notification">
+                                                   <field name="Message_add_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_add_remove_points','=',True)],}" />
+                                                </page>
+                                                <page string="IM message notification" attrs="{'invisible':[('use_message_im_add_points','=',False)],}">
+                                                   <field name="Message_im_add_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_add_points','=',True)],}" />
+                                                </page>
+                                             </notebook>
+                                          </group>
+                                       </page>
+                                       <page string="Remove Points">
+                                          <group colspan="4" col="4">
+                                             <field name="use_message_im_remove_points" colspan="4" />
+                                          </group>
+                                          <group colspan="4" expand="1" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}">
+                                             <notebook colspan="4">
+                                                <page string="Email notification">
+                                                   <field name="Message_remove_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_add_remove_points','=',True)],}" />
+                                                </page>
+                                                <page string="IM message notification" attrs="{'invisible':[('use_message_im_remove_points','=',False)],}">
+                                                   <field name="Message_im_remove_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_remove_points','=',True)],}" />
+                                                </page>
+                                             </notebook>
+                                          </group>
+                                       </page>
+                                    </notebook>
+                                 </group>
+                              </page>
+                              <page string="Suspension">
+                              </page>
+                           </notebook>
+                        </group>
+                     </page>
+                     <page id="attendance_records" string="Registro de Asistencia">
+                        <group>
+                           <field name="frequency_program_client" />
+                           <field name="allow_checkout_registers" />
+                        </group>
+                        <separator string="Imagen del Cliente de Registro de Asistencia" colspan="4" />
                         <table border="0" width="100%%" colspan="4">
                            <tr>
                               <td rowspan="2">
                                  <group>
-                                    <field name="logo_program_client" widget="image" class="oe_left oe_avatar" />
+                                    <label for="logo_program_client" />
+                                    <div>
+                                       <field name="logo_program_client" widget="image" class="oe_left oe_avatar" />
+                                    </div>
                                  </group>
                               </td>
                               <td />
@@ -511,877 +1196,182 @@
                               <td background="/kemas/static/src/img/Client/client1.png" width="404px" height="409px" style="background-repeat:no-repeat;" />
                            </tr>
                         </table>
-                     </group>
-                  </page>
-                  <page string="Reports">
-                     <notebook colspan="4">
-                        <page string="Headers and footers">
-                           <separator string="Header" colspan="4" />
-                           <group>
-                              <field name="use_header" />
-                              <newline />
-                              <field name="report_header" nolabel="1" colspan="4" attrs="{'readonly':[('use_header','=',False)], 'required':[('use_header','=',True)]}" placeholder="Header of the reports..." />
-                           </group>
-                           <separator string="Footer" colspan="4" />
-                           <group>
-                              <field name="use_footer" />
-                              <newline />
-                              <field name="report_footer" nolabel="1" colspan="4" attrs="{'readonly':[('use_footer','=',False)], 'required':[('use_footer','=',True)]}" placeholder="Footer of the reports..." />
-                           </group>
-                        </page>
-                        <page string="QR Code Colaborator">
-                           <separator string="Legend of variables you can use" colspan="4" />
-                           <table border="0" width="100%%" colspan="4">
-                              <tr>
-                                 <td width="5%%">
-                                    <b>%%cd</b>
-                                 </td>
-                                 <td width="28.33%%">Code</td>
-                                 <td width="5%%">
-                                    <b>%%cl</b>
-                                 </td>
-                                 <td width="28.33%%">Name</td>
-                                 <td width="5%%">
-                                    <b>%%bt</b>
-                                 </td>
-                                 <td width="28.33%%">Birth</td>
-                              </tr>
-                              <tr>
-                                 <td width="5%%">
-                                    <b>%%gn</b>
-                                 </td>
-                                 <td width="28.33%%">Gender</td>
-                                 <td width="5%%">
-                                    <b>%%ms</b>
-                                 </td>
-                                 <td width="28.33%%">Marital status</td>
-                                 <td width="5%%">
-                                    <b>%%t1</b>
-                                 </td>
-                                 <td width="28.33%%">Telf 1</td>
-                              </tr>
-                              <tr>
-                                 <td width="5%%">
-                                    <b>%%t2</b>
-                                 </td>
-                                 <td width="28.33%%">Telf 2</td>
-                                 <td width="5%%">
-                                    <b>%%mb</b>
-                                 </td>
-                                 <td width="28.33%%">Mobile</td>
-                                 <td width="5%%">
-                                    <b>%%em</b>
-                                 </td>
-                                 <td width="28.33%%">E-mail</td>
-                              </tr>
-                              <tr>
-                                 <td width="5%%">
-                                    <b>%%ad</b>
-                                 </td>
-                                 <td width="28.33%%">Address</td>
-                                 <td width="5%%">
-                                    <b>%%jd</b>
-                                 </td>
-                                 <td width="28.33%%">Join date</td>
-                                 <td width="5%%">
-                                    <b>%%ty</b>
-                                 </td>
-                                 <td width="28.33%%">Type</td>
-                              </tr>
-                              <tr>
-
-                                 <td width="5%%">
-                                    <b>%%us</b>
-                                 </td>
-                                 <td width="28.33%%">Username</td>
-                                 <td width="5%%">
-                                    <b>%%lv</b>
-                                 </td>
-                                 <td width="28.33%%">Level</td>
-                                 <td width="5%%">
-                                    <b>%%ad</b>
-                                 </td>
-                                 <td width="28.33%%">Date</td>
-                              </tr>
-                              <tr>
-                                 <td width="5%%">
-                                    <b>%%tm</b>
-                                 </td>
-                                 <td width="28.33%%">Time</td>
-                                 <td width="5%%">
-                                    <b>%%dt</b>
-                                 </td>
-                                 <td width="28.33%%">Date and Time</td>
-                                 <td width="5%%">
-                                    <b></b>
-                                 </td>
-                                 <td width="28.33%%"></td>
-                              </tr>
-                           </table>
-                           <group>
-                              <field name="qr_text" />
-                           </group>
-                           <group string="Image size">
-                              <field name="qr_width" />
-                              <field name="qr_height" />
-                           </group>
-                        </page>
-                        <page string="Código de barras del colaborador">
-                           <separator string="Legend of variables you can use" colspan="4" />
-                           <table border="0" width="100%%" colspan="4">
-                              <tr>
-                                 <td width="5%%">
-                                    <b>%%id</b>
-                                 </td>
-                                 <td width="28.33%%">Número del colaborador</td>
-                                 <td width="5%%">
-                                    <b>%%cd</b>
-                                 </td>
-                                 <td width="28.33%%">Código del Colaborador</td>
-                                 <td width="5%%">
-                                    <b></b>
-                                 </td>
-                                 <td width="28.33%%"></td>
-                              </tr>
-                           </table>
-                           <group>
-                              <field name="bc_text" string="Texto del Codigo de Barras" />
-                           </group>
-                           <group string="Tamaño de imagen" colspan="4" col="10">
-                              <field name="bc_type" colspan="4" />
-                              <group colspan="6" />
-                              <field name="bc_hr_form" colspan="4" string="¿Legible para lectura?" />
-                              <group colspan="6" />
-                              <field name="bc_width" colspan="4" />
-                              <group colspan="6" />
-                              <field name="bc_height" colspan="4" />
-                              <group colspan="6" />
-                           </group>
-                        </page>
-                        <page string="Reports logo">
-                           <group colspan="4" string="Reports logo">
-                              <field name="logo" align="10.10" class="oe_left oe_avatar" widget='image' options='{"size": [180, 180]}' nolabel="1" />
-                           </group>
-                        </page>
-                     </notebook>
-                  </page>
-                  <page string="Collaborators">
-                     <div align="center">
-                        <button string="Cortar fotos y logos" name="crop_photo" type="object" icon="gtk-cut" />
-                     </div>
-                     <group colspan="4" col="6">
-                        <field name="integrate_collaborators_with_partners" colspan="6" />
-                        <field name="default_points" colspan="2" />
-                        <field name="number_replacements" colspan="2" />
-                        <group colspan="2" />
-                        <separator string="Points on service" colspan="6" />
-                        <field name="default_attend_on_time_points" colspan="2" />
-                        <field name="default_late_points" colspan="2" />
-                        <field name="default_not_attend_points" colspan="2" />
-                     </group>
-                  </page>
-                  <page string="Suspensiones">
-                     <separator string="Tareas no cumplidas" />
-                     <group>
-                        <field name="day_to_suspension_task_closed" />
-                     </group>
-                  </page>
-                  <page string="Emails and notifications">
-                     <group colspan="4" expand="1" col="10">
-                        <field name="mailing" colspan="4" />
-                        <field name="use_attachments_in_im" colspan="4" attrs="{'invisible':[('mailing','=',False)]}" />
-                        <group colspan="2" />
-                        <field name="use_subject_in_im" colspan="2" attrs="{'invisible':[('mailing','=',False)]}" />
-                        <group colspan="8" />
-                     </group>
-                     <group colspan="4" attrs="{'invisible':[('mailing','=',False)]}">
+                     </page>
+                     <page string="Reports">
                         <notebook colspan="4">
-                           <page string="Basic Information">
-                              <group colspan="4" expand="1" col="4">
-                                 <field name="name_submitting" colspan="4" attrs="{'required':[('mailing','=',True)]}" />
-                                 <field name="reply_email" colspan="4" widget="email" attrs="{'required':[('mailing','=',True)]}" />
-                                 <field name="system_email" colspan="4" widget="email" attrs="{'required':[('mailing','=',True)]}" />
-                                 <field name="collaborator_manual" colspan="4" />
+                           <page string="Headers and footers">
+                              <separator string="Header" colspan="4" />
+                              <group>
+                                 <field name="use_header" />
+                                 <newline />
+                                 <field name="report_header" nolabel="1" colspan="4" attrs="{'readonly':[('use_header','=',False)], 'required':[('use_header','=',True)]}" placeholder="Header of the reports..." />
                               </group>
+                              <separator string="Footer" colspan="4" />
+                              <group>
+                                 <field name="use_footer" />
+                                 <newline />
+                                 <field name="report_footer" nolabel="1" colspan="4" attrs="{'readonly':[('use_footer','=',False)], 'required':[('use_footer','=',True)]}" placeholder="Footer of the reports..." />
+                              </group>
+                           </page>
+                           <page string="QR Code Colaborator">
                               <separator string="Legend of variables you can use" colspan="4" />
                               <table border="0" width="100%%" colspan="4">
                                  <tr>
                                     <td width="5%%">
-                                       <b>%%da</b>
-                                    </td>
-                                    <td width="28.33%%">Date</td>
-                                    <td width="5%%">
-                                       <b>%%tm</b>
-                                    </td>
-                                    <td width="28.33%%">Time</td>
-                                    <td width="5%%">
-                                       <b>%%dt</b>
-                                    </td>
-                                    <td width="28.33%%">Date and Time</td>
-                                 </tr>
-                                 <tr>
-                                    <td width="5%%">
-                                       <b>%%es</b>
-                                    </td>
-                                    <td width="28.33%%">System e-mail</td>
-                                    <td width="5%%">
-                                       <b>%%ns</b>
-                                    </td>
-                                    <td width="28.33%%">Submmiting's name</td>
-                                    <td width="5%%">
-                                       <b>%%hs</b>
-                                    </td>
-                                    <td width="28.33%%">Host name</td>
-                                 </tr>
-                                 <tr>
-                                    <td width="5%%">
-                                       <b>%%re</b>
-                                    </td>
-                                    <td width="28.33%%">Replay e-mail</td>
-                                    <td width="5%%">
-                                       <b></b>
-                                    </td>
-                                    <td width="28.33%%"></td>
-                                    <td width="5%%">
-                                       <b></b>
-                                    </td>
-                                    <td width="28.33%%"></td>
-                                 </tr>
-                              </table>
-                              <notebook colspan="4">
-                                 <page string="Header e-mail">
-                                    <field name="header_email" widget="html" colspan="4" nolabel="1" />
-                                 </page>
-                              </notebook>
-                              <notebook colspan="4">
-                                 <page string="Footer e-mail">
-                                    <field name="footer_email" widget="html" colspan="4" nolabel="1" />
-                                 </page>
-                              </notebook>
-                           </page>
-                           <page string="Incorporation">
-                              <group colspan="4" col="4">
-                                 <field name="use_message_incorporation" colspan="4" />
-                                 <field name="use_header_message_incorporation" colspan="4" attrs="{'invisible':[('use_message_incorporation','=',False)]}" />
-                                 <field name="use_message_im_incorporation" colspan="4" attrs="{'invisible':[('use_message_incorporation','=',False)]}" />
-                              </group>
-                              <separator string="Legend of variables you can use" colspan="4" attrs="{'invisible':[('use_message_incorporation','=',False)]}" />
-                              <table border="0" width="100%%" colspan="4" attrs="{'invisible':[('use_message_incorporation','=',False)]}">
-                                 <tr>
-                                    <td width="5%%">
                                        <b>%%cd</b>
                                     </td>
-                                    <td width="28.33%%">Collaborator's Code</td>
+                                    <td width="28.33%%">Code</td>
                                     <td width="5%%">
                                        <b>%%cl</b>
                                     </td>
-                                    <td width="28.33%%">Collaborator's Name</td>
+                                    <td width="28.33%%">Name</td>
                                     <td width="5%%">
-                                       <b>%%nk</b>
+                                       <b>%%bt</b>
                                     </td>
-                                    <td width="28.33%%">Collaborator's Nick name</td>
+                                    <td width="28.33%%">Birth</td>
                                  </tr>
                                  <tr>
                                     <td width="5%%">
-                                       <b>%%pt</b>
+                                       <b>%%gn</b>
                                     </td>
-                                    <td width="28.33%%">Collaborator's Points</td>
+                                    <td width="28.33%%">Gender</td>
                                     <td width="5%%">
-                                       <b>%%lv</b>
+                                       <b>%%ms</b>
                                     </td>
-                                    <td width="28.33%%">Collaborator's Level</td>
+                                    <td width="28.33%%">Marital status</td>
+                                    <td width="5%%">
+                                       <b>%%t1</b>
+                                    </td>
+                                    <td width="28.33%%">Telf 1</td>
+                                 </tr>
+                                 <tr>
+                                    <td width="5%%">
+                                       <b>%%t2</b>
+                                    </td>
+                                    <td width="28.33%%">Telf 2</td>
+                                    <td width="5%%">
+                                       <b>%%mb</b>
+                                    </td>
+                                    <td width="28.33%%">Mobile</td>
                                     <td width="5%%">
                                        <b>%%em</b>
                                     </td>
-                                    <td width="28.33%%">Collaborator's E-mail</td>
+                                    <td width="28.33%%">E-mail</td>
                                  </tr>
                                  <tr>
+                                    <td width="5%%">
+                                       <b>%%ad</b>
+                                    </td>
+                                    <td width="28.33%%">Address</td>
+                                    <td width="5%%">
+                                       <b>%%jd</b>
+                                    </td>
+                                    <td width="28.33%%">Join date</td>
+                                    <td width="5%%">
+                                       <b>%%ty</b>
+                                    </td>
+                                    <td width="28.33%%">Type</td>
+                                 </tr>
+                                 <tr>
+
                                     <td width="5%%">
                                        <b>%%us</b>
                                     </td>
-                                    <td width="28.33%%">Collaborator's Usernam</td>
-                                    <td width="5%%">
-                                       <b>%%ps</b>
-                                    </td>
-                                    <td width="28.33%%">Collaborator's Password</td>
-                                    <td width="5%%">
-                                       <b>%%gn</b>
-                                    </td>
-                                    <td width="28.33%%">('o'=male, 'a'=female)</td>
-                                 </tr>
-                                 <tr>
-                                    <td width="5%%">
-                                       <b>%%na</b>
-                                    </td>
-                                    <td width="28.33%%">Name System</td>
-                                    <td width="5%%">
-                                       <b>%%hs</b>
-                                    </td>
-                                    <td width="28.33%%">Host name</td>
-                                    <td width="5%%">
-                                       <b>%%re</b>
-                                    </td>
-                                    <td width="28.33%%">Replay e-mail</td>
-                                 </tr>
-                                 <tr>
-                                    <td width="5%%">
-                                       <b>%%se</b>
-                                    </td>
-                                    <td width="28.33%%">System e-mail</td>
-                                    <td width="5%%">
-                                       <b>%%ds</b>
-                                    </td>
-                                    <td width="28.33%%">System database</td>
-                                    <td width="5%%">
-                                       <b>%%ns</b>
-                                    </td>
-                                    <td width="28.33%%">Summiting's name</td>
-                                 </tr>
-                                 <tr>
-                                    <td width="5%%">
-                                       <b>%%da</b>
-                                    </td>
-                                    <td width="28.33%%">Date</td>
-                                    <td width="5%%">
-                                       <b>%%tm</b>
-                                    </td>
-                                    <td width="28.33%%">Time</td>
-                                    <td width="5%%">
-                                       <b>%%dt</b>
-                                    </td>
-                                    <td width="28.33%%">Date and Time</td>
-                                 </tr>
-                              </table>
-                              <group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_message_incorporation','=',False)]}">
-                                 <field name="Message_information_incorporation_subject" colspan="4" attrs="{'required':[('use_message_incorporation','=',True)],}" />
-                                 <notebook colspan="4">
-                                    <page string="E-mail">
-                                       <field name="Message_information_incorporation" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_incorporation','=',True)],}" />
-                                    </page>
-                                    <page string="IM" attrs="{'invisible':[('use_message_im_incorporation','=',False)]}">
-                                       <field name="Message_im_information_incorporation" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_incorporation','=',True)],}" />
-                                    </page>
-                                 </notebook>
-                              </group>
-                           </page>
-                           <page string="Event">
-                              <notebook colspan="4">
-                                 <page string="Creation">
-                                    <group colspan="4" col="4">
-                                       <field name="use_message_event" colspan="4" />
-                                       <field name="use_header_message_event" colspan="4" attrs="{'invisible':[('use_message_event','=',False)]}" />
-                                       <field name="use_message_im_event" colspan="4" attrs="{'invisible':[('use_message_event','=',False)]}" />
-                                       <field name="work_in_background_event" colspan="4" attrs="{'invisible':[('use_message_event','=',False)]}" />
-                                    </group>
-                                    <separator string="Legend of variables you can use" colspan="4" attrs="{'invisible':[('use_message_event','=',False)]}" />
-                                    <table border="0" width="100%%" colspan="4" attrs="{'invisible':[('use_message_event','=',False)]}">
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%ds</b>
-                                          </td>
-                                          <td width="28.33%%">Date of service</td>
-                                          <td width="5%%">
-                                             <b>%%dy</b>
-                                          </td>
-                                          <td width="28.33%%">Day of service</td>
-                                          <td width="5%%">
-                                             <b>%%sr</b>
-                                          </td>
-                                          <td width="28.33%%">Service's name</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%sp</b>
-                                          </td>
-                                          <td width="28.33%%">Service Place</td>
-                                          <td width="5%%">
-                                             <b>%%st</b>
-                                          </td>
-                                          <td width="28.33%%">Time Start</td>
-                                          <td width="5%%">
-                                             <b>%%fn</b>
-                                          </td>
-                                          <td width="28.33%%">Time End</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%te</b>
-                                          </td>
-                                          <td width="28.33%%">Time of entry</td>
-                                          <td width="5%%">
-                                             <b>%%tl</b>
-                                          </td>
-                                          <td width="28.33%%">Time Limit</td>
-                                          <td width="5%%">
-                                             <b>%%tr</b>
-                                          </td>
-                                          <td width="28.33%%">Time register</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%ac</b>
-                                          </td>
-                                          <td width="28.33%%">Activities asigned</td>
-                                          <td width="5%%">
-                                             <b>%%in</b>
-                                          </td>
-                                          <td width="28.33%%">Information</td>
-                                          <td width="5%%">
-                                             <b>%%nk</b>
-                                          </td>
-                                          <td width="28.33%%">Collaborator's Nick name</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%cl</b>
-                                          </td>
-                                          <td width="28.33%%">Collaborator's Name</td>
-                                          <td width="5%%">
-                                             <b>%%cd</b>
-                                          </td>
-                                          <td width="28.33%%">Collaborator's Code</td>
-                                          <td width="5%%">
-                                             <b>%%em</b>
-                                          </td>
-                                          <td width="28.33%%">Collaborator's E-mail</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%pt</b>
-                                          </td>
-                                          <td width="28.33%%">Collaborator's Points</td>
-                                          <td width="5%%">
-                                             <b>%%lv</b>
-                                          </td>
-                                          <td width="28.33%%">Collaborator's Level</td>
-                                          <td width="5%%">
-                                             <b>%%gn</b>
-                                          </td>
-                                          <td width="28.33%%">('o'=male, 'a'=female)</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%at</b>
-                                          </td>
-                                          <td width="28.33%%">Attend on time points</td>
-                                          <td width="5%%">
-                                             <b>%%lt</b>
-                                          </td>
-                                          <td width="28.33%%">Late points</td>
-                                          <td width="5%%">
-                                             <b>%%ab</b>
-                                          </td>
-                                          <td width="28.33%%">Absence points</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%na</b>
-                                          </td>
-                                          <td width="28.33%%">Name System</td>
-                                          <td width="5%%">
-                                             <b>%%hs</b>
-                                          </td>
-                                          <td width="28.33%%">Host name</td>
-                                          <td width="5%%">
-                                             <b>%%re</b>
-                                          </td>
-                                          <td width="28.33%%">Replay e-mail</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%se</b>
-                                          </td>
-                                          <td width="28.33%%">System e-mail</td>
-                                          <td width="5%%">
-                                             <b>%%sd</b>
-                                          </td>
-                                          <td width="28.33%%">System database</td>
-                                          <td width="5%%">
-                                             <b>%%ns</b>
-                                          </td>
-                                          <td width="28.33%%">Summiting's name</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%da</b>
-                                          </td>
-                                          <td width="28.33%%">Date</td>
-                                          <td width="5%%">
-                                             <b>%%tm</b>
-                                          </td>
-                                          <td width="28.33%%">Time</td>
-                                          <td width="5%%">
-                                             <b>%%dt</b>
-                                          </td>
-                                          <td width="28.33%%">Date and Time</td>
-                                       </tr>
-                                    </table>
-                                    <group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_message_event','=',False)]}">
-                                       <field name="Message_information_event_subject" colspan="4" attrs="{'required':[('use_message_event','=',True)],}" />
-                                       <notebook colspan="4">
-                                          <page string="E-mail">
-                                             <field name="Message_information_event" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_event','=',True)],}" />
-                                          </page>
-                                          <page string="IM" attrs="{'invisible':[('use_message_im_event','=',False)]}">
-                                             <field name="Message_im_information_event" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_event','=',True)],}" />
-                                          </page>
-                                       </notebook>
-                                    </group>
-                                 </page>
-                                 <page string="Completion">
-                                    <group colspan="4" col="4">
-                                       <field name="use_event_completion" colspan="4" />
-                                       <field name="use_header_message_event_completion" colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}" />
-                                       <field name="use_im_event_completion" colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}" />
-                                    </group>
-                                    <separator string="Legend of variables you can use" colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}" />
-                                    <table border="0" width="100%%" colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}">
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%ds</b>
-                                          </td>
-                                          <td width="28.33%%">Date of service</td>
-                                          <td width="5%%">
-                                             <b>%%dy</b>
-                                          </td>
-                                          <td width="28.33%%">Day of service</td>
-                                          <td width="5%%">
-                                             <b>%%sr</b>
-                                          </td>
-                                          <td width="28.33%%">Service's name</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%sp</b>
-                                          </td>
-                                          <td width="28.33%%">Service Place</td>
-                                          <td width="5%%">
-                                             <b>%%st</b>
-                                          </td>
-                                          <td width="28.33%%">Time Start</td>
-                                          <td width="5%%">
-                                             <b>%%te</b>
-                                          </td>
-                                          <td width="28.33%%">Time End</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%te</b>
-                                          </td>
-                                          <td width="28.33%%">Time of entry</td>
-                                          <td width="5%%">
-                                             <b>%%tl</b>
-                                          </td>
-                                          <td width="28.33%%">Time Limit</td>
-                                          <td width="5%%">
-                                             <b>%%tr</b>
-                                          </td>
-                                          <td width="28.33%%">Time register</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%nk</b>
-                                          </td>
-                                          <td width="28.33%%">Collaborator's Nick name</td>
-                                          <td width="5%%">
-                                             <b>%%cl</b>
-                                          </td>
-                                          <td width="28.33%%">Collaborator's Name</td>
-                                          <td width="5%%">
-                                             <b>%%em</b>
-                                          </td>
-                                          <td width="28.33%%">Collaborator's E-mail</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%pt</b>
-                                          </td>
-                                          <td width="28.33%%">Collaborator's Points</td>
-                                          <td width="5%%">
-                                             <b>%%lv</b>
-                                          </td>
-                                          <td width="28.33%%">Collaborator's Level</td>
-                                          <td width="5%%">
-                                             <b>%%gn</b>
-                                          </td>
-                                          <td width="28.33%%">('o'=male, 'a'=female)</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%pe</b>
-                                          </td>
-                                          <td width="28.33%%">Points earned</td>
-                                          <td width="5%%">
-                                             <b>%%pl</b>
-                                          </td>
-                                          <td width="28.33%%">Lost points</td>
-                                          <td width="5%%">
-                                             <b>%%na</b>
-                                          </td>
-                                          <td width="28.33%%">Name System</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%da</b>
-                                          </td>
-                                          <td width="28.33%%">Date</td>
-                                          <td width="5%%">
-                                             <b>%%tm</b>
-                                          </td>
-                                          <td width="28.33%%">Time</td>
-                                          <td width="5%%">
-                                             <b>%%dt</b>
-                                          </td>
-                                          <td width="28.33%%">Date and Time</td>
-                                       </tr>
-                                       <tr>
-                                          <td width="5%%">
-                                             <b>%%hs</b>
-                                          </td>
-                                          <td width="28.33%%">Dirección del Sistema</td>
-                                          <td width="5%%">
-                                             <b></b>
-                                          </td>
-                                          <td width="28.33%%"></td>
-                                          <td width="5%%">
-                                             <b></b>
-                                          </td>
-                                          <td width="28.33%%"></td>
-                                       </tr>
-                                    </table>
-                                    <group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_event_completion','=',False)]}">
-                                       <field name="message_event_completon_subject" colspan="4" attrs="{'required':[('use_event_completion','=',True)],}" />
-                                       <notebook colspan="4">
-                                          <page string="Attendance on time">
-                                             <group colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}">
-                                                <separator string="Email notification" colspan="4" />
-                                                <field name="message_event_completon_on_time" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_event_completion','=',True)],}" />
-                                                <group colspan="4" attrs="{'invisible':[('use_im_event_completion','=',False)],}">
-                                                   <separator string="Instant message" colspan="4" />
-                                                   <field name="message_im_event_completon_on_time" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion','=',True)],}" />
-                                                </group>
-                                             </group>
-                                          </page>
-                                          <page string="Attendance late">
-                                             <group colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}">
-                                                <separator string="Email notification" colspan="4" />
-                                                <field name="message_event_completon_late" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_event_completion','=',True)],}" />
-                                                <group colspan="4" attrs="{'invisible':[('use_im_event_completion','=',False)],}">
-                                                   <separator string="Instant message" colspan="4" />
-                                                   <field name="message_im_event_completon_late" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion','=',True)],}" />
-                                                </group>
-                                             </group>
-                                          </page>
-                                          <page string="Absence">
-                                             <group colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}">
-                                                <separator string="Email notification" colspan="4" />
-                                                <field name="message_event_completon_absence" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_event_completion','=',True)],}" />
-                                                <group colspan="4" attrs="{'invisible':[('use_im_event_completion','=',False)],}">
-                                                   <separator string="Instant message" colspan="4" />
-                                                   <field name="message_im_event_completon_absence" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion','=',True)],}" />
-                                                </group>
-                                             </group>
-                                          </page>
-                                       </notebook>
-                                    </group>
-                                 </page>
-                                 <page string="Event canceled">
-                                    <!--
-                                       <group colspan="4" col="4">
-                                       <field name="use_mail_event_completion_canceled" colspan="4"/>
-                                       <group colspan="4" attrs="{'invisible':[('use_mail_event_completion_canceled','=',False)]}">
-                                       <separator string="Email notification" colspan="4"/>
-                                       <field name="message_event_completon_canceled_subject" colspan="4" attrs="{'required':[('use_mail_event_completion_canceled','=',True)],}"/>
-                                       <notebook colspan="4">
-                                       <page string="Message">
-                                       <field name="message_event_completon_canceled" widget="text_WYSIWYG" colspan="4" nolabel="1" attrs="{'required':[('use_mail_event_completion_canceled','=',True)],}"/>
-                                       </page>
-                                       </notebook>
-                                       <group colspan="4" col="30">
-                                       <field name="use_im_event_completion_canceled" nolabel="1"/>
-                                       <separator string="IM message notification" colspan="29"/>
-                                       </group>
-                                       <group colspan="4" attrs="{'invisible':[('use_im_event_completion_canceled','=',False)],}">
-                                       <notebook colspan="4">
-                                       <page string="Message">
-                                       <field name="message_im_event_completon_canceled" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion_canceled','=',True)],}"/>
-                                       </page>
-                                       </notebook>
-                                       </group>
-                                       </group>
-                                       </group>
-                                    -->
-                                 </page>
-                              </notebook>
-                           </page>
-                           <page string="Massive email">
-                              <group colspan="4" col="4">
-                                 <field name="send_IM_massive_email" colspan="4" />
-                                 <field name="massive_mail_use_header" colspan="4" />
-                              </group>
-                              <separator string="Legend of variables you can use" colspan="4" attrs="{'invisible':[('send_IM_massive_email','=',False)]}" />
-                              <table border="0" width="100%%" colspan="4" attrs="{'invisible':[('send_IM_massive_email','=',False)]}">
-                                 <tr>
-                                    <td width="5%%">
-                                       <b>%%cl</b>
-                                    </td>
-                                    <td width="28.33%%">Collaborator's Name</td>
-                                    <td width="5%%">
-                                       <b>%%nk</b>
-                                    </td>
-                                    <td width="28.33%%">Collaborator's Nick name</td>
-                                    <td width="5%%">
-                                       <b>%%em</b>
-                                    </td>
-                                    <td width="28.33%%">Collaborator's E-mail</td>
-                                 </tr>
-                                 <tr>
-                                    <td width="5%%">
-                                       <b>%%gn</b>
-                                    </td>
-                                    <td width="28.33%%">('o'=male, 'a'=female)</td>
-                                    <td width="5%%">
-                                       <b>%%da</b>
-                                    </td>
-                                    <td width="28.33%%">Date</td>
-                                    <td width="5%%">
-                                       <b>%%tm</b>
-                                    </td>
-                                    <td width="28.33%%">Time</td>
-                                 </tr>
-                                 <tr>
-                                    <td width="5%%">
-                                       <b>%%dt</b>
-                                    </td>
-                                    <td width="28.33%%">Date and Time</td>
-                                    <td width="5%%">
-                                       <b></b>
-                                    </td>
-                                    <td width="28.33%%"></td>
-                                    <td width="5%%">
-                                       <b></b>
-                                    </td>
-                                    <td width="28.33%%"></td>
-                                 </tr>
-                              </table>
-                              <group colspan="4" col="4" expand="1" attrs="{'invisible':[('send_IM_massive_email','=',False)]}">
-                                 <notebook colspan="4">
-                                    <page string="Mensaje que se envia por chat">
-                                       <field name="Message_information_massive_email" colspan="4" widget="html" nolabel="1" attrs="{'required':[('send_IM_massive_email','=',True)],}" />
-                                    </page>
-                                    <page string="Cuenta de Correo por defecto">
-                                       <field name="massive_mail_body_default" colspan="4" widget="html" nolabel="1" attrs="{'required':[('send_IM_massive_email','=',True)],}" />
-                                    </page>
-                                 </notebook>
-                              </group>
-                           </page>
-                           <page string="Manually modifying points">
-                              <group colspan="4" col="4">
-                                 <field name="use_message_add_remove_points" colspan="4" />
-                                 <field name="use_header_message_add_remove_points" colspan="4" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}" />
-                              </group>
-                              <separator string="Legend of variables you can use" colspan="4" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}" />
-                              <table border="0" width="100%%" colspan="4" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}">
-                                 <tr>
-                                    <td width="5%%">
-                                       <b>%%gn</b>
-                                    </td>
-                                    <td width="28.33%%">('o'=male, 'a'=female)</td>
-                                    <td width="5%%">
-                                       <b>%%nk</b>
-                                    </td>
-                                    <td width="28.33%%">Collaborator's Nick name</td>
-                                    <td width="5%%">
-                                       <b>%%cl</b>
-                                    </td>
-                                    <td width="28.33%%">Collaborator's Name</td>
-                                 </tr>
-                                 <tr>
-                                    <td width="5%%">
-                                       <b>%%em</b>
-                                    </td>
-                                    <td width="28.33%%">Collaborator's E-mail</td>
-                                    <td width="5%%">
-                                       <b>%%pt</b>
-                                    </td>
-                                    <td width="28.33%%">Collaborator's Points</td>
+                                    <td width="28.33%%">Username</td>
                                     <td width="5%%">
                                        <b>%%lv</b>
                                     </td>
-                                    <td width="28.33%%">Collaborator's Level</td>
+                                    <td width="28.33%%">Level</td>
+                                    <td width="5%%">
+                                       <b>%%ad</b>
+                                    </td>
+                                    <td width="28.33%%">Date</td>
                                  </tr>
                                  <tr>
                                     <td width="5%%">
-                                       <b>%%ds</b>
+                                       <b>%%tm</b>
                                     </td>
-                                    <td width="28.33%%">Descripción</td>
+                                    <td width="28.33%%">Time</td>
                                     <td width="5%%">
-                                       <b>%%mp</b>
+                                       <b>%%dt</b>
                                     </td>
-                                    <td width="28.33%%">Modified points</td>
-                                    <td width="5%%">
-                                       <b>%%se</b>
-                                    </td>
-                                    <td width="28.33%%">Correo del Sistema</td>
-                                 </tr>
-                                 <tr>
-                                    <td width="5%%">
-                                       <b>%%na</b>
-                                    </td>
-                                    <td width="28.33%%">Nombre del Sistema</td>
-                                    <td width="5%%">
-                                       <b>%%hs</b>
-                                    </td>
-                                    <td width="28.33%%">Dirección del Sistema</td>
+                                    <td width="28.33%%">Date and Time</td>
                                     <td width="5%%">
                                        <b></b>
                                     </td>
                                     <td width="28.33%%"></td>
                                  </tr>
                               </table>
-                              <group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}">
-                                 <field name="Message_add_remove_points_subject" colspan="4" attrs="{'required':[('use_message_add_remove_points','=',True)],}" />
-                                 <notebook colspan="4">
-                                    <page string="Add Points">
-                                       <group colspan="4" col="4">
-                                          <field name="use_message_im_add_points" colspan="4" />
-                                       </group>
-                                       <group colspan="4" expand="1" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}">
-                                          <notebook colspan="4">
-                                             <page string="Email notification">
-                                                <field name="Message_add_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_add_remove_points','=',True)],}" />
-                                             </page>
-                                             <page string="IM message notification" attrs="{'invisible':[('use_message_im_add_points','=',False)],}">
-                                                <field name="Message_im_add_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_add_points','=',True)],}" />
-                                             </page>
-                                          </notebook>
-                                       </group>
-                                    </page>
-                                    <page string="Remove Points">
-                                       <group colspan="4" col="4">
-                                          <field name="use_message_im_remove_points" colspan="4" />
-                                       </group>
-                                       <group colspan="4" expand="1" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}">
-                                          <notebook colspan="4">
-                                             <page string="Email notification">
-                                                <field name="Message_remove_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_add_remove_points','=',True)],}" />
-                                             </page>
-                                             <page string="IM message notification" attrs="{'invisible':[('use_message_im_remove_points','=',False)],}">
-                                                <field name="Message_im_remove_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_remove_points','=',True)],}" />
-                                             </page>
-                                          </notebook>
-                                       </group>
-                                    </page>
-                                 </notebook>
+                              <group>
+                                 <field name="qr_text" />
+                              </group>
+                              <group string="Image size">
+                                 <field name="qr_width" />
+                                 <field name="qr_height" />
                               </group>
                            </page>
-                           <page string="Suspension">
+                           <page string="Código de barras del colaborador">
+                              <separator string="Legend of variables you can use" colspan="4" />
+                              <table border="0" width="100%%" colspan="4">
+                                 <tr>
+                                    <td width="5%%">
+                                       <b>%%id</b>
+                                    </td>
+                                    <td width="28.33%%">Número del colaborador</td>
+                                    <td width="5%%">
+                                       <b>%%cd</b>
+                                    </td>
+                                    <td width="28.33%%">Código del Colaborador</td>
+                                    <td width="5%%">
+                                       <b></b>
+                                    </td>
+                                    <td width="28.33%%"></td>
+                                 </tr>
+                              </table>
+                              <group>
+                                 <field name="bc_text" string="Texto del Codigo de Barras" />
+                              </group>
+                              <group string="Tamaño de imagen" colspan="4" col="10">
+                                 <field name="bc_type" colspan="4" />
+                                 <group colspan="6" />
+                                 <field name="bc_hr_form" colspan="4" string="¿Legible para lectura?" />
+                                 <group colspan="6" />
+                                 <field name="bc_width" colspan="4" />
+                                 <group colspan="6" />
+                                 <field name="bc_height" colspan="4" />
+                                 <group colspan="6" />
+                              </group>
+                           </page>
+                           <page string="Reports logo">
+                              <group colspan="4" string="Reports logo">
+                                 <field name="logo" align="10.10" class="oe_left oe_avatar" widget='image' options='{"size": [180, 180]}' nolabel="1" />
+                              </group>
                            </page>
                         </notebook>
-                     </group>
-                  </page>
-               </notebook>
-
+                     </page>
+                     <page string="Collaborators">
+                        <div align="center">
+                           <button string="Cortar fotos y logos" name="crop_photo" type="object" icon="gtk-cut" />
+                        </div>
+                        <group colspan="4" col="6">
+                           <field name="integrate_collaborators_with_partners" colspan="6" />
+                           <field name="default_points" colspan="2" />
+                           <field name="number_replacements" colspan="2" />
+                           <group colspan="2" />
+                           <separator string="Points on service" colspan="6" />
+                           <field name="default_attend_on_time_points" colspan="2" />
+                           <field name="default_late_points" colspan="2" />
+                           <field name="default_not_attend_points" colspan="2" />
+                        </group>
+                     </page>
+                     <page string="Suspensiones">
+                        <separator string="Tareas no cumplidas" />
+                        <group>
+                           <field name="day_to_suspension_task_closed" />
+                        </group>
+                     </page>
+                  </notebook>
+               </sheet>
             </form>
          </field>
       </record>

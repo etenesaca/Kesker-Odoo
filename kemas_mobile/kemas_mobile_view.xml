@@ -11,7 +11,7 @@
          <field name="model">kemas.config</field>
          <field name="inherit_id" ref="kemas.kemas_config_form_view" />
          <field name="arch" type="xml">
-            <xpath expr="/form/notebook/page[@id='attendance_records']" position="after">
+            <xpath expr="//page[@id='attendance_records']" position="after">
                <page string="Cliente móvil">
                   <group>
                      <field name="mobile_background_text_color" />
@@ -20,27 +20,28 @@
                      <label for="mobile_background" />
                   </div>
                   <separator string="Imagen del Cliente de Registro de Asistencia" colspan="4" />
-                  <group colspan="4">
-                     <table border="0" width="100%%" colspan="4">
-                        <tr>
-                           <td rowspan="2">
-                              <group>
+                  <table border="0" width="100%%" colspan="4">
+                     <tr>
+                        <td rowspan="2">
+                           <group>
+                              <label for="mobile_background" />
+                              <div>
                                  <field name="mobile_background" widget="image" class="oe_left oe_avatar" />
-                              </group>
-                           </td>
-                           <td />
-                           <td width="404px">
-                              <center>
-                                 <h5>La imagen que se selecciona va a aparecer en la parte superior derecha del cliente de registro de asistencia tal como se ven en la imagen</h5>
-                              </center>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td width="70px" />
-                           <td background="/kemas/static/src/img/Client/client1.png" width="404px" height="409px" style="background-repeat:no-repeat;" />
-                        </tr>
-                     </table>
-                  </group>
+                              </div>
+                           </group>
+                        </td>
+                        <td />
+                        <td width="404px">
+                           <center>
+                              <h5>La imagen que se selecciona va a aparecer en la parte superior derecha del cliente de registro de asistencia tal como se ven en la imagen</h5>
+                           </center>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td width="70px" />
+                        <td background="/kemas/static/src/img/Client/client1.png" width="404px" height="409px" style="background-repeat:no-repeat;" />
+                     </tr>
+                  </table>
                </page>
             </xpath>
          </field>

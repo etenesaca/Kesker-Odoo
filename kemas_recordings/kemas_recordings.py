@@ -78,18 +78,6 @@ class kemas_recording_series(osv.osv):
             vals['logo_medium'] = extras.crop_image(vals['logo'], path, 64)
             vals['logo_small'] = extras.crop_image(vals['logo'], path, 48)
         return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
-    
-    def on_change_logo(self, cr, uid, ids, photo):
-        config_obj = self.pool.get('kemas.config')
-        config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, [])
-        #------------------------------------------------------------------------------------
-        if extras.restrict_size(photo, preferences['max_size_logos']):
-            return {'value':{}}
-        else:
-            msg = self.pool.get('kemas.func').get_translate(cr, uid, _('The size of the logo can not be greater than'))[0]
-            msg = "%s %s KB..!!" % (msg, str(preferences['max_size_logos']))
-            return {'value':{'logo': False}, 'warning':{'title':_('Error!'), 'message':msg}}
 
     _order = 'name'
     _name = 'kemas.recording.series'

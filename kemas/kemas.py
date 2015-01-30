@@ -1189,8 +1189,6 @@ class kemas_config(osv.osv):
         #---Images and logos------------------------
         'logo': fields.binary('Logo', help='The reports Logo.'),
         'system_logo': fields.binary('System Logo', help='The System Logo.'),
-        'max_size_photos': fields.integer('Max size photos', help="Maximum size in kilobytes (KB) that can take photos of the system.", required=True),
-        'max_size_logos': fields.integer('Max size logos', help="Maximum size in kilobytes (KB) that can take images of the system.", required=True),
         #---Cliente de registro asistencia---------
         'logo_program_client': fields.binary('Imagen de Cabecera', help='Es la imagen que va a salir en la cabecera del programa para registro de asistencias.'),
         'frequency_program_client': fields.integer('Frecuencia de conexion', help="Frecuencia en segundos con la que el programa se conecta al sistema para consultar los datos"),
@@ -1314,8 +1312,6 @@ class kemas_config(osv.osv):
         #---Images and logos----------------------------
         'logo': _get_logo,
         'system_logo': _get_system_logo,
-        'max_size_photos':40,
-        'max_size_logos':20,
         #---
         'use_header_message_incorporation' : True,
         'use_header_message_event' : True,

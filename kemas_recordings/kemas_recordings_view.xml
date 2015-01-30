@@ -115,7 +115,7 @@
          <field name="arch" type="xml">
             <form string="Series" version="7.0">
                <sheet string="Series">
-                  <field name="logo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' required='True' on_change="on_change_logo(logo)" />
+                  <field name="logo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' required='True' />
                   <div class="oe_title">
                      <div class="oe_edit_only">
                         <label for="name" />
