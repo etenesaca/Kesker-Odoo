@@ -37,6 +37,8 @@ access_kemas_web_site_kemas_manager,kemas.web.site,kemas.model_kemas_web_site,gr
 access_kemas_collaborator_web_site_kemas_manager,kemas.collaborator.web.site,kemas.model_kemas_collaborator_web_site,group_kemas_manager,1,1,1,1
 access_kemas_collaborator_logbook_kemas_manager,kemas.collaborator.logbook,kemas.model_kemas_collaborator_logbook,group_kemas_manager,1,1,1,0
 access_kemas_suspension_kemas_manager,kemas.suspension,kemas.model_kemas_suspension,group_kemas_manager,1,1,1,0
+access_kemas_skill_kemas_manager,kemas.skill,kemas.model_kemas_skill,group_kemas_manager,1,1,1,1
+access_kemas_skill_line_kemas_manager,kemas.skill.line,kemas.model_kemas_skill_line,group_kemas_manager,1,1,1,1
 access_kemas_team_kemas_manager,kemas.team,kemas.model_kemas_team,group_kemas_manager,1,1,1,1
 access_kemas_collaborator_logbook_login_kemas_manager,kemas.collaborator.logbook.login,kemas.model_kemas_collaborator_logbook_login,group_kemas_manager,1,0,1,0
 ,,,,,,,
@@ -78,6 +80,8 @@ access_kemas_web_site_kemas_collaborator,kemas.web.site,kemas.model_kemas_web_si
 access_kemas_collaborator_web_site_kemas_collaborator,kemas.collaborator.web.site,kemas.model_kemas_collaborator_web_site,group_kemas_collaborator,1,1,1,0
 access_kemas_collaborator_logbook_kemas_collaborator,kemas.collaborator.logbook,kemas.model_kemas_collaborator_logbook,group_kemas_collaborator,1,0,1,0
 access_kemas_suspension_kemas_collaborator,kemas.suspension,kemas.model_kemas_suspension,group_kemas_collaborator,1,0,0,0
+access_kemas_skill_kemas_collaborator,kemas.skill,kemas.model_kemas_skill,group_kemas_collaborator,1,0,0,0
+access_kemas_skill_line_kemas_collaborator,kemas.skill.line,kemas.model_kemas_skill_line,group_kemas_collaborator,1,0,0,0
 access_kemas_team_kemas_collaborator,kemas.team,kemas.model_kemas_team,group_kemas_collaborator,1,0,0,0
 access_kemas_collaborator_logbook_login_kemas_collaborator,kemas.collaborator.logbook.login,kemas.model_kemas_collaborator_logbook_login,group_kemas_collaborator,1,0,1,0
 ,,,,,,,
@@ -119,6 +123,8 @@ access_kemas_web_site_kemas_register_attedance,kemas.web.site,kemas.model_kemas_
 access_kemas_collaborator_web_site_kemas_register_attedance,kemas.collaborator.web.site,kemas.model_kemas_collaborator_web_site,group_kemas_register_attedance,0,0,0,0
 access_kemas_collaborator_logbook_kemas_register_attedance,kemas.collaborator.logbook,kemas.model_kemas_collaborator_logbook,group_kemas_register_attedance,1,0,0,0
 access_kemas_suspension_kemas_register_attedance,kemas.suspension,kemas.model_kemas_suspension,group_kemas_register_attedance,0,0,0,0
+access_kemas_skill_kemas_register_attedance,kemas.skill,kemas.model_kemas_skill,group_kemas_register_attedance,0,0,0,0
+access_kemas_skill_line_kemas_register_attedance,kemas.skill.line,kemas.model_kemas_skill_line,group_kemas_register_attedance,0,0,0,0
 access_kemas_team_kemas_register_attedance,kemas.team,kemas.model_kemas_team,group_kemas_register_attedance,0,0,0,0
 access_kemas_collaborator_logbook_login_kemas_register_attedance,kemas.collaborator.logbook.login,kemas.model_kemas_collaborator_logbook_login,group_kemas_register_attedance,1,0,1,0
 ,,,,,,,
@@ -160,5 +166,7 @@ access_kemas_web_site_kemas_admin,kemas.web.site,kemas.model_kemas_web_site,grou
 access_kemas_collaborator_web_site_kemas_admin,kemas.collaborator.web.site,kemas.model_kemas_collaborator_web_site,group_kemas_admin,1,1,1,1
 access_kemas_collaborator_logbook_kemas_admin,kemas.collaborator.logbook,kemas.model_kemas_collaborator_logbook,group_kemas_admin,1,1,1,1
 access_kemas_suspension_kemas_admin,kemas.suspension,kemas.model_kemas_suspension,group_kemas_admin,1,1,1,1
+access_kemas_skill_kemas_admin,kemas.skill,kemas.model_kemas_skill,group_kemas_admin,1,1,1,1
+access_kemas_skill_line_kemas_admin,kemas.skill.line,kemas.model_kemas_skill_line,group_kemas_admin,1,1,1,1
 access_kemas_team_kemas_admin,kemas.team,kemas.model_kemas_team,group_kemas_admin,1,1,1,1
 access_kemas_collaborator_logbook_login_kemas_admin,kemas.collaborator.logbook.login,kemas.model_kemas_collaborator_logbook_login,group_kemas_admin,1,0,1,0

@@ -3265,7 +3265,7 @@ class kemas_collaborator(osv.osv):
     def write(self, cr, uid, ids, vals, context={}):
         if context is None or not context or not isinstance(context, (dict)): context = {}
         
-        #----Cambiar el Puntaje y establecer Nivel-------------------------------------------------------
+        # Cambiar el Puntaje y establecer Nivel
         if vals.has_key('points'):
             vals['level_id'] = self.get_corresponding_level(cr, uid, vals['points'])
             
