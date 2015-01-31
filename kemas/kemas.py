@@ -1823,7 +1823,7 @@ class kemas_team(osv.osv):
         'responsible_id':fields.many2one('res.partner', 'Responsable', help=u'Persona que está a cargo de este equipo'),
         'description': fields.text('Description', help='The description of the Team'),
         #Many to Many Relations----------------------------------------------------------------------------------------------
-        'collaborator_ids': fields.one2many('kemas.collaborator', 'team_id', 'Collaborators', help='Collaborators to belong to this Team.', readonly=True),
+        'collaborator_ids': fields.one2many('kemas.collaborator', 'team_id', 'Collaborators', help='Collaborators to belong to this Team.', readonly=False),
         }
     _sql_constraints = [
         ('team_name', 'unique (name)', "This Team already exist!"),
