@@ -2785,23 +2785,23 @@
                            <group>
                               <field name="birth" on_change="on_change_birth(birth)" required="1" placeholder="Fecha" />
                               <field name="age" required="1" readonly="1" />
-                              <field name="gender" required="1" />
+                              <field name="gender" required="1" placeholder=" -- " />
                            </group>
                            <group>
                               <label for="street" string="Dirección" />
                               <div>
-                                 <field name="street" placeholder="Street..." />
+                                 <field name="street" placeholder="Calle..." />
                                  <field name="street2" />
                                  <field name="country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True}' />
                                  <div class="address_format">
-                                    <field name="state_id" class="oe_no_button" placeholder="State" style="width: 50%%" options='{"no_open": True}' />
+                                    <field name="state_id" class="oe_no_button" placeholder="Provincia" style="width: 50%%" options='{"no_open": True}' />
                                     <field name="city" placeholder="City" style="width: 50%%" />
                                  </div>
                               </div>
                            </group>
                            <group>
-                              <field name="phone" placeholder="e.g. +32.81.81.37.00" />
-                              <field name="mobile" />
+                              <field name="phone" placeholder="Ejemplo. 074612753" />
+                              <field name="mobile" placeholder="Ejemplo. 0891457846" />
                               <field name="fax" />
                               <field name="email" widget="email" on_change="on_change_email(email)" placeholder="Correo electrónico" />
                            </group>

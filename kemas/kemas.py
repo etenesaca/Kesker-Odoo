@@ -3788,8 +3788,8 @@ class kemas_collaborator(osv.osv):
     _name = 'kemas.collaborator'
     _columns = {
         'partner_id':fields.many2one('res.partner', 'Partner relacionado', required=True, ondelete='cascade'),
-        'mailing': fields.function(mailing, type='boolean', string='Mailing'),
-        'code': fields.char('Code', size=32, help="Code that is assigned to each collaborator"),
+        'mailing': fields.function(mailing, type='boolean', string='Enviando Correos'),
+        'code': fields.char('Code', size=32, help="Código que se le asigna a cada colaborador"),
         'personal_id' : fields.char('CI/PASS', size=15, help=u"Número de cédula o pasaporte",),
         'photo': fields.function(_get_collaborator_photo, fnct_inv=_get_collaborator_photo_inv, multi='all', string="Foto", type="binary", store=_photo_store_triggers),
         'photo_medium': fields.function(_get_collaborator_photo, multi='all', string="Foto", type="binary", store=_photo_store_triggers),
@@ -3799,15 +3799,15 @@ class kemas_collaborator(osv.osv):
         'bar_code': fields.function(_get_barcode_image, type='binary', string='Bar Code data'),
         'first_names':fields.char('Nombres', size=64, required=True),
         'last_names':fields.char('Apellidos', size=64, required=True),
-        'name': fields.function(_get_name, fnct_inv=_get_name_inv, string="Nombres", type="char", store=_name_store_triggers, required=True, help="Full names of collaborator. Example: Rios Abad Juan David"),
-        'nick_name': fields.char('Nick name', size=32, required=True, help="Name you want to use the collaborator."),
+        'name': fields.function(_get_name, fnct_inv=_get_name_inv, string="Nombres", type="char", store=_name_store_triggers, required=True, help="Nombres completos del Colaborador"),
+        'nick_name': fields.char('Nick name', size=32, required=True, help="Nombre por el que le gusta ser llamado."),
         'name_with_nick_name': fields.function(_get_nick_name, type='char', string='Name'),
-        'birth': fields.date('Birth', help="Collaborator birthday date."),
+        'birth': fields.date('Birth', help="Fecha de nacimiento"),
         'birthday_date': fields.function(_get_birthday, type='char', string='Name'),
         'birthday': fields.function(_cal_birthday, type='datetime', string='Name'),
         'age' : fields.function(_ff_age, type='char', string='Edad', help="Edad del colaborador"),
-        'gender': fields.selection([('Male', 'Hombre'), ('Female', 'Mujer'), ], 'Gender', required=True, help="The gender of the collaborator",),
-        'marital_status': fields.selection([('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced'), ('Widower', 'Widower')], 'Marital status', help="Marital Status of the collaborator"),
+        'gender': fields.selection([('Male', 'Hombre'), ('Female', 'Mujer'), ], u'Género', required=True, help="El género del colaborador",),
+        'marital_status': fields.selection([('Single', 'Single'), ('Married', 'Married'), ('Divorced', 'Divorced'), ('Widower', 'Widower')], 'Marital status', help=u"Estado Civíl"),
         'skill_line_ids': fields.one2many('kemas.skill.line', 'collaborator_id', 'skill_lines', help='Habilidades que tiene este colaborador'),
         
         'street': fields.related('partner_id', 'street', type='char', string='Calle 1', store=False),
@@ -3821,10 +3821,10 @@ class kemas_collaborator(osv.osv):
         'mobile': fields.related('partner_id', 'mobile', type='char', string=u'Móvil', store=False),
         'email': fields.related('partner_id', 'email', type='char', string='Email', store=False),
         
-        'web_site_ids': fields.one2many('kemas.collaborator.web.site', 'collaborator_id', 'Web sites', help='Web site of this collaborator'),
-        'join_date': fields.date('Join date', help="Date on which the collaborator joined the Ministry."),
+        'web_site_ids': fields.one2many('kemas.collaborator.web.site', 'collaborator_id', 'Web sites', help='Sitio web'),
+        'join_date': fields.date('Join date', help="Fecha en la que ingreso en la empresa"),
         'age_in_ministry' : fields.function(_ff_age_in_ministry, type='char', string='Tiempo de colaboración'),
-        'end_service': fields.date('End Service', help="Date on which the collaborator ceased to be an active part of the ministry."),
+        'end_service': fields.date('End Service', help="Fecha en la que el colaborador salió de la empresa"),
         'logbook_ids': fields.one2many('kemas.collaborator.logbook', 'collaborator_id', 'Logbook'),
         'state': fields.selection([
             ('creating', 'Creating'),
@@ -3832,21 +3832,21 @@ class kemas_collaborator(osv.osv):
             ('Locked', 'Locked'),
             ('Active', 'Active'),
             ('Suspended', 'Suspended'),
-            ], 'State', select=True, help="State in which the collaborator is currently"),
-        'born_country': fields.many2one('res.country', 'Born Country', required=False, help="the born country of the collaborator"),
-        'born_state': fields.many2one('res.country.state', 'Born State', required=False, help="The born state of the collaborator"),
-        'born_city': fields.char('Born City', size=255, required=True, help="The born city of the collaborator"),
-        'user_id': fields.many2one('res.users', 'User', help='User assigned to this collaborator'),
-        'login': fields.related('user_id', 'login', type='char', store=True, string='Username', readonly=1, help="Name under which the collaborator begins session"),
-        'points': fields.integer('Points', help="points you currently have a collaborator"),
-        'level_id': fields.many2one('kemas.level', 'Level', help='Level to which it belongs, for the points accumulated.'),
+            ], 'State', select=True, help="Estado en la que se encuentra actialmente este colaborador"),
+        'born_country': fields.many2one('res.country', 'Born Country', required=False, help="País de Nacimiento"),
+        'born_state': fields.many2one('res.country.state', 'Born State', required=False, help="Provincia de nacimiento"),
+        'born_city': fields.char('Born City', size=255, required=True, help="Ciudad de nacimiento"),
+        'user_id': fields.many2one('res.users', 'User', help='Nombre de Usuario asignado con el que se conecta al sistema'),
+        'login': fields.related('user_id', 'login', type='char', store=True, string='Username', readonly=1, help="Usuario asignado con el que se conecta al sistema"),
+        'points': fields.integer('Points', help="Puntos que tiene actualmente"),
+        'level_id': fields.many2one('kemas.level', 'Level', help='Nivel en el que se encuantra por los puntos acumulados.'),
         'notified': fields.selection([
             ('notified', 'Notified'),
             ('no_notified', 'No notified'),
-            ], 'Notified', select=True, help="Indicates whether the notification email was sent"),
+            ], 'Notified', select=True, help="Indica si el correo de creación de usuario fue enviado"),
         'last_connection': fields.function(_last_connection, type='char', string='Ultima Conexion'),
         'progress': fields.function(get_percentage, type='float', string='Progress'),
-        'replacements': fields.function(_replacements, type='integer', string='Replacements avaliable', help="Number of replacements available events this month"),
+        'replacements': fields.function(_replacements, type='integer', string='Replacements avaliable', help=u"Número de reemplazos que tiene aún disponibles para este mes"),
         'integrate_collaborators_with_partners' : fields.function(_integrate_collaborators_with_partners, multi='all', type='boolean', string='integrate_collaborators_with_partners'),
         
         #Suspensions----------------------------------------------------------------------------------------------------------
@@ -3855,10 +3855,10 @@ class kemas_collaborator(osv.osv):
         #One to Many Relations-----------------------------------------------------------------------------------------------
         'school4d_ids': fields.one2many('kemas.school4d_line', 'collaborator_id', 'Persons'),
         'history_points_ids': fields.one2many('kemas.history.points', 'collaborator_id', 'History points'),
-        'attendance_ids': fields.one2many('kemas.attendance', 'collaborator_id', 'Attendances', help='Attendance register'),
-        'team_id': fields.many2one('kemas.team', 'Team', help='Equipment to which this Collaborator.'),
+        'attendance_ids': fields.one2many('kemas.attendance', 'collaborator_id', 'Attendances', help='Registros de asistencia'),
+        'team_id': fields.many2one('kemas.team', 'Team', help='Equipo al que pertenece este colaborador'),
         #Many to Many Relations----------------------------------------------------------------------------------------------
-        'area_ids': fields.many2many('kemas.area', 'kemas_collaborator_area_rel', 'collaborator_id', 'area_id', 'Areas', help='Areas belonging to this collaborator'),
+        'area_ids': fields.many2many('kemas.area', 'kemas_collaborator_area_rel', 'collaborator_id', 'area_id', 'Areas', help=u'Áreas en las que labora este colaborador'),
         #Related-------------------------------------------------------------------------------------------------------------
         'level_name': fields.related('level_id', 'name', type='char', string='Level name', readonly=1, store=False),
         'username': fields.related('user_id', 'login', type='char', string='Login', readonly=1, store=True),
@@ -3963,7 +3963,7 @@ class kemas_task(osv.osv):
     
     _name = 'kemas.task'
     _columns = {
-        'name': fields.char('Name', size=200, help="Work Name", required=True),
+        'name': fields.char('Name', size=200, help="Nombre de la tarea", required=True),
         'points': fields.integer('Points', required=True, help='Points that he will add the collaborator to fulfill the work'),
         'active': fields.boolean('Active', required=False, help='Indicates whether this work is active or not'),
         'description': fields.text('Description', required=True),
