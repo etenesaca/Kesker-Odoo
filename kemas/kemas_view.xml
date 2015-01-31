@@ -2794,7 +2794,7 @@
                                  <field name="street2" />
                                  <field name="country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True}' />
                                  <div class="address_format">
-                                    <field name="state_id" class="oe_no_button" placeholder="Provincia" style="width: 50%%" options='{"no_open": True}' />
+                                    <field name="state_id" domain="[('country_id','=',country_id)]" on_change="on_change_state_id(country_id,state_id)" class="oe_no_button" placeholder="Provincia" style="width: 50%%" options='{"no_open": True}' />
                                     <field name="city" placeholder="City" style="width: 50%%" />
                                  </div>
                               </div>
@@ -2808,7 +2808,7 @@
                            <group style="margin-top: -15px">
                               <separator string="Információn de procedencia" colspan="4" />
                               <field name="born_country" required="1" string="País" placeholder="Born Country" options='{"no_open": True}' />
-                              <field name="born_state" required="1" string="Provincia" placeholder="Born State" domain="[('country_id','=',born_country)]" options='{"no_open": True}' />
+                              <field name="born_state" required="1" string="Provincia" on_change="on_change_born_state(born_country,born_state)" placeholder="Born State" domain="[('country_id','=',born_country)]" options='{"no_open": True}' />
                               <field name="born_city" required="1" string="Ciudad" placeholder="Born City" />
                            </group>
                            <group />

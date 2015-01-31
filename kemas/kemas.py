@@ -2766,6 +2766,22 @@ class kemas_collaborator(osv.osv):
             values['name'] = "%s %s" % (first_names, last_names)
         return {'value': values}
     
+    def on_change_state_id(self, cr, uid, ids, country_id, state_id, context={}):
+        values = {}
+        if not country_id and state_id:
+            state_obj = self.pool['res.country.state']
+            state = state_obj.read(cr, uid, state_id, ['country_id'])
+            values['country_id'] = state['country_id'][0]
+        return {'value': values}
+    
+    def on_change_born_state(self, cr, uid, ids, country_id, state_id, context={}):
+        values = {}
+        if not country_id and state_id:
+            state_obj = self.pool['res.country.state']
+            state = state_obj.read(cr, uid, state_id, ['country_id'])
+            values['born_country'] = state['country_id'][0]
+        return {'value': values}
+    
     def on_change_last_names(self, cr, uid, ids, first_names, last_names, context={}):
         values = {}
         if last_names:
