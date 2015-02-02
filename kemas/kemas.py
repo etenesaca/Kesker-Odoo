@@ -5447,6 +5447,13 @@ class kemas_event(osv.osv):
             self.write_log_replace(cr, uid, event_id, collaborator_id, replace_id, replaced['record_id'])
         return True
         
+    def validate_past_date(self, cr, uid, date_start, context={}):
+        result = True
+        now = time.strftime("%Y-%m-%d %H:%M:%S")
+        if date_start < now:
+            result = False
+        return result
+    
     def create(self, cr, uid, vals, context={}):
         service_obj = self.pool.get('kemas.service')
         vals['date_create'] = str(time.strftime("%Y-%m-%d %H:%M:%S"))
@@ -5460,9 +5467,6 @@ class kemas_event(osv.osv):
         vals['date_start'] = dates_dic['date_start']
         vals['date_stop'] = dates_dic['date_stop']
         vals['date_init'] = dates_dic['date_init']
-        # --Evitar que se cree un evento en una fecha pasada-
-        if vals['date_start'] < time.strftime("%Y-%m-%d %H:%M:%S"):
-            raise osv.except_osv(_('Error!'), _('Unable to create an event in a past date.'))
         
         res_id = super(kemas_event, self).create(cr, uid, vals, context)
         lines_obj = self.pool.get('kemas.event.collaborator.line')
@@ -5806,32 +5810,35 @@ class kemas_event(osv.osv):
         if type(ids).__name__ in ['int', 'long']:
             ids = list(ids)
             
-        records = self.read(cr, uid, ids, ['event_collaborator_line_ids', 'members', 'message_follower_ids', 'code'])
+        records = self.read(cr, uid, ids, ['event_collaborator_line_ids', 'members', 'message_follower_ids', 'code', 'date_start'])
         for record in records:  
-            if record['event_collaborator_line_ids']:
-                user_obj = self.pool.get('res.users')
-                members = user_obj.read(cr, uid, record['members'] + [uid])
-                collaborator_partner_ids = []
-                for member in members:
-                    if member['partner_id']:
-                        collaborator_partner_ids.append(member['partner_id'][0])
-                vals = {
-                        'message_follower_ids' : [(6, 0, collaborator_partner_ids)],
-                        'state' : 'on_going',
-                        'color' : 4
-                        }
-                stage_obj = self.pool.get('kemas.event.stage')
-                stage_ids = stage_obj.search(cr, uid, [('sequence', '=', 2)])
-                if stage_ids:
-                    vals['stage_id'] = stage_ids[0]
-                if not record['code']:
-                    seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Event'), ])[0]
-                    vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
-                super(osv.osv, self).write(cr, uid, ids, vals)
-                message_follower_ids = self.read(cr, uid, ids[0], ['message_follower_ids'])['message_follower_ids']
-                self.write_log_on_going(cr, uid, ids[0], message_follower_ids)
-            else:
-                raise osv.except_osv(_('Error!'), _('First add the collaborators assigned to this event.'))
+            if not self.validate_past_date(cr, uid, record['date_start'], context):
+                raise osv.except_osv(u'¡Operación no válida!', u"No se puede poner en curso un evento en una fecha que ya pasó")
+            
+            if not record['event_collaborator_line_ids']:
+                raise osv.except_osv(u'¡Operación no válida!', u"Antes de porner el evento en curso primero agregue los colaboradores.")
+                
+            user_obj = self.pool.get('res.users')
+            members = user_obj.read(cr, uid, record['members'] + [uid])
+            collaborator_partner_ids = []
+            for member in members:
+                if member['partner_id']:
+                    collaborator_partner_ids.append(member['partner_id'][0])
+            vals = {
+                    'message_follower_ids' : [(6, 0, collaborator_partner_ids)],
+                    'state' : 'on_going',
+                    'color' : 4
+                    }
+            stage_obj = self.pool.get('kemas.event.stage')
+            stage_ids = stage_obj.search(cr, uid, [('sequence', '=', 2)])
+            if stage_ids:
+                vals['stage_id'] = stage_ids[0]
+            if not record['code']:
+                seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Event'), ])[0]
+                vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
+            super(kemas_event, self).write(cr, uid, ids, vals)
+            message_follower_ids = self.read(cr, uid, ids[0], ['message_follower_ids'])['message_follower_ids']
+            self.write_log_on_going(cr, uid, ids[0], message_follower_ids)
         
     def draft(self, cr, uid, ids, context={}):
         if super(osv.osv, self).read(cr, uid, ids[0], ['sending_emails'])['sending_emails']:
