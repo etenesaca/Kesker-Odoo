@@ -3659,7 +3659,7 @@
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Place" version="7.0">
-               <header>
+               <header invisible="context.get('show_simple_view')">
                   <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('active','=',True)]}" groups="kemas.group_kemas_manager" />
                   <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('active','=',False)]}" groups="kemas.group_kemas_manager" />
                </header>
@@ -3674,36 +3674,11 @@
                      </h1>
                   </div>
                   <group>
-                     <field name="active" />
-                     <field name="address" placeholder="The exact direction of the place.." />
+                     <field name="active" invisible="context.get('show_simple_view')" />
+                     <field name="address" placeholder="The exact direction of the place.." readonly="context.get('show_simple_view')" />
                   </group>
                   <label for="map_url" string="Mapa" />
-                  <field name="map_url" widget="gmap" placeholder="Ingrese la URL del mapa de google maps..." />
-               </sheet>
-            </form>
-         </field>
-      </record>
-      <record model="ir.ui.view" id="kemas_place_event_form_view">
-         <field name="name">kemas.place.event.form</field>
-         <field name="model">kemas.place</field>
-         <field name="priority" eval="2" />
-         <field name="arch" type="xml">
-            <form string="Place" version="7.0" edit="0" delete="0">
-               <sheet string="Level">
-                  <field name="photo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' readonly="1" />
-                  <div class="oe_title">
-                     <div class="oe_edit_only">
-                        <label for="name" />
-                     </div>
-                     <h1>
-                        <field name="name" />
-                     </h1>
-                  </div>
-                  <group>
-                     <field name="address" readonly="1" />
-                  </group>
-                  <label for="map_url" string="Mapa" />
-                  <field name="map_url" widget="gmap" readonly="1" />
+                  <field name="map_url" widget="gmap" placeholder="Ingrese la URL del mapa de google maps..." readonly="context.get('show_simple_view')" />
                </sheet>
             </form>
          </field>
@@ -3973,7 +3948,7 @@
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
             <form string="Service" version="7.0">
-               <header>
+               <header invisible="context.get('show_simple_view')">
                   <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('active','=',True)]}" groups="kemas.group_kemas_manager" />
                   <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('active','=',False)]}" groups="kemas.group_kemas_manager" />
                </header>
@@ -4334,7 +4309,7 @@
                         <label for="service_id" />
                      </div>
                      <h2>
-                        <field name="service_id" default_focus="1" placeholder="Service Name" />
+                        <field name="service_id" default_focus="1" placeholder="Nombre del servicio" context="{'show_simple_view': True}" />
                      </h2>
                   </div>
                   <div class="oe_right oe_button_box" name="buttons" states="on_going,closed,canceled" groups="kemas.group_kemas_manager">
@@ -4378,7 +4353,7 @@
                      <page string="Event Information">
                         <group colspan="4" expand="1" states="on_going,creating,draft">
                            <group colspan="4" col="2">
-                              <field name="place_id" placeholder="Event Location" colspan="2" context="{'form_view_ref' : 'kemas.kemas_place_event_form_view'}" />
+                              <field name="place_id" placeholder="Event Location" colspan="2" context="{'show_simple_view': True}" />
                               <field name="date_start" colspan="2" widget="date" placeholder="Fecha..." />
                               <field name="close_to_end" colspan="2" />
                            </group>
