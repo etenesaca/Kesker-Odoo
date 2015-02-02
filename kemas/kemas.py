@@ -4728,14 +4728,26 @@ class kemas_service(osv.osv):
             raise osv.except_osv(_('Error!'), _('The time of entry coupled with the time limit can not be longer than the time end.'))
         return True
     
+    def _get_days(self, cr, uid, context={}):
+        result = [
+                  ('01', u'Lunes'),
+                  ('02', u'Martes'),
+                  ('03', u'Miércoles'),
+                  ('04', u'Jueves'),
+                  ('05', u'Viernes'),
+                  ('06', u'Sábado'),
+                  ('07', u'Domingo'),
+                  ]
+        return result
+    
     _order = 'time_start'
     _name = 'kemas.service'
     _columns = {
         'name': fields.char('Name', size=64, required=True),
         'time_start': fields.float('Time start', required=True, help='Start time of service'),
         'time_end': fields.float('Time end', required=True, help='End time of service'),
+        'day': fields.selection(_get_days, u'Día', required=False),
         'time_entry': fields.float('Time entry', required=True, help='End time of service'),
-        #----------------------------------------------------------------------------------------------
         'time_register': fields.float('Time register', required=True, help='End time of service'),
         'time_limit': fields.float('Time limit', required=True, help='Limit time to register attendance'),
         'description': fields.text('Description'),
@@ -5337,8 +5349,10 @@ class kemas_event(osv.osv):
         if type(ids[0]).__name__ == 'dict':
             if ids[0].has_key('res_id'):
                 ids = [ids[0]['res_id']]
-            
         event = super(osv.osv, self).read(cr, uid, ids[0], [])
+        if not context.get('tz'):
+            context['tz'] = self.pool.get('kema.func').get_tz_by_uid(cr, uid)
+            
         if event['sending_emails']:
             raise osv.except_osv(_('Error!'), _('You can not make changes to this event as they send notification e-mails.'))
         written = False
@@ -5397,19 +5411,18 @@ class kemas_event(osv.osv):
         if vals.has_key('service_id'):
             if vals['service_id']:
                 service = service_obj.read(cr, uid, vals['service_id'], [])   
-        tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        date_start = extras.convert_to_tz(event['date_start'], tz)
-        if vals.has_key('date_start'):
-            if vals['date_start']:
-                if vals['date_start'] < time.strftime("%Y-%m-%d %H:%M:%S"):
-                    raise osv.except_osv(_('Error!'), _('Unable to move an event in a past date.'))
-                date_start = vals['date_start']
-        tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        dates_dic = extras.convert_to_format_date(date_start, service['time_entry'], service['time_start'], service['time_end'], tz)
+        if vals.get('date_start'):
+            date_start = vals['date_start']
+        else:
+            date_start = extras.convert_to_tz(event['date_start'], context['tz'])
+        dates_dic = extras.convert_to_format_date(date_start, service['time_entry'], service['time_start'], service['time_end'], context['tz'])
+        if vals.get('date_start') and not self.validate_past_date(cr, uid, extras.convert_to_tz(dates_dic['date_start'], context['tz']), context):
+            raise osv.except_osv(u'¡Operación no válida!', u"No se puede poner un evento en una fecha que ya pasó")
+        
         vals['date_start'] = dates_dic['date_start']
         vals['date_stop'] = dates_dic['date_stop']
         vals['date_init'] = dates_dic['date_init']
-        #----------------------------------------------------------------------------------------------------------------------------
+        
         super(osv.osv, self).write(cr, uid, ids, vals, context)
         lines_obj = self.pool.get('kemas.event.collaborator.line')
         collaborator_line_ids = self.read(cr, uid, ids, ['event_collaborator_line_ids'])
@@ -5423,7 +5436,7 @@ class kemas_event(osv.osv):
             user_id = super(kemas_collaborator, self.pool.get('kemas.collaborator')).read(cr, uid, collaborator_id, ['user_id'])['user_id'][0]
             members.append(user_id)
         vals = {'members' : [(6, 0, members)]}
-        return super(osv.osv, self).write(cr, uid, ids, vals, context)
+        return super(kemas_event, self).write(cr, uid, ids, vals, context)
          
     def replace_collaborators(self, cr, uid, event_id, replaceds, context={}):
         collaborator_obj = self.pool.get('kemas.collaborator')
@@ -5448,9 +5461,13 @@ class kemas_event(osv.osv):
         return True
         
     def validate_past_date(self, cr, uid, date_start, context={}):
+        if context is None or not context or not isinstance(context, (dict)): context = {}
+        
         result = True
-        now = time.strftime("%Y-%m-%d %H:%M:%S")
-        if date_start < now:
+        if not context.get('tz'):
+            context['tz'] = self.pool.get('kema.func').get_tz_by_uid(cr, uid)
+        now = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), context['tz'])
+        if now > date_start:
             result = False
         return result
     
@@ -5463,6 +5480,10 @@ class kemas_event(osv.osv):
         service = service_obj.read(cr, uid, vals['service_id'], [])
         if not context['tz']:
             context['tz'] = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
+        
+        if not self.validate_past_date(cr, uid, vals['date_start'], context):
+            raise osv.except_osv(u'¡Operación no válida!', u"No se puede crear un evento en una fecha que ya pasó")
+        
         dates_dic = extras.convert_to_format_date(vals['date_start'], service['time_entry'], service['time_start'], service['time_end'], context['tz'])
         vals['date_start'] = dates_dic['date_start']
         vals['date_stop'] = dates_dic['date_stop']
@@ -5486,14 +5507,6 @@ class kemas_event(osv.osv):
         # Escribir log
         self.write_log_create(cr, uid, res_id)
         return res_id
-        return {
-            'nodestroy': True,
-            'res_id': res_id,
-            'view_type': 'form',
-            'view_mode': 'form',
-            'res_model': 'kemas.event',
-            'type': 'ir.actions.act_window',
-            }
     
     def close_this_event(self, cr, uid, ids, context={}): 
         self.close_event(cr, uid, ids[0])

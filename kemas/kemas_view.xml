@@ -3980,25 +3980,43 @@
                <sheet string="Service">
                   <label for="name" class="oe_edit_only" />
                   <h1>
-                     <field name="name" default_focus="1" placeholder="Name of the service" />
+                     <field name="name" default_focus="1" placeholder="Nombre del servicio" />
                   </h1>
                   <br />
-                  <group colspan="4" col="6">
-                     <field name="active" />
-                     <group colspan="4" />
-                     <field name="time_start" widget="float_time" colspan="2" />
-                     <field name="time_end" widget="float_time" colspan="2" />
-                     <group colspan="2" />
-                     <separator string="Attendance" colspan="6" />
-                     <field name="time_entry" widget="float_time" colspan="2" />
-                     <field name="time_register" widget="float_time" colspan="2" />
-                     <field name="time_limit" widget="float_time" colspan="2" />
+                  <group>
+                     <group>
+                        <label for="time_start" string="Hora" />
+                        <div>
+                           <table>
+                              <tr>
+                                 <td style="vertical-align: middle; font-weight: bold; padding-left: 1px;; padding-right: 3px;">
+                                    <label string="Desde:" style="font-weight: bold" />
+                                 </td>
+                                 <td>
+                                    <field name="time_start" widget="float_time" placeholder="Desde" />
+                                 </td>
+                                 <td style="width: 5px;" />
+                                 <td style="vertical-align: middle; font-weight: bold; padding-left: 3px;; padding-right: 3px;">
+                                    <label string="hasta:" style="font-weight: bold" />
+                                 </td>
+                                 <td>
+                                    <field name="time_end" widget="float_time" placeholder="Hasta" />
+                                 </td>
+                              </tr>
+                           </table>
+                        </div>
+                        <field name="day" placeholder=" -- " />
+                     </group>
+                     <group>
+                        <field name="time_entry" widget="float_time" />
+                        <field name="time_register" widget="float_time" />
+                        <field name="time_limit" widget="float_time" />
+                     </group>
                   </group>
-                  <notebook colspan="4">
-                     <page string="Description">
-                        <field name="description" colspan="4" nolabel="1" placeholder="Description of the Service..." />
-                     </page>
-                  </notebook>
+                  <group colspan="4">
+                     <field name="active" />
+                     <field name="description" placeholder="Descripción de este servicio..." />
+                  </group>
                </sheet>
             </form>
          </field>
