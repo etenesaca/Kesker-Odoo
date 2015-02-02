@@ -5138,10 +5138,10 @@
          <field name="target">current</field>
          <field name="help" type="html">
             <p class="oe_view_nocontent_create">
-               Click to register an Area.
+               De click aquí para crear una nueva Área.
             </p>
             <p>
-               An Area is each of the parts that the ministry is divided, each one consisting of collaborators and activities.
+               Cada Área es cada una de la partes en las que está dividida la empresa, cada una costa de actividades que son cumplidas por los colaboradores
             </p>
          </field>
       </record>
