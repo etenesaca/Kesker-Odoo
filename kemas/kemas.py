@@ -2515,23 +2515,22 @@ class kemas_collaborator_web_site(osv.osv):
         if web_site['get_avatar_method'] == 'facebook':
             profile = extras.get_facebook_info(wsline['url'], 'large')
             if profile:
-                vals = {'photo': profile['photo']}
-                if profile.get('gender', False):
+                if profile.get('photo'):
+                    vals['photo'] = profile['photo']
+                if profile.get('gender'):
                     if profile['gender'] == 'male':
                         vals['gender'] = 'Male'
                     else:
                         vals['gender'] = 'Female'
-            
-        if web_site['get_avatar_method'] == 'gravatar':
+        elif web_site['get_avatar_method'] == 'gravatar':
             photo = extras.get_avatar(wsline['url'], 120)
             if photo:
-                vals = {'photo': photo}
+                vals['photo'] = photo
         
+        result = False
         if vals:
-            self.pool.get('kemas.collaborator').write(cr, uid, [wsline['collaborator_id'][0]], vals)
-            return True
-        else:
-            return False
+            result = self.pool.get('kemas.collaborator').write(cr, uid, [wsline['collaborator_id'][0]], vals)
+        return result
         
     def reload_info(self, cr, uid, ids, context={}):
         if self.sync(cr, uid, ids, context):    
