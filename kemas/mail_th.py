@@ -19,7 +19,7 @@
 from openerp.osv import osv
 
 
-class mail_th(osv.osv):
+class mail_th(osv.AbstractModel):
     _name = 'mail.th'
     
     def log_change_state(self, cr, uid, record_id, model, title, type_operation, old_state, new_state, context={}):
