@@ -42,7 +42,6 @@
         'data/res.country.state.csv',
     ],
     'data': [
-        'data/kemas_event_stage.xml',
         'data/planned_actions.xml',
         'security/kemas_security.xml',
         'security/ir.model.access.csv',
@@ -52,7 +51,6 @@
         # 'kemas_installer.xml',
         'wizard/kemas_collaborator_send_notifications_wizard_view.xml',
         'wizard/kemas_set_points_wizard_view.xml',
-        'wizard/kemas_set_points_work_wizard_view.xml',
         'wizard/kemas_send_notification_event_wizard_view.xml',
         'wizard/kemas_close_past_events_wizard_view.xml',
         'wizard/kemas_suspend_collaborator_wizard_view.xml',

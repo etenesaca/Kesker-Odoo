@@ -12,10 +12,6 @@ access_kemas_config_kemas_manager,kemas.config,kemas.model_kemas_config,group_ke
 access_kemas_activity_kemas_manager,kemas.activity,kemas.model_kemas_activity,group_kemas_manager,1,1,1,1
 access_kemas_area_kemas_manager,kemas.area,kemas.model_kemas_area,group_kemas_manager,1,1,1,1
 access_kemas_level_kemas_manager,kemas.level,kemas.model_kemas_level,group_kemas_manager,1,1,1,1
-access_kemas_task_assigned_kemas_manager,kemas.task.assigned,kemas.model_kemas_task_assigned,group_kemas_manager,1,1,1,1
-access_kemas_task_kemas_manager,kemas.task,kemas.model_kemas_task,group_kemas_manager,1,1,1,1
-access_kemas_task_type_kemas_manager,kemas.task.type,kemas.model_kemas_task_type,group_kemas_manager,1,1,1,1
-access_kemas_task_category_kemas_manager,kemas.task.category,kemas.model_kemas_task_category,group_kemas_manager,1,1,1,1
 access_kemas_collaborator_kemas_manager,kemas.collaborator,kemas.model_kemas_collaborator,group_kemas_manager,1,1,1,0
 access_kemas_school4d_stage_kemas_manager,kemas.school4d.stage,kemas.model_kemas_school4d_stage,group_kemas_manager,1,0,0,0
 access_kemas_school4d_line_kemas_manager,kemas.school4d_line,kemas.model_kemas_school4d_line,group_kemas_manager,1,1,1,1
@@ -55,10 +51,6 @@ access_kemas_config_kemas_collaborator,kemas.config,kemas.model_kemas_config,gro
 access_kemas_activity_kemas_collaborator,kemas.activity,kemas.model_kemas_activity,group_kemas_collaborator,1,0,0,0
 access_kemas_area_kemas_collaborator,kemas.area,kemas.model_kemas_area,group_kemas_collaborator,1,0,0,0
 access_kemas_level_kemas_collaborator,kemas.level,kemas.model_kemas_level,group_kemas_collaborator,1,0,0,0
-access_kemas_task_assigned_kemas_collaborator,kemas.task.assigned,kemas.model_kemas_task_assigned,group_kemas_collaborator,1,1,0,0
-access_kemas_task_kemas_collaborator,kemas.task,kemas.model_kemas_task,group_kemas_collaborator,1,0,0,0
-access_kemas_task_type_kemas_collaborator,kemas.task.type,kemas.model_kemas_task_type,group_kemas_collaborator,1,0,0,0
-access_kemas_task_category_kemas_collaborator,kemas.task.category,kemas.model_kemas_task_category,group_kemas_collaborator,1,0,0,0
 access_kemas_collaborator_kemas_collaborator,kemas.collaborator,kemas.model_kemas_collaborator,group_kemas_collaborator,1,1,0,0
 access_kemas_school4d_stage_kemas_collaborator,kemas.school4d.stage,kemas.model_kemas_school4d_stage,group_kemas_collaborator,1,0,0,0
 access_kemas_school4d_line_kemas_collaborator,kemas.school4d_line,kemas.model_kemas_school4d_line,group_kemas_collaborator,1,1,1,1
@@ -98,10 +90,6 @@ access_kemas_config_kemas_register_attedance,kemas.config,kemas.model_kemas_conf
 access_kemas_activity_kemas_register_attedance,kemas.activity,kemas.model_kemas_activity,group_kemas_register_attedance,0,0,0,0
 access_kemas_area_kemas_register_attedance,kemas.area,kemas.model_kemas_area,group_kemas_register_attedance,0,0,0,0
 access_kemas_level_kemas_register_attedance,kemas.level,kemas.model_kemas_level,group_kemas_register_attedance,1,1,0,0
-access_kemas_task_assigned_kemas_register_attedance,kemas.task.assigned,kemas.model_kemas_task_assigned,group_kemas_register_attedance,0,0,0,0
-access_kemas_task_kemas_register_attedance,kemas.task,kemas.model_kemas_task,group_kemas_register_attedance,0,0,0,0
-access_kemas_task_type_kemas_register_attedance,kemas.task.type,kemas.model_kemas_task_type,group_kemas_register_attedance,0,0,0,0
-access_kemas_task_category_kemas_register_attedance,kemas.task.category,kemas.model_kemas_task_category,group_kemas_register_attedance,0,0,0,0
 access_kemas_collaborator_kemas_register_attedance,kemas.collaborator,kemas.model_kemas_collaborator,group_kemas_register_attedance,1,1,0,0
 access_kemas_school4d_stage_kemas_register_attedance,kemas.school4d.stage,kemas.model_kemas_school4d_stage,group_kemas_register_attedance,0,0,0,0
 access_kemas_school4d_line_kemas_register_attedance,kemas.school4d_line,kemas.model_kemas_school4d_line,group_kemas_register_attedance,0,0,0,0
@@ -141,10 +129,6 @@ access_kemas_config_kemas_admin,kemas.config,kemas.model_kemas_config,group_kema
 access_kemas_activity_kemas_admin,kemas.activity,kemas.model_kemas_activity,group_kemas_admin,1,1,1,1
 access_kemas_area_kemas_admin,kemas.area,kemas.model_kemas_area,group_kemas_admin,1,1,1,1
 access_kemas_level_kemas_admin,kemas.level,kemas.model_kemas_level,group_kemas_admin,1,1,1,1
-access_kemas_task_assigned_kemas_admin,kemas.task.assigned,kemas.model_kemas_task_assigned,group_kemas_admin,1,1,1,1
-access_kemas_task_kemas_admin,kemas.task,kemas.model_kemas_task,group_kemas_admin,1,1,1,1
-access_kemas_task_type_kemas_admin,kemas.task.type,kemas.model_kemas_task_type,group_kemas_admin,1,1,1,1
-access_kemas_task_category_kemas_admin,kemas.task.category,kemas.model_kemas_task_category,group_kemas_admin,1,1,1,1
 access_kemas_collaborator_kemas_admin,kemas.collaborator,kemas.model_kemas_collaborator,group_kemas_admin,1,1,1,1
 access_kemas_school4d_stage_kemas_admin,kemas.school4d.stage,kemas.model_kemas_school4d_stage,group_kemas_admin,1,1,1,1
 access_kemas_school4d_line_kemas_admin,kemas.school4d_line,kemas.model_kemas_school4d_line,group_kemas_admin,1,1,1,1

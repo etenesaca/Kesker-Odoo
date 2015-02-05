@@ -25,7 +25,6 @@ import kemas_message_wizard
 import kemas_collaborator_active_wizard
 import kemas_collaborator_inactive_wizard  
 import kemas_set_points_wizard
-import kemas_set_points_work_wizard
 import kemas_suspend_collaborator_wizard
 import kemas_register_attendance_wizard
 import kemas_send_notification_event_wizard
