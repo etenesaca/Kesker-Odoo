@@ -34,7 +34,7 @@
         'data/kemas_event_stage.xml',
         'security/kemas_tasks_security.xml',
         'security/ir.model.access.csv',
-        'wizard/kemas_set_points_work_wizard_view.xml',
+        'wizard/kemas_set_points_task_wizard_view.xml',
         'kemas_tasks_view.xml',
         ],
     'installable': True,

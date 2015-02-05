@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-import kemas_set_points_work_wizard
+import kemas_set_points_task_wizard
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 
