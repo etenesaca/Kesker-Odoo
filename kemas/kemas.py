@@ -110,7 +110,7 @@ class kemas_collaborator_logbook_login(osv.osv):
         'count': 1,
         }
     
-class kemas_func(osv.osv):
+class kemas_func(osv.AbstractModel):
     def module_installed(self, cr, uid, module_name):
         sql = """
             SELECT mdl.id FROM ir_module_module AS mdl
@@ -267,9 +267,6 @@ class kemas_func(osv.osv):
         user_obj.write(cr, uid, [user_id], vals_02)
         return {'user_id' : user_id, 'username' : username, 'password' : password}
     _name = 'kemas.func'
-    _columns = {
-        'name': fields.char('Name', size=64),
-        }
 
 class kemas_massive_email_line(osv.osv):
     def on_change_email(self, cr, uid, ids, email):
