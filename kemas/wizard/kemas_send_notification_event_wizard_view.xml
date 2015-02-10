@@ -30,7 +30,7 @@
                         <div>
                            <button name="reset" type="object" string="Reset notifications" help="Back to prepare to receive e-mail again." class="oe_highlight" />
                            <button name="send_email" type="object" string="Send Emails" attrs="{'invisible':[('send_notification_event_line_wizard_ids','=',False)]}" confirm="Are you sure you send the emails now? This may take some time." class="oe_highlight" />
-                           <label string="or" />
+                           <span> ó </span>
                            <button string="Cancel" class="oe_link" special="cancel" />
                         </div>
                      </group>

@@ -25,7 +25,7 @@ from datetime import *
 from datetime import datetime, timedelta
 import datetime 
 from dateutil.parser import  *
-import logging
+import logging  
 from lxml import etree
 from mx import DateTime
 import random
@@ -111,6 +111,29 @@ class kemas_collaborator_logbook_login(osv.osv):
         }
     
 class kemas_func(osv.AbstractModel):
+    def is_in_this_groups(self, cr, uid, group_ext_ids, user_id=False):
+        user_obj = self.pool['res.users']
+        md_obj = self.pool['ir.model.data']
+        
+        # Llegan un entero en luigar de lista
+        if type(group_ext_ids).__name__ in ['str', 'unicode']:
+            group_ext_ids = [group_ext_ids]
+            
+        # Si no se manda el usuario en los parametros se entiende que es el usuario que consulta
+        if not user_id:
+            user_id = uid
+        
+        md_ids = md_obj.search(cr, uid, [('name', 'in', group_ext_ids)])
+        mds = md_obj.read(cr, uid, md_ids, ['res_id'])
+        
+        group_ids = []        
+        for md in mds:
+            group_ids.append(md['res_id'])
+        
+        groups_user_ids = user_obj.read(cr, uid, user_id, ['groups_id'])['groups_id']
+        result = bool(set(group_ids) & set(groups_user_ids))
+        return result
+    
     def module_installed(self, cr, uid, module_name):
         sql = """
             SELECT mdl.id FROM ir_module_module AS mdl
@@ -4902,7 +4925,7 @@ class kemas_event(osv.osv):
                 ids = [ids[0]['res_id']]
         event = super(osv.osv, self).read(cr, uid, ids[0], [])
         if not context.get('tz'):
-            context['tz'] = self.pool.get('kema.func').get_tz_by_uid(cr, uid)
+            context['tz'] = self.pool['kemas.func'].get_tz_by_uid(cr, uid)
             
         if event['sending_emails']:
             raise osv.except_osv(_('Error!'), _('You can not make changes to this event as they send notification e-mails.'))
