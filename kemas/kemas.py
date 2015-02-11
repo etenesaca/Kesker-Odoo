@@ -3758,7 +3758,7 @@ class kemas_collaborator(osv.osv):
     
     def _get_collaborator_photo(self, cr, uid, ids, name, arg, context={}): 
         def get_collaborator_photo(record):
-            result = {'photo': False, 'photo_medium': False, 'photo_small': False, 'photo_very_small': False, }
+            result = {'photo': False, 'photo_jarge': False, 'photo_medium': False, 'photo_small': False, 'photo_very_small': False, }
             
             photo = False
             if record['partner_id']:
@@ -4690,7 +4690,8 @@ class kemas_event(osv.osv):
                 return False
         
         sql = """
-            SELECT cl.id,cl.nick_name,cl.name,U.login as username FROM kemas_collaborator AS cl
+            SELECT cl.id, cl.name, U.login as username 
+            FROM kemas_collaborator AS cl
             JOIN res_users as U on (U.id = cl.user_id)
             WHERE cl.id IN
             (
@@ -4703,17 +4704,8 @@ class kemas_event(osv.osv):
         collaborators = []
         
         for collaborator in result_query:
-            name = "%s %s" % (
-                             unicode(collaborator['nick_name']).title(),
-                             unicode(collaborator['name']).split()[0].title()
-                             )
-            collaborator_dic = {
-                            'id': collaborator['id'],
-                            'name': name,
-                            'username': collaborator['username'],
-                            'registered': is_registered(event_id, collaborator['id']),
-                            }
-            collaborators.append(collaborator_dic)
+            collaborator['registered'] = is_registered(event_id, collaborator['id'])
+            collaborators.append(collaborator)
         
         res = []
         l2 = []
@@ -4791,6 +4783,7 @@ class kemas_event(osv.osv):
             
     def get_today_events(self, cr, uid):
         from datetime import datetime
+        
         def get_events():
             start = '%s 00:00:00' % ((datetime.now() - timedelta(days=1)).date().__str__())
             stop = '%s 23:59:59' % ((datetime.now() + timedelta(days=1)).date().__str__())
@@ -4867,8 +4860,7 @@ class kemas_event(osv.osv):
             time_end = int(minutes) + int(hour) * 60
             line_event['time_end_int'] = time_end
             
-            current_event = self.get_current_event(cr, uid)
-            if event['id'] == current_event:
+            if event['id'] == self.get_current_event(cr, uid):
                 line_event['current_event'] = True
             else:
                 line_event['current_event'] = False 
@@ -4876,48 +4868,57 @@ class kemas_event(osv.osv):
         return res
         
     def get_current_event(self, cr, uid, extra_info=False):
+        result = False
         service_obj = self.pool.get('kemas.service')
         now = time.strftime("%Y-%m-%d %H:%M:%S")
-        event_ids = super(osv.osv, self).search(cr, uid, [('date_init', '<=', now), ('date_stop', '>=', now), ('state', '=', 'on_going')])
-        if event_ids:
-            for event_id in event_ids:
-                event = self.read(cr, uid, event_id, ['service_id'])
-                service = service_obj.read(cr, uid, event['service_id'][0], [])
-                #----Convertir la hora de entrada a Entero---------------------------------------
-                time_entry = extras.convert_float_to_hour_format(service['time_entry'])
-                hour = str(time_entry)[:2]
-                minutes = str(time_entry)[3:5]
-                time_entry = int(minutes) + int(hour) * 60
-                #----Convertir la hora actual a Entero-------------------------------------------
-                tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-                now = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz)
-                hour = str(now)[11:13]
-                minutes = str(now)[14:16]
-                now = int(minutes) + int(hour) * 60
-                #----Genrar la hora limite-------------------------------------------------------
-                time_limit = extras.convert_float_to_hour_format(service['time_limit'])
-                hour = str(time_limit)[:2]
-                minutes = str(time_limit)[3:5]
-                time_limit = int(minutes) + int(hour) * 60
-                #----Genrar la hora para registro puntual de puntos------------------------------
-                time_register = extras.convert_float_to_hour_format(service['time_register'])
-                hour = str(time_register)[:2]
-                minutes = str(time_register)[3:5]
-                time_register = int(minutes) + int(hour) * 60
-                #----Validar si el evento es valido para registro de asistencia o no-------------
-                if time_entry <= now and (time_entry + time_limit) > now:
-                    if extra_info:
-                        return {
-                                'current_event_id': event_id,
-                                'minutes_remaining': (time_entry + time_limit) - now,
-                                'time_entry': time_entry,
-                                'now': now,
-                                'time_limit': time_limit,
-                                'time_register': time_register,
-                               }
-                    else:
-                        return event_id
-        return None
+        
+        search_args = [('date_init', '<=', now), ('date_stop', '>=', now), ('state', '=', 'on_going')]
+        event_ids = super(kemas_event, self).search(cr, uid, search_args, limit=1)
+        if not event_ids:
+            return result
+        
+        event = self.read(cr, uid, event_ids[0], ['service_id'])
+        service = service_obj.read(cr, uid, event['service_id'][0], [])
+        
+        # Convertir la hora de entrada a Entero
+        time_entry = extras.convert_float_to_hour_format(service['time_entry'])
+        hour = str(time_entry)[:2]
+        minutes = str(time_entry)[3:5]
+        time_entry = int(minutes) + int(hour) * 60
+        
+        # Convertir la hora actual a Entero
+        tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
+        now = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz)
+        hour = str(now)[11:13]
+        minutes = str(now)[14:16]
+        now = int(minutes) + int(hour) * 60
+        
+        # Genrar la hora limite
+        time_limit = extras.convert_float_to_hour_format(service['time_limit'])
+        hour = str(time_limit)[:2]
+        minutes = str(time_limit)[3:5]
+        time_limit = int(minutes) + int(hour) * 60
+        
+        # Genrar la hora para registro puntual de puntos
+        time_register = extras.convert_float_to_hour_format(service['time_register'])
+        hour = str(time_register)[:2]
+        minutes = str(time_register)[3:5]
+        time_register = int(minutes) + int(hour) * 60
+        
+        # Validar si el evento es valido para registro de asistencia o no
+        if time_entry <= now and (time_entry + time_limit) > now:
+            if extra_info:
+                result = {
+                          'current_event_id': event['id'],
+                          'minutes_remaining': (time_entry + time_limit) - now,
+                          'time_entry': time_entry,
+                          'now': now,
+                          'time_limit': time_limit,
+                          'time_register': time_register,
+                          }
+            else:
+                result = event['id']
+        return result
  
     def write(self, cr, uid, ids, vals, context={}):
         if type(ids[0]).__name__ == 'dict':
@@ -5868,7 +5869,6 @@ class kemas_attendance(osv.osv):
         r_4    No hay eventos para registrar la asistencia
         '''
         collaborator_obj = self.pool.get('kemas.collaborator')
-        #--------------------------------------------------------------------------------------
         user_id = security.login(cr.dbname, username, password)
         if user_id:
             collaborator_ids = super(collaborator_obj.__class__, collaborator_obj).search(cr, uid, [('user_id', '=', user_id), ('state', '=', 'Active')])
@@ -5877,22 +5877,22 @@ class kemas_attendance(osv.osv):
                 context['with_register_type'] = True
                 res = self.create(cr, uid, vals, context)
                 if res == 'no event':
-                    _logger.error("'%s' no has events for regsiter attedance. %s" % (username, "REGISTER ATTENDANCE"))
+                    _logger.warn("'%s'. No hay Eventos registrar asistencias. %s" % (username, "REGISTRO DE ASISTENCIA"))
                     return 'r_4'
                 elif res == 'no envolved':
-                    _logger.error("'%s' Username not envolved in this event. %s" % (username, "REGISTER ATTENDANCE"))
+                    _logger.warn("'%s' no esta registrado en este Evento. %s" % (username, "REGISTRO DE ASISTENCIA"))
                     return 'r_3'
                 elif res == 'already register':
-                    _logger.error("'%s' Username already register. %s" % (username, "REGISTER ATTENDANCE"))
+                    _logger.warn("'%s' Ya marco un registro de Entrada. %s" % (username, "REGISTRO DE ASISTENCIA"))
                     return 'r_5'
                 elif res == 'already checkout':
-                    _logger.error("'%s' Username already checkout. %s" % (username, "REGISTER ATTENDANCE"))
+                    _logger.warn("'%s' Ya marco un registro de Salida. %s" % (username, "REGISTRO DE ASISTENCIA"))
                     return 'r_6'
                 else:
                     if res['register_type'] == 'checkin':
-                        _logger.info("Registro de Asistencia 'ENTRADA' '%s' OK. %s" % (username, "REGISTER ATTENDANCE"))
+                        _logger.info("'%s' Marco ENTRADA. %s" % (username, "REGISTRO DE ASISTENCIA"))
                     else:
-                        _logger.info("Registro de Asistencia 'SALIDA' '%s' OK. %s" % (username, "REGISTER ATTENDANCE"))
+                        _logger.info("'%s' marco SALIDA. %s" % (username, "REGISTRO DE ASISTENCIA"))
                     return res
             else:
                 return 'r_2'
@@ -5902,16 +5902,23 @@ class kemas_attendance(osv.osv):
     
     def create(self, cr, uid, vals, context={}):
         event_obj = self.pool.get('kemas.event')
+        current_event = event_obj.get_current_event(cr, uid, extra_info=True)
+        if not current_event: 
+            return 'no event'
+        
         event_collaborator_line_obj = self.pool.get('kemas.event.collaborator.line')
-
-        res_current_event = event_obj.get_current_event(cr, uid, True)
-        #---No hay eventos para registrar la asistencia---------------------------------------------
-        if res_current_event == None: return 'no event'
-        #-------------------------------------------------------------------------------------------
-        atributes_read = ['current_event_id', 'service_id', 'date_start', 'attend_on_time_points', 'attend_on_time_points', 'late_points']
-        event = event_obj.read(cr, uid, res_current_event['current_event_id'], atributes_read)
         kemas_event_collaborator_line_obj = self.pool.get('kemas.event.collaborator.line')
-        event['event_collaborator_line_ids'] = super(kemas_event_collaborator_line, kemas_event_collaborator_line_obj).search(cr, uid, [('event_id', '=', res_current_event['current_event_id'])])
+        collaborator_obj = self.pool.get('kemas.collaborator')
+        history_points_obj = self.pool.get('kemas.history.points')
+        service_obj = self.pool.get('kemas.service')
+        config_obj = self.pool.get('kemas.config')
+        seq_obj = self.pool.get('ir.sequence')
+        
+        preferences = config_obj.read(cr, uid, config_obj.get_correct_config(cr, uid), ['allow_checkout_registers'])
+        
+        fields_to_read = ['service_id', 'date_start', 'attend_on_time_points', 'attend_on_time_points', 'late_points']
+        event = event_obj.read(cr, uid, current_event['current_event_id'], fields_to_read)
+        event['event_collaborator_line_ids'] = super(kemas_event_collaborator_line, kemas_event_collaborator_line_obj).search(cr, uid, [('event_id', '=', current_event['current_event_id'])])
         collaborators_involved_ids = event['event_collaborator_line_ids']
         collaborators_involved_list = []
 
@@ -5921,10 +5928,9 @@ class kemas_attendance(osv.osv):
         
         #---Este colaborador ya registro asistencia
         checkin_id = False
-        search_args = [('collaborator_id', '=', vals['collaborator_id']), ('event_id', '=', res_current_event['current_event_id']), ('register_type', '=', 'checkin')]
-        attendance_ids = super(osv.osv, self).search(cr, uid, search_args)
+        search_args = [('collaborator_id', '=', vals['collaborator_id']), ('event_id', '=', current_event['current_event_id']), ('register_type', '=', 'checkin')]
+        attendance_ids = super(kemas_attendance, self).search(cr, uid, search_args)
         if attendance_ids:
-            preferences = self.pool.get('kemas.config').read(cr, uid, self.pool.get('kemas.config').get_correct_config(cr, uid), ['allow_checkout_registers'])
             if preferences['allow_checkout_registers']:
                 last_register = self.read(cr, uid, attendance_ids[0], ['checkout_id'])
                 if last_register['checkout_id']:
@@ -5934,15 +5940,9 @@ class kemas_attendance(osv.osv):
             else:
                 return 'already register'
         
-        #---El Colaborador ho esta entre los colaboradores desginados para este evento--------------   
-        if not vals['collaborator_id'] in collaborators_involved_list: return 'no envolved'
-        #-------------------------------------------------------------------------------------------
-        seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Attendance'), ])[0]
-        vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
-        vals['count'] = 1
-        vals['user_id'] = uid
-        vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
-        vals['event_id'] = res_current_event['current_event_id']
+        # El Colaborador ho esta entre los colaboradores desginados para este evento   
+        if not vals['collaborator_id'] in collaborators_involved_list:
+            return 'no envolved'
         
         if checkin_id:
             vals['checkin_id'] = checkin_id
@@ -5951,52 +5951,58 @@ class kemas_attendance(osv.osv):
             vals['register_type'] = 'checkin'
         
         #---------Verificar tipo de Asistencia------------------------------------------------------
-        time_entry = res_current_event['time_entry']
-        now = res_current_event['now']
-        time_register = res_current_event['time_register']
+        time_entry = current_event['time_entry']
+        now = current_event['now']
+        time_register = current_event['time_register']
         
-        type = 'just_time'
+        type_attendance = 'just_time'
         summary = 'Asistencia Puntual.'
         if (time_entry + time_register) < now:
-            type = 'late'
+            type_attendance = 'late'
             minutos_tarde = now - (time_entry + time_register)
             tiempo_de_atraso = extras.convert_minutes_to_hour_format(minutos_tarde)
             summary = "Asistencia Inpuntual, %s minutos tarde." % (tiempo_de_atraso)
         
-        vals['type'] = type
+        vals['type'] = type_attendance
         vals['summary'] = summary
         
         #----Escribir el historial de puntos-----------------------------------------------------
-        collaborator_obj = self.pool.get('kemas.collaborator')
         collaborator = collaborator_obj.read(cr, uid, vals['collaborator_id'], ['points'])
-        history_points_obj = self.pool.get('kemas.history.points')
         current_points = str(collaborator['points'])
         history_type = 'increase'
         operator = '+'
         
         nombre_del_evento = unicode(event['service_id'][1])
-        time_start = self.pool.get('kemas.service').read(cr, uid, event['service_id'][0], ['time_start'])['time_start']
+        time_start = service_obj.read(cr, uid, event['service_id'][0], ['time_start'])['time_start']
         time_start = extras.convert_float_to_hour_format(time_start)
         description = "Asistencia Puntual al Servicio: '%s' del %s, programado para las %s." % (nombre_del_evento, extras.convert_date_format_long_str(event['date_start']), time_start)
                     
         new_points = int(current_points) + int(event['attend_on_time_points'])
         change_points = abs(int(event['attend_on_time_points']))
-        if type != 'just_time':
+        if type_attendance != 'just_time':
             history_type = 'decrease'
             operator = '-'
             description = unicode("""Asistencia Inpuntual,%s minutos tarde al Servicio:'%s' del %s.""", 'utf-8') % (tiempo_de_atraso, unicode(event['service_id'][1]), extras.convert_date_format_long_str(event['date_start']))
             new_points = int(current_points) - int(event['late_points'])
             change_points = abs(int(event['late_points'])) * -1
             
-        #---Escribir puntaje-----
+        #---Escribir puntaje
         current_level_id = collaborator_obj.get_corresponding_level(cr, uid, int(new_points))
-        super(osv.osv, collaborator_obj).write(cr, uid, [vals['collaborator_id']], {
-                            'points':int(new_points),
-                            'level_id':current_level_id,
-                            })
+        vals_puntos = {
+                       'points':int(new_points),
+                       'level_id':current_level_id,
+                       }
+        super(collaborator_obj.__class__, collaborator_obj).write(cr, uid, [vals['collaborator_id']], vals_puntos)
         
-        res_id = super(osv.osv, self).create(cr, uid, vals, context)
-        #------------------------
+        # Generar codigo
+        seq_id = seq_obj.search(cr, uid, [('name', '=', 'Kemas Attendance'), ])[0]
+        vals['code'] = str(seq_obj.get_id(cr, uid, seq_id))
+        vals['count'] = 1
+        vals['user_id'] = uid
+        vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
+        vals['event_id'] = current_event['current_event_id']
+        res_id = super(kemas_attendance, self).create(cr, uid, vals, context)
+        
         history_summary = str(operator) + str(change_points) + " Puntos. Antes " + str(current_points) + " ahora " + str(new_points) + " Puntos."
         vals_history_points = {
             'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
