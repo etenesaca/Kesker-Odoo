@@ -5055,13 +5055,12 @@ class kemas_event(osv.osv):
         if not context['tz']:
             context['tz'] = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
         
-        if not self.validate_past_date(cr, uid, vals['date_start'], context):
-            raise osv.except_osv(u'¡Operación no válida!', u"No se puede crear un evento en una fecha que ya pasó")
-        
         dates_dic = extras.convert_to_format_date(vals['date_start'], service['time_entry'], service['time_start'], service['time_end'], context['tz'])
         vals['date_start'] = dates_dic['date_start']
         vals['date_stop'] = dates_dic['date_stop']
         vals['date_init'] = dates_dic['date_init']
+        if not self.validate_past_date(cr, uid, vals['date_start'], context):
+            raise osv.except_osv(u'¡Operación no válida!', u"No se puede crear un evento en una fecha que ya pasó")
         
         res_id = super(kemas_event, self).create(cr, uid, vals, context)
         lines_obj = self.pool.get('kemas.event.collaborator.line')
@@ -5403,7 +5402,7 @@ class kemas_event(osv.osv):
                 raise osv.except_osv(u'¡Operación no válida!', u"No se puede poner en curso un evento en una fecha que ya pasó")
             
             if not record['event_collaborator_line_ids']:
-                raise osv.except_osv(u'¡Operación no válida!', u"Antes de porner el evento en curso primero agregue los colaboradores.")
+                raise osv.except_osv(u'¡Operación no válida!', u"Antes de poner el evento en curso primero agregue los colaboradores.")
                 
             user_obj = self.pool.get('res.users')
             members = user_obj.read(cr, uid, record['members'] + [uid])
@@ -5861,6 +5860,7 @@ class kemas_attendance(osv.osv):
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
     
     def register_attendance(self, cr, uid, username, password, context={}):
+        from openerp.service import security
         '''
         r_1    Error en logeo
         r_2    Logueo correcto pero este Usuario no pertenece a un Colaborador
@@ -5869,49 +5869,35 @@ class kemas_attendance(osv.osv):
         '''
         collaborator_obj = self.pool.get('kemas.collaborator')
         #--------------------------------------------------------------------------------------
-        sql = """
-                select id,login, password from res_users
-                where login = '%s'
-              """ % (username)
-        cr.execute(sql)
-        result_query = cr.fetchall()
-        if result_query:
-            user = {
-                    'id' : result_query[0][0],
-                    'login' : result_query[0][1],
-                    'password' : result_query[0][2],
-                    }
-            if password == user['password']:
-                collaborator_ids = super(kemas_collaborator, collaborator_obj).search(cr, uid, [('user_id', '=', user['id']), ('state', '=', 'Active'), ('type', '=', 'Collaborator'), ])
-                if collaborator_ids:
-                    vals = {'collaborator_id': collaborator_ids[0]}
-                    context['with_register_type'] = True
-                    res = self.create(cr, uid, vals, context)
-                    if res == 'no event':
-                        _logger.error("'%s' no has events for regsiter attedance. %s" % (username, "REGISTER ATTENDANCE"))
-                        return 'r_4'
-                    elif res == 'no envolved':
-                        _logger.error("'%s' Username not envolved in this event. %s" % (username, "REGISTER ATTENDANCE"))
-                        return 'r_3'
-                    elif res == 'already register':
-                        _logger.error("'%s' Username already register. %s" % (username, "REGISTER ATTENDANCE"))
-                        return 'r_5'
-                    elif res == 'already checkout':
-                        _logger.error("'%s' Username already checkout. %s" % (username, "REGISTER ATTENDANCE"))
-                        return 'r_6'
-                    else:
-                        if res['register_type'] == 'checkin':
-                            _logger.info("Registro de Asistencia 'ENTRADA' '%s' OK. %s" % (username, "REGISTER ATTENDANCE"))
-                        else:
-                            _logger.info("Registro de Asistencia 'SALIDA' '%s' OK. %s" % (username, "REGISTER ATTENDANCE"))
-                        return res
+        user_id = security.login(cr.dbname, username, password)
+        if user_id:
+            collaborator_ids = super(collaborator_obj.__class__, collaborator_obj).search(cr, uid, [('user_id', '=', user_id), ('state', '=', 'Active')])
+            if collaborator_ids:
+                vals = {'collaborator_id': collaborator_ids[0]}
+                context['with_register_type'] = True
+                res = self.create(cr, uid, vals, context)
+                if res == 'no event':
+                    _logger.error("'%s' no has events for regsiter attedance. %s" % (username, "REGISTER ATTENDANCE"))
+                    return 'r_4'
+                elif res == 'no envolved':
+                    _logger.error("'%s' Username not envolved in this event. %s" % (username, "REGISTER ATTENDANCE"))
+                    return 'r_3'
+                elif res == 'already register':
+                    _logger.error("'%s' Username already register. %s" % (username, "REGISTER ATTENDANCE"))
+                    return 'r_5'
+                elif res == 'already checkout':
+                    _logger.error("'%s' Username already checkout. %s" % (username, "REGISTER ATTENDANCE"))
+                    return 'r_6'
                 else:
-                    return 'r_2'
+                    if res['register_type'] == 'checkin':
+                        _logger.info("Registro de Asistencia 'ENTRADA' '%s' OK. %s" % (username, "REGISTER ATTENDANCE"))
+                    else:
+                        _logger.info("Registro de Asistencia 'SALIDA' '%s' OK. %s" % (username, "REGISTER ATTENDANCE"))
+                    return res
             else:
-                _logger.warning("'%s' Incorrect Password. %s" % (username, "REGISTER ATTENDANCE"))
-                return 'r_1'
+                return 'r_2'
         else:
-            _logger.warning("'%s' Username don't exist. %s" % (username, "REGISTER ATTENDANCE"))
+            _logger.warning("'%s' Incorrect Password. %s" % (username, "REGISTER ATTENDANCE"))
             return 'r_1'
     
     def create(self, cr, uid, vals, context={}):
