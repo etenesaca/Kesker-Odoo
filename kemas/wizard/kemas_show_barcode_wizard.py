@@ -25,7 +25,7 @@ from lxml import etree
 class kemas_show_barcode_wizard(osv.osv_memory):
     def fields_view_get(self, cr, uid, view_id=None, view_type='form', context={}, toolbar=True, submenu=False):       
         res = {}
-        xml='''
+        xml = '''
         <form string="Codigo de Barras" version="7.0">
             <field name="barcode_file_name" invisible="1"/>
             <div align="center">
@@ -44,21 +44,42 @@ class kemas_show_barcode_wizard(osv.osv_memory):
         res['fields'] = xfields
         return res
     
-    def fields_get(self, cr, uid, fields={}, context={}, write_access=True): 
-        result = super(kemas_show_barcode_wizard, self).fields_get(cr, uid,fields, context, write_access)
-        if not context is None and type(context).__name__=='dict' and context.get('active_ids',False):
+    def ___fields_get(self, cr, uid, fields={}, context={}, write_access=True): 
+        result = super(kemas_show_barcode_wizard, self).fields_get(cr, uid, fields, context, write_access)
+        if not context is None and type(context).__name__ == 'dict' and context.get('active_ids', False):
             def_dic = {}
-            barcode = self.pool.get('kemas.collaborator').read(cr,uid,context['active_ids'][0],['bar_code'])['bar_code']
+            barcode = self.pool.get('kemas.collaborator').read(cr, uid, context['active_ids'][0], ['bar_code'])['bar_code']
             def_dic['barcode'] = barcode
             def_dic['barcode_download'] = barcode
             def_dic['barcode_file_name'] = 'barcode.jpg'
             self._defaults = def_dic
         return result
     
-    _name='kemas.show.barcode.wizard'
-    _columns={
+    _name = 'kemas.show.barcode.wizard'
+    _columns = {
         'barcode': fields.binary('Codigo de Barras'),
         'barcode_download': fields.binary('Codigo de Barras'),
-        'barcode_file_name': fields.char('Nombre del archivo',size=255),
+        'barcode_file_name': fields.char('Nombre del archivo', size=255),
         }
+    
+    def get_barcode(self, cr, uid, context={}):
+        result = False
+        try:
+            result = self.pool.get('kemas.collaborator').read(cr, uid, context['active_ids'][0], ['bar_code'])['bar_code']
+        except: None
+        return result
+    
+    def get_barcode_file_name(self, cr, uid, context={}):
+        result = False
+        try:
+            result = self.pool.get('kemas.collaborator').read(cr, uid, context['active_ids'][0], ['name'])['name']
+        except: None
+        return 'BC: %s.png' % result
+    
+    _defaults = {  
+        'barcode': get_barcode,
+        'barcode_download': get_barcode,
+        'barcode_file_name': get_barcode_file_name
+        }
+    
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

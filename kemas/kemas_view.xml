@@ -1331,15 +1331,21 @@
                               <group>
                                  <field name="bc_text" string="Texto del Codigo de Barras" />
                               </group>
-                              <group string="Tamaño de imagen" colspan="4" col="10">
-                                 <field name="bc_type" colspan="4" />
-                                 <group colspan="6" />
-                                 <field name="bc_hr_form" colspan="4" string="¿Legible para lectura?" />
-                                 <group colspan="6" />
-                                 <field name="bc_width" colspan="4" />
-                                 <group colspan="6" />
-                                 <field name="bc_height" colspan="4" />
-                                 <group colspan="6" />
+                              <group string="Opciones" colspan="4">
+                                 <group>
+                                    <field name="bc_type" />
+                                    <field name="bc_write_text" string="¿Legible para lectura?" />
+                                    <field name="bc_module_width" />
+                                    <field name="bc_module_height" />
+                                 </group>
+                                 <group>
+                                    <field name="bc_quiet_zone" />
+                                    <field name="bc_font_size" />
+                                    <field name="bc_text_distance" />
+                                    <field name="bc_background" />
+                                    <field name="bc_foreground" />
+                                    <field name="bc_text2" />
+                                 </group>
                               </group>
                            </page>
                            <page string="Reports logo">
@@ -1379,7 +1385,6 @@
                <field name="name_system" />
                <field name="url_system" />
                <field name="mailing" />
-               <field name="sequence" invisible="1" />
             </tree>
          </field>
       </record>

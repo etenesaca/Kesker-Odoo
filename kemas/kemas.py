@@ -1204,6 +1204,7 @@ class kemas_config(osv.osv):
         'use_attachments_in_im': fields.boolean('Use attachments in IM?', required=True, help='Do you want that the attachments to emails are also sent to the IM messages?'),
         'use_subject_in_im': fields.boolean('Use Subject in IM?', required=True, help='Do you want to include the matter in IM?'),
         'number_replacements': fields.integer('Number replacements'),
+        'integrate_collaborators_with_partners':fields.boolean('Integrar colaboradores con partners', required=False),
         #---Images and logos------------------------
         'logo': fields.binary('Logo', help='The reports Logo.'),
         'system_logo': fields.binary('System Logo', help='The System Logo.'),
@@ -1285,26 +1286,32 @@ class kemas_config(osv.osv):
         'qr_height': fields.integer('height', required=True),
         #---Bar Code - Collaborator Form-------------------
         'bc_type': fields.selection([
-            ('Standard39', 'Standard39'),
-            ('QR', 'QR'),
-            ('EAN13', 'EAN13'),
-            ('FIM', 'FIM'),
-            ('UPCA', 'UPCA'),
-            ('EAN8', 'EAN8'),
-            ('Extended93', 'Extended93'),
-            ('USPS_4State', 'USPS_4State'),
-            ('Codabar', 'Codabar'),
-            ('MSI', 'POSTNET'),
-            ('Code11', 'Code11'),
-            ('Standard93', 'Standard93'),
-            ('I2of5', 'I2of5'),
-            ('Code128', 'Code128'),
+            ('code128', 'Code128'),
+            ('code39', 'Code39'),
+            ('ean', 'EAN'),
+            ('ean8', 'EAN8'),
+            ('ean13', 'EAN13'),
+            ('gs1', 'GS1'),
+            ('gtin', 'GTIN'),
+            ('isbn', 'ISBN'),
+            ('isbn10', 'ISBN10'),
+            ('isbn13', 'ISBN13'),
+            ('itf', 'ITF'),
+            ('jan', 'JAN'),
+            ('pzn', 'PZN'),
+            ('upc', 'UPC'),
+            ('upca', 'UPCA'),
              ], 'Typo de Codigo de Barras', required=True),
         'bc_text': fields.char('Texto de Codigo de barras', size=32, required=True),
-        'bc_width': fields.integer('Ancho', required=True),
-        'bc_height': fields.integer('Alto', required=True),
-        'bc_hr_form': fields.boolean("Human Readable", help="Legible para lectura?"),
-        'integrate_collaborators_with_partners':fields.boolean('Integrar colaboradores con partners', required=False),
+        'bc_write_text': fields.boolean(u'¿legible para lectura?', required=False),
+        'bc_module_width': fields.float('Ancho', digits=(16, 2), required=True),
+        'bc_module_height': fields.float('Alto', digits=(16, 2), required=True),
+        'bc_quiet_zone': fields.float('Quiet zone', digits=(16, 2), required=False),
+        'bc_font_size': fields.integer('Font_size', required=False),
+        'bc_text_distance': fields.float('Text distance', digits=(16, 2), required=False),
+        'bc_background':fields.char('Background', size=64, required=False),
+        'bc_foreground':fields.char('Foreground', size=64, required=False),
+        'bc_text2':fields.char('Texto bajo la imagen', size=64, required=False),
         }
 
     def _get_logo(self, cr, uid, context={}):
@@ -1735,11 +1742,20 @@ Fecha de Ingreso al ministerio: %jd
         'qr_width':150,
         'qr_height':150,
         #---Bar Code----------------------------------------------------------------------------
-        'bc_text':"%cd",
-        'bc_type':"Code128",
-        'bc_width':200,
-        'bc_height':50,
+        'bc_text': "%cd",
+        'bc_type': "code128",
+        'bc_module_width': 0.2,
+        'bc_module_height': 15.0,
+        'bc_quiet_zone': 6.5,
+        'bc_font_size': 10,
+        'bc_text_distance': 5.0,
+        'bc_background': 'white',
+        'bc_foreground': 'black',
+        'bc_write_text': False,
+        'bc_text2': '',
     }
+    
+    
     _sql_constraints = [
         ('config_name', 'unique (name_system)', 'This system name already exist!'),
         ('config_sequence', 'unique (sequence)', 'This sequence already exist!'),
@@ -3509,21 +3525,61 @@ class kemas_collaborator(osv.osv):
         message = message.replace('%dt', unicode(now.strftime("%Y-%m-%d %H:%M:%S")))
         return unicode(message)
     
+    def _get_collaborator_by_bc_id(self, cr, uid, bc_id, context={}):
+        import barcode
+        result = False
+        BC_class = barcode.get_barcode_class('ean13')
+        fullcode = BC_class(bc_id).get_fullcode()
+        record_id = int(extras.extraer_numeros(fullcode))
+        return result
+    
     def _get_barcode_image(self, cr, uid, ids, name, arg, context={}):
+        import barcode
+        from barcode.writer import ImageWriter
+        from StringIO import StringIO
+        
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
-        preferences = config_obj.read(cr, uid, config_id, ['bc_text', 'bc_width', 'bc_height', 'bc_type', 'bc_hr_form'])
-        width = preferences['bc_width']        
-        height = preferences['bc_height']
-        image_type = preferences['bc_type']
-        hr_form = preferences['bc_hr_form']
         
+        fields_to_read = [
+                          'bc_type',
+                          'bc_text',
+                          'bc_module_width',
+                          'bc_module_height',
+                          'bc_quiet_zone',
+                          'bc_font_size',
+                          'bc_text_distance',
+                          'bc_background',
+                          'bc_foreground',
+                          'bc_write_text',
+                          'bc_text2',
+                          ]
+        preferences = config_obj.read(cr, uid, config_id, fields_to_read)
+        options = {
+                   'module_width': preferences['bc_module_width'] or 0.2,
+                   'module_height': preferences['bc_module_height'] or 15.0,
+                   'quiet_zone': preferences['bc_quiet_zone'] or 6.5,
+                   'font_size': preferences['bc_font_size'] or 10,
+                   'text_distance': preferences['bc_text_distance'] or 5.0,
+                   'background': preferences['bc_background'] or 'white',
+                   'foreground': preferences['bc_foreground'] or 'black',
+                   'write_text': preferences['bc_write_text'],
+                   'text': preferences['bc_text2'] or '',
+                   }
         def get_barcode_image(collaborator):
             bc_text = preferences['bc_text'].replace('%cd', unicode(collaborator['code']))
-            return extras.get_image_code(bc_text, width, height, hr_form, image_type)
+            """
+            id_int = int(extras.extraer_numeros(collaborator['id']))
+            bc_text = extras.completar_cadena(id_int, 12)
+            """
+            BC = barcode.get_barcode_class(preferences['bc_type'])
+            foo = BC(unicode(bc_text), writer=ImageWriter())
+            fp = StringIO()
+            foo.write(fp, options=options)
+            return base64.encodestring(fp.getvalue())
 
         result = {}
-        collaborators = super(osv.osv, self).read(cr, uid, ids, ['id', 'code'])
+        collaborators = super(kemas_collaborator, self).read(cr, uid, ids, ['code'])
         for collaborator in collaborators:
             result[collaborator['id']] = get_barcode_image(collaborator)
         return result
@@ -4343,6 +4399,10 @@ class kemas_service(osv.osv):
         }
     
 class kemas_event_collaborator_line(osv.osv):
+    def create(self, cr, uid, vals, context={}):
+        import pdb;pdb.set_trace()
+        return super(kemas_event_collaborator_line, self).create(cr, uid, vals, context)
+    
     def on_change_collaborator(self, cr, uid, ids, context={}):
         values = {}
         values['activity_ids'] = False
@@ -4400,13 +4460,13 @@ class kemas_event_collaborator_line(osv.osv):
                 except:None
             for item in items_to_remove:
                 args.remove(item)
-        return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
+        return super(kemas_event_collaborator_line, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
     
     _name = 'kemas.event.collaborator.line'
     _rec_name = 'collaborator_id'
     _columns = {
         'collaborator_id': fields.many2one('kemas.collaborator', 'Collaborator', required=True),
-        'event_id': fields.many2one('kemas.event', 'event', required=True, ondelete="cascade"),
+        'event_id': fields.many2one('kemas.event', 'event', required=True, ondelete="cascade", select=True),
         'activity_ids': fields.many2many('kemas.activity', 'kemas_event_collaborator_line_activity_rel', 'event_collaborator_line_id', 'activity_id', 'Activities', help='Activities that have been assigned to this Collaborator in this event'),
         'sent_date': fields.datetime('Enviado el'),
         'send_email_state': fields.selection([
@@ -4445,6 +4505,7 @@ class kemas_event_collaborator_line(osv.osv):
         'count':1,
         'ct':1
         }
+    
 class kemas_event_stage(osv.osv):    
     _name = 'kemas.event.stage'
     _order = 'sequence'
@@ -5046,7 +5107,26 @@ class kemas_event(osv.osv):
             result = False
         return result
     
+    def copy(self, cr, uid, record_id, default=None, context={}):
+        if default is None or not default or not isinstance(default, (dict)): default = {}
+        if context is None or not context or not isinstance(context, (dict)): context = {}
+        
+        dict_update = {
+                       'code': False,
+                       'comments': False,
+                       'state': 'creating',
+                       'mailing': False,
+                       'sending_emails': False,
+                       'attendance_ids': False,
+                       }
+        dict_update['date_start'] = time.strftime("%Y-%m-%d")
+        default.update(dict_update)
+        context['copy'] = True
+        return super(kemas_event, self).copy(cr, uid, record_id, default, context=context)
+    
     def create(self, cr, uid, vals, context={}):
+        if context is None or not context or not isinstance(context, (dict)): context = {}
+        
         service_obj = self.pool.get('kemas.service')
         vals['date_create'] = str(time.strftime("%Y-%m-%d %H:%M:%S"))
         vals['state'] = 'draft'
@@ -5060,7 +5140,7 @@ class kemas_event(osv.osv):
         vals['date_start'] = dates_dic['date_start']
         vals['date_stop'] = dates_dic['date_stop']
         vals['date_init'] = dates_dic['date_init']
-        if not self.validate_past_date(cr, uid, vals['date_start'], context):
+        if not context.get('copy') and not self.validate_past_date(cr, uid, vals['date_start'], context):
             raise osv.except_osv(u'¡Operación no válida!', u"No se puede crear un evento en una fecha que ya pasó")
         
         res_id = super(kemas_event, self).create(cr, uid, vals, context)
@@ -5392,7 +5472,19 @@ class kemas_event(osv.osv):
                                }
             self.pool.get('mail.notification').create(cr, uid, vals_notication)
         return message_id
-        
+    
+    def check_crossing(self, cr, uid, event_id, context={}):
+        result = True
+        event = self.read(cr, uid, event_id, ['date_start', 'date_stop'])
+        event_ids = self.search(cr, uid, [('date_start', '<=', event['date_start']), ('date_stop', '>=', event['date_start']), ('state', 'in', ['on_going'])])
+        if event_ids and event_ids != event_id:
+            result = False
+        else:
+            event_ids = self.search(cr, uid, [('date_start', '<=', event['date_stop']), ('date_stop', '>=', event['date_stop']), ('state', 'in', ['on_going'])])
+            if event_ids and event_ids[0] != event_id:
+                result = False
+        return result
+    
     def on_going(self, cr, uid, ids, context={}):
         if type(ids).__name__ in ['int', 'long']:
             ids = list(ids)
@@ -5401,6 +5493,9 @@ class kemas_event(osv.osv):
         for record in records:  
             if not self.validate_past_date(cr, uid, record['date_start'], context):
                 raise osv.except_osv(u'¡Operación no válida!', u"No se puede poner en curso un evento en una fecha que ya pasó")
+            
+            if not self.check_crossing(cr, uid, record['id'], context):
+                raise osv.except_osv(u'¡Operación no válida!', u"No se puede poner en curso un evento porque ya hay otro en la misma fecha")
             
             if not record['event_collaborator_line_ids']:
                 raise osv.except_osv(u'¡Operación no válida!', u"Antes de poner el evento en curso primero agregue los colaboradores.")
@@ -5735,7 +5830,7 @@ class kemas_event(osv.osv):
                     'event_id':ids[0]
                     }
             line_obj.create(cr, uid, vals) 
-        self.write(cr, uid, ids, {'collaborators_loaded':True}, context)
+        self.write(cr, uid, ids, {'collaborators_loaded': True}, context)
         line_ids = line_obj.search(cr, uid, [('event_id', '=', ids[0])])
         collaborator_ids = line_obj.read(cr, uid, line_ids, ['collaborator_id'])
         self.write(cr, uid, ids, {'line_ids': collaborator_ids}, context)       
@@ -5761,25 +5856,7 @@ class kemas_event(osv.osv):
         'collaborators_loaded': True,
         'min_points': 1,
         }
-    def validate_date(self, cr, uid, ids):
-        event = self.read(cr, uid, ids[0], ['date_start', 'date_stop'])
-        event_ids = self.search(cr, uid, [('date_start', '<=', event['date_start']), ('date_stop', '>=', event['date_start']), ('state', 'in', ['on_going'])])
-        if event_ids and event_ids != ids:
-            raise osv.except_osv(_('Error!'), _('This event is crossed with another.'))
-        
-        event_ids = self.search(cr, uid, [('date_start', '<=', event['date_stop']), ('date_stop', '>=', event['date_stop']), ('state', 'in', ['on_going'])])
-        if event_ids and event_ids != ids:
-            raise osv.except_osv(_('Error!'), _('This event is crossed with another.'))
-        # tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-        # if extras.convert_to_tz(event['date_start'],tz) <= extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"),tz)[:10] + ' 00:00:00': 
-        #    raise osv.except_osv(_('Error!'), _('Unable to create an event in a past date.')) 
-        
-        return True
-    
-    _constraints = [
-        (validate_date, 'inconsistent data.', ['date_start'])
-        ] 
-    
+
     def _read_group_stage_id(self, cr, uid, ids, domain, read_group_order=None, access_rights_uid=None, context={}):
         stage_obj = self.pool.get('kemas.event.stage')
         access_rights_uid = access_rights_uid or uid
