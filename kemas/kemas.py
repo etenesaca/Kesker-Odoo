@@ -4399,10 +4399,6 @@ class kemas_service(osv.osv):
         }
     
 class kemas_event_collaborator_line(osv.osv):
-    def create(self, cr, uid, vals, context={}):
-        import pdb;pdb.set_trace()
-        return super(kemas_event_collaborator_line, self).create(cr, uid, vals, context)
-    
     def on_change_collaborator(self, cr, uid, ids, context={}):
         values = {}
         values['activity_ids'] = False
@@ -5122,7 +5118,21 @@ class kemas_event(osv.osv):
         dict_update['date_start'] = time.strftime("%Y-%m-%d")
         default.update(dict_update)
         context['copy'] = True
-        return super(kemas_event, self).copy(cr, uid, record_id, default, context=context)
+        res_id = super(kemas_event, self).copy(cr, uid, record_id, default, context=context)
+        line_obj = self.pool['kemas.event.collaborator.line']
+        event = self.read(cr, uid, record_id, ['event_collaborator_line_ids'])
+        lines = line_obj.read(cr, uid, event['event_collaborator_line_ids'])
+        for line in lines:
+            vals = {
+                    'collaborator_id': line['collaborator_id'][0],
+                    'event_id': res_id
+                    }
+            line_obj.create(cr, uid, vals)
+        self.write(cr, uid, [res_id], {'collaborators_loaded': True}, context)
+        line_ids = line_obj.search(cr, uid, [('event_id', '=', res_id)])
+        collaborator_ids = line_obj.read(cr, uid, line_ids, ['collaborator_id'])
+        self.write(cr, uid, [res_id], {'line_ids': collaborator_ids}, context)
+        return res_id
     
     def create(self, cr, uid, vals, context={}):
         if context is None or not context or not isinstance(context, (dict)): context = {}
