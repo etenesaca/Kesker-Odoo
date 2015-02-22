@@ -2680,8 +2680,6 @@ class kemas_skill(osv.osv):
     _columns = {
         'name': fields.char('Nombre', size=64, required=True),
         'active': fields.boolean('Active', required=False, help='Indicates whether this place is active or not'),
-        'skill_ids': fields.many2many('kemas.skill', 'kemas_collaborator_skill_rel', 'collaborator_id', 'skill_id', 'Habilidades', help="Habilidades que tiene este colaborador"),
-        # 'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_collaborator_skill_rel', 'skill_id', 'collaborator_id', 'Colaboraroes', help='Colaboraradores que tienen esta habilidad'),
         'collaborator_ids' : fields.function(_get_collaborators, type='many2many', relation="kemas.collaborator", string='collaborator'),
         }
     _sql_constraints = [
