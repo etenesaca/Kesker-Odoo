@@ -5309,7 +5309,7 @@
             </p>
          </field>
       </record>
-      <menuitem web_icon="images/kemas.png" web_icon_hover="images/kemas-hover.png" id="menu_kemas_collaborator_root" action="kemas_collaborator_dashboard_form_action" name="Kester" sequence="2" groups="group_kemas_collaborator" />
+      <menuitem web_icon="images/kemas.png" web_icon_hover="images/kemas-hover.png" id="menu_kemas_collaborator_root" action="kemas_collaborator_dashboard_form_action" name="Kesker" sequence="2" groups="group_kemas_collaborator" />
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Menu
       -->

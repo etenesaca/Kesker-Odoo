@@ -20,7 +20,7 @@
 #
 ##############################################################################
 {
-    'name': u'Kester - Gestión de Tareas',
+    'name': u'Kesker - Gestión de Tareas',
     'description': """""",
     'version':'1.0',
     'author': 'EdgarSoft',
