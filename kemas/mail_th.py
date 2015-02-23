@@ -22,7 +22,7 @@ from openerp.osv import osv
 class mail_th(osv.AbstractModel):
     _name = 'mail.th'
     
-    def log_change_state(self, cr, uid, record_id, model, title, type_operation, old_state, new_state, context={}):
+    def log_change_state(self, cr, uid, record_id, model, title, old_state, new_state, type_operation='Estado', context={}):
         if context is None or not context or not isinstance(context, (dict)): context = {}
         
         body = u'''
@@ -36,17 +36,18 @@ class mail_th(osv.AbstractModel):
         context['notify_all_followers'] = True
         return self.log_write(cr, uid, record_id, model, body, context=context)
     
-    def log_create(self, cr, uid, record_id, model, body, context={}):
+    def log_create(self, cr, uid, record_id, model, body=False, context={}):
         if context is None or not context or not isinstance(context, (dict)): context = {}
         
         if not body:
+            record_name = context.get('record_name') or 'del registro'
             body = u'''
             <div>
                 <span>
-                    <b>CREACIÓN</b> del registro
+                    <b>CREACIÓN</b> %s
                 </span>
             </div>
-            '''
+            ''' % record_name
         if context.get('delete_uid_followers', False):
             # Quitar el partner del usuario que crear el estudiante de los seguidores
             user = self.pool.get('res.users').read(cr, uid, uid, ['partner_id'])

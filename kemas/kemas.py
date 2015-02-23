@@ -3903,7 +3903,7 @@ class kemas_collaborator(osv.osv):
         'phone': fields.related('partner_id', 'phone', type='char', string=u'Teléfono', store=False),
         'fax': fields.related('partner_id', 'fax', type='char', string=u'Fax', store=False),
         'mobile': fields.related('partner_id', 'mobile', type='char', string=u'Móvil', store=False),
-        'email': fields.related('partner_id', 'email', type='char', string='Email', store=False),
+        'email': fields.related('partner_id', 'email', type='char', string='Email', store=False, required=True),
         
         'web_site_ids': fields.one2many('kemas.collaborator.web.site', 'collaborator_id', 'Web sites', help='Sitio web'),
         'join_date': fields.date('Join date', help="Fecha en la que ingreso en la empresa"),
@@ -5151,6 +5151,7 @@ class kemas_event(osv.osv):
         if not context.get('copy') and not self.validate_past_date(cr, uid, vals['date_start'], context):
             raise osv.except_osv(u'¡Operación no válida!', u"No se puede crear un evento en una fecha que ya pasó")
         
+        context['mail_create_nolog'] = True
         res_id = super(kemas_event, self).create(cr, uid, vals, context)
         lines_obj = self.pool.get('kemas.event.collaborator.line')
         collaborator_line_ids = self.read(cr, uid, [res_id], ['event_collaborator_line_ids'])
@@ -5167,7 +5168,8 @@ class kemas_event(osv.osv):
         super(kemas_event, self).write(cr, uid, [res_id], vals)
         
         # Escribir log
-        self.write_log_create(cr, uid, res_id)
+        ctx = {'notify_all_followers': True, 'delete_uid_followers': True, 'record_name': 'del Evento'}
+        self.pool['mail.th'].log_create(cr, uid, res_id, self._name, context=ctx)
         return res_id
     
     def close_this_event(self, cr, uid, ids, context={}): 
@@ -5335,37 +5337,35 @@ class kemas_event(osv.osv):
                 noticaciones['collaborators'].append(collaborator)
                 cr.commit()
             cr.commit()
-            self.write_log_closed(cr, uid, event_id, event['message_follower_ids'])
+            self.pool['mail.th'].log_change_state(cr, uid, event_id, self._name, 'Evento Finalizado', 'En Curso', 'Cerrado', context=context)
             send_notifications(self)
             
     def cancel_event(self, cr, uid, ids, context={}): 
-        event = self.read(cr, uid, ids[0], ['place_id', 'message_follower_ids'])
         service_obj = self.pool.get('kemas.service')
-        service_id = self.read(cr, uid, ids[0], ['service_id'])['service_id'][0]
-        service = service_obj.read(cr, uid, service_id, [])
-        date_start = self.read(cr, uid, ids[0], ['date_start'])['date_start'] 
-        
-        vals = {
-                'state' : 'canceled',
-                'color' : 2,
-                'date_cancel' : str(time.strftime("%Y-%m-%d %H:%M:%S")),
-                #--Summary----------------------------------------------
-                'rm_service': service['name'],
-                'rm_place': event['place_id'][1],
-                'rm_date': date_start,
-                'rm_time_start': service['time_start'],
-                'rm_time_end': service['time_end'],
-                'rm_time_entry': service['time_entry'],
-                'rm_time_register': service['time_register'],
-                'rm_time_limit': service['time_limit'],
-                }
-        stage_obj = self.pool.get('kemas.event.stage')
-        stage_ids = stage_obj.search(cr, uid, [('sequence', '=', 4)])
-        if stage_ids:
-            vals['stage_id'] = stage_ids[0]
-            
-        super(osv.osv, self).write(cr, uid, ids, vals)
-        self.write_log_canceled(cr, uid, ids[0], event['message_follower_ids'])
+        for record_id in ids:
+            event = self.read(cr, uid, record_id, ['place_id', 'message_follower_ids'])
+            service_id = self.read(cr, uid, record_id, ['service_id'])['service_id'][0]
+            service = service_obj.read(cr, uid, service_id, [])
+            date_start = self.read(cr, uid, record_id, ['date_start'])['date_start'] 
+            stage_ids = self.pool['kemas.event.stage'].search(cr, uid, [('sequence', '=', 4)])
+            vals = {
+                    'state' : 'canceled',
+                    'color' : 2,
+                    'stage_id': stage_ids and stage_ids[0] or False,
+                    'date_cancel' : str(time.strftime("%Y-%m-%d %H:%M:%S")),
+                    #--Summary----------------------------------------------
+                    'rm_service': service['name'],
+                    'rm_place': event['place_id'][1],
+                    'rm_date': date_start,
+                    'rm_time_start': service['time_start'],
+                    'rm_time_end': service['time_end'],
+                    'rm_time_entry': service['time_entry'],
+                    'rm_time_register': service['time_register'],
+                    'rm_time_limit': service['time_limit']
+                    }
+            super(kemas_event, self).write(cr, uid, [record_id], vals)
+            self.pool['mail.th'].log_change_state(cr, uid, record_id, self._name, 'Evento Cancelado', 'En Curso', 'Cancelado', context=context)
+        return True
     
     def write_log_delete_replace(self, cr, uid, event_id, collaborator_id, replaced_id, replace_id):
         collaborator_obj = self.pool.get('kemas.collaborator')
@@ -5398,88 +5398,6 @@ class kemas_event(osv.osv):
         replaced_id = self.pool.get('kemas.collaborator').get_partner_id(cr, uid, replaced_id)
         collaborator_id = self.pool.get('kemas.collaborator').get_partner_id(cr, uid, collaborator_id)
         return self.write_log_update(cr, uid, event_id, body, [replaced_id, collaborator_id])
-    
-    def write_log_create(self, cr, uid, event_id, notify_partner_ids=[]):
-        body = u'''
-        <div>
-            <span>
-                <b>CREACIÓN</b> del Evento
-            </span>
-        </div>
-        '''
-        # Borrar los logs que creados por defecto
-        self.pool.get('mail.message').unlink(cr, SUPERUSER_ID, self.pool.get('mail.message').search(cr, uid, [('res_id', '=', event_id)]))
-        return self.write_log_update(cr, uid, event_id, body, notify_partner_ids)
-    
-    def write_log_draft(self, cr, uid, event_id, notify_partner_ids=[]):
-        body = u'''
-        <div>
-            <span>
-                %s
-            </span>
-            <div>     • <b>%s</b>: %s → %s</div>
-        </div>
-        ''' % (_('Evento Pausado'), _('Estado'), ('En Curso'), _('Borrador'))
-        return self.write_log_update(cr, uid, event_id, body, notify_partner_ids)
-    
-    def write_log_canceled(self, cr, uid, event_id, notify_partner_ids=[]):
-        body = u'''
-        <div>
-            <span>
-                %s
-            </span>
-            <div>     • <b>%s</b>: %s → %s</div>
-        </div>
-        ''' % (_('Este evento fue Cancelado'), _('Estado'), ('En Curso'), _('Cancelado'))
-        return self.write_log_update(cr, uid, event_id, body, notify_partner_ids)
-    
-    def write_log_closed(self, cr, uid, event_id, notify_partner_ids=[]):
-        body = u'''
-        <div>
-            <span>
-                %s
-            </span>
-            <div>     • <b>%s</b>: %s → %s</div>
-        </div>
-        ''' % (_('Evento Finalizado'), _('Estado'), ('En Curso'), _('Cerrado'))
-        return self.write_log_update(cr, uid, event_id, body, notify_partner_ids)
-    
-    def write_log_on_going(self, cr, uid, event_id, notify_partner_ids=[]):
-        body = u'''
-        <div>
-            <span>
-                %s
-            </span>
-            <div>     • <b>%s</b>: %s → %s</div>
-        </div>
-        ''' % (_('Evento en Curso'), _('Estado'), ('Borrador'), _('En Curso'))
-        return self.write_log_update(cr, uid, event_id, body, notify_partner_ids)
-    
-    def write_log_update(self, cr, uid, event_id, body, notify_partner_ids=[]):
-        # --Escribir un mensaje con un registro de que se paso Estado en Curso
-        user_obj = self.pool.get('res.users')
-        message_obj = self.pool.get('mail.message')
-        
-        event_name = self.name_get(cr, uid, [event_id])[0][1]
-        partner_id = user_obj.read(cr, uid, uid, ['partner_id'])['partner_id'][0]
-        vals_message = {
-                        'body' : body,
-                        'model' : 'kemas.event',
-                        'record_name' : event_name,
-                        'res_id' : event_id,
-                        'type' : 'notification',
-                        'author_id' : partner_id,
-                        }
-        message_id = message_obj.create(cr, uid, vals_message)
-        for notify_partner_id in notify_partner_ids:
-            vals_notication = {
-                               'message_id' : message_id,
-                               'partner_id' : notify_partner_id,
-                               'read': False,
-                               'starred': False,
-                               }
-            self.pool.get('mail.notification').create(cr, uid, vals_notication)
-        return message_id
     
     def check_crossing(self, cr, uid, event_id, context={}):
         result = True
@@ -5528,20 +5446,23 @@ class kemas_event(osv.osv):
                 vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
             super(kemas_event, self).write(cr, uid, ids, vals)
             message_follower_ids = self.read(cr, uid, ids[0], ['message_follower_ids'])['message_follower_ids']
-            self.write_log_on_going(cr, uid, ids[0], message_follower_ids)
+            
+            self.pool['mail.th'].log_change_state(cr, uid, record['id'], self._name, 'Evento en Curso', 'Borrador', 'En Curso', context=context)
+        return True
         
     def draft(self, cr, uid, ids, context={}):
         if super(osv.osv, self).read(cr, uid, ids[0], ['sending_emails'])['sending_emails']:
             raise osv.except_osv(_('Error!'), _('You can not make changes to this event as they send notification e-mails.'))
-        vals = {}
-        vals['state'] = 'draft'
-        vals['color'] = 7
-        stage_obj = self.pool.get('kemas.event.stage')
-        stage_ids = stage_obj.search(cr, uid, [('sequence', '=', 1)])
-        if stage_ids:
-            vals['stage_id'] = stage_ids[0]
-        super(osv.osv, self).write(cr, uid, ids, vals)
-        self.write_log_draft(cr, uid, ids[0])
+        stage_ids = self.pool['kemas.event.stage'].search(cr, uid, [('sequence', '=', 1)])
+        vals = {
+                'state': 'draft',
+                'color': 7,
+                'stage_id': stage_ids and stage_ids[0] or False
+                }
+        super(kemas_event, self).write(cr, uid, ids, vals)
+        for record_id in ids:
+            self.pool['mail.th'].log_change_state(cr, uid, record_id, self._name, 'Evento Pausado', 'En Curso', 'Borrador', context=context)
+        return True
         
     def get_percentage(self, cr, uid, ids, name, arg, context={}):
         def get_percent_progress_event(event_id):
@@ -5819,15 +5740,14 @@ class kemas_event(osv.osv):
         return int(config_obj.read(cr, uid, config_id, ['default_not_attend_points'])['default_not_attend_points'])
     
     def load_collaborators(self, cr, uid, ids, context={}):
-        event = self.read(cr, uid, ids[0], ['team_id', 'line_ids', 'min_points'])
         collaborator_obj = self.pool.get('kemas.collaborator')
         line_obj = self.pool.get('kemas.event.collaborator.line')
+        
+        event = self.read(cr, uid, ids[0], ['team_id', 'line_ids', 'min_points'])
         line_ids = line_obj.search(cr, uid, [('event_id', '=', ids[0])])
         line_obj.unlink(cr, uid, line_ids)
-        args = []
-        args.append(('state', '=', 'Active'))
-        args.append(('points', '>', int(event['min_points'])))
-            
+        
+        args = [('state', '=', 'Active'), ('points', '>', int(event['min_points']))]
         if event['team_id']:
             args.append(('team_id', '=', event['team_id'][0]))
         
@@ -5841,7 +5761,8 @@ class kemas_event(osv.osv):
         self.write(cr, uid, ids, {'collaborators_loaded': True}, context)
         line_ids = line_obj.search(cr, uid, [('event_id', '=', ids[0])])
         collaborator_ids = line_obj.read(cr, uid, line_ids, ['collaborator_id'])
-        self.write(cr, uid, ids, {'line_ids': collaborator_ids}, context)       
+        self.write(cr, uid, ids, {'line_ids': collaborator_ids}, context)
+        return True
     
     def _get_def_stage(self, cr, uid, context={}):
         stage_obj = self.pool.get('kemas.event.stage')

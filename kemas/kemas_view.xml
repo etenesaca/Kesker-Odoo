@@ -3953,15 +3953,10 @@
                   <newline />
                   <field name="mailing" invisible="1" />
                </sheet>
-               <group states="closed,canceled">
-                  <div class="oe_chatter">
-                     <field name="message_ids" readonly="1" widget="mail_thread" />
-                  </div>
-               </group>
-               <group states="draft,on_going">
+               <group>
                   <div class="oe_chatter">
                      <field name="message_follower_ids" attrs="{'invisible':[('state','not in',['on_going'])]}" widget="mail_followers" help="Follow this event so you can be notified of all changes made in this." groups="base.group_user" />
-                     <field name="message_ids" widget="mail_thread" />
+                     <field name="message_ids" attrs="{'readonly':[('state','not in',['on_going'])]}" widget="mail_thread" />
                   </div>
                </group>
             </form>
