@@ -18,20 +18,21 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import addons
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
-from openerp import addons
-#import kemas
+
 
 class kemas_event_replace_collaborator_wizard(osv.osv_memory):
     def load_collaborators(self, cr, uid, ids, context={}):
         line_obj = self.pool.get('kemas.event_replace_collaborator.wizard.line')
-        line_obj.unlink(cr,uid,line_obj.search(cr,uid,[('wizard_id','in',ids)]))
         event_obj = self.pool.get('kemas.event')
         config_obj = self.pool.get('kemas.config')
         collaborator_obj = self.pool.get('kemas.collaborator')
         replacement_obj = self.pool.get('kemas.event.replacement')
         event_line_obj = self.pool.get('kemas.event.collaborator.line')
+        
+        line_obj.unlink(cr,uid,line_obj.search(cr,uid,[('wizard_id','in',ids)]))
         wizard = self.read(cr, uid, ids[0], ['event_id'])
         event = event_obj.read(cr, uid, wizard['event_id'][0],['event_collaborator_line_ids'])
         lines = event_line_obj.read(cr, uid, event['event_collaborator_line_ids'], ['id','collaborator_id','replacement_id'])
@@ -131,15 +132,8 @@ class kemas_event_replace_collaborator_wizard(osv.osv_memory):
     _rec_name = 'event_id'
     _columns={
         'event_id': fields.many2one('kemas.event','Event', required=True,ondelete='cascade', help='Event which will replace collaborators.'),
-        'logo': fields.binary('img'),
         'line_ids': fields.one2many('kemas.event_replace_collaborator.wizard.line', 'wizard_id', 'Lines',help=''),
         'collaborator_ids': fields.text('collaborator_id'),
-        }
-    def _get_logo(self, cr, uid, context=None):
-        photo_path = addons.get_module_resource('kemas','images','update.png')
-        return open(photo_path, 'rb').read().encode('base64')
-    _defaults = {  
-        'logo': _get_logo,
         }
 
 class kemas_event_replace_collaborator_wizard_line(osv.osv_memory):

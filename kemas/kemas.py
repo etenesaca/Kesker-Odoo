@@ -5367,7 +5367,7 @@ class kemas_event(osv.osv):
             self.pool['mail.th'].log_change_state(cr, uid, record_id, self._name, 'Evento Cancelado', 'En Curso', 'Cancelado', context=context)
         return True
     
-    def write_log_delete_replace(self, cr, uid, event_id, collaborator_id, replaced_id, replace_id):
+    def write_log_delete_replace(self, cr, uid, event_id, collaborator_id, replaced_id, replace_id, context={}):
         collaborator_obj = self.pool.get('kemas.collaborator')
         collaborator = collaborator_obj.get_nick_name(cr, uid, collaborator_id)
         replaced = collaborator_obj.get_nick_name(cr, uid, replaced_id)
@@ -5378,12 +5378,12 @@ class kemas_event(osv.osv):
             </span>
             <div>     • <b>%s</b>: %s <b>%s</b> %s</div>
         </div>
-        ''' % (_('Reemplazo de Colaboradores'), str(replace_id), _('NULLED'), _('Reemplazo'), collaborator, _('by'), replaced)
-        replaced_id = self.pool.get('kemas.collaborator').get_partner_id(cr, uid, replaced_id)
-        collaborator_id = self.pool.get('kemas.collaborator').get_partner_id(cr, uid, collaborator_id)
-        return self.write_log_update(cr, uid, event_id, body, [replaced_id, collaborator_id])
+        ''' % ('Reemplazo de Colaboradores', str(replace_id), 'ANULADO', 'Reemplazo', collaborator, 'por', replaced)
+        replaced_id = collaborator_obj.get_partner_id(cr, uid, replaced_id)
+        collaborator_id = collaborator_obj.get_partner_id(cr, uid, collaborator_id)
+        return self.pool['mail.th'].log_write(cr, uid, event_id, self._name, body, [replaced_id, collaborator_id], context=context)
     
-    def write_log_replace(self, cr, uid, event_id, collaborator_id, replaced_id, replace_id):
+    def write_log_replace(self, cr, uid, event_id, collaborator_id, replaced_id, replace_id, context={}):
         collaborator_obj = self.pool.get('kemas.collaborator')
         collaborator = collaborator_obj.get_nick_name(cr, uid, collaborator_id)
         replaced = collaborator_obj.get_nick_name(cr, uid, replaced_id)
@@ -5394,10 +5394,10 @@ class kemas_event(osv.osv):
             </span>
             <div>     • <b>%s</b>: %s <b>%s</b> %s</div>
         </div>
-        ''' % (_('Reemplazo de Colaboradores'), str(replace_id), _('Reemplazo'), collaborator, _('by'), replaced)
-        replaced_id = self.pool.get('kemas.collaborator').get_partner_id(cr, uid, replaced_id)
-        collaborator_id = self.pool.get('kemas.collaborator').get_partner_id(cr, uid, collaborator_id)
-        return self.write_log_update(cr, uid, event_id, body, [replaced_id, collaborator_id])
+        ''' % ('Reemplazo de Colaboradores', str(replace_id), 'Reemplazo', collaborator, 'por', replaced)
+        replaced_id = collaborator_obj.get_partner_id(cr, uid, replaced_id)
+        collaborator_id = collaborator_obj.get_partner_id(cr, uid, collaborator_id)
+        return self.pool['mail.th'].log_write(cr, uid, event_id, self._name, body, [replaced_id, collaborator_id], context=context)
     
     def check_crossing(self, cr, uid, event_id, context={}):
         result = True
@@ -6108,23 +6108,20 @@ class kemas_event_replacement(osv.osv):
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
     
     def unlink(self, cr, uid, ids, context={}): 
-        records = self.read(cr, uid, ids, ['event_collaborator_line_id', 'collaborator_id', 'collaborator_replacement_id', 'event_id'])
         event_obj = self.pool.get('kemas.event')
         line_obj = self.pool.get('kemas.event.collaborator.line')
         attendace_obj = self.pool.get('kemas.attendance')        
+        records = self.read(cr, uid, ids, ['event_collaborator_line_id', 'collaborator_id', 'collaborator_replacement_id', 'event_id'])
         for record in records:
             event = event_obj.read(cr, uid, record['event_id'][0], ['state'])
             if event['state'] not in ['on_going']:                
-                raise osv.except_osv(_('Error!'), _('Can not delete a replacement from an event that is not ongoing!!'))
+                raise osv.except_osv(u'Operación no válida', u'No se puede eliminar este reemplazo porque el evento no está en Curso')
             else:
-                args = [('event_id', '=', record['event_id'][0]), ('collaborator_id', '=', record['collaborator_replacement_id'][0])]
-                if attendace_obj.search(cr, uid, args):
-                    raise osv.except_osv(_('Error!'), _('Can not delete a replacement from a collaborator and attendance record.'))
+                search_args = [('event_id', '=', record['event_id'][0]), ('collaborator_id', '=', record['collaborator_replacement_id'][0])]
+                if attendace_obj.search(cr, uid, search_args):
+                    raise osv.except_osv(u'Operación no válida', u'No se puede borrar un reemplazo de un colaborador que ya registro asistencia en este evento.')
                 collaborator_id = record['collaborator_id'][0]
                 replace_id = record['collaborator_replacement_id'][0]
-                vals = {
-                        'collaborator_id' : collaborator_id
-                        }
                 
                 collaborator_obj = self.pool.get('kemas.collaborator')
                 users_obj = self.pool.get('res.users')
@@ -6143,7 +6140,7 @@ class kemas_event_replacement(osv.osv):
                     super(kemas_event, event_obj).write(cr, uid, [event['id']], {'message_follower_ids' : [(4, collaborator_partner_id)]}, context)
                 super(kemas_event, event_obj).write(cr, uid, [event['id']], {'message_follower_ids' : [(3, replace_partner_id)]}, context)
                 
-                line_obj.write(cr, uid, record['event_collaborator_line_id'][0], vals)
+                line_obj.write(cr, uid, record['event_collaborator_line_id'][0], vals={'collaborator_id' : collaborator_id})
                 event_obj.write_log_delete_replace(cr, uid, event['id'], collaborator_id, replace_id, record['id'])
                 
         return super(osv.osv, self).unlink(cr, uid, ids, context)
@@ -6174,7 +6171,7 @@ class kemas_event_replacement(osv.osv):
         'collaborator_replacement_id': fields.many2one('kemas.collaborator', 'Collaborator replacement', help='Collaborator replacement'),
         'event_id': fields.many2one('kemas.event', 'Event', help='Event that was carried out the replacement', ondelete="cascade"),
         'event_collaborator_line_id': fields.many2one('kemas.event.collaborator.line', 'event_collaborator_line', ondelete="cascade", help=''),
-        'user_id': fields.many2one('res.users', 'User', help='Person performing the replacement'),
+        'user_id': fields.many2one('res.users', 'User', help='Persona que realizó el reemplado'),
         'datetime': fields.datetime('Date'),
         'description': fields.text('Description'),
         # Campos para buscar entre fechas
