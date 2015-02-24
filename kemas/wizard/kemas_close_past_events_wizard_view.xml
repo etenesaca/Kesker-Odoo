@@ -13,7 +13,7 @@
          <field name="type">form</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
-            <form string="Close Past Events" version="7.0">
+            <form string="Cerrar eventos pasados" version="7.0">
                <header attrs="{'invisible':['|',('line_ids','=',[]),('state','!=','loaded')]}">
                   <field name="state" invisible="1" />
                   <button name="load_form" type="object" string="Reload Past Events" icon="STOCK_REFRESH" colspan="4" />

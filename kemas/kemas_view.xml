@@ -3643,8 +3643,8 @@
          </field>
       </record>
       <!--____________________________________________________Vista de Busqueda -->
-      <record model="ir.ui.view" id="kemas_event_replacement_search_view2">
-         <field name="name">kemas.event.replacement.search2</field>
+      <record model="ir.ui.view" id="kemas_event_replacement_search_view">
+         <field name="name">kemas.event.replacement.search</field>
          <field name="model">kemas.event.replacement</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
@@ -3664,8 +3664,8 @@
                <field name="user_id" />
                <field name="datetime" />
                <group string="Agrupar por...">
-                  <filter string="Service" icon="terp-partner" domain="[]" context="{'group_by':'event_id'}" />
-                  <filter string="Date" icon="terp-partner" domain="[]" context="{'group_by':'datetime'}" />
+                  <filter string="Servicio" domain="[]" context="{'group_by':'event_id'}" />
+                  <filter string="Fecha" domain="[]" context="{'group_by':'datetime'}" />
                </group>
             </search>
          </field>
@@ -3822,13 +3822,24 @@
          ====================
       -->
       <record id="action_kemas_attendance_event" model="ir.actions.act_window">
-         <field name="name">Attendance record</field>
+         <field name="name">Registros de asistencia</field>
          <field name="res_model">kemas.attendance</field>
          <field name="view_mode">tree,form,graph</field>
          <field name="context">{'search_view_ref':'kemas.kemas_attendance_search_view','search_default_event_id': [active_id], 'default_event_id': active_id}</field>
          <field name="help" type="html">
             <p>
-               No attendace record..!!
+               No hay registros de asistencias
+            </p>
+         </field>
+      </record>
+      <record id="action_kemas_replacements_event" model="ir.actions.act_window">
+         <field name="name">Reemplazos</field>
+         <field name="res_model">kemas.event.replacement</field>
+         <field name="view_mode">tree,form,graph</field>
+         <field name="context">{'search_view_ref':'kemas.kemas_event_replacement_search_view','search_default_event_id': [active_id], 'default_event_id': active_id}</field>
+         <field name="help" type="html">
+            <p>
+               No hay reemplazos realizados
             </p>
          </field>
       </record>
@@ -3858,6 +3869,9 @@
                      </h2>
                   </div>
                   <div class="oe_right oe_button_box" name="buttons" states="on_going,closed,canceled" groups="kemas.group_kemas_manager">
+                     <button type="action" icon="fa-pencil" class="oe_stat_button oe_read_only" name="%(action_kemas_replacements_event)d" help="Ver los reemplazos registrados en este evento">
+                        <field name="replacements_count" widget="statinfo" string="Reemplazos" />
+                     </button>
                      <button type="action" icon="fa-clock-o" class="oe_stat_button oe_read_only" name="%(action_kemas_attendance_event)d" help="Ver los registrosde asistencia registrados en este evento">
                         <field name="attendance_count" widget="statinfo" string="Asistencias" />
                      </button>

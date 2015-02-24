@@ -5630,10 +5630,12 @@ class kemas_event(osv.osv):
     
     def _count_all(self, cr, uid, ids, name, arg, context={}): 
         def count_all(record):
-            result = {'attendance_count': 0}
+            result = {'attendance_count': 0, 'replacements_count': 0}
             # Contar los registros de asistencias
             cr.execute("select count(id) from kemas_attendance where event_id = %d" % record['id'])
             result['attendance_count'] = cr.fetchall()[0][0] 
+            cr.execute("select count(id) from kemas_event_replacement where event_id = %d" % record['id'])
+            result['replacements_count'] = cr.fetchall()[0][0] 
             return result
              
         result = {}
@@ -5719,6 +5721,7 @@ class kemas_event(osv.osv):
         'event_date_str': fields.function(_get_event_date_str, type='char', string='Event date'),
         'event_day': fields.function(_event_day, type='char', string='Dia del evento'),
         # Contadores
+        'replacements_count': fields.function(_count_all, type='integer', string='Reeplazos', multi=True),
         'attendance_count': fields.function(_count_all, type='integer', string='Asistencias', multi=True),
         }
     _sql_constraints = [
