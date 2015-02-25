@@ -5427,7 +5427,7 @@ class kemas_event(osv.osv):
                 raise osv.except_osv(u'¡Operación no válida!', u"Antes de poner el evento en curso primero agregue los colaboradores.")
                 
             user_obj = self.pool.get('res.users')
-            members = user_obj.read(cr, uid, record['members'] + [uid])
+            members = user_obj.read(cr, uid, record['members'])
             collaborator_partner_ids = []
             for member in members:
                 if member['partner_id']:
@@ -5445,8 +5445,6 @@ class kemas_event(osv.osv):
                 seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Event'), ])[0]
                 vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
             super(kemas_event, self).write(cr, uid, ids, vals)
-            message_follower_ids = self.read(cr, uid, ids[0], ['message_follower_ids'])['message_follower_ids']
-            
             self.pool['mail.th'].log_change_state(cr, uid, record['id'], self._name, 'Evento en Curso', 'Borrador', 'En Curso', context=context)
         return True
         

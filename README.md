@@ -1,3 +1,3 @@
-[![Build Status](https://travis-ci.org/etenesaca/Kester-Odoo.svg?branch=v8.0)](https://travis-ci.org/etenesaca/Kester-Odoo)
+[![Build Status](https://travis-ci.org/etenesaca/Kesker-Odoo.svg?branch=v8.0)](https://travis-ci.org/etenesaca/Kesker-Odoo)
 
-# Kester
+# Kesker

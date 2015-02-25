@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-31 13:29+0000\n"
-"PO-Revision-Date: 2015-01-31 13:29+0000\n"
+"POT-Creation-Date: 2015-02-25 00:00+0000\n"
+"PO-Revision-Date: 2015-02-25 00:00+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -316,54 +316,6 @@ msgstr "<p class=\"oe_view_nocontent_create\">\n"
 "         "
 
 #. module: kemas
-#: model:ir.actions.act_window,help:kemas.action_kemas_task_category
-msgid "<p class=\"oe_view_nocontent_create\">\n"
-"               Click to add a new tag.\n"
-"            </p>\n"
-"         "
-msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"               De click aquí para crear una nueva Etiqueta.\n"
-"            </p>\n"
-"         "
-
-#. module: kemas
-#: model:ir.actions.act_window,help:kemas.action_kemas_task_type
-msgid "<p class=\"oe_view_nocontent_create\">\n"
-"               Click to add a stage in the task pipeline.\n"
-"            </p>\n"
-"            <p>\n"
-"               Define the steps that will be used in the project from the\n"
-"               creation of the task, up to the closing of the task or issue.\n"
-"               You will use these stages in order to track the progress in\n"
-"               solving a task or an issue.\n"
-"            </p>\n"
-"         "
-msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"               De click aquí para crear una nueva Etapa para las tareas.\n"
-"            </p>\n"
-"            <p>\n"
-"            </p>\n"
-"         "
-
-#. module: kemas
-#: model:ir.actions.act_window,help:kemas.action_kemas_task_assigned
-msgid "<p class=\"oe_view_nocontent_create\">\n"
-"               Click to create a new task.\n"
-"            </p>\n"
-"            <p>\n"
-"               OpenERP's project management allows you to manage the pipeline\n"
-"               of tasks in order to get things done efficiently. You can\n"
-"               track progress, discuss on tasks, attach documents, etc.\n"
-"            </p>\n"
-"         "
-msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"               De click aquí para crear una nueva Tarea.\n"
-"            </p>\n"
-"            <p>\n"
-"                         </p>\n"
-"         "
-
-#. module: kemas
 #: model:ir.actions.act_window,help:kemas.action_kemas_collaborator
 msgid "<p class=\"oe_view_nocontent_create\">\n"
 "               Click to register a Collaborator.\n"
@@ -465,23 +417,6 @@ msgstr "<p class=\"oe_view_nocontent_create\">\n"
 "         "
 
 #. module: kemas
-#: model:ir.actions.act_window,help:kemas.action_kemas_task
-msgid "<p class=\"oe_view_nocontent_create\">\n"
-"               Click to register a Task.\n"
-"            </p>\n"
-"            <p>\n"
-"\n"
-"            </p>\n"
-"         "
-msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"               De click aquí para registrar una nueva Tarea.\n"
-"            </p>\n"
-"            <p>\n"
-"\n"
-"            </p>\n"
-"         "
-
-#. module: kemas
 #: model:ir.actions.act_window,help:kemas.action_kemas_team
 msgid "<p class=\"oe_view_nocontent_create\">\n"
 "               Click to register a Team.\n"
@@ -548,23 +483,6 @@ msgstr "<p class=\"oe_view_nocontent_create\">\n"
 "         "
 
 #. module: kemas
-#: model:ir.actions.act_window,help:kemas.action_kemas_area
-msgid "<p class=\"oe_view_nocontent_create\">\n"
-"               Click to register an Area.\n"
-"            </p>\n"
-"            <p>\n"
-"               An Area is each of the parts that the ministry is divided, each one consisting of collaborators and activities.\n"
-"            </p>\n"
-"         "
-msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"               Click to register an Area.\n"
-"            </p>\n"
-"            <p>\n"
-"               An Area is each of the parts that the ministry is divided, each one consisting of collaborators and activities.\n"
-"            </p>\n"
-"         "
-
-#. module: kemas
 #: model:ir.actions.act_window,help:kemas.kemas_skill_action
 msgid "<p class=\"oe_view_nocontent_create\">\n"
 "               De click aquí para agregar un Nueva Habilidad.\n"
@@ -578,6 +496,23 @@ msgstr "<p class=\"oe_view_nocontent_create\">\n"
 "            </p>\n"
 "            <p>\n"
 "\n"
+"            </p>\n"
+"         "
+
+#. module: kemas
+#: model:ir.actions.act_window,help:kemas.action_kemas_area
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"               De click aquí para crear una nueva Área.\n"
+"            </p>\n"
+"            <p>\n"
+"               Cada Área es cada una de la partes en las que está dividida la empresa, cada una costa de actividades que son cumplidas por los colaboradores\n"
+"            </p>\n"
+"         "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"               De click aquí para crear una nueva Área.\n"
+"            </p>\n"
+"            <p>\n"
+"               Cada Área es cada una de la partes en las que está dividida la empresa, cada una costa de actividades que son cumplidas por los colaboradores\n"
 "            </p>\n"
 "         "
 
@@ -610,24 +545,6 @@ msgstr "<p>\n"
 "         "
 
 #. module: kemas
-#: model:ir.actions.act_window,help:kemas.action_kemas_task_assigned_collaborator
-msgid "<p>\n"
-"               Click to create a new task.\n"
-"            </p>\n"
-"            <p>\n"
-"               OpenERP's project management allows you to manage the pipeline\n"
-"               of tasks in order to get things done efficiently. You can\n"
-"               track progress, discuss on tasks, attach documents, etc.\n"
-"            </p>\n"
-"         "
-msgstr "<p>\n"
-"               De click aquí para agregar una nueva tarea.\n"
-"            </p>\n"
-"            <p>\n"
-"            </p>\n"
-"         "
-
-#. module: kemas
 #: model:ir.actions.act_window,help:kemas.kemas_event_replacement_form_action
 msgid "<p>\n"
 "               No Replaces record..!!\n"
@@ -635,17 +552,6 @@ msgid "<p>\n"
 "         "
 msgstr "<p>\n"
 "               No hay reemplazos guardados\n"
-"            </p>\n"
-"         "
-
-#. module: kemas
-#: model:ir.actions.act_window,help:kemas.action_kemas_attendance_event
-msgid "<p>\n"
-"               No attendace record..!!\n"
-"            </p>\n"
-"         "
-msgstr "<p>\n"
-"               No hay registros de asistencia\n"
 "            </p>\n"
 "         "
 
@@ -694,6 +600,28 @@ msgstr "<p>\n"
 "         "
 
 #. module: kemas
+#: model:ir.actions.act_window,help:kemas.action_kemas_replacements_event
+msgid "<p>\n"
+"               No hay reemplazos realizados\n"
+"            </p>\n"
+"         "
+msgstr "<p>\n"
+"               No hay reemplazos realizados\n"
+"            </p>\n"
+"         "
+
+#. module: kemas
+#: model:ir.actions.act_window,help:kemas.action_kemas_attendance_event
+msgid "<p>\n"
+"               No hay registros de asistencias\n"
+"            </p>\n"
+"         "
+msgstr "<p>\n"
+"               No hay registros de asistencias\n"
+"            </p>\n"
+"         "
+
+#. module: kemas
 #: model:ir.actions.act_window,help:kemas.action_kemas_suspension
 #: model:ir.actions.act_window,help:kemas.action_kemas_suspension_collaborator
 msgid "<p>\n"
@@ -730,11 +658,6 @@ msgstr "Una breve historia del Área..."
 #: view:kemas.set.points.step2.wizard:kemas.kemas_set_points_step2_wizard_form_view
 msgid "ADD POINTS"
 msgstr "AGREGAR PUNTOS"
-
-#. module: kemas
-#: view:kemas.set.points.task.wizard:kemas.kemas_set_points_task_wizard_form_view
-msgid "ADD POINTS FOR TASK"
-msgstr "AGREGAR PUNTOS POR TAREA"
 
 #. module: kemas
 #: view:kemas.attendance:kemas.kemas_attendance_search_view
@@ -776,9 +699,6 @@ msgstr "Activar Colaborador"
 #: view:kemas.service:kemas.kemas_service_search_view
 #: field:kemas.service,active:0
 #: field:kemas.skill,active:0
-#: view:kemas.task:kemas.kemas_task_search_view
-#: field:kemas.task,active:0
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
 msgid "Active"
 msgstr "Activo"
 
@@ -838,29 +758,9 @@ msgid "Add Points"
 msgstr "Agregar puntos"
 
 #. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view
-msgid "Add a Description..."
-msgstr "Agregar descripción..."
-
-#. module: kemas
-#: view:kemas.task.type:kemas.kemas_task_type_form
-msgid "Add a description..."
-msgstr "Agregar descripción..."
-
-#. module: kemas
 #: view:kemas.event.collaborator.line:kemas.kemas_event_collaborator_line_form_view
 msgid "Add here the activities that will meet the collaborator.."
 msgstr "Agrega aquí las actividades que va cumplir este colaborador..."
-
-#. module: kemas
-#: model:ir.actions.act_window,name:kemas.kemas_set_points_task_wizard_form_action
-msgid "Add points for Tasks"
-msgstr "Agregar puntos por tareas"
-
-#. module: kemas
-#: model:ir.ui.menu,name:kemas.menu_kemas_set_points_task_wizard_form_action_mn
-msgid "Add points for task"
-msgstr "Agregar puntos por tarea"
 
 #. module: kemas
 #: view:kemas.school4d_line:kemas.kemas_school4d_line_form_view
@@ -902,6 +802,7 @@ msgstr "Agrega aqui las actividades"
 #: view:kemas.event:kemas.kemas_event_search_view
 #: view:kemas.event:kemas.kemas_event_search_view2
 #: view:kemas.event.collaborator.line:kemas.kemas_event_collaborator_line_search_view
+#: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view
 #: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view2
 #: view:kemas.history.points:kemas.kemas_history_points_search_view2
 #: view:kemas.massive.email:kemas.kemas_massive_email_search_view
@@ -909,8 +810,6 @@ msgstr "Agrega aqui las actividades"
 #: view:kemas.school4d_line:kemas.kemas_school4d_line_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view2
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view2
 msgid "Agrupar por..."
 msgstr "Agrupar por..."
 
@@ -936,12 +835,12 @@ msgid "Also remove points?"
 msgstr "¿También quitar puntos?"
 
 #. module: kemas
-#: field:kemas.config,bc_height:0
+#: field:kemas.config,bc_module_height:0
 msgid "Alto"
 msgstr "Alto"
 
 #. module: kemas
-#: field:kemas.config,bc_width:0
+#: field:kemas.config,bc_module_width:0
 msgid "Ancho"
 msgstr "Ancho"
 
@@ -952,7 +851,7 @@ msgid "Apellidos"
 msgstr "Apellidos"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:3383
+#: code:addons/kemas/kemas.py:3427
 #, python-format
 msgid "Apr"
 msgstr "Abr"
@@ -969,24 +868,9 @@ msgid "Archivo"
 msgstr "Archivo"
 
 #. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view
-msgid "Are you Cancel sure This Task now? This action is irreversible."
-msgstr "¿Está seguro CANCELAR Esta Tarea ahora? Esta acción es irreversible"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view
-msgid "Are you Close sure This Task now? This action is irreversible."
-msgstr "¿Está seguro CERRAR Esta Tarea ahora? Esta acción es irreversible"
-
-#. module: kemas
 #: view:kemas.set.points.step2.wizard:kemas.kemas_set_points_step2_wizard_form_view
 msgid "Are you dure to save the changes now?"
 msgstr "¿Está seguro para guardar los cambios ahora?"
-
-#. module: kemas
-#: view:kemas.set.points.task.wizard:kemas.kemas_set_points_task_wizard_form_view
-msgid "Are you sure reclaim to these Collaborators for the fulfillment of task task now?"
-msgstr "¿Está seguro de bonificar a estos colaboradores para el cumplimiento de la tarea ahora?"
 
 #. module: kemas
 #: view:kemas.close.past.event.wizard:kemas.kemas_close_past_event_wizard_form_view
@@ -1047,7 +931,7 @@ msgid "Are you sure to put this event in ONGOING now?"
 msgstr "¿Está seguro de poner  En CURSO este evento ahora?"
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:98
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:99
 #, python-format
 msgid "Are you sure to replace this contributor now?"
 msgstr "¿Está seguro de Reemplazar este Colaborador ahora?"
@@ -1166,16 +1050,6 @@ msgid "Assign User Account"
 msgstr "Asignar una Cuenta de Usuario"
 
 #. module: kemas
-#: field:kemas.task.assigned,user_id:0
-msgid "Assigned to"
-msgstr "Asignar a"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view
-msgid "Assigned to..."
-msgstr "Asignar a..."
-
-#. module: kemas
 #: view:board.board:kemas.kemas_collaborator_dashboard_form
 #: view:board.board:kemas.kemas_manager_dashboard_form
 msgid "Attedance Statistics"
@@ -1198,7 +1072,6 @@ msgstr "Estadísticas de Asistencia"
 #: view:kemas.attendance:kemas.kemas_attendance_form_view3
 #: view:kemas.event:kemas.kemas_event_form_view
 #: view:kemas.event:kemas.kemas_event_form_view2
-#: view:kemas.service:kemas.kemas_service_form_view
 msgid "Attendance"
 msgstr "Asistencia"
 
@@ -1219,7 +1092,6 @@ msgstr "Asistencia a tiempo"
 
 #. module: kemas
 #: model:ir.actions.act_window,name:kemas.action_kemas_attendance_collaborator
-#: model:ir.actions.act_window,name:kemas.action_kemas_attendance_event
 #: model:ir.actions.act_window,name:kemas.kemas_attendance_form_action
 #: model:ir.actions.act_window,name:kemas.kemas_attendance_form_action2
 msgid "Attendance record"
@@ -1240,7 +1112,7 @@ msgid "Attendances"
 msgstr "Registro de asistencia"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:3391
+#: code:addons/kemas/kemas.py:3435
 #, python-format
 msgid "Aug"
 msgstr "Ago"
@@ -1252,6 +1124,7 @@ msgstr "Ago"
 #: view:kemas.event:kemas.kemas_event_search_view
 #: view:kemas.event:kemas.kemas_event_search_view2
 #: view:kemas.event.collaborator.line:kemas.kemas_event_collaborator_line_search_view
+#: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view
 #: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view2
 #: view:kemas.history.points:kemas.kemas_history_points_search_view
 #: view:kemas.history.points:kemas.kemas_history_points_search_view2
@@ -1259,7 +1132,6 @@ msgstr "Ago"
 #: view:kemas.repository:kemas.kemas_repository_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view2
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
 msgid "Ayer"
 msgstr "Ayer"
 
@@ -1267,6 +1139,11 @@ msgstr "Ayer"
 #: view:kemas.send.notification.event.wizard:kemas.kemas_send_notification_event_wizard_form_view
 msgid "Back to prepare to receive e-mail again."
 msgstr "Preparar para volver a enviar las notificaciones a todos los colaboradores"
+
+#. module: kemas
+#: field:kemas.config,bc_background:0
+msgid "Background"
+msgstr "Background"
 
 #. module: kemas
 #: selection:kemas.collaborator.logbook,type:0
@@ -1334,9 +1211,7 @@ msgid "Born State"
 msgstr "Provincia de Nacimiento"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:5727
 #: selection:kemas.repository,state:0
-#, python-format
 msgid "Borrador"
 msgstr "Borrador"
 
@@ -1365,7 +1240,6 @@ msgstr "Buscar Habilidad"
 #: help:kemas.massive.email,search_start:0
 #: help:kemas.repository,search_start:0
 #: help:kemas.suspension,search_start:0
-#: help:kemas.task.assigned,search_start:0
 msgid "Buscar desde"
 msgstr "Buscar desde"
 
@@ -1379,7 +1253,6 @@ msgstr "Buscar desde"
 #: help:kemas.massive.email,search_end:0
 #: help:kemas.repository,search_end:0
 #: help:kemas.suspension,search_end:0
-#: help:kemas.task.assigned,search_end:0
 msgid "Buscar hasta"
 msgstr "Buscar hasta"
 
@@ -1395,6 +1268,7 @@ msgstr "Buscar registro de asistencia"
 #: view:kemas.event:kemas.kemas_event_search_view
 #: view:kemas.event:kemas.kemas_event_search_view2
 #: view:kemas.event.collaborator.line:kemas.kemas_event_collaborator_line_search_view
+#: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view
 #: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view2
 #: view:kemas.history.points:kemas.kemas_history_points_search_view
 #: view:kemas.history.points:kemas.kemas_history_points_search_view2
@@ -1402,7 +1276,6 @@ msgstr "Buscar registro de asistencia"
 #: view:kemas.repository:kemas.kemas_repository_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view2
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
 msgid "Buscar todos los registros guardados ayer"
 msgstr "Buscar todos los registros guardados ayer"
 
@@ -1413,6 +1286,7 @@ msgstr "Buscar todos los registros guardados ayer"
 #: view:kemas.event:kemas.kemas_event_search_view
 #: view:kemas.event:kemas.kemas_event_search_view2
 #: view:kemas.event.collaborator.line:kemas.kemas_event_collaborator_line_search_view
+#: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view
 #: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view2
 #: view:kemas.history.points:kemas.kemas_history_points_search_view
 #: view:kemas.history.points:kemas.kemas_history_points_search_view2
@@ -1420,7 +1294,6 @@ msgstr "Buscar todos los registros guardados ayer"
 #: view:kemas.repository:kemas.kemas_repository_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view2
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
 msgid "Buscar todos los registros guardados durante este mes"
 msgstr "Buscar todos los registros guardados durante este mes"
 
@@ -1431,6 +1304,7 @@ msgstr "Buscar todos los registros guardados durante este mes"
 #: view:kemas.event:kemas.kemas_event_search_view
 #: view:kemas.event:kemas.kemas_event_search_view2
 #: view:kemas.event.collaborator.line:kemas.kemas_event_collaborator_line_search_view
+#: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view
 #: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view2
 #: view:kemas.history.points:kemas.kemas_history_points_search_view
 #: view:kemas.history.points:kemas.kemas_history_points_search_view2
@@ -1438,7 +1312,6 @@ msgstr "Buscar todos los registros guardados durante este mes"
 #: view:kemas.repository:kemas.kemas_repository_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view2
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
 msgid "Buscar todos los registros guardados en esta semana"
 msgstr "Buscar todos los registros guardados en esta semana"
 
@@ -1449,6 +1322,7 @@ msgstr "Buscar todos los registros guardados en esta semana"
 #: view:kemas.event:kemas.kemas_event_search_view
 #: view:kemas.event:kemas.kemas_event_search_view2
 #: view:kemas.event.collaborator.line:kemas.kemas_event_collaborator_line_search_view
+#: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view
 #: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view2
 #: view:kemas.history.points:kemas.kemas_history_points_search_view
 #: view:kemas.history.points:kemas.kemas_history_points_search_view2
@@ -1456,7 +1330,6 @@ msgstr "Buscar todos los registros guardados en esta semana"
 #: view:kemas.repository:kemas.kemas_repository_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view2
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
 msgid "Buscar todos los registros guardados hoy"
 msgstr "Buscar todos los registros guardados hoy"
 
@@ -1502,18 +1375,6 @@ msgid "Campos a incluir en el reporte"
 msgstr "Campos a incluir en el reporte"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:6514
-#, python-format
-msgid "Can not delete a replacement from a collaborator and attendance record."
-msgstr "Usted puede eliminar un reemplazo de un Colaborador que ya Registro Asistencia"
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:6510
-#, python-format
-msgid "Can not delete a replacement from an event that is not ongoing!!"
-msgstr "¡No se puede eliminar un Reemplazo de un Evento que ya no está En Curso!"
-
-#. module: kemas
 #: code:addons/kemas/wizard/kemas_collaborator_active_wizard.py:35
 #: code:addons/kemas/wizard/kemas_collaborator_assing_code_wizard.py:36
 #: code:addons/kemas/wizard/kemas_collaborator_assing_user_account_wizard.py:37
@@ -1521,24 +1382,15 @@ msgstr "¡No se puede eliminar un Reemplazo de un Evento que ya no está En Curs
 #: code:addons/kemas/wizard/kemas_collaborator_notify_incorporation_wizard.py:69
 #: code:addons/kemas/wizard/kemas_collaborator_send_notifications_wizard.py:65
 #: code:addons/kemas/wizard/kemas_register_attendance_wizard.py:44
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:118
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:119
 #: view:kemas.send.notification.event.wizard:kemas.kemas_send_notification_event_wizard_form_view
 #: view:kemas.set.points.step1.wizard:kemas.kemas_set_points_step1_wizard_form_view
 #: view:kemas.set.points.step2.wizard:kemas.kemas_set_points_step2_wizard_form_view
-#: view:kemas.set.points.task.wizard:kemas.kemas_set_points_task_wizard_form_view
 #: view:kemas.suspend_collaborator.step1.wizard:kemas.kemas_suspend_collaborator_step1_wizard_form_view
 #: view:kemas.suspend_collaborator.step2.wizard:kemas.kemas_suspend_collaborator_step2_wizard_form_view
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view
 #, python-format
 msgid "Cancel"
 msgstr "Cancelar"
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:4026
-#: code:addons/kemas/kemas.py:5738
-#, python-format
-msgid "Cancelado"
-msgstr "Cancelado"
 
 #. module: kemas
 #: view:kemas.attendance.statistics.wizard:kemas.kemas_report_attendance_statistics_wizard_form_view
@@ -1554,24 +1406,7 @@ msgstr "Cancelar"
 #: selection:kemas.event,state:0
 #: model:kemas.event.stage,name:kemas.seq_stage_kemas_event_canceled
 #: selection:kemas.report.events.list.wizard,state:0
-#: model:kemas.task.type,name:kemas.kemas_stage_canceled
 msgid "Canceled"
-msgstr "Cancelado"
-
-#. module: kemas
-#: field:kemas.task.assigned,date_cancelled:0
-msgid "Cancellation date"
-msgstr "Fecha de cancelación"
-
-#. module: kemas
-#: help:kemas.task.assigned,date_cancelled:0
-msgid "Cancellation date of This Task"
-msgstr "Fecha de cancelación de esta Tarea"
-
-#. module: kemas
-#: selection:kemas.task.assigned,state:0
-#: selection:kemas.task.type,state:0
-msgid "Cancelled"
 msgstr "Cancelado"
 
 #. module: kemas
@@ -1590,16 +1425,14 @@ msgid "Celular:"
 msgstr "Celular:"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:4061
-#: code:addons/kemas/kemas.py:5749
-#, python-format
-msgid "Cerrado"
-msgstr "Cerrado"
-
-#. module: kemas
 #: view:kemas.event:kemas.kemas_event_form_view
 msgid "Cerrar"
 msgstr "Cerrar"
+
+#. module: kemas
+#: view:kemas.close.past.event.wizard:kemas.kemas_close_past_event_wizard_form_view
+msgid "Cerrar eventos pasados"
+msgstr "Cerrar eventos pasados"
 
 #. module: kemas
 #: view:kemas.school4d_line:kemas.kemas_school4d_line_kanban_view
@@ -1638,11 +1471,6 @@ msgid "Ciudad de nacimiento"
 msgstr "Ciudad de nacimiento"
 
 #. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view
-msgid "Close"
-msgstr "Cerrar"
-
-#. module: kemas
 #: view:kemas.close.past.event.line.wizard:kemas.kemas_close_past_event_line_wizard_form_view
 #: view:kemas.close.past.event.wizard:kemas.kemas_close_past_event_wizard_form_view
 msgid "Close Past Events"
@@ -1665,19 +1493,8 @@ msgstr "Cerrar eventos pasados"
 #: view:kemas.event.collaborator.line:kemas.kemas_event_collaborator_line_search_view
 #: model:kemas.event.stage,name:kemas.seq_stage_kemas_event_closed
 #: selection:kemas.report.events.list.wizard,state:0
-#: model:kemas.task.type,name:kemas.kemas_stage_closed
 msgid "Closed"
 msgstr "Cerrado"
-
-#. module: kemas
-#: field:kemas.task.assigned,date_closing:0
-msgid "Closing date"
-msgstr "Fecha de Cierre"
-
-#. module: kemas
-#: help:kemas.task.assigned,date_closing:0
-msgid "Closing date for This Task"
-msgstr "Fecha de cierre de esta Tarea"
 
 #. module: kemas
 #: code:addons/kemas/wizard/kemas_close_past_events_wizard.py:78
@@ -1685,11 +1502,6 @@ msgstr "Fecha de cierre de esta Tarea"
 #, python-format
 msgid "Closing of events has begun..."
 msgstr "El cierre de los evento ha empezado..."
-
-#. module: kemas
-#: selection:kemas.config,bc_type:0
-msgid "Codabar"
-msgstr "Codabar"
 
 #. module: kemas
 #: field:kemas.attendance,code:0
@@ -1705,13 +1517,13 @@ msgstr "Código"
 
 #. module: kemas
 #: selection:kemas.config,bc_type:0
-msgid "Code11"
-msgstr "Code11"
+msgid "Code128"
+msgstr "Code128"
 
 #. module: kemas
 #: selection:kemas.config,bc_type:0
-msgid "Code128"
-msgstr "Code128"
+msgid "Code39"
+msgstr "Code39"
 
 #. module: kemas
 #: field:kemas.show.barcode.wizard,barcode:0
@@ -1793,7 +1605,6 @@ msgstr "Colaborador"
 #: field:kemas.send.notification.event.line.wizard,collaborator_id:0
 #: view:kemas.suspension:kemas.kemas_suspension_search_view
 #: field:kemas.suspension,collaborator_id:0
-#: field:kemas.task.assigned,collaborator_id:0
 msgid "Collaborator"
 msgstr "Colaborador"
 
@@ -1838,11 +1649,6 @@ msgstr "Nombre del Colaborador, que desea Activar."
 #: help:kemas.event_replace_collaborator.wizard.line,collaborator_replacement_id:0
 msgid "Collaborator replacement"
 msgstr "Colaborador reemplazante"
-
-#. module: kemas
-#: help:kemas.task.assigned,collaborator_id:0
-msgid "Collaborator to perform this task."
-msgstr "Colaborador al que se le asigna esta tarea."
 
 #. module: kemas
 #: help:kemas.replace.collaborator.wizard,collaborator_id:0
@@ -1921,9 +1727,7 @@ msgstr "Username del colaborador"
 #: view:kemas.event.collaborator.line:kemas.kemas_event_collaborator_line_graph_view
 #: view:kemas.level:kemas.kemas_level_form_view
 #: field:kemas.set.points.step2.wizard,collaborator_ids:0
-#: field:kemas.set.points.task.wizard,collaborator_ids:0
 #: field:kemas.suspend_collaborator.step2.wizard,collaborator_ids:0
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
 #: view:kemas.team:kemas.kemas_team_kanban_view
 #: field:kemas.team,collaborator_ids:0
 #: view:kemas.web.site:kemas.kemas_web_site_form_view
@@ -1977,7 +1781,6 @@ msgstr "Colaboradores que recibirán el correo"
 #. module: kemas
 #: field:kemas.event,color:0
 #: field:kemas.school4d_line,color:0
-#: field:kemas.task.assigned,color:0
 msgid "Color Index"
 msgstr "Color"
 
@@ -1986,22 +1789,6 @@ msgstr "Color"
 #: field:kemas.event,comments:0
 msgid "Comments"
 msgstr "Observaciones"
-
-#. module: kemas
-#: view:kemas.task.type:kemas.kemas_task_type_search
-msgid "Common"
-msgstr "Common"
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:4077
-#, python-format
-msgid "Completado"
-msgstr "Completado"
-
-#. module: kemas
-#: model:kemas.task.type,name:kemas.kemas_stage_completed
-msgid "Completed"
-msgstr "Completado"
 
 #. module: kemas
 #: view:kemas.config:kemas.kemas_config_form_view
@@ -2038,11 +1825,6 @@ msgstr "Configuración"
 #: view:kemas.config:kemas.kemas_config_tree_view
 msgid "Configurations"
 msgstr "Configuraciones"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view2
-msgid "Confirmed"
-msgstr "Confirmado"
 
 #. module: kemas
 #: view:kemas.collaborator:kemas.kemas_collaborator_form_view2
@@ -2094,11 +1876,6 @@ msgid "Country State"
 msgstr "Provincia"
 
 #. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-msgid "Create Date"
-msgstr "Fecha de creación"
-
-#. module: kemas
 #: field:kemas.suspension,user_create_id:0
 msgid "Create by"
 msgstr "Creado por"
@@ -2128,7 +1905,6 @@ msgstr "Creado por"
 #: field:kemas.event.stage,create_uid:0
 #: field:kemas.event_replace_collaborator.wizard,create_uid:0
 #: field:kemas.event_replace_collaborator.wizard.line,create_uid:0
-#: field:kemas.func,create_uid:0
 #: field:kemas.history.points,create_uid:0
 #: field:kemas.level,create_uid:0
 #: field:kemas.massive.email,create_uid:0
@@ -2152,20 +1928,14 @@ msgstr "Creado por"
 #: field:kemas.service,create_uid:0
 #: field:kemas.set.points.step1.wizard,create_uid:0
 #: field:kemas.set.points.step2.wizard,create_uid:0
-#: field:kemas.set.points.task.wizard,create_uid:0
 #: field:kemas.show.barcode.wizard,create_uid:0
 #: field:kemas.skill,create_uid:0
 #: field:kemas.skill.line,create_uid:0
 #: field:kemas.suspend_collaborator.step1.wizard,create_uid:0
 #: field:kemas.suspend_collaborator.step2.wizard,create_uid:0
 #: field:kemas.suspension,create_uid:0
-#: field:kemas.task,create_uid:0
-#: field:kemas.task.assigned,create_uid:0
-#: field:kemas.task.category,create_uid:0
-#: field:kemas.task.type,create_uid:0
 #: field:kemas.team,create_uid:0
 #: field:kemas.web.site,create_uid:0
-#: field:mail.th,create_uid:0
 msgid "Created by"
 msgstr "Created by"
 
@@ -2194,7 +1964,6 @@ msgstr "Created by"
 #: field:kemas.event.stage,create_date:0
 #: field:kemas.event_replace_collaborator.wizard,create_date:0
 #: field:kemas.event_replace_collaborator.wizard.line,create_date:0
-#: field:kemas.func,create_date:0
 #: field:kemas.history.points,create_date:0
 #: field:kemas.level,create_date:0
 #: field:kemas.massive.email,create_date:0
@@ -2218,20 +1987,14 @@ msgstr "Created by"
 #: field:kemas.service,create_date:0
 #: field:kemas.set.points.step1.wizard,create_date:0
 #: field:kemas.set.points.step2.wizard,create_date:0
-#: field:kemas.set.points.task.wizard,create_date:0
 #: field:kemas.show.barcode.wizard,create_date:0
 #: field:kemas.skill,create_date:0
 #: field:kemas.skill.line,create_date:0
 #: field:kemas.suspend_collaborator.step1.wizard,create_date:0
 #: field:kemas.suspend_collaborator.step2.wizard,create_date:0
 #: field:kemas.suspension,create_date:0
-#: field:kemas.task,create_date:0
-#: field:kemas.task.assigned,create_date:0
-#: field:kemas.task.category,create_date:0
-#: field:kemas.task.type,create_date:0
 #: field:kemas.team,create_date:0
 #: field:kemas.web.site,create_date:0
-#: field:mail.th,create_date:0
 msgid "Created on"
 msgstr "Created on"
 
@@ -2240,8 +2003,6 @@ msgstr "Created on"
 #: selection:kemas.event,state:0
 #: selection:kemas.event.collaborator.line,collaborator_state:0
 #: selection:kemas.massive.email,state:0
-#: selection:kemas.task.assigned,state:0
-#: selection:kemas.task.type,state:0
 msgid "Creating"
 msgstr "Creando"
 
@@ -2249,11 +2010,6 @@ msgstr "Creando"
 #: view:kemas.config:kemas.kemas_config_form_view
 msgid "Creation"
 msgstr "Creación"
-
-#. module: kemas
-#: field:kemas.task.assigned,date_created:0
-msgid "Creation date"
-msgstr "Fecha de creación"
 
 #. module: kemas
 #: view:kemas.config:kemas.kemas_config_form_view
@@ -2371,11 +2127,6 @@ msgid "Date of bith od the person."
 msgstr "La fecha de nacimiento de la persona. Ejemplo 10/06/1993"
 
 #. module: kemas
-#: help:kemas.task.assigned,date_created:0
-msgid "Date of creation of this task"
-msgstr "Fecha de creación de esta Tarea"
-
-#. module: kemas
 #: view:kemas.config:kemas.kemas_config_form_view
 msgid "Date of service"
 msgstr "Fecha de Servicio"
@@ -2384,7 +2135,6 @@ msgstr "Fecha de Servicio"
 #: help:kemas.event,message_last_post:0
 #: help:kemas.history.points,message_last_post:0
 #: help:kemas.repository,message_last_post:0
-#: help:kemas.task.assigned,message_last_post:0
 msgid "Date of the last message posted on the record."
 msgstr "Date of the last message posted on the record."
 
@@ -2475,7 +2225,7 @@ msgid "Days remaining to end the suspension"
 msgstr "Días restantes para que termine la suspensión"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:3399
+#: code:addons/kemas/kemas.py:3443
 #, python-format
 msgid "Dec"
 msgstr "Dic"
@@ -2500,11 +2250,6 @@ msgid "Decrese"
 msgstr "Disminución"
 
 #. module: kemas
-#: field:kemas.task.type,case_default:0
-msgid "Default for New Projects"
-msgstr "Por defecto para nuevo proyectos"
-
-#. module: kemas
 #: help:kemas.config,default_not_attend_points:0
 msgid "Default point is decreased to a collaborator not to asist to a service."
 msgstr "Puntos por defecto que se le quitan al Colaborador por no asistir al Servicio."
@@ -2526,7 +2271,6 @@ msgstr "Puntos por defecto que se le agregan a un Colaborador por llegar a tiemp
 
 #. module: kemas
 #: view:kemas.event:kemas.kemas_event_kanban_view
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_kanban
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -2541,6 +2285,11 @@ msgstr "Descripcion de esta etiqueta.."
 #: field:kemas.skill.line,description:0
 msgid "Descripción"
 msgstr "Descripción"
+
+#. module: kemas
+#: view:kemas.service:kemas.kemas_service_form_view
+msgid "Descripción de este servicio..."
+msgstr "Descripción de este servicio..."
 
 #. module: kemas
 #: field:kemas.activity,description:0
@@ -2558,17 +2307,11 @@ msgstr "Descripción"
 #: field:kemas.repository.category,description:0
 #: view:kemas.school4d_detail:kemas.kemas_school4d_detail_form_view
 #: field:kemas.school4d_detail,description:0
-#: view:kemas.service:kemas.kemas_service_form_view
 #: field:kemas.service,description:0
 #: field:kemas.set.points.step2.wizard,description:0
 #: field:kemas.suspend_collaborator.step2.wizard,description:0
 #: view:kemas.suspension:kemas.kemas_suspension_form_view2
 #: field:kemas.suspension,description:0
-#: field:kemas.task,description:0
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view2
-#: field:kemas.task.assigned,description:0
-#: field:kemas.task.type,description:0
 #: view:kemas.team:kemas.kemas_team_form_view
 #: field:kemas.team,description:0
 msgid "Description"
@@ -2578,16 +2321,6 @@ msgstr "Descripción"
 #: view:kemas.area:kemas.kemas_area_form_view
 msgid "Description of the Area..."
 msgstr "Descripción del Área..."
-
-#. module: kemas
-#: view:kemas.service:kemas.kemas_service_form_view
-msgid "Description of the Service..."
-msgstr "Descripción del servicio..."
-
-#. module: kemas
-#: view:kemas.task:kemas.kemas_task_form_view
-msgid "Description of the Task"
-msgstr "Descripción de la Tarea"
 
 #. module: kemas
 #: view:kemas.activity:kemas.kemas_activity_form2_view
@@ -2611,10 +2344,15 @@ msgstr "Descripción del Equipo"
 #: field:kemas.history.points,search_start:0
 #: field:kemas.massive.email,search_start:0
 #: field:kemas.repository,search_start:0
+#: view:kemas.service:kemas.kemas_service_form_view
 #: field:kemas.suspension,search_start:0
-#: field:kemas.task.assigned,search_start:0
 msgid "Desde"
 msgstr "Desde"
+
+#. module: kemas
+#: view:kemas.service:kemas.kemas_service_form_view
+msgid "Desde:"
+msgstr "Desde:"
 
 #. module: kemas
 #: view:kemas.school4d_detail:kemas.kemas_school4d_detail_form_view
@@ -2626,11 +2364,6 @@ msgstr "Detalles"
 #: field:kemas.school4d_line,details:0
 msgid "Details"
 msgstr "Detalles"
-
-#. module: kemas
-#: field:kemas.config,day_to_suspension_task_closed:0
-msgid "Dia de suspensión"
-msgstr "Dia de suspensión"
 
 #. module: kemas
 #: field:kemas.event,event_day:0
@@ -2672,12 +2405,6 @@ msgid "Documentos"
 msgstr "Documentos"
 
 #. module: kemas
-#: selection:kemas.task.assigned,state:0
-#: selection:kemas.task.type,state:0
-msgid "Done"
-msgstr "Completado"
-
-#. module: kemas
 #: selection:kemas.close.past.event.line.wizard,state:0
 #: view:kemas.event:kemas.kemas_event_search_view
 #: selection:kemas.event,state:0
@@ -2690,9 +2417,9 @@ msgid "Draft"
 msgstr "Borrador"
 
 #. module: kemas
-#: help:kemas.config,day_to_suspension_task_closed:0
-msgid "Días que se van a suspender a un colaborador por no haber entregado una tarea a tiempo"
-msgstr "Días que se van a suspender a un colaborador por no haber entregado una tarea a tiempo"
+#: field:kemas.service,day:0
+msgid "Día"
+msgstr "Día"
 
 #. module: kemas
 #: view:kemas.config:kemas.kemas_config_form_view
@@ -2701,7 +2428,7 @@ msgid "E-mail"
 msgstr "Correo electrónico"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:280
+#: code:addons/kemas/kemas.py:300
 #: code:addons/kemas/wizard/kemas_send_notification_event_wizard.py:278
 #, python-format
 msgid "E-mail format invalid..!!"
@@ -2711,6 +2438,11 @@ msgstr "¡Formato de Correo electrónico no válido!"
 #: view:kemas.massive.email:kemas.kemas_massive_email_form_view
 msgid "E-mail information"
 msgstr "Información de correo"
+
+#. module: kemas
+#: selection:kemas.config,bc_type:0
+msgid "EAN"
+msgstr "EAN"
 
 #. module: kemas
 #: selection:kemas.config,bc_type:0
@@ -2746,11 +2478,6 @@ msgstr "Editar"
 #: view:kemas.massive.email:kemas.kemas_massive_email_form_view
 msgid "Edit email"
 msgstr "Volver a editar el correo"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_kanban
-msgid "Edit..."
-msgstr "Editar..."
 
 #. module: kemas
 #: view:kemas.collaborator:kemas.kemas_collaborator_form_view
@@ -2809,18 +2536,6 @@ msgid "Emails and notifications"
 msgstr "Correos y notificaciones"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:4014
-#: code:addons/kemas/kemas.py:5760
-#, python-format
-msgid "En Curso"
-msgstr "En Curso"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-msgid "End Date"
-msgstr "Fecha de finalización"
-
-#. module: kemas
 #: field:kemas.collaborator,end_service:0
 msgid "End Service"
 msgstr "Fin de servicio"
@@ -2840,17 +2555,12 @@ msgid "Ended"
 msgstr "Finalizado"
 
 #. module: kemas
-#: field:kemas.task.assigned,date_end:0
-msgid "Ending Date"
-msgstr "Fecha de finalización"
-
-#. module: kemas
 #: view:kemas.suspend_collaborator.step2.wizard:kemas.kemas_suspend_collaborator_step2_wizard_form_view
 msgid "Enter how many days will suspend collaborators considering the weekdays."
 msgstr "Introduce el número de días suspenderán a los colaboradores teniendo en cuenta los días de la semana."
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:118
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:119
 #, python-format
 msgid "Enter the reason for replacement..."
 msgstr "Introduzca el motivo del reemplazo ..."
@@ -2907,45 +2617,34 @@ msgid "Error"
 msgstr "Error"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:404
-#: code:addons/kemas/kemas.py:433
-#: code:addons/kemas/kemas.py:3276
-#: code:addons/kemas/kemas.py:4110
-#: code:addons/kemas/kemas.py:4232
-#: code:addons/kemas/kemas.py:4238
-#: code:addons/kemas/kemas.py:4335
-#: code:addons/kemas/kemas.py:4700
-#: code:addons/kemas/kemas.py:4703
-#: code:addons/kemas/kemas.py:4706
-#: code:addons/kemas/kemas.py:4709
-#: code:addons/kemas/kemas.py:4712
-#: code:addons/kemas/kemas.py:5008
-#: code:addons/kemas/kemas.py:5327
-#: code:addons/kemas/kemas.py:5344
-#: code:addons/kemas/kemas.py:5350
-#: code:addons/kemas/kemas.py:5352
-#: code:addons/kemas/kemas.py:5354
-#: code:addons/kemas/kemas.py:5364
-#: code:addons/kemas/kemas.py:5365
-#: code:addons/kemas/kemas.py:5366
-#: code:addons/kemas/kemas.py:5374
-#: code:addons/kemas/kemas.py:5375
-#: code:addons/kemas/kemas.py:5376
-#: code:addons/kemas/kemas.py:5389
-#: code:addons/kemas/kemas.py:5449
-#: code:addons/kemas/kemas.py:5818
-#: code:addons/kemas/kemas.py:5822
-#: code:addons/kemas/kemas.py:6158
-#: code:addons/kemas/kemas.py:6162
-#: code:addons/kemas/kemas.py:6510
-#: code:addons/kemas/kemas.py:6514
+#: code:addons/kemas/kemas.py:424
+#: code:addons/kemas/kemas.py:453
+#: code:addons/kemas/kemas.py:3320
+#: code:addons/kemas/kemas.py:4344
+#: code:addons/kemas/kemas.py:4347
+#: code:addons/kemas/kemas.py:4350
+#: code:addons/kemas/kemas.py:4353
+#: code:addons/kemas/kemas.py:4356
+#: code:addons/kemas/kemas.py:4665
+#: code:addons/kemas/kemas.py:4987
+#: code:addons/kemas/kemas.py:5004
+#: code:addons/kemas/kemas.py:5010
+#: code:addons/kemas/kemas.py:5012
+#: code:addons/kemas/kemas.py:5014
+#: code:addons/kemas/kemas.py:5024
+#: code:addons/kemas/kemas.py:5025
+#: code:addons/kemas/kemas.py:5026
+#: code:addons/kemas/kemas.py:5034
+#: code:addons/kemas/kemas.py:5035
+#: code:addons/kemas/kemas.py:5036
+#: code:addons/kemas/kemas.py:5453
 #: code:addons/kemas/report/attendance_statistics.py:65
 #: code:addons/kemas/report/collaborator_form.py:141
 #: code:addons/kemas/report/collaborator_list.py:51
 #: code:addons/kemas/report/event_list.py:65
 #: code:addons/kemas/report/team_list.py:89
 #: code:addons/kemas/wizard/kemas_collaborator_send_notifications_wizard.py:88
-#: code:addons/kemas/wizard/kemas_event_replace_collaborator_wizard.py:98
+#: code:addons/kemas/wizard/kemas_event_replace_collaborator_wizard.py:99
 #: code:addons/kemas/wizard/kemas_register_attendance_wizard.py:99
 #: code:addons/kemas/wizard/kemas_register_attendance_wizard.py:101
 #: code:addons/kemas/wizard/kemas_register_attendance_wizard.py:103
@@ -2958,17 +2657,11 @@ msgstr "Error"
 #: code:addons/kemas/wizard/kemas_send_notification_event_wizard.py:192
 #: code:addons/kemas/wizard/kemas_set_points_wizard.py:32
 #: code:addons/kemas/wizard/kemas_set_points_wizard.py:74
-#: code:addons/kemas/wizard/kemas_set_points_work_wizard.py:30
 #: code:addons/kemas/wizard/kemas_suspend_collaborator_wizard.py:29
 #: code:addons/kemas/wizard/kemas_suspend_collaborator_wizard.py:67
 #, python-format
 msgid "Error!"
 msgstr "¡Error!"
-
-#. module: kemas
-#: constraint:kemas.task.assigned:0
-msgid "Error: Invalid Message"
-msgstr "Error: Mensaje no válido"
 
 #. module: kemas
 #: help:kemas.config,logo_program_client:0
@@ -2989,6 +2682,7 @@ msgstr "Escriba aqui una descripción de este archivo..."
 #: view:kemas.event:kemas.kemas_event_search_view
 #: view:kemas.event:kemas.kemas_event_search_view2
 #: view:kemas.event.collaborator.line:kemas.kemas_event_collaborator_line_search_view
+#: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view
 #: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view2
 #: view:kemas.history.points:kemas.kemas_history_points_search_view
 #: view:kemas.history.points:kemas.kemas_history_points_search_view2
@@ -2996,7 +2690,6 @@ msgstr "Escriba aqui una descripción de este archivo..."
 #: view:kemas.repository:kemas.kemas_repository_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view2
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
 msgid "Esta semana"
 msgstr "Esta semana"
 
@@ -3006,18 +2699,8 @@ msgid "Estadisticas de Colaboración"
 msgstr "Estadisticas de Colaboración"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:4002
-#: code:addons/kemas/kemas.py:4014
-#: code:addons/kemas/kemas.py:4026
-#: code:addons/kemas/kemas.py:4061
-#: code:addons/kemas/kemas.py:4077
-#: code:addons/kemas/kemas.py:5727
-#: code:addons/kemas/kemas.py:5738
-#: code:addons/kemas/kemas.py:5749
-#: code:addons/kemas/kemas.py:5760
 #: view:kemas.collaborator:kemas.kemas_collaborator_form_view
 #: field:kemas.repository,state:0
-#, python-format
 msgid "Estado"
 msgstr "Estado"
 
@@ -3069,12 +2752,6 @@ msgid "Este colaborador no tiene un Codigo Asignado"
 msgstr "Este colaborador no tiene un Codigo Asignado"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:5738
-#, python-format
-msgid "Este evento fue Cancelado"
-msgstr "Este evento fue Cancelado"
-
-#. module: kemas
 #: view:kemas.attendance:kemas.kemas_attendance_search_view
 #: view:kemas.attendance:kemas.kemas_attendance_search_view2
 #: selection:kemas.attendance.statistics.wizard,date_type:0
@@ -3082,6 +2759,7 @@ msgstr "Este evento fue Cancelado"
 #: view:kemas.event:kemas.kemas_event_search_view
 #: view:kemas.event:kemas.kemas_event_search_view2
 #: view:kemas.event.collaborator.line:kemas.kemas_event_collaborator_line_search_view
+#: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view
 #: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view2
 #: view:kemas.history.points:kemas.kemas_history_points_search_view
 #: view:kemas.history.points:kemas.kemas_history_points_search_view2
@@ -3089,7 +2767,6 @@ msgstr "Este evento fue Cancelado"
 #: view:kemas.repository:kemas.kemas_repository_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view2
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
 msgid "Este mes"
 msgstr "Este mes"
 
@@ -3165,24 +2842,6 @@ msgid "Evento"
 msgstr "Evento"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:5749
-#, python-format
-msgid "Evento Finalizado"
-msgstr "Evento Finalizado"
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:5727
-#, python-format
-msgid "Evento Pausado"
-msgstr "Evento Pausado"
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:5760
-#, python-format
-msgid "Evento en Curso"
-msgstr "Evento en Curso"
-
-#. module: kemas
 #: model:ir.actions.act_window,name:kemas.action_kemas_event_active_events
 #: model:ir.ui.menu,name:kemas.kemas_actions_events_mn
 #: view:kemas.collaborator:kemas.kemas_collaborator_form_view
@@ -3208,16 +2867,6 @@ msgid "Events"
 msgstr "Eventos"
 
 #. module: kemas
-#: selection:kemas.config,bc_type:0
-msgid "Extended93"
-msgstr "Extended93"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view
-msgid "Extra Info"
-msgstr "Extra Info"
-
-#. module: kemas
 #: view:kemas.area:kemas.kemas_area_form_view
 #: view:kemas.event:kemas.kemas_event_form_view
 msgid "Extra information"
@@ -3229,17 +2878,12 @@ msgid "Extras"
 msgstr "Extras"
 
 #. module: kemas
-#: selection:kemas.config,bc_type:0
-msgid "FIM"
-msgstr "FIM"
-
-#. module: kemas
 #: field:kemas.collaborator,fax:0
 msgid "Fax"
 msgstr "Fax"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:3379
+#: code:addons/kemas/kemas.py:3423
 #, python-format
 msgid "Feb"
 msgstr "Feb"
@@ -3248,14 +2892,10 @@ msgstr "Feb"
 #: field:kemas.attendance.statistics.wizard,date_type:0
 #: view:kemas.collaborator:kemas.kemas_collaborator_form_view
 #: view:kemas.collaborator.logbook.login:kemas.kemas_collaborator_logbook_login_search_view
+#: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view
 #: field:kemas.send.notification.event.line.wizard,sent_date:0
 msgid "Fecha"
 msgstr "Fecha"
-
-#. module: kemas
-#: field:kemas.task.assigned,date_limit:0
-msgid "Fecha de entrega"
-msgstr "Fecha de entrega"
 
 #. module: kemas
 #: view:kemas.collaborator:kemas.kemas_collaborator_form_view
@@ -3276,11 +2916,6 @@ msgstr "Fecha en la que el colaborador salió de la empresa"
 #: help:kemas.collaborator,join_date:0
 msgid "Fecha en la que ingreso en la empresa"
 msgstr "Fecha en la que ingreso en la empresa"
-
-#. module: kemas
-#: help:kemas.task.assigned,date_limit:0
-msgid "Fecha limite de entrega de esta tarea"
-msgstr "Fecha limite de entrega de esta tarea"
 
 #. module: kemas
 #: field:kemas.collaborator.logbook.login,datetime:0
@@ -3321,33 +2956,11 @@ msgid "Files"
 msgstr "Archivos"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:5818
-#, python-format
-msgid "First add the collaborators assigned to this event."
-msgstr "Primero agregue los Colaboradores asignados a este evento."
-
-#. module: kemas
 #: code:addons/kemas/wizard/kemas_set_points_wizard.py:32
 #: code:addons/kemas/wizard/kemas_suspend_collaborator_wizard.py:29
 #, python-format
 msgid "First select the collaborators."
 msgstr "Primero seleccione a los colaboradores"
-
-#. module: kemas
-#: constraint:kemas.set.points.task.wizard:0
-msgid "First you have to select collaborators!"
-msgstr "¡Primero tienes que seleccionar los Colaboradores!"
-
-#. module: kemas
-#: code:addons/kemas/wizard/kemas_set_points_work_wizard.py:30
-#, python-format
-msgid "First you have to select collaborators!!"
-msgstr "¡Primero tiene que seleccionar los colaboradores!"
-
-#. module: kemas
-#: field:kemas.task.type,fold:0
-msgid "Folded by Default"
-msgstr "Plegado por defecto"
 
 #. module: kemas
 #: view:kemas.event:kemas.kemas_event_form_view
@@ -3359,9 +2972,13 @@ msgstr "Sigue este evento para que puedas ser notificado de todos los cambios re
 #: field:kemas.event,message_follower_ids:0
 #: field:kemas.history.points,message_follower_ids:0
 #: field:kemas.repository,message_follower_ids:0
-#: field:kemas.task.assigned,message_follower_ids:0
 msgid "Followers"
 msgstr "Seguidores"
+
+#. module: kemas
+#: field:kemas.config,bc_font_size:0
+msgid "Font_size"
+msgstr "Font_size"
 
 #. module: kemas
 #: view:kemas.config:kemas.kemas_config_form_view
@@ -3378,6 +2995,11 @@ msgstr "Pie del Correo"
 #: view:kemas.config:kemas.kemas_config_form_view
 msgid "Footer of the reports..."
 msgstr "Pie de los reportes..."
+
+#. module: kemas
+#: field:kemas.config,bc_foreground:0
+msgid "Foreground"
+msgstr "Foreground"
 
 #. module: kemas
 #: field:kemas.collaborator,photo:0
@@ -3403,6 +3025,16 @@ msgid "Friday"
 msgstr "Viernes"
 
 #. module: kemas
+#: selection:kemas.config,bc_type:0
+msgid "GS1"
+msgstr "GS1"
+
+#. module: kemas
+#: selection:kemas.config,bc_type:0
+msgid "GTIN"
+msgstr "GTIN"
+
+#. module: kemas
 #: view:kemas.collaborator:kemas.kemas_collaborator_search_view
 #: view:kemas.collaborator:kemas.kemas_collaborator_search_view2
 #: view:kemas.collaborator:kemas.kemas_collaborator_search_view3
@@ -3415,11 +3047,6 @@ msgstr "Gender"
 #: model:ir.module.category,description:kemas.module_category_kemas_management
 msgid "Gestión de colaborador, asistencias y eventos."
 msgstr "Gestión de colaborador, asistencias y eventos."
-
-#. module: kemas
-#: help:kemas.task.assigned,sequence:0
-msgid "Gives the sequence order when displaying a list of tasks."
-msgstr "Indica el orden en que se muestras las tareas."
 
 #. module: kemas
 #: selection:kemas.web.site,get_avatar_method:0
@@ -3455,14 +3082,12 @@ msgstr "Habilidad"
 #: model:ir.ui.menu,name:kemas.kemas_skill_menu
 #: view:kemas.collaborator:kemas.kemas_collaborator_form_view
 #: view:kemas.skill:kemas.kemas_skill_tree
-#: field:kemas.skill,skill_ids:0
 #: view:kemas.skill.line:kemas.kemas_skill_line_tree
 msgid "Habilidades"
 msgstr "Habilidades"
 
 #. module: kemas
 #: help:kemas.collaborator,skill_line_ids:0
-#: help:kemas.skill,skill_ids:0
 msgid "Habilidades que tiene este colaborador"
 msgstr "Habilidades que tiene este colaborador"
 
@@ -3477,8 +3102,8 @@ msgstr "Habilidades que tiene este colaborador"
 #: field:kemas.history.points,search_end:0
 #: field:kemas.massive.email,search_end:0
 #: field:kemas.repository,search_end:0
+#: view:kemas.service:kemas.kemas_service_form_view
 #: field:kemas.suspension,search_end:0
-#: field:kemas.task.assigned,search_end:0
 msgid "Hasta"
 msgstr "Hasta"
 
@@ -3544,7 +3169,7 @@ msgid "Here you can print a list of the events are on the calendar. You can also
 msgstr "Aquí usted puede imprimir un listado de los Eventos que están en el Calendario.  También puede filtrar los eventos utilizando los campos del asistente."
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:97
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:98
 #, python-format
 msgid "Here you can replace one of the collaborators, you can only replace collaborators who have not yet been replaced and do not exceed the limit of replacements this month."
 msgstr "Aquí puedes reemplazar a unos de los colaboradores, solo se pueden reemplazar los colaboradores que aun no hayan sido reemplazados en este evento y no excedan el límite de reemplazos mensuales,"
@@ -3633,7 +3258,6 @@ msgstr "Historial de puntos"
 #: help:kemas.event,message_summary:0
 #: help:kemas.history.points,message_summary:0
 #: help:kemas.repository,message_summary:0
-#: help:kemas.task.assigned,message_summary:0
 msgid "Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
 msgstr "Contiene el resumen Remover (número de mensajes, ...). Este resumen es directamente en formato html para insertar en las vistas kanban."
 
@@ -3641,6 +3265,11 @@ msgstr "Contiene el resumen Remover (número de mensajes, ...). Este resumen es 
 #: selection:kemas.collaborator,gender:0
 msgid "Hombre"
 msgstr "Hombre"
+
+#. module: kemas
+#: view:kemas.service:kemas.kemas_service_form_view
+msgid "Hora"
+msgstr "Hora"
 
 #. module: kemas
 #: view:kemas.config:kemas.kemas_config_form_view
@@ -3655,6 +3284,7 @@ msgstr "Dirección del Sistema"
 #: view:kemas.event:kemas.kemas_event_search_view
 #: view:kemas.event:kemas.kemas_event_search_view2
 #: view:kemas.event.collaborator.line:kemas.kemas_event_collaborator_line_search_view
+#: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view
 #: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view2
 #: view:kemas.history.points:kemas.kemas_history_points_search_view
 #: view:kemas.history.points:kemas.kemas_history_points_search_view2
@@ -3662,19 +3292,8 @@ msgstr "Dirección del Sistema"
 #: view:kemas.repository:kemas.kemas_repository_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view2
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
 msgid "Hoy"
 msgstr "Hoy"
-
-#. module: kemas
-#: field:kemas.config,bc_hr_form:0
-msgid "Human Readable"
-msgstr "Human Readable"
-
-#. module: kemas
-#: selection:kemas.config,bc_type:0
-msgid "I2of5"
-msgstr "I2of5"
 
 #. module: kemas
 #: field:kemas.activity,id:0
@@ -3725,17 +3344,12 @@ msgstr "I2of5"
 #: field:kemas.service,id:0
 #: field:kemas.set.points.step1.wizard,id:0
 #: field:kemas.set.points.step2.wizard,id:0
-#: field:kemas.set.points.task.wizard,id:0
 #: field:kemas.show.barcode.wizard,id:0
 #: field:kemas.skill,id:0
 #: field:kemas.skill.line,id:0
 #: field:kemas.suspend_collaborator.step1.wizard,id:0
 #: field:kemas.suspend_collaborator.step2.wizard,id:0
 #: field:kemas.suspension,id:0
-#: field:kemas.task,id:0
-#: field:kemas.task.assigned,id:0
-#: field:kemas.task.category,id:0
-#: field:kemas.task.type,id:0
 #: field:kemas.team,id:0
 #: field:kemas.web.site,id:0
 #: field:mail.th,id:0
@@ -3754,17 +3368,31 @@ msgid "INCREASE / DECREASE POINTS"
 msgstr "AGREGAR / QUITAR PUNTOS"
 
 #. module: kemas
+#: selection:kemas.config,bc_type:0
+msgid "ISBN"
+msgstr "ISBN"
+
+#. module: kemas
+#: selection:kemas.config,bc_type:0
+msgid "ISBN10"
+msgstr "ISBN10"
+
+#. module: kemas
+#: selection:kemas.config,bc_type:0
+msgid "ISBN13"
+msgstr "ISBN13"
+
+#. module: kemas
+#: selection:kemas.config,bc_type:0
+msgid "ITF"
+msgstr "ITF"
+
+#. module: kemas
 #: help:kemas.event,message_unread:0
 #: help:kemas.history.points,message_unread:0
 #: help:kemas.repository,message_unread:0
-#: help:kemas.task.assigned,message_unread:0
 msgid "If checked new messages require your attention."
 msgstr "Si se marca nuevos mensajes requieren su atención."
-
-#. module: kemas
-#: help:kemas.task.type,case_default:0
-msgid "If you check this field, this stage will be proposed by default on each new project. It will not assign this stage to existing projects."
-msgstr "Si marca este campo, esta etapa se propone por defecto para cada proyecto nuevo. No va a asignar esta etapa de los proyectos existentes."
 
 #. module: kemas
 #: selection:kemas.send.notification.event.line.wizard,state:0
@@ -3790,7 +3418,6 @@ msgstr "Imagen del Cliente de Registro de Asistencia"
 #: selection:kemas.collaborator.logbook,type:0
 #: selection:kemas.event,priority:0
 #: selection:kemas.school4d_line,priority:0
-#: selection:kemas.task.assigned,priority:0
 msgid "Important"
 msgstr "Importante"
 
@@ -3798,18 +3425,6 @@ msgstr "Importante"
 #: view:kemas.attendance.statistics.wizard:kemas.kemas_report_attendance_statistics_wizard_form_view
 msgid "Imprimir reporte"
 msgstr "Imprimir reporte"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-#: selection:kemas.task.assigned,state:0
-#: selection:kemas.task.type,state:0
-msgid "In Progress"
-msgstr "En progreso"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-msgid "In Progress Tasks"
-msgstr "Tarea en progreso"
 
 #. module: kemas
 #: field:kemas.event,rm_close_to_end:0
@@ -3840,8 +3455,6 @@ msgstr "Inactivar Colaborator"
 #: selection:kemas.event.collaborator.line,collaborator_state:0
 #: selection:kemas.report.collaborators.list.wizard,type_collaborators_to_select:0
 #: view:kemas.service:kemas.kemas_service_search_view
-#: view:kemas.task:kemas.kemas_task_search_view
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
 msgid "Inactive"
 msgstr "Inactivo"
 
@@ -3919,11 +3532,6 @@ msgid "Indicates whether this service is active or not"
 msgstr "Indica si este Servicio esta Activo o No."
 
 #. module: kemas
-#: help:kemas.task,active:0
-msgid "Indicates whether this work is active or not"
-msgstr "Indica si esta la tarea esta activa o no"
-
-#. module: kemas
 #: selection:kemas.collaborator.logbook,type:0
 #: view:kemas.config:kemas.kemas_config_form_view
 #: field:kemas.event,information:0
@@ -3978,24 +3586,13 @@ msgstr "Nombre de usuario o contraseña incorrectos."
 #: field:kemas.event,message_is_follower:0
 #: field:kemas.history.points,message_is_follower:0
 #: field:kemas.repository,message_is_follower:0
-#: field:kemas.task.assigned,message_is_follower:0
 msgid "Is a Follower"
 msgstr "Es un seguidor"
-
-#. module: kemas
-#: field:kemas.task.assigned,active:0
-msgid "Is active"
-msgstr "Está activo"
 
 #. module: kemas
 #: field:kemas.level,first_level:0
 msgid "Is first level?"
 msgstr "¿Este es el primer nivel?"
-
-#. module: kemas
-#: view:kemas.task.category:kemas.kemas_task_category_search_view
-msgid "Issue Version"
-msgstr "Issue Version"
 
 #. module: kemas
 #: help:kemas.massive.email,subject:0
@@ -4018,7 +3615,12 @@ msgid "It is the user manual for collaborators who are sent as an attachment in 
 msgstr "Este es el manual para el Colaborador que va a ser enviado con el correo de bienvenida."
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:3377
+#: selection:kemas.config,bc_type:0
+msgid "JAN"
+msgstr "JAN"
+
+#. module: kemas
+#: code:addons/kemas/kemas.py:3421
 #, python-format
 msgid "Jan"
 msgstr "Ene"
@@ -4035,22 +3637,21 @@ msgid "Join date"
 msgstr "Fecha de ingreso"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:3389
+#: code:addons/kemas/kemas.py:3433
 #, python-format
 msgid "Jul"
 msgstr "Jul"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:3387
+#: code:addons/kemas/kemas.py:3431
 #, python-format
 msgid "Jun"
 msgstr "Jun"
 
 #. module: kemas
 #: model:ir.module.category,name:kemas.module_category_kemas_management
-#: model:ir.ui.menu,name:kemas.menu_kemas_manager_root
 msgid "Ke+"
-msgstr "Kester"
+msgstr "Kesker"
 
 #. module: kemas
 #: model:res.groups,name:kemas.group_kemas_admin
@@ -4074,8 +3675,9 @@ msgstr "Kemas / Register Attendance"
 
 #. module: kemas
 #: model:ir.ui.menu,name:kemas.menu_kemas_collaborator_root
-msgid "Kester"
-msgstr "Kester"
+#: model:ir.ui.menu,name:kemas.menu_kemas_manager_root
+msgid "Kesker"
+msgstr "Kesker"
 
 #. module: kemas
 #: help:kemas.repository,url:0
@@ -4106,7 +3708,6 @@ msgstr "Las notificaciones se están enviando..."
 #: field:kemas.event,message_last_post:0
 #: field:kemas.history.points,message_last_post:0
 #: field:kemas.repository,message_last_post:0
-#: field:kemas.task.assigned,message_last_post:0
 msgid "Last Message Date"
 msgstr "Last Message Date"
 
@@ -4135,7 +3736,6 @@ msgstr "Last Message Date"
 #: field:kemas.event.stage,write_uid:0
 #: field:kemas.event_replace_collaborator.wizard,write_uid:0
 #: field:kemas.event_replace_collaborator.wizard.line,write_uid:0
-#: field:kemas.func,write_uid:0
 #: field:kemas.history.points,write_uid:0
 #: field:kemas.level,write_uid:0
 #: field:kemas.massive.email,write_uid:0
@@ -4159,20 +3759,14 @@ msgstr "Last Message Date"
 #: field:kemas.service,write_uid:0
 #: field:kemas.set.points.step1.wizard,write_uid:0
 #: field:kemas.set.points.step2.wizard,write_uid:0
-#: field:kemas.set.points.task.wizard,write_uid:0
 #: field:kemas.show.barcode.wizard,write_uid:0
 #: field:kemas.skill,write_uid:0
 #: field:kemas.skill.line,write_uid:0
 #: field:kemas.suspend_collaborator.step1.wizard,write_uid:0
 #: field:kemas.suspend_collaborator.step2.wizard,write_uid:0
 #: field:kemas.suspension,write_uid:0
-#: field:kemas.task,write_uid:0
-#: field:kemas.task.assigned,write_uid:0
-#: field:kemas.task.category,write_uid:0
-#: field:kemas.task.type,write_uid:0
 #: field:kemas.team,write_uid:0
 #: field:kemas.web.site,write_uid:0
-#: field:mail.th,write_uid:0
 msgid "Last Updated by"
 msgstr "Last Updated by"
 
@@ -4201,7 +3795,6 @@ msgstr "Last Updated by"
 #: field:kemas.event.stage,write_date:0
 #: field:kemas.event_replace_collaborator.wizard,write_date:0
 #: field:kemas.event_replace_collaborator.wizard.line,write_date:0
-#: field:kemas.func,write_date:0
 #: field:kemas.history.points,write_date:0
 #: field:kemas.level,write_date:0
 #: field:kemas.massive.email,write_date:0
@@ -4225,20 +3818,14 @@ msgstr "Last Updated by"
 #: field:kemas.service,write_date:0
 #: field:kemas.set.points.step1.wizard,write_date:0
 #: field:kemas.set.points.step2.wizard,write_date:0
-#: field:kemas.set.points.task.wizard,write_date:0
 #: field:kemas.show.barcode.wizard,write_date:0
 #: field:kemas.skill,write_date:0
 #: field:kemas.skill.line,write_date:0
 #: field:kemas.suspend_collaborator.step1.wizard,write_date:0
 #: field:kemas.suspend_collaborator.step2.wizard,write_date:0
 #: field:kemas.suspension,write_date:0
-#: field:kemas.task,write_date:0
-#: field:kemas.task.assigned,write_date:0
-#: field:kemas.task.category,write_date:0
-#: field:kemas.task.type,write_date:0
 #: field:kemas.team,write_date:0
 #: field:kemas.web.site,write_date:0
-#: field:mail.th,write_date:0
 msgid "Last Updated on"
 msgstr "Last Updated on"
 
@@ -4265,11 +3852,6 @@ msgid "Legend of variables you can use"
 msgstr "Leyenda de variables que usted puede  usar."
 
 #. module: kemas
-#: help:kemas.config,bc_hr_form:0
-msgid "Legible para lectura?"
-msgstr "Legible para lectura?"
-
-#. module: kemas
 #: view:kemas.area:kemas.kemas_area_form_view
 #: view:kemas.collaborator:kemas.kemas_collaborator_search_view
 #: view:kemas.collaborator:kemas.kemas_collaborator_search_view2
@@ -4278,7 +3860,6 @@ msgstr "Legible para lectura?"
 #: view:kemas.config:kemas.kemas_config_form_view
 #: field:kemas.event.collaborator.line,level_id:0
 #: view:kemas.level:kemas.kemas_level_form_view
-#: view:kemas.place:kemas.kemas_place_event_form_view
 #: view:kemas.place:kemas.kemas_place_form_view
 #: field:kemas.report.collaborators.list.wizard,fl_level:0
 #: view:kemas.team:kemas.kemas_team_form_view
@@ -4433,7 +4014,6 @@ msgstr "Puntos perdidos"
 #. module: kemas
 #: selection:kemas.event,priority:0
 #: selection:kemas.school4d_line,priority:0
-#: selection:kemas.task.assigned,priority:0
 msgid "Low"
 msgstr "Baja"
 
@@ -4474,14 +4054,13 @@ msgid "Manually modifying points"
 msgstr "Modificación manual de puntos"
 
 #. module: kemas
-#: view:kemas.place:kemas.kemas_place_event_form_view
 #: view:kemas.place:kemas.kemas_place_form_view
 #: field:kemas.place,Map:0
 msgid "Mapa"
 msgstr "Mapa"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:3381
+#: code:addons/kemas/kemas.py:3425
 #, python-format
 msgid "Mar"
 msgstr "Mar"
@@ -4537,7 +4116,7 @@ msgid "Massive emails"
 msgstr "Correos masivos"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:3385
+#: code:addons/kemas/kemas.py:3429
 #, python-format
 msgid "May"
 msgstr "May"
@@ -4551,7 +4130,6 @@ msgstr "Yo"
 #. module: kemas
 #: selection:kemas.event,priority:0
 #: selection:kemas.school4d_line,priority:0
-#: selection:kemas.task.assigned,priority:0
 msgid "Medium"
 msgstr "Medio"
 
@@ -4599,7 +4177,6 @@ msgstr "Mensaje"
 #: field:kemas.event,message_ids:0
 #: field:kemas.history.points,message_ids:0
 #: field:kemas.repository,message_ids:0
-#: field:kemas.task.assigned,message_ids:0
 msgid "Messages"
 msgstr "Mensajes"
 
@@ -4607,7 +4184,6 @@ msgstr "Mensajes"
 #: help:kemas.event,message_ids:0
 #: help:kemas.history.points,message_ids:0
 #: help:kemas.repository,message_ids:0
-#: help:kemas.task.assigned,message_ids:0
 msgid "Messages and communication history"
 msgstr "Mensajes e historial de comunicación"
 
@@ -4650,11 +4226,6 @@ msgid "Mujer"
 msgstr "Mujer"
 
 #. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-msgid "My Tasks"
-msgstr "Mis tareas"
-
-#. module: kemas
 #: view:kemas.web.site:kemas.kemas_web_site_form_view
 msgid "Método de obtención"
 msgstr "Método de obtención"
@@ -4670,12 +4241,6 @@ msgid "Móvil"
 msgstr "Móvil"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:5686
-#, python-format
-msgid "NULLED"
-msgstr "ANULADO"
-
-#. module: kemas
 #: field:kemas.activity,name:0
 #: view:kemas.area:kemas.kemas_area_form_view
 #: field:kemas.area,name:0
@@ -4683,7 +4248,6 @@ msgstr "ANULADO"
 #: field:kemas.collaborator,birthday_date:0
 #: field:kemas.collaborator,name_with_nick_name:0
 #: view:kemas.config:kemas.kemas_config_form_view
-#: field:kemas.func,name:0
 #: view:kemas.level:kemas.kemas_level_form_view
 #: field:kemas.level,name:0
 #: field:kemas.message.closing.begun.wizard,name:0
@@ -4696,10 +4260,6 @@ msgstr "ANULADO"
 #: field:kemas.repository,name:0
 #: field:kemas.repository.category,name:0
 #: field:kemas.service,name:0
-#: field:kemas.task,name:0
-#: view:kemas.task.category:kemas.kemas_task_category_form_view
-#: field:kemas.task.category,name:0
-#: view:kemas.task.type:kemas.kemas_task_type_form
 #: view:kemas.team:kemas.kemas_team_form_view
 #: field:kemas.team,name:0
 #: view:kemas.web.site:kemas.kemas_web_site_form_view
@@ -4729,11 +4289,6 @@ msgid "Name of service relating to this event."
 msgstr "Nombre del servicio relacionado con este evento."
 
 #. module: kemas
-#: view:kemas.task:kemas.kemas_task_form_view
-msgid "Name of the Task"
-msgstr "Nombre de la tarea"
-
-#. module: kemas
 #: view:kemas.activity:kemas.kemas_activity_form2_view
 #: view:kemas.activity:kemas.kemas_activity_form_view
 msgid "Name of the activity"
@@ -4745,7 +4300,6 @@ msgid "Name of the collaborator..."
 msgstr "Nombre del colaborador..."
 
 #. module: kemas
-#: view:kemas.service:kemas.kemas_service_form_view
 #: view:kemas.suspension:kemas.kemas_suspension_form_view
 msgid "Name of the service"
 msgstr "Nombre del servicio"
@@ -4759,19 +4313,6 @@ msgstr "Nombre de este nivel"
 #: field:kemas.config,name_submitting:0
 msgid "Name submitting"
 msgstr "Nombre del Remitente"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-#: selection:kemas.task.assigned,state:0
-#: model:kemas.task.type,name:kemas.kemas_stage_new
-#: selection:kemas.task.type,state:0
-msgid "New"
-msgstr "Nuevo"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-msgid "New Tasks"
-msgstr "Nuevas Tareas"
 
 #. module: kemas
 #: view:kemas.set.points.step1.wizard:kemas.kemas_set_points_step1_wizard_form_view
@@ -4800,7 +4341,7 @@ msgid "Niveles"
 msgstr "Niveles"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:433
+#: code:addons/kemas/kemas.py:453
 #, python-format
 msgid "No hay ninguna configuracion del Sistema definida."
 msgstr "No hay ninguna configuracion del Sistema definida."
@@ -4811,16 +4352,10 @@ msgid "No notified"
 msgstr "No se notificó"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:404
+#: code:addons/kemas/kemas.py:424
 #, python-format
 msgid "No recipients to send mail."
 msgstr "No hay destinatarios para enviar el correo."
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:4232
-#, python-format
-msgid "No se puede modificar una tarea Cerrada o Cancelada."
-msgstr "No se puede modificar una tarea Cerrada o Cancelada."
 
 #. module: kemas
 #: code:addons/kemas/report/attendance_statistics.py:65
@@ -4878,6 +4413,12 @@ msgid "Nombre del archivo"
 msgstr "Nombre del archivo"
 
 #. module: kemas
+#: view:kemas.event:kemas.kemas_event_form_view
+#: view:kemas.service:kemas.kemas_service_form_view
+msgid "Nombre del servicio"
+msgstr "Nombre del servicio"
+
+#. module: kemas
 #: view:kemas.config:kemas.kemas_config_form_view
 msgid "Nombre del sistema"
 msgstr "Nombre del sistema"
@@ -4905,23 +4446,7 @@ msgid "Nombres completos del Colaborador"
 msgstr "Nombres completos del Colaborador"
 
 #. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_kanban
-msgid "Normal"
-msgstr "Normal"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view
-#: field:kemas.task.assigned,notes:0
-msgid "Notes"
-msgstr "Notas"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view
-msgid "Notes..."
-msgstr "Notas..."
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:5008
+#: code:addons/kemas/kemas.py:4665
 #, python-format
 msgid "Notifications are disabled."
 msgstr "Las notificaciones están desactivadas."
@@ -4944,26 +4469,15 @@ msgid "Notify creating account"
 msgstr "Notificar creación de la cuenta"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:3397
+#: code:addons/kemas/kemas.py:3441
 #, python-format
 msgid "Nov"
 msgstr "Nov"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:4002
-#, python-format
-msgid "Nuevo"
-msgstr "Nuevo"
-
-#. module: kemas
 #: view:kemas.event:kemas.kemas_event_search_view
 msgid "Nuevos y en Curso"
 msgstr "Nuevos y en Curso"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view2
-msgid "Nulled"
-msgstr "Anulado"
 
 #. module: kemas
 #: help:kemas.config,default_points:0
@@ -5011,7 +4525,7 @@ msgid "Obtener foto de perfíl"
 msgstr "Obtener foto de perfíl"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:3395
+#: code:addons/kemas/kemas.py:3439
 #, python-format
 msgid "Oct"
 msgstr "Oct"
@@ -5024,7 +4538,7 @@ msgstr "Oct"
 #: code:addons/kemas/wizard/kemas_collaborator_notify_incorporation_wizard.py:63
 #: code:addons/kemas/wizard/kemas_message_wizard.py:17
 #: code:addons/kemas/wizard/kemas_register_attendance_wizard.py:69
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:83
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:84
 #, python-format
 msgid "Ok"
 msgstr "Aceptar"
@@ -5052,12 +4566,11 @@ msgstr "A tiempo"
 #: view:kemas.suspension:kemas.kemas_suspension_search_view
 #: view:kemas.suspension:kemas.kemas_suspension_search_view2
 #: selection:kemas.suspension,state:0
-#: model:kemas.task.type,name:kemas.kemas_stage_on_going
 msgid "On going"
 msgstr "En curso"
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_event_replace_collaborator_wizard.py:98
+#: code:addons/kemas/wizard/kemas_event_replace_collaborator_wizard.py:99
 #, python-format
 msgid "One of the collaborators replacement is repeated."
 msgstr "Unos de los colaboradores reemplazados esta repetido"
@@ -5068,6 +4581,11 @@ msgid "One of the contributors appears more than once in the list!"
 msgstr "!Uno de los Colaboradores aparece mas de una vez en la Lista¡"
 
 #. module: kemas
+#: view:kemas.config:kemas.kemas_config_form_view
+msgid "Opciones"
+msgstr "Opciones"
+
+#. module: kemas
 #: field:kemas.massive.email,line_ids:0
 #: view:kemas.massive.email.line:kemas.kemas_email_line_form_view
 msgid "Other recipients"
@@ -5075,14 +4593,8 @@ msgstr "Otros destinatarios"
 
 #. module: kemas
 #: selection:kemas.config,bc_type:0
-msgid "POSTNET"
-msgstr "POSTNET"
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:4238
-#, python-format
-msgid "Para cancelar o Cerrar una Tarea hay que dar click en el boton respectivo."
-msgstr "Para cancelar o Cerrar una Tarea hay que dar click en el boton respectivo."
+msgid "PZN"
+msgstr "PZN"
 
 #. module: kemas
 #: model:ir.model,name:kemas.model_res_partner
@@ -5124,18 +4636,6 @@ msgid "País de Nacimiento"
 msgstr "País de Nacimiento"
 
 #. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-#: selection:kemas.task.assigned,state:0
-#: selection:kemas.task.type,state:0
-msgid "Pending"
-msgstr "Pendiente"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-msgid "Pending Tasks"
-msgstr "Tareas pendientes"
-
-#. module: kemas
 #: field:kemas.collaborator.progress.level,percentaje:0
 msgid "Percentaje"
 msgstr "Percentaje"
@@ -5159,11 +4659,6 @@ msgid "Person"
 msgstr "Persona"
 
 #. module: kemas
-#: help:kemas.event.replacement,user_id:0
-msgid "Person performing the replacement"
-msgstr "Persona que realizó el reemplazo"
-
-#. module: kemas
 #: help:kemas.area,responsible_id:0
 msgid "Persona que está a cargo de esta Área"
 msgstr "Persona que está a cargo de esta Área"
@@ -5172,6 +4667,11 @@ msgstr "Persona que está a cargo de esta Área"
 #: help:kemas.team,responsible_id:0
 msgid "Persona que está a cargo de este equipo"
 msgstr "Persona que está a cargo de este equipo"
+
+#. module: kemas
+#: help:kemas.event.replacement,user_id:0
+msgid "Persona que realizó el reemplado"
+msgstr "Persona que realizó el reemplado"
 
 #. module: kemas
 #: view:kemas.collaborator:kemas.kemas_collaborator_form_view
@@ -5201,7 +4701,6 @@ msgstr "Foto"
 #. module: kemas
 #: field:kemas.event,place_id:0
 #: field:kemas.event,rm_place:0
-#: view:kemas.place:kemas.kemas_place_event_form_view
 #: view:kemas.place:kemas.kemas_place_form_view
 #: field:kemas.report.events.list.wizard,place_id:0
 msgid "Place"
@@ -5230,7 +4729,7 @@ msgid "Point is decreased to a contributor for not arriving on time."
 msgstr "Puntos que se restan al colaborador por no llegar a tiempo al servicio."
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:2083
+#: code:addons/kemas/kemas.py:2115
 #: view:kemas.collaborator:kemas.kemas_collaborator_search_view
 #: view:kemas.collaborator:kemas.kemas_collaborator_search_view2
 #: view:kemas.collaborator:kemas.kemas_collaborator_search_view3
@@ -5243,7 +4742,6 @@ msgstr "Puntos que se restan al colaborador por no llegar a tiempo al servicio."
 #: field:kemas.level,points:0
 #: field:kemas.report.collaborators.list.wizard,fl_points:0
 #: field:kemas.set.points.step2.wizard,new_points:0
-#: field:kemas.task,points:0
 #, python-format
 msgid "Points"
 msgstr "Puntos"
@@ -5287,11 +4785,6 @@ msgstr "Puntos por no asistir (-)"
 #: view:kemas.config:kemas.kemas_config_form_view
 msgid "Points on service"
 msgstr "Puntos por servicio"
-
-#. module: kemas
-#: help:kemas.task,points:0
-msgid "Points that he will add the collaborator to fulfill the work"
-msgstr "Puntos que va a agregar el colaborador para cumplir con la tarea"
 
 #. module: kemas
 #: help:kemas.history.points,points:0
@@ -5357,7 +4850,6 @@ msgstr "Prioridad de Configuración"
 #. module: kemas
 #: field:kemas.event,priority:0
 #: field:kemas.school4d_line,priority:0
-#: field:kemas.task.assigned,priority:0
 msgid "Priority"
 msgstr "Prioridad"
 
@@ -5406,11 +4898,6 @@ msgid "Puntos- Hist"
 msgstr "Puntos- Hist"
 
 #. module: kemas
-#: selection:kemas.config,bc_type:0
-msgid "QR"
-msgstr "QR"
-
-#. module: kemas
 #: view:kemas.config:kemas.kemas_config_form_view
 msgid "QR Code Colaborator"
 msgstr "Código QR del Colaborador"
@@ -5424,6 +4911,11 @@ msgstr "Código QR"
 #: field:kemas.config,qr_text:0
 msgid "QR code text"
 msgstr "Texto del Código QR"
+
+#. module: kemas
+#: field:kemas.config,bc_quiet_zone:0
+msgid "Quiet zone"
+msgstr "Quiet zone"
 
 #. module: kemas
 #: view:kemas.set.points.step2.wizard:kemas.kemas_set_points_step2_wizard_form_view
@@ -5451,23 +4943,20 @@ msgid "Reemplazado"
 msgstr "Reemplazado"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:5686
-#: code:addons/kemas/kemas.py:5702
-#, python-format
-msgid "Reemplazo"
-msgstr "Reemplazo"
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:5686
-#: code:addons/kemas/kemas.py:5702
-#, python-format
-msgid "Reemplazo de Colaboradores"
-msgstr "Reemplazo de Colaboradores"
+#: model:ir.actions.act_window,name:kemas.action_kemas_replacements_event
+#: view:kemas.event:kemas.kemas_event_form_view
+msgid "Reemplazos"
+msgstr "Reemplazos"
 
 #. module: kemas
 #: view:kemas.event:kemas.kemas_event_form_view
 msgid "Reenviar notificaciones"
 msgstr "Reenviar notificaciones"
+
+#. module: kemas
+#: field:kemas.event,replacements_count:0
+msgid "Reeplazos"
+msgstr "Reeplazos"
 
 #. module: kemas
 #: code:addons/kemas/wizard/kemas_register_attendance_wizard.py:49
@@ -5502,6 +4991,7 @@ msgid "Registro de asistencia"
 msgstr "Registro de asistencia"
 
 #. module: kemas
+#: model:ir.actions.act_window,name:kemas.action_kemas_attendance_event
 #: help:kemas.collaborator,attendance_ids:0
 msgid "Registros de asistencia"
 msgstr "Registros de asistencia"
@@ -5510,11 +5000,6 @@ msgstr "Registros de asistencia"
 #: view:kemas.event:kemas.kemas_event_form_view
 msgid "Regresar a Borrador"
 msgstr "Regresar a Borrador"
-
-#. module: kemas
-#: field:kemas.task.type,state:0
-msgid "Related Status"
-msgstr "Estado relacionado"
 
 #. module: kemas
 #: code:addons/kemas/wizard/kemas_collaborator_send_notifications_wizard.py:65
@@ -5533,7 +5018,7 @@ msgid "Remove Points"
 msgstr "Quitar puntos"
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:118
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:119
 #, python-format
 msgid "Replace"
 msgstr "Reemplazar"
@@ -5544,7 +5029,7 @@ msgid "Replace Collaborator"
 msgstr "Reemplazar Colaborador"
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_event_replace_collaborator_wizard.py:70
+#: code:addons/kemas/wizard/kemas_event_replace_collaborator_wizard.py:71
 #: model:ir.actions.act_window,name:kemas.kemas_event_replace_collaborator_wizard_form_action
 #, python-format
 msgid "Replace colaborators"
@@ -5647,14 +5132,13 @@ msgid "Resumen de Colaboración"
 msgstr "Resumen de Colaboración"
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:118
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:119
 #, python-format
 msgid "SELECT COLLABORATOR"
 msgstr "SELECCIONAR COLABORADOR"
 
 #. module: kemas
 #: view:kemas.set.points.step1.wizard:kemas.kemas_set_points_step1_wizard_form_view
-#: view:kemas.set.points.task.wizard:kemas.kemas_set_points_task_wizard_form_view
 msgid "SELECTION OF COLLABORATORS"
 msgstr "SELECCIÓN DE COLABORADORES"
 
@@ -5677,7 +5161,6 @@ msgstr "Sábado"
 #. module: kemas
 #: view:kemas.event_replace_collaborator.wizard:kemas.kemas_event_replace_collaborator_wizard_form_view
 #: view:kemas.set.points.step2.wizard:kemas.kemas_set_points_step2_wizard_form_view
-#: view:kemas.set.points.task.wizard:kemas.kemas_set_points_task_wizard_form_view
 #: view:kemas.suspend_collaborator.step2.wizard:kemas.kemas_suspend_collaborator_step2_wizard_form_view
 msgid "Save"
 msgstr "Guardar"
@@ -5725,6 +5208,7 @@ msgid "Search Person"
 msgstr "Buscar rersona"
 
 #. module: kemas
+#: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view
 #: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view2
 msgid "Search Replacement"
 msgstr "Buscar reemplazos"
@@ -5741,11 +5225,6 @@ msgid "Search Suspension"
 msgstr "Buscar suspensión"
 
 #. module: kemas
-#: view:kemas.task:kemas.kemas_task_search_view
-msgid "Search Task"
-msgstr "Buscar Tarea"
-
-#. module: kemas
 #: view:kemas.team:kemas.kemas_team_search_view
 msgid "Search Team"
 msgstr "Buscar Equipo"
@@ -5760,11 +5239,6 @@ msgstr "Buscar Sitio web"
 #: view:kemas.history.points:kemas.kemas_history_points_search_view2
 msgid "Search history points"
 msgstr "Buscar Historial de puntos"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view2
-msgid "Search task assigned"
-msgstr "Buscar tarea asignada"
 
 #. module: kemas
 #: view:kemas.collaborator.progress.level:kemas.kemas_collaborator_progress_level_form_view
@@ -5785,11 +5259,6 @@ msgstr "Seleccione todos los colaboradores a los que se va a agregar o quitar pu
 #: view:kemas.suspend_collaborator.step1.wizard:kemas.kemas_suspend_collaborator_step1_wizard_form_view
 msgid "Select all collaborators who are to be suspended, you can select all you want."
 msgstr "Seleccionar los colaboradores que van a ser suspendidos, se pueden seleccionar varios a la ves."
-
-#. module: kemas
-#: view:kemas.set.points.task.wizard:kemas.kemas_set_points_task_wizard_form_view
-msgid "Select to collaborators that they will receive bonus points for having completed a task."
-msgstr "Seleccione los colaboradores que van a recibir los puntos de bonificación por haber completado una Tarea."
 
 #. module: kemas
 #: code:addons/kemas/wizard/kemas_collaborator_send_notifications_wizard.py:65
@@ -5870,7 +5339,7 @@ msgid "Sent"
 msgstr "Enviado"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:3393
+#: code:addons/kemas/kemas.py:3437
 #, python-format
 msgid "Sep"
 msgstr "Sep"
@@ -5879,8 +5348,6 @@ msgstr "Sep"
 #: field:kemas.config,sequence:0
 #: field:kemas.event.stage,sequence:0
 #: field:kemas.school4d.stage,sequence:0
-#: field:kemas.task.assigned,sequence:0
-#: field:kemas.task.type,sequence:0
 msgid "Sequence"
 msgstr "Secuencia"
 
@@ -5903,7 +5370,6 @@ msgid "Service"
 msgstr "Servicio"
 
 #. module: kemas
-#: view:kemas.event:kemas.kemas_event_form_view
 #: view:kemas.event:kemas.kemas_event_form_view2
 msgid "Service Name"
 msgstr "Nombre del servicio"
@@ -5927,6 +5393,7 @@ msgstr "Servicios"
 
 #. module: kemas
 #: field:kemas.attendance.statistics.wizard,service_id:0
+#: view:kemas.event.replacement:kemas.kemas_event_replacement_search_view
 msgid "Servicio"
 msgstr "Servicio"
 
@@ -5962,52 +5429,19 @@ msgstr "Small Logo"
 #: field:kemas.event,stage_id:0
 #: field:kemas.school4d_line,stage:0
 #: field:kemas.school4d_line,stage_id:0
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-#: field:kemas.task.assigned,stage_id:0
 msgid "Stage"
 msgstr "Estado"
 
 #. module: kemas
 #: field:kemas.event.stage,name:0
 #: field:kemas.school4d.stage,name:0
-#: field:kemas.task.type,name:0
 msgid "Stage Name"
 msgstr "Nombre del Estado"
-
-#. module: kemas
-#: model:ir.actions.act_window,name:kemas.action_kemas_task_type
-msgid "Stages"
-msgstr "Etapas"
-
-#. module: kemas
-#: view:kemas.task.type:kemas.kemas_task_type_search
-msgid "Stages common to all projects"
-msgstr "Etapas comunes a todos los proyectos"
-
-#. module: kemas
-#: selection:kemas.config,bc_type:0
-msgid "Standard39"
-msgstr "Standard39"
-
-#. module: kemas
-#: selection:kemas.config,bc_type:0
-msgid "Standard93"
-msgstr "Standard93"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-msgid "Start Date"
-msgstr "Fecha de inicio"
 
 #. module: kemas
 #: help:kemas.service,time_start:0
 msgid "Start time of service"
 msgstr "Hora de inicio del servicio"
-
-#. module: kemas
-#: field:kemas.task.assigned,date_start:0
-msgid "Starting Date"
-msgstr "Fecha de Inicio"
 
 #. module: kemas
 #: field:kemas.close.past.event.line.wizard,state:0
@@ -6049,11 +5483,6 @@ msgstr "Estado actualmente del correo."
 #: view:kemas.attendance:kemas.kemas_attendancel_graph_view
 msgid "Statisctics"
 msgstr "Estadísticas"
-
-#. module: kemas
-#: field:kemas.task.assigned,state:0
-msgid "Status"
-msgstr "Estatus"
 
 #. module: kemas
 #: selection:kemas.set.points.step1.wizard,state:0
@@ -6125,7 +5554,6 @@ msgstr "Exitoso"
 #: field:kemas.history.points,message_summary:0
 #: field:kemas.history.points,summary:0
 #: field:kemas.repository,message_summary:0
-#: field:kemas.task.assigned,message_summary:0
 msgid "Summary"
 msgstr "Resumen"
 
@@ -6169,7 +5597,6 @@ msgstr "Suspensión"
 
 #. module: kemas
 #: view:kemas.collaborator:kemas.kemas_collaborator_form_view
-#: view:kemas.config:kemas.kemas_config_form_view
 msgid "Suspensiones"
 msgstr "Suspensiones"
 
@@ -6213,116 +5640,10 @@ msgid "System name, it will show up also in the reports."
 msgstr "Nombre del sistema, se mostrará también en los informes."
 
 #. module: kemas
-#: model:ir.actions.act_window,name:kemas.action_kemas_task_category
-#: model:ir.ui.menu,name:kemas.menu_kemas_task_category_mn
 #: view:kemas.repository.category:kemas.kemas_repository_category_form_view
 #: view:kemas.repository.category:kemas.kemas_repository_category_tree_view
-#: field:kemas.task.assigned,categ_ids:0
-#: view:kemas.task.category:kemas.kemas_task_category_form_view
 msgid "Tags"
 msgstr "Tags"
-
-#. module: kemas
-#: view:kemas.config:kemas.kemas_config_form_view
-msgid "Tamaño de imagen"
-msgstr "Tamaño de imagen"
-
-#. module: kemas
-#: field:kemas.suspension,task_assigned_id:0
-msgid "Tarea"
-msgstr "Tarea"
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:4002
-#: code:addons/kemas/kemas.py:4014
-#: code:addons/kemas/kemas.py:4026
-#: code:addons/kemas/kemas.py:4061
-#: code:addons/kemas/kemas.py:4077
-#, python-format
-msgid "Tarea Completada"
-msgstr "Tarea Completada"
-
-#. module: kemas
-#: help:kemas.suspension,task_assigned_id:0
-msgid "Tarea no cumplida por la cual se realizó la suspensión"
-msgstr "Tarea no cumplida por la cual se realizó la suspensión"
-
-#. module: kemas
-#: view:kemas.config:kemas.kemas_config_form_view
-msgid "Tareas no cumplidas"
-msgstr "Tareas no cumplidas"
-
-#. module: kemas
-#: model:ir.ui.menu,name:kemas.menu_kemas_task_mn
-#: field:kemas.set.points.task.wizard,task_id:0
-#: view:kemas.task:kemas.kemas_task_form_view
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view2
-#: field:kemas.task.assigned,task_id:0
-msgid "Task"
-msgstr "Tarea"
-
-#. module: kemas
-#: model:ir.actions.act_window,name:kemas.kemas_task_assigned
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view2
-msgid "Task Assigned"
-msgstr "Tarea Asignadas"
-
-#. module: kemas
-#: view:kemas.task.type:kemas.kemas_task_type_form
-#: view:kemas.task.type:kemas.kemas_task_type_tree
-msgid "Task Stage"
-msgstr "Etapa de la Tarea"
-
-#. module: kemas
-#: model:ir.ui.menu,name:kemas.menu_kemas_task_stage_mn
-msgid "Task Stages"
-msgstr "Etapas de la Tarea"
-
-#. module: kemas
-#: model:ir.ui.menu,name:kemas.menu_kemas_task_assigned
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view
-msgid "Task assigned"
-msgstr "Tarea Asignadas"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_form_view
-msgid "Task summary..."
-msgstr "Descripción de la Tarea..."
-
-#. module: kemas
-#: help:kemas.set.points.task.wizard,task_id:0
-msgid "Task to be reclaiming the collaborators"
-msgstr "Tarea por la cual se van a asignar puntos"
-
-#. module: kemas
-#: model:ir.actions.act_window,name:kemas.action_kemas_task
-#: model:ir.actions.act_window,name:kemas.action_kemas_task_assigned
-#: model:ir.actions.act_window,name:kemas.action_kemas_task_assigned_collaborator
-#: model:ir.actions.act_window,name:kemas.kemas_task_form_action
-#: model:ir.ui.menu,name:kemas.kemas_task_mn
-#: view:kemas.task:kemas.kemas_task_tree_view
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-msgid "Tasks"
-msgstr "Tareas"
-
-#. module: kemas
-#: view:kemas.task.type:kemas.kemas_task_type_search
-msgid "Tasks Stages"
-msgstr "Estapas de la tarea"
-
-#. module: kemas
-#: model:ir.actions.act_window,name:kemas.kemas_task_assigned_form_action_collaborator
-#: model:ir.ui.menu,name:kemas.menu_action_kemas_tasks_assigned_collaborator
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_tree_view
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_tree_view2
-msgid "Tasks assigned"
-msgstr "Tareas asignadas"
-
-#. module: kemas
-#: view:kemas.set.points.task.wizard:kemas.kemas_set_points_task_wizard_form_view
-msgid "Tasks which will assign the points ..."
-msgstr "Tarea por la cual se van a asignar puntos ..."
 
 #. module: kemas
 #: view:kemas.collaborator:kemas.kemas_collaborator_search_view
@@ -6370,6 +5691,11 @@ msgid "Teléfono"
 msgstr "Teléfono"
 
 #. module: kemas
+#: field:kemas.config,bc_text_distance:0
+msgid "Text distance"
+msgstr "Text distance"
+
+#. module: kemas
 #: help:kemas.config,header_email:0
 msgid "Text that is sent in the footer of all emails."
 msgstr "El texto que se envía en el pie de página de todos los mensajes de correo electrónico."
@@ -6388,6 +5714,11 @@ msgstr "Texto que se mostrará en el pie del reporte."
 #: help:kemas.config,report_header:0
 msgid "Text to be displayed in the header of the report."
 msgstr "El texto que se muestra en el encabezado del informe."
+
+#. module: kemas
+#: field:kemas.config,bc_text2:0
+msgid "Texto bajo la imagen"
+msgstr "Texto bajo la imagen"
 
 #. module: kemas
 #: field:kemas.config,bc_text:0
@@ -6450,22 +5781,22 @@ msgid "The email notifications are disabled!"
 msgstr "¡Las notificaciones por correo electrónico están desactivados!"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:5365
-#: code:addons/kemas/kemas.py:5375
+#: code:addons/kemas/kemas.py:5025
+#: code:addons/kemas/kemas.py:5035
 #, python-format
 msgid "The event has been Canceled and can not be changed."
 msgstr "Este evento ya fue CANCELADO y ya no puede ser cambiado."
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:5364
-#: code:addons/kemas/kemas.py:5374
+#: code:addons/kemas/kemas.py:5024
+#: code:addons/kemas/kemas.py:5034
 #, python-format
 msgid "The event has been Closed and can not be changed."
 msgstr "Este evento ya ha sido CERRADO y ya no puede ser cambiado."
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:5366
-#: code:addons/kemas/kemas.py:5376
+#: code:addons/kemas/kemas.py:5026
+#: code:addons/kemas/kemas.py:5036
 #, python-format
 msgid "The event is on going and can not be changed."
 msgstr "Este evento está EN CURSO y no puede ser modificado"
@@ -6541,7 +5872,7 @@ msgid "The points must be greater than zero."
 msgstr "Los puntos debe ser mayor que cero."
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_event_replace_collaborator_wizard.py:120
+#: code:addons/kemas/wizard/kemas_event_replace_collaborator_wizard.py:121
 #: code:addons/kemas/wizard/kemas_suspend_collaborator_wizard.py:87
 #, python-format
 msgid "The registers was saved correctly."
@@ -6553,48 +5884,37 @@ msgid "The reports Logo."
 msgstr "El logo de los reportes"
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:34
-#, python-format
-msgid "The selected collaborator already exceeded the limit of replacements available for this month"
-msgstr "El colaborador seleccionado  supera el límite de reemplazos disponibles para este mes"
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:407
+#: code:addons/kemas/kemas.py:427
 #, python-format
 msgid "The sending email has begun..."
 msgstr "El envío de correo electrónico ha comenzado ..."
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:4700
+#: code:addons/kemas/kemas.py:4344
 #, python-format
 msgid "The start time must be less than the end time."
 msgstr "La ¨Hora de inicio¨ debe ser menor a la ¨Hora de finalización¨"
 
 #. module: kemas
-#: help:kemas.task.type,state:0
-msgid "The status of your document is automatically changed regarding the selected stage. For example, if a stage is related to the status 'Close', when your document reaches this stage, it is automatically closed."
-msgstr "El estado del documento se cambia automáticamente sobre el escenario seleccionado. Por ejemplo, si una etapa está relacionada con el estado de \"Cerrar\", cuando el documento llega a esta fase, se cierra automáticamente."
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:4706
+#: code:addons/kemas/kemas.py:4350
 #, python-format
 msgid "The time of entry can not be longer than the end time."
 msgstr "La ¨Hora de Entrada¨ no puede ser mayor a la ¨Hora de finalización¨ del servicio."
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:4703
+#: code:addons/kemas/kemas.py:4347
 #, python-format
 msgid "The time of entry can not be longer than the time limit."
 msgstr "La ¨Hora de entrada¨ no puede ser mayor que el ¨Tiempo limite de registro¨"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:4712
+#: code:addons/kemas/kemas.py:4356
 #, python-format
 msgid "The time of entry coupled with the time limit can not be longer than the time end."
 msgstr "La ¨Hora de entrada¨ sumada más el ¨Tiempo limite de registro¨ no puede ser mayor a la ¨Hora de finalización del Servicio¨"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:4709
+#: code:addons/kemas/kemas.py:4353
 #, python-format
 msgid "The time of entry coupled with the time of entry can not be longer than the time end."
 msgstr "La ¨Hora de entrada¨  sumada con el ¨Tiempo para registro¨ no puede ser mayor a la hora de ¨Finalización del servicio¨."
@@ -6720,31 +6040,14 @@ msgid "This collaborator has registered their attendance at this event!"
 msgstr "!El colaborador ya ha registrado su asistencia en este Evento!"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:6158
-#: code:addons/kemas/kemas.py:6162
-#, python-format
-msgid "This event is crossed with another."
-msgstr "Este evento se CRUZA con otro. Verifica que no haya otro evento previsto para esta misma fecha"
-
-#. module: kemas
 #: sql_constraint:kemas.level:0
 msgid "This level's name already exist!"
 msgstr "!Este nombre de nivel ya existe!"
 
 #. module: kemas
-#: sql_constraint:kemas.task:0
-msgid "This name already exist!"
-msgstr "¡Este nombre ya existe!"
-
-#. module: kemas
 #: sql_constraint:kemas.config:0
 msgid "This sequence already exist!"
 msgstr "!Esta secuencia ya existe!"
-
-#. module: kemas
-#: help:kemas.task.type,fold:0
-msgid "This stage is not visible, for example in status bar or kanban view, when there are no records in that stage to display."
-msgstr "Esta etapa no es visible, por ejemplo en la barra de estado o vista kanban, cuando no hay registros en esta etapa para mostrar."
 
 #. module: kemas
 #: sql_constraint:kemas.config:0
@@ -6758,7 +6061,7 @@ msgid "This user name does not belong to any collaborator. Contact the administr
 msgstr "Este nombre de usuario que no pertenece a ningún colaborador. Póngase en contacto con el Administrador."
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:79
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:80
 #, python-format
 msgid "This wizard is only for collaborators."
 msgstr "¡Este asistente es SOLO para los Colaboradores!"
@@ -6907,6 +6210,11 @@ msgstr "Typo de Codigo de Barras"
 
 #. module: kemas
 #: selection:kemas.config,bc_type:0
+msgid "UPC"
+msgstr "UPC"
+
+#. module: kemas
+#: selection:kemas.config,bc_type:0
 msgid "UPCA"
 msgstr "UPCA"
 
@@ -6938,31 +6246,9 @@ msgid "URL o E-mail"
 msgstr "URL o E-mail"
 
 #. module: kemas
-#: selection:kemas.config,bc_type:0
-msgid "USPS_4State"
-msgstr "USPS_4State"
-
-#. module: kemas
 #: field:kemas.collaborator,last_connection:0
 msgid "Ultima Conexion"
 msgstr "Ultima Conexion"
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:5449
-#, python-format
-msgid "Unable to create an event in a past date."
-msgstr "No se puede CREAR un Evento en una Fecha que ya pasó."
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:5389
-#, python-format
-msgid "Unable to move an event in a past date."
-msgstr "No se puede mover un evento en una fecha que ya paso."
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-msgid "Unassigned Tasks"
-msgstr "Tareas no asignadas"
 
 #. module: kemas
 #: help:kemas.config,use_header_message_add_remove_points:0
@@ -6987,8 +6273,6 @@ msgstr "Código único que se asigna a cada colaborador"
 #: field:kemas.history.points,message_unread:0
 #: view:kemas.repository:kemas.kemas_repository_search_view
 #: field:kemas.repository,message_unread:0
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view
-#: field:kemas.task.assigned,message_unread:0
 msgid "Unread Messages"
 msgstr "Mensajes no leídos"
 
@@ -7063,11 +6347,6 @@ msgid "User"
 msgstr "Usuario"
 
 #. module: kemas
-#: field:kemas.task.assigned,user_email:0
-msgid "User Email"
-msgstr "Correo electrónico del Usuario"
-
-#. module: kemas
 #: help:kemas.suspension,user_lift_id:0
 msgid "User who lifted the suspension to collaborator"
 msgstr "Usuario que levantó la suspensión"
@@ -7120,11 +6399,6 @@ msgid "Usuario asignado con el que se conecta al sistema"
 msgstr "Usuario asignado con el que se conecta al sistema"
 
 #. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_kanban
-msgid "Validate planned time"
-msgstr "Validar el tiempo previsto"
-
-#. module: kemas
 #: model:ir.actions.act_window,name:kemas.kemas_show_bar_code_act_window
 msgid "Ver Código de Barras"
 msgstr "Ver Código de Barras"
@@ -7145,6 +6419,11 @@ msgid "Ver eventos en los que se le han asignado actividades"
 msgstr "Ver eventos en los que se le han asignado actividades"
 
 #. module: kemas
+#: view:kemas.event:kemas.kemas_event_form_view
+msgid "Ver los reemplazos registrados en este evento"
+msgstr "Ver los reemplazos registrados en este evento"
+
+#. module: kemas
 #: view:kemas.collaborator:kemas.kemas_collaborator_form_view
 msgid "Ver los registros de asistencias"
 msgstr "Ver los registros de asistencias"
@@ -7160,21 +6439,14 @@ msgid "Ver todos las veces que se ha conectado al sistema"
 msgstr "Ver todos las veces que se ha conectado al sistema"
 
 #. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_kanban
-msgid "Very Important"
-msgstr "Muy importante"
-
-#. module: kemas
 #: selection:kemas.event,priority:0
 #: selection:kemas.school4d_line,priority:0
-#: selection:kemas.task.assigned,priority:0
 msgid "Very Low"
 msgstr "Muy lento"
 
 #. module: kemas
 #: selection:kemas.event,priority:0
 #: selection:kemas.school4d_line,priority:0
-#: selection:kemas.task.assigned,priority:0
 msgid "Very important"
 msgstr "Muy importante"
 
@@ -7183,11 +6455,6 @@ msgstr "Muy importante"
 #: selection:kemas.send.notification.event.line.wizard,state:0
 msgid "Waiting"
 msgstr "En espera"
-
-#. module: kemas
-#: view:kemas.task.assigned:kemas.kemas_task_assigned_search_view2
-msgid "Waiting for confirmation"
-msgstr "Esperando confirmación"
 
 #. module: kemas
 #: code:addons/kemas/wizard/kemas_close_past_events_wizard.py:75
@@ -7247,19 +6514,9 @@ msgid "Wizard parent"
 msgstr "Asistente padre"
 
 #. module: kemas
-#: help:kemas.task,name:0
-msgid "Work Name"
-msgstr "Nombre de la tarea"
-
-#. module: kemas
 #: field:kemas.config,work_in_background_event:0
 msgid "Work in backgound?"
 msgstr "¿Trabajar en segundo plano?"
-
-#. module: kemas
-#: help:kemas.task.assigned,task_id:0
-msgid "Work name you turned."
-msgstr "Nombre de la tarea"
 
 #. module: kemas
 #: sql_constraint:kemas.collaborator.web.site:0
@@ -7278,16 +6535,10 @@ msgid "You can Close the Past Events that are still On going, so you have update
 msgstr "Aquí puedes Cerrar los eventos pasados que aun se encuentren en Curso, para así tener actualizado el sistema."
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:3276
+#: code:addons/kemas/kemas.py:3320
 #, python-format
 msgid "You can not change information that is not yours!"
 msgstr "¡No puede cambiar datos que no sean tuyos!"
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:4110
-#, python-format
-msgid "You can not delete this work."
-msgstr "Usted ya no puede borrar esta tarea realizada. Porque ya fue revisada por un administrador."
 
 #. module: kemas
 #: constraint:kemas.config:0
@@ -7295,44 +6546,44 @@ msgid "You can not enter values ​​less than 1 or leave the field empty."
 msgstr "No se pueden ingresar valores que sean menores a 1 o dejar el campo vacío."
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:5327
-#: code:addons/kemas/kemas.py:5822
+#: code:addons/kemas/kemas.py:4987
+#: code:addons/kemas/kemas.py:5453
 #, python-format
 msgid "You can not make changes to this event as they send notification e-mails."
 msgstr "No se pueden realizar cambios a este evento, ya que las notificaciones se están enviando."
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:68
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:69
 #, python-format
 msgid "You can not replace anyone in this event because and those Included in this event."
 msgstr "¡No puedes reemplazar a naden en este Evento porque ya estas incluido en el!"
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:48
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:49
 #, python-format
 msgid "You can not replace anyone in this event because it is not On Going."
 msgstr "No se puede reemplazar a nadie en este Evento porque ya no esta En Curso."
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:56
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:57
 #, python-format
 msgid "You can not replace anyone in this event because it was Canceled."
 msgstr "No se puede reemplazar a nadie en este Evento porque ya fue Cancelado."
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:52
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:53
 #, python-format
 msgid "You can not replace anyone in this event because it was Closed."
 msgstr "No se puede reemplazar a nadie en este Evento porque ya fue cerrado."
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:73
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:74
 #, python-format
 msgid "You can not replace anyone in this event because were replaced by"
 msgstr "No se puede reemplazar a nadie en este Evento porque ya fuistes reemplazado por"
 
 #. module: kemas
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:64
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:65
 #, python-format
 msgid "You can not replace anyone in this event because you replaced "
 msgstr "No se puede reemplazar a nadie en este Evento porque ya reemplazaste a "
@@ -7341,12 +6592,6 @@ msgstr "No se puede reemplazar a nadie en este Evento porque ya reemplazaste a "
 #: view:kemas.event:kemas.kemas_event_form_view
 msgid "You're sure to put back this event in DRAFT now?"
 msgstr "¿Está seguro de volver a BORRADOR este evento ahora?"
-
-#. module: kemas
-#: code:addons/kemas/kemas.py:4335
-#, python-format
-msgid "You've entered this task and has not yet been confirmed."
-msgstr "Has entrado en esta tarea y aún no ha sido confirmado."
 
 #. module: kemas
 #: view:kemas.event:kemas.kemas_event_form_view
@@ -7359,9 +6604,7 @@ msgid "años"
 msgstr "años"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:5686
-#: code:addons/kemas/kemas.py:5702
-#: code:addons/kemas/kemas.py:6550
+#: code:addons/kemas/kemas.py:6156
 #, python-format
 msgid "by"
 msgstr "por"
@@ -7451,6 +6694,11 @@ msgid "facebook.com"
 msgstr "facebook.com"
 
 #. module: kemas
+#: view:kemas.service:kemas.kemas_service_form_view
+msgid "hasta:"
+msgstr "hasta:"
+
+#. module: kemas
 #: field:kemas.config,qr_height:0
 msgid "height"
 msgstr "Alto"
@@ -7461,17 +6709,11 @@ msgid "http://pad.openerp.com/"
 msgstr "http://pad.openerp.com/"
 
 #. module: kemas
-#: field:kemas.event_replace_collaborator.wizard,logo:0
 #: field:kemas.report.collaborators.list.wizard,logo:0
 #: field:kemas.report.events.list.wizard,logo:0
 #: field:kemas.suspend_collaborator.step2.wizard,logo:0
 msgid "img"
 msgstr "img"
-
-#. module: kemas
-#: constraint:kemas.event:0
-msgid "inconsistent data."
-msgstr "Datos inconsistentes."
 
 #. module: kemas
 #: field:kemas.collaborator,integrate_collaborators_with_partners:0
@@ -7495,13 +6737,11 @@ msgstr "massive_mail"
 #: code:addons/kemas/wizard/kemas_collaborator_inactive_wizard.py:30
 #: code:addons/kemas/wizard/kemas_collaborator_notify_incorporation_wizard.py:64
 #: code:addons/kemas/wizard/kemas_register_attendance_wizard.py:43
-#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:96
+#: code:addons/kemas/wizard/kemas_replace_collaborator_wizard.py:97
 #: view:kemas.close.past.event.wizard:kemas.kemas_close_past_event_wizard_form_view
 #: view:kemas.event_replace_collaborator.wizard:kemas.kemas_event_replace_collaborator_wizard_form_view
-#: view:kemas.send.notification.event.wizard:kemas.kemas_send_notification_event_wizard_form_view
 #: view:kemas.set.points.step1.wizard:kemas.kemas_set_points_step1_wizard_form_view
 #: view:kemas.set.points.step2.wizard:kemas.kemas_set_points_step2_wizard_form_view
-#: view:kemas.set.points.task.wizard:kemas.kemas_set_points_task_wizard_form_view
 #: view:kemas.suspend_collaborator.step1.wizard:kemas.kemas_suspend_collaborator_step1_wizard_form_view
 #: view:kemas.suspend_collaborator.step2.wizard:kemas.kemas_suspend_collaborator_step2_wizard_form_view
 #, python-format
@@ -7519,7 +6759,7 @@ msgid "points"
 msgstr "Puntos"
 
 #. module: kemas
-#: code:addons/kemas/kemas.py:2741
+#: code:addons/kemas/kemas.py:2769
 #, python-format
 msgid "replacements available"
 msgstr "reemplazos disponibles"
@@ -7618,6 +6858,11 @@ msgstr "¿Seguro de ACTIVAR a este colaborador?"
 #: view:kemas.collaborator:kemas.kemas_collaborator_form_view
 msgid "¿Seguro de INACTIVAR a este colaborador?"
 msgstr "¿Seguro de INACTIVAR a este colaborador?"
+
+#. module: kemas
+#: field:kemas.config,bc_write_text:0
+msgid "¿legible para lectura?"
+msgstr "¿legible para lectura?"
 
 #. module: kemas
 #: view:kemas.collaborator:kemas.kemas_collaborator_form_view
