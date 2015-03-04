@@ -22,7 +22,7 @@
        			</div>
 	       		<separator string="REPLACE COLLABORATORS" colspan="4"/>
 	       		<group colspan="4" col="10">
-	       			<field name="event_id" colspan="8" default_focus="1" domain="[('state','=','on_going')]" context="{'search_view_ref' : 'kemas.kemas_event_search_view2','tree_view_ref' : 'kemas.kemas_event_tree_view3',}"/>
+	       			<field name="event_id" colspan="8" default_focus="1" domain="[('state','=','on_going')]" context="{'search_view_ref' : 'kemas.kemas_event_search_view2','tree_view_ref' : 'kemas.kemas_event_tree_view3'}"/>
 	       			<button name="load_collaborators" colspan="2" type="object" string="Load Collaborators" icon="gtk-execute" class="oe_highlight"/>
 	       		</group>
 	       		<field name="line_ids" nolabel="1" colspan="4"/>
@@ -65,7 +65,7 @@
           		<field name="replaced" invisible="1"/>
           		<field name="collaborator_id" readonly="1" colspan="0"/>
           		<field name="replacements" readonly="1" colspan="0"/>
-          		<field name="collaborator_replacement_id" required="1" domain="[('state','=','Active'),]"
+          		<field name="collaborator_replacement_id" required="1" domain="[('state','=','Active')]"
 										      context="{
 														'except_ids' : except_ids,							      
 										      			'event_collaborator_line_ids' : [],

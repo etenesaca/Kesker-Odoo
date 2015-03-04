@@ -23,7 +23,7 @@
        			<separator string="SELECTION OF COLLABORATORS" colspan="20"/>
 	       		<group colspan="4">
 	       			<field name="task_id" default_focus="1" placeholder="Tasks which will assign the points ..."/>
-	       			<field name="collaborator_ids" domain="[('state','=','Active'),]" colspan="4" context="{'search_view_ref' : 'kemas.kemas_collaborator_search_view2','tree_view_ref' : 'kemas.kemas_collaborator_tree_view6',}" nolabel="1"/>
+	       			<field name="collaborator_ids" domain="[('state','=','Active')]" colspan="4" context="{'search_view_ref' : 'kemas.kemas_collaborator_search_view2','tree_view_ref' : 'kemas.kemas_collaborator_tree_view6'}" nolabel="1"/>
        			</group>
       			<footer>
 	           		<button string="Save" name="save" type="object" class="oe_highlight" confirm="Are you sure reclaim to these Collaborators for the fulfillment of task task now?"/>

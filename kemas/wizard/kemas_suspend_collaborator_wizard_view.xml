@@ -26,7 +26,7 @@
        			</div>
        			<separator string="COLLABORATORS TO SUSPEND" colspan="20"/>
        			<group colspan="2">
-	       			<field name="collaborator_ids" domain="[('state','=','Active'),]" colspan="4" context="{'search_view_ref' : 'kemas.kemas_collaborator_search_view2','tree_view_ref' : 'kemas.kemas_collaborator_tree_view6',}" nolabel="1"/>
+	       			<field name="collaborator_ids" domain="[('state','=','Active')]" colspan="4" context="{'search_view_ref' : 'kemas.kemas_collaborator_search_view2','tree_view_ref' : 'kemas.kemas_collaborator_tree_view6'}" nolabel="1"/>
        			</group>
        			<footer>
 	           		<table border="0" width="100%%">

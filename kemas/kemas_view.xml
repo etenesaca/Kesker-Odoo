@@ -641,13 +641,13 @@
                                     </tr>
                                  </table>
                                  <group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_message_incorporation','=',False)]}">
-                                    <field name="Message_information_incorporation_subject" colspan="4" attrs="{'required':[('use_message_incorporation','=',True)],}" />
+                                    <field name="Message_information_incorporation_subject" colspan="4" attrs="{'required':[('use_message_incorporation','=',True)]}" />
                                     <notebook colspan="4">
                                        <page string="E-mail">
-                                          <field name="Message_information_incorporation" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_incorporation','=',True)],}" />
+                                          <field name="Message_information_incorporation" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_incorporation','=',True)]}" />
                                        </page>
                                        <page string="IM" attrs="{'invisible':[('use_message_im_incorporation','=',False)]}">
-                                          <field name="Message_im_information_incorporation" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_incorporation','=',True)],}" />
+                                          <field name="Message_im_information_incorporation" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_incorporation','=',True)]}" />
                                        </page>
                                     </notebook>
                                  </group>
@@ -805,13 +805,13 @@
                                           </tr>
                                        </table>
                                        <group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_message_event','=',False)]}">
-                                          <field name="Message_information_event_subject" colspan="4" attrs="{'required':[('use_message_event','=',True)],}" />
+                                          <field name="Message_information_event_subject" colspan="4" attrs="{'required':[('use_message_event','=',True)]}" />
                                           <notebook colspan="4">
                                              <page string="E-mail">
-                                                <field name="Message_information_event" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_event','=',True)],}" />
+                                                <field name="Message_information_event" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_event','=',True)]}" />
                                              </page>
                                              <page string="IM" attrs="{'invisible':[('use_message_im_event','=',False)]}">
-                                                <field name="Message_im_information_event" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_event','=',True)],}" />
+                                                <field name="Message_im_information_event" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_event','=',True)]}" />
                                              </page>
                                           </notebook>
                                        </group>
@@ -938,35 +938,35 @@
                                           </tr>
                                        </table>
                                        <group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_event_completion','=',False)]}">
-                                          <field name="message_event_completon_subject" colspan="4" attrs="{'required':[('use_event_completion','=',True)],}" />
+                                          <field name="message_event_completon_subject" colspan="4" attrs="{'required':[('use_event_completion','=',True)]}" />
                                           <notebook colspan="4">
                                              <page string="Attendance on time">
                                                 <group colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}">
                                                    <separator string="Email notification" colspan="4" />
-                                                   <field name="message_event_completon_on_time" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_event_completion','=',True)],}" />
-                                                   <group colspan="4" attrs="{'invisible':[('use_im_event_completion','=',False)],}">
+                                                   <field name="message_event_completon_on_time" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_event_completion','=',True)]}" />
+                                                   <group colspan="4" attrs="{'invisible':[('use_im_event_completion','=',False)]}">
                                                       <separator string="Instant message" colspan="4" />
-                                                      <field name="message_im_event_completon_on_time" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion','=',True)],}" />
+                                                      <field name="message_im_event_completon_on_time" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion','=',True)]}" />
                                                    </group>
                                                 </group>
                                              </page>
                                              <page string="Attendance late">
                                                 <group colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}">
                                                    <separator string="Email notification" colspan="4" />
-                                                   <field name="message_event_completon_late" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_event_completion','=',True)],}" />
-                                                   <group colspan="4" attrs="{'invisible':[('use_im_event_completion','=',False)],}">
+                                                   <field name="message_event_completon_late" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_event_completion','=',True)]}" />
+                                                   <group colspan="4" attrs="{'invisible':[('use_im_event_completion','=',False)]}">
                                                       <separator string="Instant message" colspan="4" />
-                                                      <field name="message_im_event_completon_late" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion','=',True)],}" />
+                                                      <field name="message_im_event_completon_late" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion','=',True)]}" />
                                                    </group>
                                                 </group>
                                              </page>
                                              <page string="Absence">
                                                 <group colspan="4" attrs="{'invisible':[('use_event_completion','=',False)]}">
                                                    <separator string="Email notification" colspan="4" />
-                                                   <field name="message_event_completon_absence" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_event_completion','=',True)],}" />
-                                                   <group colspan="4" attrs="{'invisible':[('use_im_event_completion','=',False)],}">
+                                                   <field name="message_event_completon_absence" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_event_completion','=',True)]}" />
+                                                   <group colspan="4" attrs="{'invisible':[('use_im_event_completion','=',False)]}">
                                                       <separator string="Instant message" colspan="4" />
-                                                      <field name="message_im_event_completon_absence" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion','=',True)],}" />
+                                                      <field name="message_im_event_completon_absence" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion','=',True)]}" />
                                                    </group>
                                                 </group>
                                              </page>
@@ -979,20 +979,20 @@
                                           <field name="use_mail_event_completion_canceled" colspan="4"/>
                                           <group colspan="4" attrs="{'invisible':[('use_mail_event_completion_canceled','=',False)]}">
                                           <separator string="Email notification" colspan="4"/>
-                                          <field name="message_event_completon_canceled_subject" colspan="4" attrs="{'required':[('use_mail_event_completion_canceled','=',True)],}"/>
+                                          <field name="message_event_completon_canceled_subject" colspan="4" attrs="{'required':[('use_mail_event_completion_canceled','=',True)]}"/>
                                           <notebook colspan="4">
                                           <page string="Message">
-                                          <field name="message_event_completon_canceled" widget="text_WYSIWYG" colspan="4" nolabel="1" attrs="{'required':[('use_mail_event_completion_canceled','=',True)],}"/>
+                                          <field name="message_event_completon_canceled" widget="text_WYSIWYG" colspan="4" nolabel="1" attrs="{'required':[('use_mail_event_completion_canceled','=',True)]}"/>
                                           </page>
                                           </notebook>
                                           <group colspan="4" col="30">
                                           <field name="use_im_event_completion_canceled" nolabel="1"/>
                                           <separator string="IM message notification" colspan="29"/>
                                           </group>
-                                          <group colspan="4" attrs="{'invisible':[('use_im_event_completion_canceled','=',False)],}">
+                                          <group colspan="4" attrs="{'invisible':[('use_im_event_completion_canceled','=',False)]}">
                                           <notebook colspan="4">
                                           <page string="Message">
-                                          <field name="message_im_event_completon_canceled" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion_canceled','=',True)],}"/>
+                                          <field name="message_im_event_completon_canceled" colspan="4" nolabel="1" attrs="{'required':[('use_im_event_completion_canceled','=',True)]}"/>
                                           </page>
                                           </notebook>
                                           </group>
@@ -1055,10 +1055,10 @@
                                  <group colspan="4" col="4" expand="1" attrs="{'invisible':[('send_IM_massive_email','=',False)]}">
                                     <notebook colspan="4">
                                        <page string="Mensaje que se envia por chat">
-                                          <field name="Message_information_massive_email" colspan="4" widget="html" nolabel="1" attrs="{'required':[('send_IM_massive_email','=',True)],}" />
+                                          <field name="Message_information_massive_email" colspan="4" widget="html" nolabel="1" attrs="{'required':[('send_IM_massive_email','=',True)]}" />
                                        </page>
                                        <page string="Cuenta de Correo por defecto">
-                                          <field name="massive_mail_body_default" colspan="4" widget="html" nolabel="1" attrs="{'required':[('send_IM_massive_email','=',True)],}" />
+                                          <field name="massive_mail_body_default" colspan="4" widget="html" nolabel="1" attrs="{'required':[('send_IM_massive_email','=',True)]}" />
                                        </page>
                                     </notebook>
                                  </group>
@@ -1128,7 +1128,7 @@
                                     </tr>
                                  </table>
                                  <group colspan="4" col="4" expand="1" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}">
-                                    <field name="Message_add_remove_points_subject" colspan="4" attrs="{'required':[('use_message_add_remove_points','=',True)],}" />
+                                    <field name="Message_add_remove_points_subject" colspan="4" attrs="{'required':[('use_message_add_remove_points','=',True)]}" />
                                     <notebook colspan="4">
                                        <page string="Add Points">
                                           <group colspan="4" col="4">
@@ -1137,10 +1137,10 @@
                                           <group colspan="4" expand="1" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}">
                                              <notebook colspan="4">
                                                 <page string="Email notification">
-                                                   <field name="Message_add_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_add_remove_points','=',True)],}" />
+                                                   <field name="Message_add_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_add_remove_points','=',True)]}" />
                                                 </page>
-                                                <page string="IM message notification" attrs="{'invisible':[('use_message_im_add_points','=',False)],}">
-                                                   <field name="Message_im_add_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_add_points','=',True)],}" />
+                                                <page string="IM message notification" attrs="{'invisible':[('use_message_im_add_points','=',False)]}">
+                                                   <field name="Message_im_add_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_add_points','=',True)]}" />
                                                 </page>
                                              </notebook>
                                           </group>
@@ -1152,10 +1152,10 @@
                                           <group colspan="4" expand="1" attrs="{'invisible':[('use_message_add_remove_points','=',False)]}">
                                              <notebook colspan="4">
                                                 <page string="Email notification">
-                                                   <field name="Message_remove_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_add_remove_points','=',True)],}" />
+                                                   <field name="Message_remove_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_add_remove_points','=',True)]}" />
                                                 </page>
-                                                <page string="IM message notification" attrs="{'invisible':[('use_message_im_remove_points','=',False)],}">
-                                                   <field name="Message_im_remove_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_remove_points','=',True)],}" />
+                                                <page string="IM message notification" attrs="{'invisible':[('use_message_im_remove_points','=',False)]}">
+                                                   <field name="Message_im_remove_points" widget="html" colspan="4" nolabel="1" attrs="{'required':[('use_message_im_remove_points','=',True)]}" />
                                                 </page>
                                              </notebook>
                                           </group>
@@ -2509,7 +2509,7 @@
                         </page>
                         <page string="Areas">
                            <group colspan="4" expand="1" col="4">
-                              <field name="area_ids" colspan="4" nolabel="1" context="{'tree_view_ref' : 'kemas.kemas_area_tree_view2',}" />
+                              <field name="area_ids" colspan="4" nolabel="1" context="{'tree_view_ref' : 'kemas.kemas_area_tree_view2'}" />
                            </group>
                         </page>
                      </notebook>
@@ -4824,7 +4824,7 @@
          <field name="res_model">kemas.collaborator</field>
          <field name="view_mode">kanban,tree,form</field>
          <field name="domain">[('state','=','Active')]</field>
-         <field name="context">{'all_collaborators':1,'search_default_active': 1,'search_default_collaborator': 1,'no_name_get':True,'search_view_ref':'kemas.kemas_collaborator_search_view3','kanban_view_ref':'kemas.kemas_collaborator_kanban_view3',}</field>
+         <field name="context">{'all_collaborators':1,'search_default_active': 1,'search_default_collaborator': 1,'no_name_get':True,'search_view_ref':'kemas.kemas_collaborator_search_view3','kanban_view_ref':'kemas.kemas_collaborator_kanban_view3'}</field>
          <field name="help">All collaborators who are actively involved in ministry.</field>
       </record>
       <record model="ir.actions.act_window" id="kemas_collaborator_form_action_me">
@@ -4833,7 +4833,7 @@
          <field name="res_model">kemas.collaborator</field>
          <field name="view_mode">tree,form</field>
          <field name="domain">[('user_id','=',uid)]</field>
-         <field name="context">{'is_collaborator':1,'no_name_get':True,'search_view_ref':'kemas.kemas_collaborator_search_view_me','form_view_ref':'kemas.kemas_collaborator_form_view_me',}</field>
+         <field name="context">{'is_collaborator':1,'no_name_get':True,'search_view_ref':'kemas.kemas_collaborator_search_view_me','form_view_ref':'kemas.kemas_collaborator_form_view_me'}</field>
       </record>
 
       <record model="ir.actions.act_window" id="kemas_history_points_form_action">

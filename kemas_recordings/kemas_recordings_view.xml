@@ -296,7 +296,7 @@
                      </div>
                   </group>
                   <group col="4" colspan="4" string="Lugar y otros">
-                     <field name="event_id" domain="[('state','=','closed'),]" on_change="on_change_event_id(event_id)" colspan="2" placeholder="Evento relacionado..." />
+                     <field name="event_id" domain="[('state','=','closed')]" on_change="on_change_event_id(event_id)" colspan="2" placeholder="Evento relacionado..." />
                      <field name="place_id" colspan="2" placeholder="Lugar en donde se realizo la grabación..." />
                      <field name="url" on_change="on_change_url(url)" widget="url" colspan="4" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
                   </group>
@@ -429,7 +429,7 @@
                      </div>
                   </group>
                   <group col="4" colspan="4" string="Lugar y otros">
-                     <field name="event_id" domain="[('state','=','closed'),]" on_change="on_change_event_id(event_id)" colspan="2" placeholder="Evento relacionado..." />
+                     <field name="event_id" domain="[('state','=','closed')]" on_change="on_change_event_id(event_id)" colspan="2" placeholder="Evento relacionado..." />
                      <field name="place_id" colspan="2" placeholder="Lugar en donde se realizo la grabación..." />
                      <field name="url" widget="url" colspan="4" placeholder="Dirección en que se encuentra almacenada esta grabación..." />
                   </group>
