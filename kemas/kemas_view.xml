@@ -24,7 +24,7 @@
                      </h1>
                   </div>
                   <group>
-                     <field name="responsible_id" placeholder="Responsable del Equipo" required="True" />
+                     <field name="responsible_id" domain="[('is_company','=',False)]" placeholder="Responsable del Equipo" required="True" />
                   </group>
                   <notebook colspan="4">
                      <page string="Colaboradores">
@@ -121,7 +121,7 @@
                      </h1>
                   </div>
                   <group>
-                     <field name="responsible_id" placeholder="Responsable del Área" required="True" />
+                     <field name="responsible_id" domain="[('is_company','=',False)]" placeholder="Responsable del Área" required="True" />
                   </group>
                   <notebook colspan="4">
                      <page string="Activities">
@@ -268,7 +268,7 @@
                   <field name="area_id" />
                </group>
                <newline />
-               <field name="description" nolabel="1" placeholder="Description of the activity" />
+               <field name="description" nolabel="1" placeholder="Descripción de la actividad" />
             </form>
          </field>
       </record>
@@ -280,9 +280,9 @@
             <form string="Activity" version="7.0">
                <label for="name" class="oe_edit_only" />
                <h1>
-                  <field name="name" placeholder="Name of the activity" />
+                  <field name="name" placeholder="Nombre de la actividad" />
                </h1>
-               <field name="description" nolabel="1" placeholder="Description of the activity" />
+               <field name="description" nolabel="1" placeholder="Descripción" />
             </form>
          </field>
       </record>

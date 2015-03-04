@@ -421,7 +421,7 @@ class kemas_massive_email(osv.osv):
             email_list.append(line_obj.read(cr, uid, line_id, ['email'])['email'])
             
         if email_list == []:
-            raise osv.except_osv(_('Error!'), _('No recipients to send mail.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('No recipients to send mail.'))
         threaded_sending = threading.Thread(target=self._send_email, args=(cr.dbname , uid, ids[0], email_list, massive_email['collaborator_ids'], massive_email['message'], massive_email['subject'], context))
         threaded_sending.start()
         context['message'] = self.pool.get('kemas.func').get_translate(cr, uid, _('The sending email has begun...'))[0]            
@@ -450,7 +450,7 @@ class kemas_massive_email(osv.osv):
                     def_dic['use_header_message'] = preferences['massive_mail_use_header']
                     def_dic['message'] = preferences['massive_mail_body_default']
                 except:
-                    raise osv.except_osv(_('Error!'), _('No hay ninguna configuracion del Sistema definida.'))
+                    raise osv.except_osv(u'¡Operación no válida!', _('No hay ninguna configuracion del Sistema definida.'))
                 def_dic['state'] = 'draft'
                 self._defaults = def_dic
         return result
@@ -2063,16 +2063,15 @@ class kemas_area(osv.osv):
     _order = 'name'
     _name = 'kemas.area'
     _columns = {
-        'logo': fields.binary('Logo', help='The Area Logo.'),
+        'logo': fields.binary('Logo', help='El logotipo de Área'),
         'logo_medium': fields.binary('Medium Logo'),
         'logo_small': fields.binary('Small Logo'),
-        'name': fields.char('Name', size=64, required=True, help='The name of the area'),
+        'name': fields.char('Nombre', size=64, required=True, help='Nombre del Área'),
         'responsible_id':fields.many2one('res.partner', 'Responsable', help=u'Persona que está a cargo de esta Área'),
-        'description': fields.text('Description', help='the description of the area'),
-        'history': fields.text('History'),
-        'activity_ids': fields.one2many('kemas.activity', 'area_id', 'Activities', help='Activities that belong to this area'),
-        #Many to Many Relations----------------------------------------------------------------------------------------------
-        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_collaborator_area_rel', 'area_id', 'collaborator_id', 'Collaborators', help='Collaborators to belong to this Area.'),
+        'description': fields.text('Description', help='Una descripción del Área'),
+        'history': fields.text('Historia'),
+        'activity_ids': fields.one2many('kemas.activity', 'area_id', 'Actividades', help='Actividades relacionadas a ésta Ärea'),
+        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_collaborator_area_rel', 'area_id', 'collaborator_id', 'Colaboradores', help='colaboradores que pertenecen a esta Área'),
         }
     _sql_constraints = [
         ('area_name', 'unique (name)', "This Area already exist!"),
@@ -3317,7 +3316,7 @@ class kemas_collaborator(osv.osv):
         for collaborator in collaborators:
             if context.get('is_collaborator', False):
                 if collaborator['user_id'] and uid != collaborator['user_id'][0]:
-                    raise osv.except_osv(_('Error!'), _('You can not change information that is not yours!'))
+                    raise osv.except_osv(u'¡Operación no válida!', _('You can not change information that is not yours!'))
                 
             if context.get('no_update_logbook'):
                 continue
@@ -4341,19 +4340,19 @@ class kemas_service(osv.osv):
         service = self.read(cr, uid, ids[0], [])
         #----La hora de Inicio de servicio no puede ser mayor a la hora de fin de servicio--------------------------------------------------------.
         if float(service['time_start']) >= float(service['time_end']):
-            raise osv.except_osv(_('Error!'), _('The start time must be less than the end time.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('The start time must be less than the end time.'))
         #----El tiempo para registro puntual no puede ser mayor al tiempo limite de registro------------------------------------------------------.
         if float(service['time_register']) >= float(service['time_limit']):
-            raise osv.except_osv(_('Error!'), _('The time of entry can not be longer than the time limit.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('The time of entry can not be longer than the time limit.'))
         #----La hora de entrada no puede ser mayor a la hora de finalizacion de servicio----------------------------------------------------------.
         if float(service['time_entry']) >= float(service['time_end']):
-            raise osv.except_osv(_('Error!'), _('The time of entry can not be longer than the end time.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('The time of entry can not be longer than the end time.'))
         #----La hora de entrada sumada mas el tiempo para registro puntual no puede ser mayor a la la hora de finalizacion de servicio------------.
         if (float(service['time_entry']) + float(service['time_register'])) >= float(service['time_end']):
-            raise osv.except_osv(_('Error!'), _('The time of entry coupled with the time of entry can not be longer than the time end.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('The time of entry coupled with the time of entry can not be longer than the time end.'))
         #----La hora de entrada sumada mas el tiempo limite registro de asistencia no puede ser mayor a la la hora de finalizacion de servicio----.
         if (float(service['time_entry']) + float(service['time_limit'])) >= float(service['time_end']):
-            raise osv.except_osv(_('Error!'), _('The time of entry coupled with the time limit can not be longer than the time end.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('The time of entry coupled with the time limit can not be longer than the time end.'))
         return True
     
     def _get_days(self, cr, uid, context={}):
@@ -4662,7 +4661,7 @@ class kemas_event(osv.osv):
         config_id = config_obj.get_correct_config(cr, uid)
         preferences = config_obj.read(cr, uid, config_id, [])
         if preferences['mailing'] == False or preferences['use_message_event'] == False: 
-            raise osv.except_osv(_('Error!'), _('Notifications are disabled.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('Notifications are disabled.'))
         event_line_ids = self.read(cr, uid, ids[0], ['event_collaborator_line_ids'])['event_collaborator_line_ids']
         sending_emails = self.read(cr, uid, ids[0], ['sending_emails'])['sending_emails']
         collaborator_ids_send_email = self.read(cr, uid, ids[0], ['collaborator_ids_send_email'])['collaborator_ids_send_email']     
@@ -4984,7 +4983,7 @@ class kemas_event(osv.osv):
             context['tz'] = self.pool['kemas.func'].get_tz_by_uid(cr, uid)
             
         if event['sending_emails']:
-            raise osv.except_osv(_('Error!'), _('You can not make changes to this event as they send notification e-mails.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('You can not make changes to this event as they send notification e-mails.'))
         written = False
 
         if vals.get('priority', False):
@@ -5001,17 +5000,17 @@ class kemas_event(osv.osv):
                     vals['state'] = 'draft'
                     written = True
                 else:
-                    raise osv.except_osv(_('Error!'), _(''))
+                    raise osv.except_osv(u'¡Operación no válida!', _(''))
             if stage['sequence'] == 2:  # on_going
                 if event['state'] == 'draft':
                     vals['state'] = 'on_going'
                     written = True
                 else:
-                    raise osv.except_osv(_('Error!'), _(''))
+                    raise osv.except_osv(u'¡Operación no válida!', _(''))
             elif stage['sequence'] == 3:  # closed
-                raise osv.except_osv(_('Error!'), _(''))
+                raise osv.except_osv(u'¡Operación no válida!', _(''))
             elif stage['sequence'] == 4:  # canceled
-                raise osv.except_osv(_('Error!'), _('')) 
+                raise osv.except_osv(u'¡Operación no válida!', _('')) 
             else:
                 written = True
         if context.has_key('change_service') == False:
@@ -5021,9 +5020,9 @@ class kemas_event(osv.osv):
                 cr.commit() 
                 return True
             
-            if event['state'] == 'closed':raise osv.except_osv(_('Error!'), _('The event has been Closed and can not be changed.'))
-            if event['state'] == 'canceled':raise osv.except_osv(_('Error!'), _('The event has been Canceled and can not be changed.'))
-            if event['state'] == 'on_going':raise osv.except_osv(_('Error!'), _('The event is on going and can not be changed.'))
+            if event['state'] == 'closed':raise osv.except_osv(u'¡Operación no válida!', _('The event has been Closed and can not be changed.'))
+            if event['state'] == 'canceled':raise osv.except_osv(u'¡Operación no válida!', _('The event has been Canceled and can not be changed.'))
+            if event['state'] == 'on_going':raise osv.except_osv(u'¡Operación no válida!', _('The event is on going and can not be changed.'))
         else:
             if context['change_service'] == False:
                 if written:
@@ -5031,9 +5030,9 @@ class kemas_event(osv.osv):
                     super(kemas_event, self).write(cr, uid, ids, vals, context)
                     cr.commit()
                     return True
-                if event['state'] == 'closed':raise osv.except_osv(_('Error!'), _('The event has been Closed and can not be changed.'))
-                if event['state'] == 'canceled':raise osv.except_osv(_('Error!'), _('The event has been Canceled and can not be changed.'))
-                if event['state'] == 'on_going':raise osv.except_osv(_('Error!'), _('The event is on going and can not be changed.'))
+                if event['state'] == 'closed':raise osv.except_osv(u'¡Operación no válida!', _('The event has been Closed and can not be changed.'))
+                if event['state'] == 'canceled':raise osv.except_osv(u'¡Operación no válida!', _('The event has been Canceled and can not be changed.'))
+                if event['state'] == 'on_going':raise osv.except_osv(u'¡Operación no válida!', _('The event is on going and can not be changed.'))
         service_obj = self.pool.get('kemas.service')
         #---------------------------------------------------------------------------------------------------------------------------
         #--Change Date start y date stop---------------------------------------------------------------------------------------------
@@ -5450,7 +5449,7 @@ class kemas_event(osv.osv):
         
     def draft(self, cr, uid, ids, context={}):
         if super(osv.osv, self).read(cr, uid, ids[0], ['sending_emails'])['sending_emails']:
-            raise osv.except_osv(_('Error!'), _('You can not make changes to this event as they send notification e-mails.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('You can not make changes to this event as they send notification e-mails.'))
         stage_ids = self.pool['kemas.event.stage'].search(cr, uid, [('sequence', '=', 1)])
         vals = {
                 'state': 'draft',

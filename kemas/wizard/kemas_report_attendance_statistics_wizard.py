@@ -80,7 +80,7 @@ class kemas_report_attendance_statistics_wizard(osv.osv_memory):
     def validate_dates(self, cr, uid, ids):
         wizard = self.read(cr, uid, ids[0], ['date_start', 'date_end'])
         if wizard['date_start'] > wizard['date_end']:
-            raise osv.except_osv(_('Error!'), _('The date from which to search for events can not be higher than the deadline.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('The date from which to search for events can not be higher than the deadline.'))
         else:
             return True
             

@@ -26,26 +26,26 @@ from openerp.tools.translate import _
 class kemas_collaborator_inactives_wizard(osv.osv_memory):
     def fields_view_get(self, cr, uid, view_id=None, view_type='form', context={}, toolbar=False, submenu=False):
         result = {}
-        ok_str = self.pool.get('kemas.func').get_translate(cr, uid, _('Ok'))[0]
-        or_str = self.pool.get('kemas.func').get_translate(cr, uid, _('or'))[0]
+        ok_str = u'Aceptar'
+        or_str = u' ó '
         buttons = """
         <button string="%s" name="save" type="object" class="oe_highlight"/>
         %s
         <button string="%s" class="oe_link" special="cancel"/>
-        """%(ok_str,or_str, _('Cancel'))
+        """ % (ok_str, or_str, _('Cancelar'))
         if len(context['active_ids']) > 1:
-            m1 = self.pool.get('kemas.func').get_translate(cr,uid,_('Are you sure to Inactivate these'))[0]
-            m2 = self.pool.get('kemas.func').get_translate(cr,uid,_('Collaborators'))[0]
-            message = "%s %d %s?"%(m1,len(context['active_ids']),m2)
+            m1 = self.pool.get('kemas.func').get_translate(cr, uid, _('Are you sure to Inactivate these'))[0]
+            m2 = self.pool.get('kemas.func').get_translate(cr, uid, _('Collaborators'))[0]
+            message = u"¿%s %d %s?" % (m1, len(context['active_ids']), m2)
         else:
             collaborator_obj = self.pool.get('kemas.collaborator')
-            if collaborator_obj.read(cr,uid,context['active_id'],['state'])['state'] == 'Inactive':
-                message = self.pool.get('kemas.func').get_translate(cr,uid,_('This Collaborator already in Inactive state!'))[0]
+            if collaborator_obj.read(cr, uid, context['active_id'], ['state'])['state'] == 'Inactive':
+                message = self.pool.get('kemas.func').get_translate(cr, uid, _('This Collaborator already in Inactive state!'))[0]
                 buttons = """
                 <button string="%s" class="oe_link" special="cancel"/>
-                """%(ok_str)
+                """ % (ok_str)
             else:
-                message = self.pool.get('kemas.func').get_translate(cr,uid,_('Are you sure to Inactivate this Collaborator?'))[0] 
+                message = self.pool.get('kemas.func').get_translate(cr, uid, _('Are you sure to Inactivate this Collaborator?'))[0] 
         xml = """
                 <form string="" version="7.0">
                     <div align="center">
@@ -55,18 +55,18 @@ class kemas_collaborator_inactives_wizard(osv.osv_memory):
                        %s
                     </footer>
                 </form>
-                """%(message,buttons)
+                """ % (message, buttons)
         result['fields'] = self.fields_get(cr, uid, None, context)
         result['arch'] = xml
         return result
     
-    def save(self,cr,uid,ids,context={}):
+    def save(self, cr, uid, ids, context={}):
         self.pool.get('kemas.collaborator').do_inactivate(cr, uid, context['active_ids'], context)
         return {}
 
-    _name='kemas.collaborator.inactive.wizard'
-    _columns={
-        'collaborator_id': fields.many2one('kemas.collaborator','Collaborator',ondelete='cascade',help='Collaborator name, which you want to activate.'),
+    _name = 'kemas.collaborator.inactive.wizard'
+    _columns = {
+        'collaborator_id': fields.many2one('kemas.collaborator', 'Collaborator', ondelete='cascade', help='Collaborator name, which you want to activate.'),
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

@@ -27,7 +27,7 @@ class kemas_set_points_task_wizard(osv.osv_memory):
     def validate_collaborators(self,cr,uid,ids):
         wizard = self.read(cr, uid, ids[0],['collaborator_ids'])
         if wizard['collaborator_ids']==[]:
-            raise osv.except_osv(_('Error!'), _('First you have to select collaborators!!'))
+            raise osv.except_osv(u'¡Operación no válida!', _('First you have to select collaborators!!'))
         return True
     
     def save(self,cr,uid,ids,context=None):

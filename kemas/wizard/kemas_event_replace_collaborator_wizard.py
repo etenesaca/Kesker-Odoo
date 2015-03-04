@@ -96,7 +96,7 @@ class kemas_event_replace_collaborator_wizard(osv.osv_memory):
                 if line['collaborator_replacement_id'][0] not in collaborator_replacement_ids:
                     collaborator_replacement_ids.append(line['collaborator_replacement_id'][0])
                 else:
-                    raise osv.except_osv(_('Error!'), _('One of the collaborators replacement is repeated.'))
+                    raise osv.except_osv(u'¡Operación no válida!', _('One of the collaborators replacement is repeated.'))
                 #Crear el registro de reemplazo
                 collaborator_id = line['collaborator_id'][0]
                 replace_id = line['collaborator_replacement_id'][0]

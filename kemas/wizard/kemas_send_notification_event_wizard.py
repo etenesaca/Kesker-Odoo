@@ -130,7 +130,7 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
                 }
         super(addons.kemas.kemas.kemas_event, event_obj).write(cr, uid, this['event_id'], vals)
         if len(_lines) == 0:
-            raise osv.except_osv(_('Error!'), _('No staff to send notifications.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('No staff to send notifications.'))
         
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
@@ -189,7 +189,7 @@ class kemas_send_notification_event_wizard(osv.osv_memory):
                     _lines.append(line)
             
             if len(_lines) == 0:
-                raise osv.except_osv(_('Error!'), _('No staff to send notifications.'))
+                raise osv.except_osv(u'¡Operación no válida!', _('No staff to send notifications.'))
             
             if not self.collaborator_ids_send_email.has_key(event_id):
                 self.collaborator_ids_send_email[event_id] = []

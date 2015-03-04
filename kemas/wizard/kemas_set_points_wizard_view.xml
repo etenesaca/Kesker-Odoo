@@ -38,7 +38,7 @@
                         <td align="right">
                            <div align="right">
                               <button string="Next" name="do_next" icon="gtk-go-forward" type="object" class="oe_highlight" />
-                              <label string="or" />
+                              <b> ó </b>
                               <button string="Cancel" class="oe_link" special="cancel" />
                            </div>
                         </td>
@@ -80,7 +80,7 @@
                </group>
                <footer>
                   <button string="Save" name="save" type="object" class="oe_highlight" confirm="Are you dure to save the changes now?" />
-                  <label string="or" />
+                  <b> ó </b>
                   <button string="Cancel" class="oe_link" special="cancel" />
                </footer>
             </form>

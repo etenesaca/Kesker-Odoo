@@ -138,4 +138,4 @@ class Parser(report_sxw.rml_parse):
         if config_id:
             return config_obj.browse(self.cr, self.uid, config_id)
         else:
-            raise osv.except_osv(_('Error!'), _('No settings available. Please create a setting.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('No settings available. Please create a setting.'))

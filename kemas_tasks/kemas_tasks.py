@@ -239,7 +239,7 @@ class kemas_task_assigned(osv.osv):
         works = self.read(cr, uid, ids, ['state'])
         for work in works:
             if work['state'] in ['confirmed', 'nulled']:
-                raise osv.except_osv(_('Error!'), _('You can not delete this work.'))
+                raise osv.except_osv(u'¡Operación no válida!', _('You can not delete this work.'))
         return super(osv.osv, self).unlink(cr, uid, ids, context)
     
     def name_get(self, cr, uid, ids, context={}):
@@ -361,13 +361,13 @@ class kemas_task_assigned(osv.osv):
             ids = [ids] 
         for task_assigned in super(osv.osv, self).read(cr, uid, ids, ['state', 'stage_id', 'active', 'message_follower_ids']):
             if not task_assigned['active']:
-                raise osv.except_osv(_('Error!'), _('No se puede modificar una tarea Cerrada o Cancelada.'))
+                raise osv.except_osv(u'¡Operación no válida!', _('No se puede modificar una tarea Cerrada o Cancelada.'))
             
             if vals.get('stage_id'):
                 stage = self.pool.get('kemas.task.type').read(cr, uid, vals['stage_id'], ['state', 'name'])
                 state = stage['state']
                 if state in ['done', 'cancelled'] and stage['name'] != 'Completed':
-                    raise osv.except_osv(_('Error!'), _('Para cancelar o Cerrar una Tarea hay que dar click en el boton respectivo.'))
+                    raise osv.except_osv(u'¡Operación no válida!', _('Para cancelar o Cerrar una Tarea hay que dar click en el boton respectivo.'))
                 
                 if state in ['draft', 'open', 'pending', 'done']:
                     if stage['name'] == 'New':
@@ -464,7 +464,7 @@ class kemas_task_assigned(osv.osv):
         args = [('collaborator_id', '=', this['collaborator_id'][0]), ('task_id', '=', this['task_id'][0]), ('state', 'in', ['waiting_for_confirmation'])]
         task_ids = self.search(cr, uid, args)
         if len(task_ids) > 1:
-            raise osv.except_osv(_('Error!'), _("You've entered this task and has not yet been confirmed."))
+            raise osv.except_osv(u'¡Operación no válida!', _("You've entered this task and has not yet been confirmed."))
         
     _constraints = [(_validate, 'Error: Invalid Message', ['field_name']), ]
     

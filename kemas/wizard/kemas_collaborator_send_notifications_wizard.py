@@ -85,7 +85,7 @@ class kemas_collaborator_send_notifications_wizard(osv.osv_memory):
         #---------------------------------------------------------------------------------------------------------
         line_ids = self.read(cr, uid, ids[0],['line_ids'])['line_ids']
         if len(line_ids)==0:
-            raise osv.except_osv(_('Error!'), _('No staff to send notifications.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('No staff to send notifications.'))
         collaborator_obj.send_join_notification(cr, uid)
         mensaje = _('Sending mails notification has begun..')
         return{            

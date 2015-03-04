@@ -96,17 +96,17 @@ class kemas_register_attendance_wizard(osv.osv_memory):
         #--------------------------------------------------------------------------------------
         res = attendance_obj.register_attendance(cr, uid, wizard['username'],  wizard['password'])
         if res == 'r_1':
-            raise osv.except_osv(_('Error!'), _('Invalid username or password.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('Invalid username or password.'))
         elif res == 'r_2':
-            raise osv.except_osv(_('Error!'), _('This user name does not belong to any collaborator. Contact the administrator'))
+            raise osv.except_osv(u'¡Operación no válida!', _('This user name does not belong to any collaborator. Contact the administrator'))
         elif res == 'r_3':
-            raise osv.except_osv(_('Error!'), _("You are not in the list of designated staff for this service."))
+            raise osv.except_osv(u'¡Operación no válida!', _("You are not in the list of designated staff for this service."))
         elif res == 'r_4':
-            raise osv.except_osv(_('Error!'), _('There are no services for record attendance.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('There are no services for record attendance.'))
         elif res == 'r_5':
-            raise osv.except_osv(_('Error!'), _('This collaborator has registered their attendance at this event!'))
+            raise osv.except_osv(u'¡Operación no válida!', _('This collaborator has registered their attendance at this event!'))
         elif res == 'r_6':
-            raise osv.except_osv(_('Error!'), _('Este Colaborador ya marco el registro de salida!'))
+            raise osv.except_osv(u'¡Operación no válida!', _('Este Colaborador ya marco el registro de salida!'))
         else:
             mensaje = 'OK.'
             return{            

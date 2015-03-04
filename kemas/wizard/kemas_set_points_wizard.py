@@ -29,7 +29,7 @@ class kemas_set_points_step1_wizard(osv.osv_memory):
         step2_obj = self.pool['kemas.set.points.step2.wizard']
         
         if wizard['collaborator_ids'] == []:
-            raise osv.except_osv(_('Error!'), _('First select the collaborators.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('First select the collaborators.'))
         
         vals = {
                 'collaborator_ids': wizard['collaborator_ids'],
@@ -71,7 +71,7 @@ class kemas_set_points_step2_wizard(osv.osv_memory):
     def validate_points_zero(self, cr, uid, ids):
         level = self.read(cr, uid, ids[0], [])
         if level['new_points'] <= 0:
-            raise osv.except_osv(_('Error!'), _('The points must be greater than zero.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('The points must be greater than zero.'))
         return True
     
     def save(self, cr, uid, ids, context={}):

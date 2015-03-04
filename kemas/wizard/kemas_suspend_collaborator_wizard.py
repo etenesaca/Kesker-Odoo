@@ -26,7 +26,7 @@ class kemas_suspend_collaborator_step1_wizard(osv.osv_memory):
     def do_next(self, cr, uid, ids, context={}):
         wizard = self.read(cr, uid, ids[0])
         if wizard['collaborator_ids'] == []:
-            raise osv.except_osv(_('Error!'), _('First select the collaborators.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('First select the collaborators.'))
         dict_header={}    
         dict_header['collaborator_ids'] = wizard['collaborator_ids']        
         
@@ -64,7 +64,7 @@ class kemas_suspend_collaborator_step2_wizard(osv.osv_memory):
     def validate_points_zero(self,cr,uid,ids):
         wizard = self.read(cr, uid, ids[0],[])
         if wizard['new_points']<=0 and wizard['remove_points']:
-            raise osv.except_osv(_('Error!'), _('The points must be greater than zero.'))
+            raise osv.except_osv(u'¡Operación no válida!', _('The points must be greater than zero.'))
         return True
         
     def save(self,cr,uid,ids,context=None):
