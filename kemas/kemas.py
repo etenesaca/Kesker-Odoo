@@ -5300,6 +5300,7 @@ class kemas_event(osv.osv):
                 vals['event_id'] = event_id
                 vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
                 vals['summary'] = summary
+                vals['user_id'] = uid
                 attendance_id = super(kemas_attendance, attendance_obj).create(cr, uid, vals)
                 
                 collaborator = collaborator_obj.read(cr, uid, inasistente, ['points'])
@@ -5908,10 +5909,6 @@ class kemas_attendance(osv.osv):
     
     def create(self, cr, uid, vals, context={}):
         event_obj = self.pool.get('kemas.event')
-        current_event = event_obj.get_current_event(cr, uid, extra_info=True)
-        if not current_event: 
-            return 'no event'
-        
         event_collaborator_line_obj = self.pool.get('kemas.event.collaborator.line')
         kemas_event_collaborator_line_obj = self.pool.get('kemas.event.collaborator.line')
         collaborator_obj = self.pool.get('kemas.collaborator')
@@ -5919,6 +5916,15 @@ class kemas_attendance(osv.osv):
         service_obj = self.pool.get('kemas.service')
         config_obj = self.pool.get('kemas.config')
         seq_obj = self.pool.get('ir.sequence')
+        
+        current_event = event_obj.get_current_event(cr, uid, extra_info=True)
+        if not current_event: 
+            return 'no event'
+        
+        vals['count'] = 1
+        vals['user_id'] = uid
+        vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
+        vals['event_id'] = current_event['current_event_id']
         
         preferences = config_obj.read(cr, uid, config_obj.get_correct_config(cr, uid), ['allow_checkout_registers'])
         
@@ -6003,10 +6009,6 @@ class kemas_attendance(osv.osv):
         # Generar codigo
         seq_id = seq_obj.search(cr, uid, [('name', '=', 'Kemas Attendance'), ])[0]
         vals['code'] = str(seq_obj.get_id(cr, uid, seq_id))
-        vals['count'] = 1
-        vals['user_id'] = uid
-        vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
-        vals['event_id'] = current_event['current_event_id']
         res_id = super(kemas_attendance, self).create(cr, uid, vals, context)
         
         history_summary = str(operator) + str(change_points) + " Puntos. Antes " + str(current_points) + " ahora " + str(new_points) + " Puntos."
