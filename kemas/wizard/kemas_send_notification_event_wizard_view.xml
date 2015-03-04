@@ -35,7 +35,7 @@
                         </div>
                      </group>
                      <group attrs="{'invisible':[('sending_emails','=',False)]}">
-                        <button string="Ok" class="oe_link" special="cancel" />
+                        <button string="Aceptar" class="oe_link" special="cancel" />
                      </group>
                   </group>
                </footer>

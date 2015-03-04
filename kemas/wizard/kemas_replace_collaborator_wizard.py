@@ -19,9 +19,11 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
 from lxml import etree
+
+from openerp.osv import fields, osv
 from openerp.tools.translate import _
+
 
 class kemas_replace_collaborator_wizard(osv.osv_memory):
     def on_change_collaborator_id(self, cr, uid, ids, collaborator_id, context={}):
@@ -38,10 +40,11 @@ class kemas_replace_collaborator_wizard(osv.osv_memory):
     def fields_view_get(self, cr, uid, view_id=None, view_type='form', context=None, toolbar=True, submenu=False):       
         res = {}
         event_obj = self.pool.get('kemas.event')
+        collaborator_obj = self.pool.get('kemas.collaborator')
         event = event_obj.read(cr, uid, context['active_id'], ['state', 'event_collaborator_line_ids'])
         error = False
         msg_error = ''
-        collaborator_ids = self.pool.get('kemas.collaborator').search(cr, uid, [('user_id', '=', uid)])
+        collaborator_ids = collaborator_obj.search(cr, uid, [('user_id', '=', uid)])
         if collaborator_ids:
             collaborator_id = collaborator_ids[0]
             if event['state'] in ['draft', 'creating']:
@@ -79,9 +82,9 @@ class kemas_replace_collaborator_wizard(osv.osv_memory):
             error = True
             msg_error = _('This wizard is only for collaborators.')
             msg_error = self.pool.get('kemas.func').get_translate(cr, uid, msg_error)[0]
-                
+        
         if error:
-            ok_str = self.pool.get('kemas.func').get_translate(cr, uid, _('Ok'))[0]
+            ok_str = 'Aceptar'
             xml = '''
             <form string="" version="7.0">
                 <div align="center" class="box_warning">
@@ -94,10 +97,11 @@ class kemas_replace_collaborator_wizard(osv.osv_memory):
             </form>
             ''' % (msg_error, ok_str)
         else:            
-            or_str = self.pool.get('kemas.func').get_translate(cr, uid, _('or'))[0]
+            import pdb;pdb.set_trace()
+            or_str = u'ó'
             tip = self.pool.get('kemas.func').get_translate(cr, uid, _('Here you can replace one of the collaborators, you can only replace collaborators who have not yet been replaced and do not exceed the limit of replacements this month.'))[0]
             confirm = self.pool.get('kemas.func').get_translate(cr, uid, _('Are you sure to replace this contributor now?'))[0]
-            xml = '''
+            xml = u'''
             <form string="" version="7.0">
                <div align="center" class="box_tip">
                    <img src="/web/static/src/img/icons/gtk-info.png"/>
@@ -112,7 +116,7 @@ class kemas_replace_collaborator_wizard(osv.osv_memory):
                </group>
               <footer>
                    <button string="%s" name="replace" type="object" class="oe_highlight" confirm="%s"/>
-                   <label string="%s"/>
+                   <b> %s </b>
                    <button string="%s" class="oe_link" special="cancel"/>
                </footer>
             </form>
@@ -123,7 +127,7 @@ class kemas_replace_collaborator_wizard(osv.osv_memory):
         res['fields'] = xfields
         return res
     
-    def replace(self, cr, uid, ids, context=None):
+    def replace(self, cr, uid, ids, context={}):
         this = self.read(cr, uid, ids[0])
         replacement_obj = self.pool.get('kemas.event.replacement')
         event_line_obj = self.pool.get('kemas.event.collaborator.line')

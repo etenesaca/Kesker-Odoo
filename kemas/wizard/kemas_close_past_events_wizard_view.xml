@@ -47,7 +47,7 @@
                <footer states="loaded">
                   <button string="Close Past Events" name="close_events" type="object" class="oe_highlight" attrs="{'invisible':[('line_ids','=',[])]}" confirm="Are you sure that you want close these events now?" />
                   <label string="or" attrs="{'invisible':[('line_ids','=',[])]}" />
-                  <button string="Ok" class="oe_link" special="cancel" />
+                  <button string="Aceptar" class="oe_link" special="cancel" />
                </footer>
             </form>
          </field>
@@ -104,7 +104,7 @@
                <separator string="" colspan="4" />
                <group colspan="4" expand="1" col="8">
                   <group colspan="4" expand="1" col="4" />
-                  <button special="cancel" string="Ok" icon="kanban-apply" />
+                  <button special="cancel" string="Aceptar" icon="kanban-apply" />
                </group>
             </form>
          </field>
