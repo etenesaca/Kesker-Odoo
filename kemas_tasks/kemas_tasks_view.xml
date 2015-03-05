@@ -274,7 +274,7 @@
             <form string="Task Assigned" version="7.0">
                <header>
                   <button name="do_close" class="oe_highlight" string="Close" type="object" icon="kanban-apply" attrs="{'invisible':['|',('active','=',False),('state','=','creating')]}" confirm="Are you Close sure This Task now? This action is irreversible." groups="kemas.group_kemas_manager" />
-                  <button name="do_cancel" string="Cancel" type="object" icon="gtk-cancel" attrs="{'invisible':['|',('active','=',False),('state','=','creating')]}" confirm="Are you Cancel sure This Task now? This action is irreversible." groups="kemas.group_kemas_manager" />
+                  <button name="do_cancel" string="Cancelar" type="object" icon="gtk-cancel" attrs="{'invisible':['|',('active','=',False),('state','=','creating')]}" confirm="Are you Cancel sure This Task now? This action is irreversible." groups="kemas.group_kemas_manager" />
                   <field name="stage_id" widget="statusbar" clickable="True" attrs="{'invisible':[('state','=','creating')]}" />
                   <field name="state" widget="statusbar" statusbar_visible="creating" attrs="{'invisible':[('state','!=','creating')]}" />
                </header>

@@ -3070,10 +3070,11 @@ class kemas_collaborator(osv.osv):
                     'type' : 'bad',
                     }
             self.pool.get('kemas.collaborator.logbook').create(cr, uid, vals)
-            
-        for collaborator_id in ids:
-            process(collaborator_id, description, date_end)
-        cr.commit()
+        
+        with Environment.manage():
+            for collaborator_id in ids:
+                process(collaborator_id, description, date_end)
+            cr.commit()
             
     def add_remove_points(self, cr, uid, ids, points, description, type='increase'):
         threaded_sending = threading.Thread(target=self._add_remove_points, args=(cr.dbname, uid, ids, points, description, type))
@@ -3147,17 +3148,15 @@ class kemas_collaborator(osv.osv):
     def _send_join_notification(self, db_name, uid):
         db = pooler.get_db(db_name)
         cr = db.cursor()
-        #--------------------------------------------------------------------------------------------
-        collaborator_ids = super(osv.osv, self).search(cr, uid, [('notified', 'in', ['no_notified'])])
-        count = 0
-        for collaborator_id in collaborator_ids:
-            count += 1
-            self.send_notification(cr, uid, collaborator_id, context={})
-        print """\n
-                 -------------------------------------------------------------------------------------------------------------------------
-                 ***********************************************[%d] Join Notifications was sended****************************************
-                 -------------------------------------------------------------------------------------------------------------------------\n""" % (count)
-        cr.commit()
+        with Environment.manage():
+            collaborator_ids = super(osv.osv, self).search(cr, uid, [('notified', 'in', ['no_notified'])])
+            count = 0
+            for collaborator_id in collaborator_ids:
+                count += 1
+                self.send_notification(cr, uid, collaborator_id, context={})
+            if count > 0:
+                _logger.info('[%d] Correo de registro enviados', count)
+            cr.commit()
         
     def update_collaborators_level(self, cr, uid):
         threaded_sending = threading.Thread(target=self._update_collaborators_level, args=(cr.dbname , uid))
@@ -3166,19 +3165,16 @@ class kemas_collaborator(osv.osv):
     def _update_collaborators_level(self, db_name, uid):
         db = pooler.get_db(db_name)
         cr = db.cursor()
-        #--------------------------------------------------------------------------------------------
-        collaborator_ids = super(osv.osv, self).search(cr, uid, [])
-        collaborators = super(osv.osv, self).read(cr, uid, collaborator_ids, ['id', 'points'])
-        for collaborator in collaborators:
-            level_id = self.get_corresponding_level(cr, uid, int(collaborator['points']))
-            if level_id:
-                vals = {'level_id': level_id}
-                super(osv.osv, self).write(cr, uid, [collaborator['id']], vals)
-        print """\n
-                 -------------------------------------------------------------------------------------------------------------------------
-                 ************************************************Collaborator's level was updated*****************************************
-                 -------------------------------------------------------------------------------------------------------------------------\n"""                                 
-        cr.commit()
+        with Environment.manage():
+            collaborator_ids = super(osv.osv, self).search(cr, uid, [])
+            collaborators = super(osv.osv, self).read(cr, uid, collaborator_ids, ['id', 'points'])
+            for collaborator in collaborators:
+                level_id = self.get_corresponding_level(cr, uid, int(collaborator['points']))
+                if level_id:
+                    vals = {'level_id': level_id}
+                    super(osv.osv, self).write(cr, uid, [collaborator['id']], vals)
+            _logger.info(u'Actualización de nivel realizada')
+            cr.commit()
           
     def get_corresponding_level(self, cr, uid, points):
         level_obj = self.pool.get('kemas.level')
@@ -5192,22 +5188,12 @@ class kemas_event(osv.osv):
         
         with Environment.manage():
             event_ids = self.get_past_events(cr, uid, False)
-            print """\n
-                     -------------------------------------------------------------------------------------------------------------------------
-                     ***************************************CLOSE PAST EVENTS*****************************************************************"""
-            cont = 0
             for event_id in event_ids:
-                cont += 1
                 self.close_event(cr, uid, event_id)
                 event_name = self.name_get(cr, uid, [event_id])[0][1]
                 cr.commit()
-                print """\t\t\t* Closed: %s """ % (event_name)
-            tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-            print """
-        
-                         [%d] Past events successfully closed: %s
-                         
-                     -------------------------------------------------------------------------------------------------------------------------\n""" % (cont, extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz))
+                _logger.info('Cerrado evento [%s]', event_name)
+                
     def close_event(self, cr, uid, event_id, context={}):   
         def send_notifications(self):
             def send(self, db_name, uid):
@@ -5219,10 +5205,7 @@ class kemas_event(osv.osv):
                 for collaborator in noticaciones['collaborators']:
                     count += 1
                     config_obj.send_email_event_completed(cr, uid, noticaciones['service_id'], noticaciones['event_id'], collaborator['id'], collaborator['type'])
-                print """\n
-                 -------------------------------------------------------------------------------------------------------------------------
-                 **********************************************[%d] Event notifications sent over****************************************
-                 -------------------------------------------------------------------------------------------------------------------------\n""" % (count)
+                _logger.info('[%d] Notificaciones de fin de evento enviadas', count)
                 cr.commit()
                  
             threaded_sending = threading.Thread(target=send, args=(self, cr.dbname, uid))

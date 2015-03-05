@@ -639,17 +639,22 @@ def get_image_code(value, width, height, hr=False, code='QR'):
     return base64.encodestring(ret_val.asString('jpg'))
 
 def addworkdays(date_start, days, tz, holidays=(), workdays=('LUN', 'MAR', 'MIE', 'JUE', 'VIE')):
+    if days == 0:
+        return False
+    
     avalible_days = []
     for workday in workdays:
-        if workday == 'MON' or workday == 'LUN' or workday == 'LUNES' or workday == 'MONDAY':avalible_days.append(0)
-        if workday == 'TUE' or workday == 'MAR' or workday == 'MARTES' or workday == 'TUESDAY':avalible_days.append(1)
-        if workday == 'WED' or workday == 'MIE' or workday == 'MIERCOLES' or workday == 'WEDNESDAY':avalible_days.append(2)
-        if workday == 'THU' or workday == 'JUE' or workday == 'JUEVES' or workday == 'THURSDAY':avalible_days.append(3)
-        if workday == 'FRI' or workday == 'VIE' or workday == 'VIERNES' or workday == 'FRIDAY':avalible_days.append(4)
-        if workday == 'SAT' or workday == 'SAB' or workday == 'SABADO' or workday == 'SATURDAY':avalible_days.append(5)
-        if workday == 'SUN' or workday == 'DOM' or workday == 'DOMINGO' or workday == 'SUNDAY':avalible_days.append(6)
-    if workdays == False:
+        if workday in ['MON', 'LUN', 'LUNES', 'MONDAY']: avalible_days.append(0)
+        if workday in ['TUE', 'MAR', 'MARTES', 'TUESDAY']: avalible_days.append(1)
+        if workday in ['WED', 'MIE', 'MIERCOLES', 'WEDNESDAY']: avalible_days.append(2)
+        if workday in ['THU', 'JUE', 'JUEVES', 'THURSDAY']: avalible_days.append(3)
+        if workday in ['FRI', 'VIE', 'VIERNES', 'FRIDAY']: avalible_days.append(4)
+        if workday in ['SAT', 'SAB', 'SABADO', 'SATURDAY']: avalible_days.append(5)
+        if workday in ['SUN', 'DOM', 'DOMINGO', 'SUNDAY']: avalible_days.append(6)
+        
+    if not workdays:
         avalible_days = [1]
+        
     if type(date_start).__name__ != 'datetime':
         try:date_start = datetime.strptime(date_start, '%Y-%m-%d')
         except:

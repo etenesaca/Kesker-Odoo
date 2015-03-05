@@ -2241,21 +2241,34 @@
                      <field name="state" widget="statusbar" statusbar_visible="Active" />
                   </div>
                   <div style="width:60%%">
-                     <button name="do_activate" string="Activar" class="oe_highlight" type="object" icon="gtk-yes" attrs="{'invisible':[('state','in',['Active','creating'])]}" confirm="¿Seguro de ACTIVAR a este colaborador?" groups="kemas.group_kemas_manager" />
-                     <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('state','in',['Inactive','creating'])]}" confirm="¿Seguro de INACTIVAR a este colaborador?" groups="kemas.group_kemas_manager" />
+                     <button name="do_activate" string="Activar" class="oe_highlight" type="object" attrs="{'invisible':[('state','in',['Active','creating','Suspended'])]}" confirm="¿Seguro de ACTIVAR a este colaborador?" groups="kemas.group_kemas_manager" icon="gtk-yes" />
+                     <button name="lift_suspension" string="Levantar suspensión" type="object" attrs="{'invisible':[('state','not in',['Suspended'])]}" confirm="Are you sure you lift the suspension before it has finished?" icon="terp-stage" groups="kemas.group_kemas_manager" />
+                     <button name="do_inactivate" string="Inactivar" type="object" attrs="{'invisible':[('state','in',['Inactive','creating','Suspended'])]}" confirm="¿Seguro de INACTIVAR a este colaborador?" icon="gtk-no" />
                   </div>
                </header>
                <sheet string="Collaborator">
                   <div class="box_red" states="Suspended">
-                     <group colspan="4" col="10">
-                        <group colspan="3">
-                           <h1>
-                              <label string="Suspension" />
-                           </h1>
-                        </group>
-                        <field name="day_remaining_suspension" />
-                        <button name="lift_suspension" confirm="Are you sure you lift the suspension before it has finished?" icon="terp-stage" type="object" string="Lift suspension" />
-                     </group>
+                     <table>
+                        <tr>
+                           <td style="font-size: 25px;font-weight: bold">Suspendido</td>
+                           <td style="width: 10px" />
+                           <td style="vertical-align: text-center;">
+                              <div style="font-size: 22px;vertical-align: bottom; padding: 2px 2px 2px 0px">
+                                 <span>(</span>
+                              </div>
+                           </td>
+                           <td>
+                              <div style="font-size: 22px;vertical-align: bottom">
+                                 <field name="day_remaining_suspension" readonly="1" />
+                              </div>
+                           </td>
+                           <td>
+                              <div style="font-size: 22px;vertical-align: bottom; padding: 2px 2px 2px 1px">
+                                 <span>días restantes)</span>
+                              </div>
+                           </td>
+                        </tr>
+                     </table>
                   </div>
                   <div states="Suspended">
                      <br />

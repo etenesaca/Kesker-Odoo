@@ -33,17 +33,9 @@
                   <field name="collaborator_ids" domain="[('state','=','Active')]" colspan="4" context="{'search_view_ref' : 'kemas.kemas_collaborator_search_view2','tree_view_ref' : 'kemas.kemas_collaborator_tree_view6'}" nolabel="1" />
                </group>
                <footer>
-                  <table border="0" width="100%%">
-                     <tr>
-                        <td align="right">
-                           <div align="right">
-                              <button string="Next" name="do_next" icon="gtk-go-forward" type="object" class="oe_highlight" />
-                              <b> ó </b>
-                              <button string="Cancel" class="oe_link" special="cancel" />
-                           </div>
-                        </td>
-                     </tr>
-                  </table>
+                  <button string="Siguiente" name="do_next" icon="gtk-go-forward" type="object" class="oe_highlight" />
+                  <b> ó </b>
+                  <button string="Cancelar" class="oe_link" special="cancel" />
                </footer>
             </form>
          </field>
@@ -79,9 +71,9 @@
                   <field name="description" placeholder="Type a clear description" required="1" />
                </group>
                <footer>
-                  <button string="Save" name="save" type="object" class="oe_highlight" confirm="Are you dure to save the changes now?" />
+                  <button string="Guardar" name="save" type="object" class="oe_highlight" confirm="Are you dure to save the changes now?" />
                   <b> ó </b>
-                  <button string="Cancel" class="oe_link" special="cancel" />
+                  <button string="Cancelar" class="oe_link" special="cancel" />
                </footer>
             </form>
          </field>

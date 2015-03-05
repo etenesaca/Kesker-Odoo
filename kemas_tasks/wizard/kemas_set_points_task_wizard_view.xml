@@ -26,9 +26,9 @@
 	       			<field name="collaborator_ids" domain="[('state','=','Active')]" colspan="4" context="{'search_view_ref' : 'kemas.kemas_collaborator_search_view2','tree_view_ref' : 'kemas.kemas_collaborator_tree_view6'}" nolabel="1"/>
        			</group>
       			<footer>
-	           		<button string="Save" name="save" type="object" class="oe_highlight" confirm="Are you sure reclaim to these Collaborators for the fulfillment of task task now?"/>
+	           		<button string="Guardar" name="save" type="object" class="oe_highlight" confirm="Are you sure reclaim to these Collaborators for the fulfillment of task task now?"/>
 					<label string="or"/>
-					<button string="Cancel" class="oe_link" special="cancel"/>
+					<button string="Cancelar" class="oe_link" special="cancel"/>
 	           	</footer>
 	       	</form>
      	</field>

@@ -26,29 +26,39 @@ class kemas_suspend_collaborator_step1_wizard(osv.osv_memory):
     def do_next(self, cr, uid, ids, context={}):
         wizard = self.read(cr, uid, ids[0])
         if wizard['collaborator_ids'] == []:
-            raise osv.except_osv(u'¡Operación no válida!', _('First select the collaborators.'))
-        dict_header={}    
-        dict_header['collaborator_ids'] = wizard['collaborator_ids']        
+            raise osv.except_osv(u'¡Operación no válida!', 'Primeero seleccione los colaboradores a suspender')
         
-        context={'dict_header':dict_header}
-        wizard_title = self.pool.get('kemas.func').get_translate(cr, uid, _('Suspend Collaborators'))[0]
+        step_obj = self.pool['kemas.suspend_collaborator.step2.wizard']
+        vals = {
+                'collaborator_ids': [(6, 0, wizard['collaborator_ids'])],
+                'state': 'step2',
+                'day1': True,
+                'day2': True,
+                'day3': True,
+                'day4': True,
+                'day5': True,
+                'day6': True,
+                'day7': True,
+                }
+        res_id = step_obj.create(cr, uid, vals)
         return {                                  
-            'context':context,
-            'name' : wizard_title,
-            'view_type': 'form', 
-            'view_mode': 'form', 
-            'res_model': 'kemas.suspend_collaborator.step2.wizard', 
+            'context': context,
+            'res_id': res_id,
+            'name' : 'Suspender Colaboradores',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': step_obj._name,
             'type': 'ir.actions.act_window',
             'target':'new',
             }
         
-    _name='kemas.suspend_collaborator.step1.wizard'
-    _columns={
-        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_suspend_collaborator_collaborator_rel',  'collaborator_id',  'suspend_collaborator_id', 'collaborators',help=''),
+    _name = 'kemas.suspend_collaborator.step1.wizard'
+    _columns = {
+        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_suspend_collaborator_collaborator_rel', 'collaborator_id', 'suspend_collaborator_id', 'collaborators', help=''),
         'state': fields.selection([
-            ('step1','Step 1'),
-            ('step2','Step 2'),
-        ],    'State', select=True, readonly=True),
+            ('step1', 'Step 1'),
+            ('step2', 'Step 2'),
+        ], 'State', select=True, readonly=True),
         }
 
     _defaults = {  
@@ -58,19 +68,25 @@ class kemas_suspend_collaborator_step1_wizard(osv.osv_memory):
 class kemas_suspend_collaborator_step2_wizard(osv.osv_memory):
     def on_change_days(self, cr, uid, ids, days, day1, day2, day3, day4, day5, day6, day7, context={}):
         values = {}
-        values['date_end'] = self.pool.get('kemas.suspension').get_end_date(cr, uid, days, day1, day2, day3, day4, day5, day6, day7, context)
+        if days > 0:
+            values['date_end'] = self.pool.get('kemas.suspension').get_end_date(cr, uid, days, day1, day2, day3, day4, day5, day6, day7, context)
         return {'value':values}
     
-    def validate_points_zero(self,cr,uid,ids):
-        wizard = self.read(cr, uid, ids[0],[])
-        if wizard['new_points']<=0 and wizard['remove_points']:
+    def validate_points_zero(self, cr, uid, ids):
+        wizard = self.read(cr, uid, ids[0], [])
+        if wizard['new_points'] <= 0 and wizard['remove_points']:
             raise osv.except_osv(u'¡Operación no válida!', _('The points must be greater than zero.'))
         return True
         
-    def save(self,cr,uid,ids,context=None):
-        wizard = self.read(cr, uid, ids[0],[])
+    def save(self, cr, uid, ids, context=None):
+        wizard = self.read(cr, uid, ids[0], [])
+        if not wizard['days'] or wizard['days'] == 0:
+            raise osv.except_osv(u'¡Operación no válida!', u"Primero ingrese el número de días de suspensión.") 
+        
         collaborator_obj = self.pool.get('kemas.collaborator')
-        collaborator_ids = eval(wizard['collaborator_ids'])
+        suspension_obj = self.pool.get('kemas.suspension')
+        
+        collaborator_ids = wizard['collaborator_ids']
         
         days = wizard['days']
         day1 = wizard['day1']
@@ -80,44 +96,24 @@ class kemas_suspend_collaborator_step2_wizard(osv.osv_memory):
         day5 = wizard['day5']
         day6 = wizard['day6']
         day7 = wizard['day7']
-        end_date = self.pool.get('kemas.suspension').get_end_date(cr, uid, days, day1, day2, day3, day4, day5, day6, day7, context)
+        end_date = suspension_obj.get_end_date(cr, uid, days, day1, day2, day3, day4, day5, day6, day7, context)
         collaborator_obj.suspend(cr, uid, collaborator_ids, end_date, unicode(wizard['description']))
         if wizard['remove_points']:
             collaborator_obj.add_remove_points(cr, uid, collaborator_ids, int(wizard['new_points']), unicode(u'Suspención: ' + wizard['description']), 'decrease')
         mensaje = _('The registers was saved correctly.')
         return{            
-            'context': "{'message':'"+mensaje+"'}",
-            'view_type': 'form', 
-            'view_mode': 'form', 
-            'res_model': 'kemas.message.wizard', 
-            'type': 'ir.actions.act_window', 
+            'context': "{'message':'" + mensaje + "'}",
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'kemas.message.wizard',
+            'type': 'ir.actions.act_window',
             'target':'new',
             }
         
-    def fields_get(self, cr, uid, fields=None, context={}, write_access=True):   
-        result = super(kemas_suspend_collaborator_step2_wizard, self).fields_get(cr, uid,fields, context, write_access)
-        if context is None or not context or type(context).__name__!="dict" or not context.has_key('dict_header'):
-            return result
-        
-        dict_def={}
-        dict_def.update(context['dict_header'])
-        dict_def['collaborator_ids'] = dict_def['collaborator_ids']
-        dict_def['day1']=True
-        dict_def['day2']=True
-        dict_def['day3']=True
-        dict_def['day4']=True
-        dict_def['day5']=True
-        dict_def['day6']=True
-        dict_def['day7']=True
-        dict_def['days']=30
-        dict_def['state']='step2'
-        self._defaults=dict_def
-        return result
-    
-    _name='kemas.suspend_collaborator.step2.wizard'
-    _columns={
+    _name = 'kemas.suspend_collaborator.step2.wizard'
+    _columns = {
         'logo': fields.binary('img'),
-        'collaborator_ids': fields.text('Collaborators'),
+        'collaborator_ids': fields.many2many('kemas.collaborator', 'kemas_suspend_collaborator_step2_collaborator_rel', 'wizard_id', 'collaborator_id', 'Colaboradores'),
         'day1': fields.boolean('Monday', required=False),
         'day2': fields.boolean('Tuesday', required=False),
         'day3': fields.boolean('Wednesday', required=False),
@@ -125,18 +121,19 @@ class kemas_suspend_collaborator_step2_wizard(osv.osv_memory):
         'day5': fields.boolean('Friday', required=False),
         'day6': fields.boolean('Saturday', required=False),
         'day7': fields.boolean('Sunday', required=False),
-        'days': fields.char('Days',size=255,required=True,help=""),
-        'date_end': fields.datetime('Date end',help=""),
+        'days': fields.integer(u'Días'),
+        'date_end': fields.datetime('Date end', help=""),
         'remove_points': fields.boolean('Also remove points?', required=False, help="Check the box if you want to also remove points to collaboratords"),
         'new_points': fields.integer('Points to remove', required=False, help="Points you currently have a collaborator"),
-        'description': fields.text('Description', required=True),
+        'description': fields.text('Description', required=False),
         'state': fields.selection([
-            ('step1','Step 1'),
-            ('step2','Step 2'),
-        ],    'State', select=True, readonly=True),
+            ('step1', 'Step 1'),
+            ('step2', 'Step 2'),
+        ], 'State', select=True, readonly=True),
+        'by_days':fields.boolean('Por días', required=False, help="Permite indicar que días de la semana se va suspende a los colaboradores"),
         }
-    _constraints=[
-        (validate_points_zero,'The points must be greater than zero.',['new_points']),
+    _constraints = [
+        (validate_points_zero, 'The points must be greater than zero.', ['new_points']),
         ]
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

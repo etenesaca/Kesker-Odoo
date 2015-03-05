@@ -27,7 +27,7 @@
                </group>
                <field name="line_ids" nolabel="1" colspan="4" />
                <footer>
-                  <button string="Save" name="save" type="object" class="oe_highlight" confirm="Are you sure you save now these replacements now?" />
+                  <button string="Guardar" name="save" type="object" class="oe_highlight" confirm="Are you sure you save now these replacements now?" />
                   <b> ó </b>
                   <button string="Aceptar" class="oe_link" special="cancel" />
                </footer>
