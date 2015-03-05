@@ -5289,19 +5289,19 @@ class kemas_event(osv.osv):
             
             inasistentes = list(set(programados) - set(asistentes))
             for inasistente in inasistentes:
-                #---Escribir registro de Asitencia-----
-                vals = {}
-                seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Attendance'), ])[0]
+                # Escribir registro de Asitencia
                 summary = 'Inasistencia.'
-                
-                vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
-                vals['collaborator_id'] = inasistente
-                vals['type'] = 'absence'
-                vals['event_id'] = event_id
-                vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
-                vals['summary'] = summary
-                vals['user_id'] = uid
-                attendance_id = super(kemas_attendance, attendance_obj).create(cr, uid, vals)
+                seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Attendance'), ])[0]
+                attendance_vals = {
+                                   'code' : str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id)),
+                                   'collaborator_id': inasistente,
+                                   'type': 'absence',
+                                   'event_id': event_id,
+                                   'date': time.strftime("%Y-%m-%d %H:%M:%S"),
+                                   'summary': summary,
+                                   'user_id': uid
+                                   }
+                attendance_id = super(kemas_attendance, attendance_obj).create(cr, uid, attendance_vals)
                 
                 collaborator = collaborator_obj.read(cr, uid, inasistente, ['points'])
                 current_points = str(collaborator['points'])
@@ -5313,27 +5313,22 @@ class kemas_event(osv.osv):
                 new_points = int(current_points) - int(event['not_attend_points'])
                 change_points = str(event['not_attend_points'])
                 
-                #---Escribir puntaje-----
-                super(kemas_collaborator, collaborator_obj).write(cr, uid, [inasistente], {
-                                    'points':int(new_points)
-                                    })
-                #------------------------
+                # Escribir puntaje
+                super(kemas_collaborator, collaborator_obj).write(cr, uid, [inasistente], {'points': int(new_points)})
+                
                 history_summary = '-' + str(change_points) + " Puntos. Antes " + str(current_points) + " ahora " + str(new_points) + " Puntos."
                 vals_history_points = {
-                    'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
-                    'attendance_id': attendance_id,
-                    'collaborator_id': inasistente,
-                    'type': 'decrease',
-                    'description': description,
-                    'summary': history_summary,
-                    'points': abs(int(change_points)) * -1,
-                    }
+                                       'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
+                                       'attendance_id': attendance_id,
+                                       'collaborator_id': inasistente,
+                                       'type': 'decrease',
+                                       'description': description,
+                                       'summary': history_summary,
+                                       'points': abs(int(change_points)) * -1,
+                                       }
                 history_points_obj.create(cr, uid, vals_history_points)
-                #---Agregar un colaborador a la lista de notificationes (Inasistente)
-                collaborator = {
-                                'id': inasistente,
-                                'type':'absence'
-                                }
+                # Agregar un colaborador a la lista de notificationes (Inasistente)
+                collaborator = {'id': inasistente, 'type':'absence'}
                 noticaciones['collaborators'].append(collaborator)
                 cr.commit()
             cr.commit()
