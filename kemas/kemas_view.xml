@@ -5130,6 +5130,23 @@
             </p>
          </field>
       </record>
+      <!--____________________________________________________Personas -->
+      <record model="ir.actions.act_window" id="res_partner_action">
+         <field name="name">Personas</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">res.partner</field>
+         <field name="view_mode">kanban,tree,form</field>
+         <field name="domain">[('is_company','=',False)]</field>
+         <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+               De click aquí para agregar una Nueva Persona.
+            </p>
+            <p>
+
+            </p>
+         </field>
+      </record>
+
       <!--
          ====================
          WIZARDS
@@ -5433,48 +5450,46 @@
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Collaborator
       -->
-      <menuitem id="menu_kemas_collaborator_management" name="Collaborators" parent="menu_kemas_manager_root" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
-      <!--
-         >>>>>>>>>>>>Areas
-      -->
-      <menuitem id="menu_kemas_collaborator_areas_management" name="Areas" parent="" sequence="1" />
+      <menuitem id="menu_kemas_collaborator_management" name="Collaborators" parent="menu_kemas_manager_root" sequence="2" />
       <!--_____________Collaborator -->
-      <menuitem action="action_kemas_collaborator" name="Collaborators" id="menu_kemas_collaborator" parent="menu_kemas_collaborator_management" sequence="1" />
+      <menuitem action="action_kemas_collaborator" name="Collaborators" id="menu_kemas_collaborator" parent="menu_kemas_collaborator_management" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
       <!--_____________Area -->
-      <menuitem action="action_kemas_area" name="Areas" id="menu_kemas_area" parent="menu_kemas_collaborator_management" sequence="2" />
+      <menuitem action="action_kemas_area" name="Areas" id="menu_kemas_area" parent="menu_kemas_collaborator_management" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
       <!--_____________Teams -->
-      <menuitem action="action_kemas_team" name="Teams" id="menu_kemas_team" parent="menu_kemas_collaborator_management" sequence="3" />
+      <menuitem action="action_kemas_team" name="Teams" id="menu_kemas_team" parent="menu_kemas_collaborator_management" sequence="3" groups="group_kemas_manager,group_kemas_admin" />
       <!--_____________History Points -->
-      <menuitem action="kemas_history_points_form_action" name="History Points" id="menu_kemas_history_points_mn" parent="menu_kemas_collaborator_management" sequence="4" />
+      <menuitem action="kemas_history_points_form_action" name="History Points" id="menu_kemas_history_points_mn" parent="menu_kemas_collaborator_management" sequence="4" groups="group_kemas_manager,group_kemas_admin" />
       <!--_____________Suspensions -->
-      <menuitem action="action_kemas_suspension" name="Suspensions" id="menu_kemas_suspension" parent="menu_kemas_collaborator_management" sequence="5" />
-      <!--
-         >>>>>>>>>>>Collaborator
-      -->
-      <!--_____________School4d
-         <menuitem action="kemas_school4d_line_form_action" name="School4D" id="menu_kemas_school4d" parent="menu_kemas_collaborator_management" sequence="1" />
-      -->
+      <menuitem action="action_kemas_suspension" name="Suspensions" id="menu_kemas_suspension" parent="menu_kemas_collaborator_management" sequence="5" groups="group_kemas_manager,group_kemas_admin" />
+
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Calendar
       -->
-      <menuitem id="menu_kemas_calendar_menu" name="Calendar" parent="menu_kemas_manager_root" sequence="2" groups="group_kemas_manager,group_kemas_admin,group_kemas_register_attedance" />
+      <menuitem id="menu_kemas_calendar_menu" name="Calendar" parent="menu_kemas_manager_root" sequence="3" />
       <!--_____________Event -->
-      <menuitem action="action_kemas_event" name="Events" id="menu_kemas_event" parent="menu_kemas_calendar_menu" sequence="1" />
+      <menuitem action="action_kemas_event" name="Events" id="menu_kemas_event" parent="menu_kemas_calendar_menu" sequence="1" groups="group_kemas_manager,group_kemas_admin,group_kemas_register_attedance" />
       <!--_____________Service -->
-      <menuitem action="action_kemas_service" name="Services" id="menu_kemas_service_category" parent="menu_kemas_calendar_menu" sequence="2" />
+      <menuitem action="action_kemas_service" name="Services" id="menu_kemas_service_category" parent="menu_kemas_calendar_menu" sequence="2" groups="group_kemas_manager,group_kemas_admin,group_kemas_register_attedance" />
       <!--_____________Places -->
-      <menuitem action="action_kemas_place" name="Places" id="menu_kemas_place" parent="menu_kemas_calendar_menu" sequence="3" />
+      <menuitem action="action_kemas_place" name="Places" id="menu_kemas_place" parent="menu_kemas_calendar_menu" sequence="3" groups="group_kemas_manager,group_kemas_admin,group_kemas_register_attedance" />
       <!--_____________Registros de asistencia -->
-      <menuitem action="kemas_attendance_form_action" name="Asistencias" id="menu_kemas_attendance" parent="menu_kemas_calendar_menu" sequence="4" />
+      <menuitem action="kemas_attendance_form_action" name="Asistencias" id="menu_kemas_attendance" parent="menu_kemas_calendar_menu" sequence="4" groups="group_kemas_manager,group_kemas_admin,group_kemas_register_attedance" />
       <!--_____________Replacements -->
-      <menuitem action="kemas_event_replacement_form_action" name="Historial de reemplazos" id="menu_kemas_event_replacement" parent="menu_kemas_calendar_menu" sequence="5" />
+      <menuitem action="kemas_event_replacement_form_action" name="Historial de reemplazos" id="menu_kemas_event_replacement" parent="menu_kemas_calendar_menu" sequence="5" groups="group_kemas_manager,group_kemas_admin,group_kemas_register_attedance" />
+      <!--
+
+         >>>>>>>>>>>>>>>>>>>>>>>>>>Gestión de personas
+      -->
+      <menuitem id="menu_kemas_persons" name="Gestión de personas" parent="menu_kemas_manager_root" sequence="4" />
+      <!-- Personas -->
+      <menuitem action="res_partner_action" id="res_partner_menu" parent="menu_kemas_persons" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
 
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Acciones
       -->
-      <menuitem id="menu_kemas_actions_menu" name="Acciones" parent="menu_kemas_manager_root" sequence="4" groups="group_kemas_manager,group_kemas_admin" />
+      <menuitem id="menu_kemas_actions_menu" name="Acciones" parent="menu_kemas_manager_root" sequence="5" />
       <!--_____________Suspend collaborator -->
-      <menuitem action="kemas_suspend_collaborator_step1_wizard_form_action" name="Suspend Collaborator" id="menu_kemas_suspend_collaborator" parent="menu_kemas_actions_menu" sequence="1" />
+      <menuitem action="kemas_suspend_collaborator_step1_wizard_form_action" name="Suspend Collaborator" id="menu_kemas_suspend_collaborator" parent="menu_kemas_actions_menu" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
       <!--
          History Points
       -->
@@ -5484,49 +5499,49 @@
       <!--
          Events
       -->
-      <menuitem id="kemas_actions_events_mn" name="Eventos" parent="menu_kemas_actions_menu" sequence="3" groups="group_kemas_manager,group_kemas_admin" />
+      <menuitem id="kemas_actions_events_mn" name="Eventos" parent="menu_kemas_actions_menu" sequence="3" />
       <!--_____________Registrar asistencia -->
-      <menuitem action="kemas_register_attendance_wizard_form_action" name="Registrar asistencias" id="menu_kemas_register_attendance_wizard" parent="kemas_actions_events_mn" sequence="1" />
+      <menuitem action="kemas_register_attendance_wizard_form_action" name="Registrar asistencias" id="menu_kemas_register_attendance_wizard" parent="kemas_actions_events_mn" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
       <!--_____________Replace collaborator -->
-      <menuitem action="kemas_event_replace_collaborator_wizard_form_action" name="Replace collaborator" id="menu_kemas_event_replace_collaborator" parent="kemas_actions_events_mn" sequence="2" />
+      <menuitem action="kemas_event_replace_collaborator_wizard_form_action" name="Replace collaborator" id="menu_kemas_event_replace_collaborator" parent="kemas_actions_events_mn" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
       <!--_____________Close past events -->
       <menuitem action="kemas_close_past_event_wizard_form_action" name="Close past events" id="menu_kemas_close_past_event_wizard" parent="kemas_actions_events_mn" sequence="3" groups="group_kemas_manager,group_kemas_admin" />
 
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Reportes
       -->
-      <menuitem id="menu_kemas_reports_menu" name="Reports" parent="menu_kemas_manager_root" sequence="5" groups="group_kemas_manager,group_kemas_admin" />
+      <menuitem id="menu_kemas_reports_menu" name="Reports" parent="menu_kemas_manager_root" sequence="6" />
       <!--_____________Collaborator Statisitics -->
-      <menuitem action="kemas_event_collaborator_line_form_action" name="Estadisticas de Colaboración" id="menu_kemas_event_collaborator_line" parent="menu_kemas_reports_menu" sequence="1" />
+      <menuitem action="kemas_event_collaborator_line_form_action" name="Estadisticas de Colaboración" id="menu_kemas_event_collaborator_line" parent="menu_kemas_reports_menu" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
       <!--_____________Listado de Colaboradores -->
-      <menuitem action="kemas_report_collaborators_list_wizard_form_action" name="List of collaborators" id="menu_kemas_report_collaborators_list" parent="menu_kemas_reports_menu" sequence="2" />
+      <menuitem action="kemas_report_collaborators_list_wizard_form_action" name="List of collaborators" id="menu_kemas_report_collaborators_list" parent="menu_kemas_reports_menu" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
       <!--_____________Listado de Eventos -->
-      <menuitem action="kemas_report_events_list_wizard_form_action" name="List of events" id="menu_kemas_report_events_list" parent="menu_kemas_reports_menu" sequence="3" />
+      <menuitem action="kemas_report_events_list_wizard_form_action" name="List of events" id="menu_kemas_report_events_list" parent="menu_kemas_reports_menu" sequence="3" groups="group_kemas_manager,group_kemas_admin" />
       <!--_____________Estadisticas de Colaboración -->
-      <menuitem action="kemas_report_attendance_statistics_wizard_action" name="Colaboración" id="kemas_report_attendance_statistic_wizard_menu" parent="menu_kemas_reports_menu" sequence="4" />
+      <menuitem action="kemas_report_attendance_statistics_wizard_action" name="Colaboración" id="kemas_report_attendance_statistic_wizard_menu" parent="menu_kemas_reports_menu" sequence="4" groups="group_kemas_manager,group_kemas_admin" />
       <!-- Inicios de Sesión -->
-      <menuitem action="kemas_collaborator_logbook_login_action" id="menu_kemas_collaborator_logbook_login" parent="menu_kemas_reports_menu" sequence="5" />
+      <menuitem action="kemas_collaborator_logbook_login_action" id="menu_kemas_collaborator_logbook_login" parent="menu_kemas_reports_menu" sequence="5" groups="group_kemas_manager,group_kemas_admin" />
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Extras
       -->
-      <menuitem id="menu_kemas_extras_menu" name="Extras" parent="menu_kemas_manager_root" sequence="6" groups="group_kemas_manager,group_kemas_admin" />
+      <menuitem id="menu_kemas_extras_menu" name="Extras" parent="menu_kemas_manager_root" sequence="7" />
       <!--
          >>>>>>>>>>>>GESTION DOCUMENTAL
       -->
       <menuitem id="menu_kemas_documentos_menu" name="Documentos" parent="menu_kemas_extras_menu" sequence="1" />
       <!--_____________Tags -->
-      <menuitem action="action_repository_category_form" name="Etiquetas" id="menu_kemas_repository_category" parent="menu_kemas_documentos_menu" sequence="1" />
+      <menuitem action="action_repository_category_form" name="Etiquetas" id="menu_kemas_repository_category" parent="menu_kemas_documentos_menu" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
       <!--_____________Files -->
-      <menuitem action="action_kemas_repository_form" name="Documentos" id="menu_kemas_repository" parent="menu_kemas_documentos_menu" sequence="2" />
+      <menuitem action="action_kemas_repository_form" name="Documentos" id="menu_kemas_repository" parent="menu_kemas_documentos_menu" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
       <!--
          >>>>>>>>>>>>MASSIVE E-MAIL
       -->
       <!--_____________Masive Mail -->
-      <menuitem action="kemas_massive_email_form_action" name="Massive e-mail" id="menu_kemas_massive_email" parent="menu_kemas_extras_menu" sequence="2" />
+      <menuitem action="kemas_massive_email_form_action" name="Massive e-mail" id="menu_kemas_massive_email" parent="menu_kemas_extras_menu" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Configuration
       -->
-      <menuitem id="menu_kemas_configurations" name="Configuration" parent="menu_kemas_manager_root" sequence="7" />
+      <menuitem id="menu_kemas_configurations" name="Configuration" parent="menu_kemas_manager_root" sequence="8" />
       <!-- Configuraciones -->
       <menuitem action="action_kemas_config" name="Preferencias" id="menu_kemas_config" parent="menu_kemas_configurations" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
 
