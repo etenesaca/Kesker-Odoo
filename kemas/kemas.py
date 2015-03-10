@@ -1852,10 +1852,9 @@ class kemas_team(osv.osv):
         'logo_medium': fields.binary('Medium Logo'),
         'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='The name of the Team'),
-        'responsible_id':fields.many2one('res.partner', 'Responsable', help=u'Persona que está a cargo de este equipo'),
-        'description': fields.text('Description', help='The description of the Team'),
-        #Many to Many Relations----------------------------------------------------------------------------------------------
         'collaborator_ids': fields.one2many('kemas.collaborator', 'team_id', 'Collaborators', help='Collaborators to belong to this Team.', readonly=False),
+        'responsible_ids': fields.many2many('res.partner', id1='team_id', id2='responsible_id', string='Responsables'),
+        'description': fields.text('Description', help='The description of the Team'),
         }
     _sql_constraints = [
         ('team_name', 'unique (name)', "This Team already exist!"),
@@ -2067,7 +2066,7 @@ class kemas_area(osv.osv):
         'logo_medium': fields.binary('Medium Logo'),
         'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Nombre', size=64, required=True, help='Nombre del Área'),
-        'responsible_id':fields.many2one('res.partner', 'Responsable', help=u'Persona que está a cargo de esta Área'),
+        'responsible_ids': fields.many2many('res.partner', id1='area_id', id2='responsible_id', string='Responsables'),
         'description': fields.text('Description', help='Una descripción del Área'),
         'history': fields.text('Historia'),
         'activity_ids': fields.one2many('kemas.activity', 'area_id', 'Actividades', help='Actividades relacionadas a ésta Ärea'),
@@ -3276,7 +3275,9 @@ class kemas_collaborator(osv.osv):
         vals['state'] = 'Active'
 
         res_id = super(kemas_collaborator, self).create(cr, uid, vals, context)
-        #----Escribir el historial de puntos-----------------------------------------------------------------
+        # Agregar partner la etiqueta de partner
+        
+        # Escribir el historial de puntos
         history_points_obj = self.pool.get('kemas.history.points')
         description = 'Se inicializa el registro.'
         points = vals['points']

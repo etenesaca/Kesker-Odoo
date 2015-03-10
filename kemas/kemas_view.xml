@@ -24,7 +24,7 @@
                      </h1>
                   </div>
                   <group>
-                     <field name="responsible_id" domain="[('is_company','=',False)]" placeholder="Responsable del Equipo" required="True" />
+                     <field name="responsible_ids" domain="[('is_company','=',False)]" widget="many2many_tags" placeholder="Responsable del Equipo" required="True" />
                   </group>
                   <notebook colspan="4">
                      <page string="Colaboradores">
@@ -91,7 +91,7 @@
             <search string="Search Team">
                <group>
                   <field name="name" default_focus="1" />
-                  <field name="responsible_id" />
+                  <field name="responsible_ids" />
                </group>
             </search>
          </field>
@@ -121,7 +121,7 @@
                      </h1>
                   </div>
                   <group>
-                     <field name="responsible_id" domain="[('is_company','=',False)]" placeholder="Responsable del Área" required="True" />
+                     <field name="responsible_ids" domain="[('is_company','=',False)]" widget="many2many_tags" placeholder="Responsable del Área" required="True" />
                   </group>
                   <notebook colspan="4">
                      <page string="Activities">
@@ -247,7 +247,7 @@
             <search string="Areas">
                <group>
                   <field name="name" default_focus="1" />
-                  <field name="responsible_id" />
+                  <field name="responsible_ids" />
                </group>
             </search>
          </field>
@@ -5146,6 +5146,21 @@
             </p>
          </field>
       </record>
+      <!--____________________________________________________Personas -->
+      <record model="ir.actions.act_window" id="res_partner_category_action">
+         <field name="name">Categorías</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">res.partner.category</field>
+         <field name="view_mode">tree,form</field>
+         <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+               De click aquí para agregar una Nueva Categoría de Personas.
+            </p>
+            <p>
+
+            </p>
+         </field>
+      </record>
 
       <!--
          ====================
@@ -5483,6 +5498,8 @@
       <menuitem id="menu_kemas_persons" name="Gestión de personas" parent="menu_kemas_manager_root" sequence="4" />
       <!-- Personas -->
       <menuitem action="res_partner_action" id="res_partner_menu" parent="menu_kemas_persons" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
+      <!-- Categorías de personas -->
+      <menuitem action="res_partner_category_action" id="res_partner_category_menu" parent="menu_kemas_persons" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
 
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Acciones
