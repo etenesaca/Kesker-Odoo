@@ -5,6 +5,14 @@
          <field name="name">Colaborador</field>
          <field name="active">1</field>
       </record>
+      <record id="res_partner_category_resp_area" model="res.partner.category">
+         <field name="name">Resp. Área</field>
+         <field name="active">1</field>
+      </record>
+      <record id="res_partner_category_resp_team" model="res.partner.category">
+         <field name="name">Resp. Equipo</field>
+         <field name="active">1</field>
+      </record>
    </data>
 </openerp>
 
