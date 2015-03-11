@@ -2341,7 +2341,7 @@
                               <field name="birth" on_change="on_change_birth(birth)" required="1" placeholder="Fecha" />
                               <field name="age" required="1" readonly="1" />
                               <field name="gender" required="1" placeholder=" -- " />
-                              <field name="partner_id" on_change="on_change_partner_id(partner_id,first_names,last_names,state)" attrs="{'required':[('state','!=','creating')]}" placeholder="Partner relacionado" />
+                              <field name="partner_id" on_change="on_change_partner_id(partner_id,first_names,last_names,state)" attrs="{'required':[('state','!=','creating')]}" context="{'no_relation_with_collaborator': True}" options='{"no_create": True}' placeholder="Partner relacionado" />
                            </group>
                            <group>
                               <label for="street" string="Dirección" />

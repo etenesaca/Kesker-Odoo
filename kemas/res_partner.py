@@ -24,6 +24,25 @@ from openerp.osv import osv
 
 
 class res_partner(osv.osv):
+    def name_search(self, cr, uid, name, args=[], operator='ilike', context={}, limit=100):
+        ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
+        return self.name_get(cr, uid, ids, context)
+    
+    def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
+        if context is None or not context or not isinstance(context, (dict)): context = {}
+        res_ids = super(res_partner, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
+        if context.get('no_relation_with_collaborator'):
+            res_tpl = res_ids and len(res_ids) == 1 and '(%d)' % res_ids[0] or res_ids and str(tuple(res_ids)) or '(0)'
+            sql = """
+                select partner_id from kemas_collaborator 
+                where partner_id in %s
+                """ % res_tpl
+            cr.execute(sql)
+            result_query = cr.fetchall()
+            foo = extras.convert_result_query_to_list(result_query)
+            res_ids = list(set(res_ids) - set(foo))
+        return res_ids
+    
     def create(self, cr, uid, vals, context={}):
         try:
             vals['image'] = extras.crop_image(vals['image'], 256)
