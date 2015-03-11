@@ -1827,15 +1827,14 @@ class kemas_activity(osv.osv):
         ]
 class kemas_team(osv.osv):
     def write(self, cr, uid, ids, vals, context={}):
+        old_records = self.read(cr, uid, ids, ['responsible_ids'])
         result = super(kemas_team, self).write(cr, uid, ids, vals, context)
         records = self.read(cr, uid, ids, ['responsible_ids'])
         
         partner_obj = self.pool['res.partner']
         md_obj = self.pool['ir.model.data']
         md_ids = md_obj.search(cr, uid, [('name', '=', 'res_partner_category_resp_team')])
-        if md_ids:
-            cat_id = md_obj.read(cr, uid, md_ids[0], ['res_id'])['res_id']
-        
+        cat_id = md_obj.read(cr, uid, md_ids[0], ['res_id'])['res_id']
         for record in records:
             if vals.get('logo', False):
                 vals_write = {}
@@ -1844,32 +1843,31 @@ class kemas_team(osv.osv):
                 vals_write['logo_small'] = extras.crop_image(vals['logo'], 48)
                 super(kemas_team, self).write(cr, uid, [record['id']], vals_write, context)
             # Poner etiqueta de responsable a los responsables
-            if md_ids:
-                partners = partner_obj.read(cr, uid, record['responsible_ids'])
-                for partner in partners:
-                    partner = partner_obj.read(cr, uid, partner['id'], ['category_id'])
-                    category_ids = list(set(partner['category_id'] + [cat_id]))
-                    partner_obj.write(cr, uid, [partner['id']], vals={'category_id': [(6, 0, category_ids)]})
+            partner_obj.write(cr, uid, record['responsible_ids'], vals={'category_id': [(4, cat_id)]})
+            # En el caso de que se hayan quitado responsables se verifica si ya no son responsables de otros team se les quita la etiquetas
+            for old_record in old_records:
+                if old_record['id'] == record['id']:
+                    del_partner_ids = list(set(old_record['responsible_ids']) - set(record['responsible_ids']))
+                    for del_partner_id in del_partner_ids:
+                        if not self.search(cr, uid, [('responsible_ids', 'in', del_partner_id)]):
+                            partner = partner_obj.read(cr, uid, del_partner_id, ['category_id'])
+                            if cat_id in partner['category_id']:
+                                partner_obj.write(cr, uid, [partner['id']], vals={'category_id': [(3, cat_id)]})
         return result
-    
+
     def create(self, cr, uid, vals, context={}):
         if vals.get('logo', False):
             vals['logo'] = extras.crop_image(vals['logo'], 192)
             vals['logo_medium'] = extras.crop_image(vals['logo'], 64)
             vals['logo_small'] = extras.crop_image(vals['logo'], 48)
         res_id = super(kemas_team, self).create(cr, uid, vals, context)
+        
         # Poner etiqueta de responsable a los responsables
-        record = self.read(cr, uid, res_id, ['responsible_ids'])
-        md_obj = self.pool['ir.model.data']
-        md_ids = md_obj.search(cr, uid, [('name', '=', 'res_partner_category_resp_team')])
-        if md_ids:
-            partner_obj = self.pool['res.partner']
+        if vals['responsible_ids']:
+            md_obj = self.pool['ir.model.data']
+            md_ids = md_obj.search(cr, uid, [('name', '=', 'res_partner_category_resp_team')])
             cat_id = md_obj.read(cr, uid, md_ids[0], ['res_id'])['res_id']
-            partners = partner_obj.read(cr, uid, record['responsible_ids'])
-            for partner in partners:
-                partner = partner_obj.read(cr, uid, partner['id'], ['category_id'])
-                category_ids = list(set(partner['category_id'] + [cat_id]))
-                partner_obj.write(cr, uid, [partner['id']], vals={'category_id': [(6, 0, category_ids)]})
+            self.pool['res.partner'].write(cr, uid, vals['responsible_ids'][0][2], vals={'category_id': [(4, cat_id)]})
         return res_id
     
     _order = 'name'
@@ -2069,15 +2067,14 @@ class kemas_school4d_line(osv.osv):
     
 class kemas_area(osv.osv):
     def write(self, cr, uid, ids, vals, context={}):
+        old_records = self.read(cr, uid, ids, ['responsible_ids'])
         result = super(kemas_area, self).write(cr, uid, ids, vals, context)
         records = self.read(cr, uid, ids, ['responsible_ids'])
         
         partner_obj = self.pool['res.partner']
         md_obj = self.pool['ir.model.data']
         md_ids = md_obj.search(cr, uid, [('name', '=', 'res_partner_category_resp_area')])
-        if md_ids:
-            cat_id = md_obj.read(cr, uid, md_ids[0], ['res_id'])['res_id']
-        
+        cat_id = md_obj.read(cr, uid, md_ids[0], ['res_id'])['res_id']
         for record in records:
             if vals.get('logo', False):
                 vals_write = {}
@@ -2086,12 +2083,16 @@ class kemas_area(osv.osv):
                 vals_write['logo_small'] = extras.crop_image(vals['logo'], 48)
                 super(kemas_area, self).write(cr, uid, [record['id']], vals_write, context)
             # Poner etiqueta de responsable a los responsables
-            if md_ids:
-                partners = partner_obj.read(cr, uid, record['responsible_ids'])
-                for partner in partners:
-                    partner = partner_obj.read(cr, uid, partner['id'], ['category_id'])
-                    category_ids = list(set(partner['category_id'] + [cat_id]))
-                    partner_obj.write(cr, uid, [partner['id']], vals={'category_id': [(6, 0, category_ids)]})
+            partner_obj.write(cr, uid, record['responsible_ids'], vals={'category_id': [(4, cat_id)]})
+            # En el caso de que se hayan quitado responsables se verifica si ya no son responsables de otros area se les quita la etiquetas
+            for old_record in old_records:
+                if old_record['id'] == record['id']:
+                    del_partner_ids = list(set(old_record['responsible_ids']) - set(record['responsible_ids']))
+                    for del_partner_id in del_partner_ids:
+                        if not self.search(cr, uid, [('responsible_ids', 'in', del_partner_id)]):
+                            partner = partner_obj.read(cr, uid, del_partner_id, ['category_id'])
+                            if cat_id in partner['category_id']:
+                                partner_obj.write(cr, uid, [partner['id']], vals={'category_id': [(3, cat_id)]})
         return result
 
     def create(self, cr, uid, vals, context={}):
@@ -2100,18 +2101,13 @@ class kemas_area(osv.osv):
             vals['logo_medium'] = extras.crop_image(vals['logo'], 64)
             vals['logo_small'] = extras.crop_image(vals['logo'], 48)
         res_id = super(kemas_area, self).create(cr, uid, vals, context)
+        
         # Poner etiqueta de responsable a los responsables
-        record = self.read(cr, uid, res_id, ['responsible_ids'])
-        md_obj = self.pool['ir.model.data']
-        md_ids = md_obj.search(cr, uid, [('name', '=', 'res_partner_category_resp_area')])
-        if md_ids:
-            partner_obj = self.pool['res.partner']
+        if vals['responsible_ids']:
+            md_obj = self.pool['ir.model.data']
+            md_ids = md_obj.search(cr, uid, [('name', '=', 'res_partner_category_resp_area')])
             cat_id = md_obj.read(cr, uid, md_ids[0], ['res_id'])['res_id']
-            partners = partner_obj.read(cr, uid, record['responsible_ids'])
-            for partner in partners:
-                partner = partner_obj.read(cr, uid, partner['id'], ['category_id'])
-                category_ids = list(set(partner['category_id'] + [cat_id]))
-                partner_obj.write(cr, uid, [partner['id']], vals={'category_id': [(6, 0, category_ids)]})
+            self.pool['res.partner'].write(cr, uid, vals['responsible_ids'][0][2], vals={'category_id': [(4, cat_id)]})
         return res_id
     
     _order = 'name'
