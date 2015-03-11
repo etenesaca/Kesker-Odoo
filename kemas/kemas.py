@@ -1204,7 +1204,6 @@ class kemas_config(osv.osv):
         'use_attachments_in_im': fields.boolean('Use attachments in IM?', required=True, help='Do you want that the attachments to emails are also sent to the IM messages?'),
         'use_subject_in_im': fields.boolean('Use Subject in IM?', required=True, help='Do you want to include the matter in IM?'),
         'number_replacements': fields.integer('Number replacements'),
-        'integrate_collaborators_with_partners':fields.boolean('Integrar colaboradores con partners', required=False),
         #---Images and logos------------------------
         'logo': fields.binary('Logo', help='The reports Logo.'),
         'system_logo': fields.binary('System Logo', help='The System Logo.'),
@@ -2778,6 +2777,14 @@ class kemas_collaborator(osv.osv):
             res.append((record['id'], name))
         return res
     
+    def on_change_partner_id(self, cr, uid, ids, partner_id, first_names, last_names, state, context={}):
+        values = {}
+        if partner_id:
+            if not first_names or not last_names or state in ['creating']:
+                partner = self.pool['res.partner'].read(cr, uid, partner_id, ['name'])
+                values['first_names'], values['last_names'] = extras.get_short_name(partner['name'])
+        return {'value': values}
+    
     def on_change_first_names(self, cr, uid, ids, first_names, last_names, context={}):
         values = {}
         if first_names:
@@ -3230,6 +3237,13 @@ class kemas_collaborator(osv.osv):
         if vals.has_key('points'):
             return super(kemas_collaborator, self).create(cr, uid, vals, context)
         
+        md_obj = self.pool['ir.model.data']
+        partner_obj = self.pool['res.partner']
+        md_ids = md_obj.search(cr, uid, [('name', '=', 'res_partner_category_collaborator')])
+        if not md_ids:
+            raise osv.except_osv(u'¡Operación no válida!', u"No hay una categoria de partner para Colaborador.")
+        cat_collaborator_id = md_obj.read(cr, uid, md_ids[0], ['res_id'])['res_id']
+        
         # Procesar Nombre
         vals['first_names'] = extras.elimina_tildes(vals['first_names']).title()
         vals['last_names'] = extras.elimina_tildes(vals['last_names']).title()
@@ -3240,8 +3254,7 @@ class kemas_collaborator(osv.osv):
         vals['level_id'] = self.get_corresponding_level(cr, uid, self.get_initial_points(cr, uid))
         
         # Crear un partner
-        if not vals.get('partner_id', False):
-            collaborator_category_ids = self.pool.get('res.partner.category').search(cr, uid, [('name', '=', 'Colaborador'), ])
+        if not vals.get('partner_id'):
             vals_partner = {
                              'comment': vals.get('comment'),
                              'name': vals.get('name', False),
@@ -3251,16 +3264,21 @@ class kemas_collaborator(osv.osv):
                              'city': vals.get('city', False),
                              'state_id': vals.get('state_id', False),
                              'country_id': vals.get('country_id', False),
-                             'email' :vals.get('email', False),
+                             'email': vals.get('email', False),
                              'phone': vals.get('phone', False),
                              'fax': vals.get('fax', False),
                              'mobile': vals.get('mobile', False),
                              'personal_id': vals.get('personal_id'),
-                             'category_id':[(6, 0, collaborator_category_ids)]
+                             'category_id': [(6, 0, [cat_collaborator_id])]
                              }
-            vals['partner_id'] = self.pool.get('res.partner').create(cr, uid, vals_partner)
+            vals['partner_id'] = partner_obj.create(cr, uid, vals_partner)
+        else:
+            p_id = vals['partner_id']
+            partner = partner_obj.read(cr, uid, p_id, ['category_id'])
+            category_ids = list(set(partner['category_id'] + [cat_collaborator_id]))
+            partner_obj.write(cr, uid, [p_id], vals={'category_id': [(6, 0, category_ids)]})
         
-        #----Crear un codigo para la persona que se registre---------------------------------------------
+        # Crear un codigo para la persona que se registre
         seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Collaborator'), ])[0]
         vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
         
@@ -3275,8 +3293,6 @@ class kemas_collaborator(osv.osv):
         vals['state'] = 'Active'
 
         res_id = super(kemas_collaborator, self).create(cr, uid, vals, context)
-        # Agregar partner la etiqueta de partner
-        
         # Escribir el historial de puntos
         history_points_obj = self.pool.get('kemas.history.points')
         description = 'Se inicializa el registro.'
@@ -3331,7 +3347,23 @@ class kemas_collaborator(osv.osv):
                         'type' : 'low_importance',
                         }
                 self.pool.get('kemas.collaborator.logbook').create(cr, uid, vals_logbook)
-        return super(kemas_collaborator, self).write(cr, uid, ids, vals, context)
+        res = super(kemas_collaborator, self).write(cr, uid, ids, vals, context)
+        # Obtener el id de la categoria
+        md_obj = self.pool['ir.model.data']
+        partner_obj = self.pool['res.partner']
+        md_ids = md_obj.search(cr, uid, [('name', '=', 'res_partner_category_collaborator')])
+        if not md_ids:
+            raise osv.except_osv(u'¡Operación no válida!', u"No hay una categoria de partner para Colaborador.")
+        cat_collaborator_id = md_obj.read(cr, uid, md_ids[0], ['res_id'])['res_id']
+        
+        collaborators = self.read(cr, uid, ids, ['partner_id']) 
+        for collaborator in collaborators:
+            p_id = collaborator['partner_id'][0]
+            partner = partner_obj.read(cr, uid, p_id, ['category_id'])
+            category_ids = list(set(partner['category_id'] + [cat_collaborator_id]))
+            partner_obj.write(cr, uid, [p_id], vals={'category_id': [(6, 0, category_ids)]})
+        return res
+
 
     def _person_age(self, cr, uid, ids, name, arg, context={}):
         result = {}
@@ -3774,17 +3806,6 @@ class kemas_collaborator(osv.osv):
             result[record['id']] = count_all(record)
         return result
     
-    def _integrate_collaborators_with_partners(self, cr, uid, ids, name, arg, context={}): 
-        result = {}
-        config = self.pool.get('kemas.config').get_correct_config(cr, uid, ['integrate_collaborators_with_partners'])
-        if not config:
-            raise osv.except_osv(u'¡Advertencia!', u"No hay realizado las configuraciones del sistema.")
-        
-        res_config = {'integrate_collaborators_with_partners': config['integrate_collaborators_with_partners']}
-        for record_id in ids:
-            result[record_id] = res_config
-        return result
-    
     def _get_collaborator_photo_inv(self, cr, uid, record_id, name, value, fnct_inv_arg, context):
         if context is None or not context or not isinstance(context, (dict)): context = {}
         if not context.get('no_save_inv'):
@@ -3927,8 +3948,6 @@ class kemas_collaborator(osv.osv):
         'last_connection': fields.function(_last_connection, type='char', string='Ultima Conexion'),
         'progress': fields.function(get_percentage, type='float', string='Progress'),
         'replacements': fields.function(_replacements, type='integer', string='Replacements avaliable', help=u"Número de reemplazos que tiene aún disponibles para este mes"),
-        'integrate_collaborators_with_partners' : fields.function(_integrate_collaborators_with_partners, multi='all', type='boolean', string='integrate_collaborators_with_partners'),
-        
         #Suspensions----------------------------------------------------------------------------------------------------------
         'suspension_ids': fields.one2many('kemas.suspension', 'collaborator_id', 'Suspensions'),
         'day_remaining_suspension': fields.function(_get_days_remaining, type='char', string='Days remaining'),

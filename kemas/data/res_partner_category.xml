@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+   <data>
+      <record id="res_partner_category_collaborator" model="res.partner.category">
+         <field name="name">Colaborador</field>
+         <field name="active">1</field>
+      </record>
+   </data>
+</openerp>
+

@@ -291,6 +291,24 @@ def buid_username(names):
         username = unicode(dic_name[2][0]) + unicode(dic_name[3][0]) + unicode(dic_name[0] + unicode(dic_name[1][0]))
     return username
 
+def get_short_name(names):
+    dic_name = do_dic(names)
+    num_words = len(dic_name)
+    first_names = ''
+    last_names = ''
+    if num_words == 1:
+        first_names = dic_name[0]
+    elif num_words == 2:
+        first_names = dic_name[0]
+        last_names = dic_name[1]
+    elif num_words == 3:
+        first_names = dic_name[0]
+        last_names = dic_name[1] + ' ' + dic_name[2]
+    else:
+        first_names = dic_name[0] + ' ' + dic_name[1]
+        last_names = dic_name[2] + ' ' + dic_name[3]
+    return first_names.title(), last_names.title()
+
 def convert_hour_format_to_float(hour_str, seconds=False):
     hour = hour_str[:2]
     minutes = hour_str[3:5]

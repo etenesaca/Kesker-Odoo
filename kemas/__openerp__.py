@@ -43,10 +43,12 @@
     ],
     'data': [
         'data/planned_actions.xml',
+        'data/res_partner_category.xml',
         'security/kemas_security.xml',
         'security/ir.model.access.csv',
         # 'report/reports.xml',
         'kemas_view.xml',
+        'res_partner_view.xml',
         'controllers/kemas_sequence.xml',
         # 'kemas_installer.xml',
         'wizard/kemas_collaborator_send_notifications_wizard_view.xml',

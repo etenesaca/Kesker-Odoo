@@ -1360,7 +1360,6 @@
                            <button string="Cortar fotos y logos" name="crop_photo" type="object" icon="gtk-cut" />
                         </div>
                         <group colspan="4" col="6">
-                           <field name="integrate_collaborators_with_partners" colspan="6" />
                            <field name="default_points" colspan="2" />
                            <field name="number_replacements" colspan="2" />
                            <group colspan="2" />
@@ -2234,7 +2233,6 @@
             <form string="Collaborator" version="7.0">
                <field name="notified" invisible="1" />
                <field name="user_id" invisible="1" />
-               <field name="integrate_collaborators_with_partners" invisible="1" />
                <field name="name" invisible="1" />
                <header>
                   <div>
@@ -2335,7 +2333,6 @@
                      <page id="personal_info" string="Personal Information">
                         <group style="margin-bottom: -8px">
                            <group>
-                              <field name="partner_id" invisible="0" required="0" placeholder="Partner relacionado" attrs="{'invisible':[('integrate_collaborators_with_partners','=',False)]}" />
                               <field name="code" readonly="1" />
                               <field name="marital_status" required="1" />
                               <field name="personal_id" on_change="on_change_personal_id(personal_id)" placeholder="CI/PASS" />
@@ -2344,6 +2341,7 @@
                               <field name="birth" on_change="on_change_birth(birth)" required="1" placeholder="Fecha" />
                               <field name="age" required="1" readonly="1" />
                               <field name="gender" required="1" placeholder=" -- " />
+                              <field name="partner_id" on_change="on_change_partner_id(partner_id,first_names,last_names,state)" attrs="{'required':[('state','!=','creating')]}" placeholder="Partner relacionado" />
                            </group>
                            <group>
                               <label for="street" string="Dirección" />
@@ -5130,38 +5128,6 @@
             </p>
          </field>
       </record>
-      <!--____________________________________________________Personas -->
-      <record model="ir.actions.act_window" id="res_partner_action">
-         <field name="name">Personas</field>
-         <field name="type">ir.actions.act_window</field>
-         <field name="res_model">res.partner</field>
-         <field name="view_mode">kanban,tree,form</field>
-         <field name="domain">[('is_company','=',False)]</field>
-         <field name="help" type="html">
-            <p class="oe_view_nocontent_create">
-               De click aquí para agregar una Nueva Persona.
-            </p>
-            <p>
-
-            </p>
-         </field>
-      </record>
-      <!--____________________________________________________Personas -->
-      <record model="ir.actions.act_window" id="res_partner_category_action">
-         <field name="name">Categorías</field>
-         <field name="type">ir.actions.act_window</field>
-         <field name="res_model">res.partner.category</field>
-         <field name="view_mode">tree,form</field>
-         <field name="help" type="html">
-            <p class="oe_view_nocontent_create">
-               De click aquí para agregar una Nueva Categoría de Personas.
-            </p>
-            <p>
-
-            </p>
-         </field>
-      </record>
-
       <!--
          ====================
          WIZARDS
@@ -5491,15 +5457,6 @@
       <menuitem action="kemas_attendance_form_action" name="Asistencias" id="menu_kemas_attendance" parent="menu_kemas_calendar_menu" sequence="4" groups="group_kemas_manager,group_kemas_admin,group_kemas_register_attedance" />
       <!--_____________Replacements -->
       <menuitem action="kemas_event_replacement_form_action" name="Historial de reemplazos" id="menu_kemas_event_replacement" parent="menu_kemas_calendar_menu" sequence="5" groups="group_kemas_manager,group_kemas_admin,group_kemas_register_attedance" />
-      <!--
-
-         >>>>>>>>>>>>>>>>>>>>>>>>>>Gestión de personas
-      -->
-      <menuitem id="menu_kemas_persons" name="Gestión de personas" parent="menu_kemas_manager_root" sequence="4" />
-      <!-- Personas -->
-      <menuitem action="res_partner_action" id="res_partner_menu" parent="menu_kemas_persons" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
-      <!-- Categorías de personas -->
-      <menuitem action="res_partner_category_action" id="res_partner_category_menu" parent="menu_kemas_persons" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
 
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Acciones
