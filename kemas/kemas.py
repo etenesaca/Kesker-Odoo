@@ -2833,8 +2833,20 @@ class kemas_collaborator(osv.osv):
         values = {}
         if partner_id:
             if not first_names or not last_names or state in ['creating']:
-                partner = self.pool['res.partner'].read(cr, uid, partner_id, ['name'])
+                fields_partner = ['name', 'partner', 'street', 'street2', 'city', 'state_id', 'country_id', 'phone', 'fax', 'mobile', 'email']
+                partner = self.pool['res.partner'].read(cr, uid, partner_id, fields_partner)
                 values['first_names'], values['last_names'] = extras.get_short_name(partner['name'])
+                values.update({
+                               'street': partner['street'],
+                               'street2': partner['street2'],
+                               'city': partner['city'],
+                               'state_id': partner['state_id'] and partner['state_id'][0],
+                               'country_id': partner['country_id'] and partner['country_id'][0],
+                               'phone': partner['phone'],
+                               'fax': partner['fax'],
+                               'mobile': partner['mobile'],
+                               'email': partner['email'],
+                               })            
         return {'value': values}
     
     def on_change_first_names(self, cr, uid, ids, first_names, last_names, context={}):
