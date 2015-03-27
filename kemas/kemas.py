@@ -4490,6 +4490,24 @@ class kemas_event_collaborator_line(osv.osv):
         return self.name_get(cr, uid, ids, context)
     
     def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context={}, orderby=False, lazy=True):
+        if context.has_key('search_this_month'):
+            context.pop('search_this_month')
+        items_to_remove = []
+        for arg in domain:
+            try:
+                if arg[0] == 'ctx':
+                    foo = arg[2].split(':')
+                    context.update({foo[0]: True})
+                    items_to_remove.append(arg)
+                else:
+                    if arg[0] and arg[0][0] == 'ctx':
+                        foo = arg[2].split(':')
+                        context.update({foo[0]: True})
+                        items_to_remove.append(arg)
+            except:
+                None
+        for item in items_to_remove:
+            domain.remove(item)
         res_ids = self.search(cr, uid, domain, context=context)
         result = super(kemas_event_collaborator_line, self).read_group(cr, uid, domain + [('id', 'in', res_ids)], fields, groupby, offset, limit, context, orderby, lazy)
         return result

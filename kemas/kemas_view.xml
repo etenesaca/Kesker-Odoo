@@ -3789,9 +3789,9 @@
          <field name="name">kemas.event.collaborator.line.graph</field>
          <field name="model">kemas.event.collaborator.line</field>
          <field name="arch" type="xml">
-            <graph string="Collaborators" type="radar">
-               <field name="collaborator_id" />
-               <field name="count" operator="*" />
+            <graph string="Collaborators" type="pie">
+               <field name="collaborator_id" type="row" />
+               <field name="count" operator="*" type="measure" />
             </graph>
          </field>
       </record>
@@ -3808,10 +3808,10 @@
                <field name="search_start" context="{'search_start':True}" />
                <field name="search_end" context="{'search_end':True}" />
                <separator />
-               <filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" help="Buscar todos los registros guardados ayer" />
-               <filter name="today" string="Hoy" context="{'search_today':True}" help="Buscar todos los registros guardados hoy" />
-               <filter name="this_week" string="Esta semana" context="{'search_this_week':True}" help="Buscar todos los registros guardados en esta semana" />
-               <filter name="this_month" string="Este mes" context="{'search_this_month':True}" help="Buscar todos los registros guardados durante este mes" />
+               <filter name="yesterday" string="Ayer" context="{'search_yesterday':True}" domain="[('ctx','=','search_yesterday:True')]" help="Buscar todos los registros guardados ayer" />
+               <filter name="today" string="Hoy" context="{'search_today':True}" domain="[('ctx','=','search_today:True')]" help="Buscar todos los registros guardados hoy" />
+               <filter name="this_week" string="Esta semana" context="{'search_this_week':True}" domain="[('ctx','=','search_this_week:True')]" help="Buscar todos los registros guardados en esta semana" />
+               <filter name="this_month" string="Este mes" context="{'search_this_month':True}" domain="[('ctx','=','search_this_month:True')]" help="Buscar todos los registros guardados durante este mes" />
                <separator />
                <field name="date_start" default_focus="1" />
                <field name="collaborator_id" />
