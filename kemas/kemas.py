@@ -2833,7 +2833,7 @@ class kemas_collaborator(osv.osv):
         values = {}
         if partner_id:
             if not first_names or not last_names or state in ['creating']:
-                fields_partner = ['name', 'partner', 'street', 'street2', 'city', 'state_id', 'country_id', 'phone', 'fax', 'mobile', 'email']
+                fields_partner = ['name', 'image', 'street', 'street2', 'city', 'state_id', 'country_id', 'phone', 'fax', 'mobile', 'email']
                 partner = self.pool['res.partner'].read(cr, uid, partner_id, fields_partner)
                 values['first_names'], values['last_names'] = extras.get_short_name(partner['name'])
                 values.update({
@@ -2846,7 +2846,9 @@ class kemas_collaborator(osv.osv):
                                'fax': partner['fax'],
                                'mobile': partner['mobile'],
                                'email': partner['email'],
-                               })            
+                               })
+                if partner['image']:
+                    values['photo'] = partner['image']          
         return {'value': values}
     
     def on_change_first_names(self, cr, uid, ids, first_names, last_names, context={}):
@@ -4499,11 +4501,6 @@ class kemas_event_collaborator_line(osv.osv):
                     foo = arg[2].split(':')
                     context.update({foo[0]: True})
                     items_to_remove.append(arg)
-                else:
-                    if arg[0] and arg[0][0] == 'ctx':
-                        foo = arg[2].split(':')
-                        context.update({foo[0]: True})
-                        items_to_remove.append(arg)
             except:
                 None
         for item in items_to_remove:
