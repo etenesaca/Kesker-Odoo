@@ -1,3 +1,3 @@
-[![Build Status](https://travis-ci.org/etenesaca/kemas-OpenERP.svg?branch=master)](https://travis-ci.org/etenesaca/kemas-OpenERP)
+[![Build Status](https://travis-ci.org/etenesaca/Kesker-Odoo.svg?branch=v8.0)](https://travis-ci.org/etenesaca/Kesker-Odoo)
 
-# ke+
+# Kesker

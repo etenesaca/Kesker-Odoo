@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+   <data>
+      <!--
+         ====================
+         WIZARD CLOSE PAST EVENTS
+         ====================
+      -->
+      <!--____________________________________________________Vista de Formulario -->
+      <record model="ir.ui.view" id="kemas_close_past_event_wizard_form_view">
+         <field name="name">kemas.close.past.event.wizard.form</field>
+         <field name="model">kemas.close.past.event.wizard</field>
+         <field name="type">form</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="Cerrar eventos pasados" version="7.0">
+               <header attrs="{'invisible':['|',('line_ids','=',[]),('state','!=','loaded')]}">
+                  <field name="state" invisible="1" />
+                  <button name="load_form" type="object" string="Reload Past Events" icon="STOCK_REFRESH" colspan="4" />
+               </header>
+               <div align="center">
+                  <button name="load_form" type="object" string="Load Past Events" icon="STOCK_EXECUTE" colspan="4" states="loading" class="oe_link" />
+               </div>
+               <group colspan="4" expand="1" col="4" states="loaded">
+                  <div align="center" class="box_tip" attrs="{'invisible':[('line_ids','=',[])]}">
+                     <img src="/web/static/src/img/icons/gtk-info.png" />
+                     <i>
+                        <label string="Here you can see the events that have already been completed but have not yet been closed, it is recommended that close or wait for the end system." />
+                     </i>
+                  </div>
+                  <group colspan="4" attrs="{'invisible':[('line_ids','=',[])]}">
+                     <separator string="Past events to close" colspan="4" />
+                     <field name="line_ids" colspan="4" nolabel="1" readonly="1" />
+                  </group>
+                  <div align="center" attrs="{'invisible':[('line_ids','!=',[])]}">
+                     <br />
+                     <img src="/web/static/src/img/icons/gtk-info.png" />
+                     <b>
+                        <label string="There are no events to close!" />
+                     </b>
+                     <br />
+                     <br />
+                     <button name="load_form" type="object" string="Reload Past Events" icon="STOCK_REFRESH" class="oe_link" colspan="4" />
+                     <br />
+                  </div>
+               </group>
+               <footer states="loaded">
+                  <button string="Close Past Events" name="close_events" type="object" class="oe_highlight" attrs="{'invisible':[('line_ids','=',[])]}" confirm="Are you sure that you want close these events now?" />
+                  <label string="or" attrs="{'invisible':[('line_ids','=',[])]}" />
+                  <button string="Aceptar" class="oe_link" special="cancel" />
+               </footer>
+            </form>
+         </field>
+      </record>
+      <!--
+         ====================
+         WIZARD CLOSE PAST EVENTS LINE
+         ====================
+      -->
+      <!--____________________________________________________Vista de Formulario -->
+      <record model="ir.ui.view" id="kemas_close_past_event_line_wizard_form_view">
+         <field name="name">kemas.close.past.event.line.wizard.form</field>
+         <field name="model">kemas.close.past.event.line.wizard</field>
+         <field name="type">form</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="Close Past Events">
+               <field name="event_id" />
+            </form>
+         </field>
+      </record>
+      <!--____________________________________________________Vista de Arbol -->
+      <record model="ir.ui.view" id="kemas_close_past_event_line_wizard_tree_view">
+         <field name="name">kemas.close.past.event.line.wizard.tree</field>
+         <field name="model">kemas.close.past.event.line.wizard</field>
+         <field name="type">tree</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <tree string="" colors="blue:state=='draft';">
+               <field name="code" />
+               <field name="date_create" />
+               <field name="service_id" />
+               <field name="date_start" />
+               <field name="date_end" />
+               <field name="state" />
+            </tree>
+         </field>
+      </record>
+      <!--
+         ====================
+         MENSAJE
+         ====================
+      -->
+      <record model="ir.ui.view" id="kemas_message_closing_begun_wizard_form_view">
+         <field name="name">kemas.message.closing.begun.wizard.form</field>
+         <field name="model">kemas.message.closing.begun.wizard</field>
+         <field name="type">form</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="">
+               <group colspan="4" string=" ">
+                  <label string="Closing of events has begun..." colspan="4" align="10.10" />
+               </group>
+               <separator string="" colspan="4" />
+               <group colspan="4" expand="1" col="8">
+                  <group colspan="4" expand="1" col="4" />
+                  <button special="cancel" string="Aceptar" icon="kanban-apply" />
+               </group>
+            </form>
+         </field>
+      </record>
+   </data>
+</openerp>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+   <data>
+      <!--
+         ====================
+         WIZARD SET POINTS STEP 1
+         ====================
+      -->
+      <!--____________________________________________________Vista de Formulario -->
+      <record model="ir.ui.view" id="kemas_set_points_step1_wizard_form_view">
+         <field name="name">kemas.set.points.step1.wizard.form</field>
+         <field name="model">kemas.set.points.step1.wizard</field>
+         <field name="type">form</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="INCREASE / DECREASE POINTS" version="7.0">
+               <header>
+                  <field name="state" widget="statusbar" statusbar_visible="step1,step2,step3,step4,step5,step6" statusbar_colors='{"step1":"green","step2":"green","step3":"green","step4":"green","step5":"green","step6":"green"}' />
+               </header>
+               <br />
+               <div align="center" class="box_tip">
+                  <img src="/web/static/src/img/icons/gtk-info.png" />
+                  <i>
+                     <label string="Select all collaborators to whom you will add or remove points, you can select all you want." />
+                  </i>
+               </div>
+               <separator string="SELECTION OF COLLABORATORS" colspan="20" />
+               <group colspan="2" col="20">
+                  <field name="type" colspan="4" />
+                  <group colspan="16"></group>
+               </group>
+               <group colspan="2">
+                  <field name="collaborator_ids" domain="[('state','=','Active')]" colspan="4" context="{'search_view_ref' : 'kemas.kemas_collaborator_search_view2','tree_view_ref' : 'kemas.kemas_collaborator_tree_view6'}" nolabel="1" />
+               </group>
+               <footer>
+                  <button string="Siguiente" name="do_next" icon="gtk-go-forward" type="object" class="oe_highlight" />
+                  <b> ó </b>
+                  <button string="Cancelar" class="oe_link" special="cancel" />
+               </footer>
+            </form>
+         </field>
+      </record>
+      <!--
+         ====================
+         WIZARD SET POINTS STEP 2
+         ====================
+      -->
+      <!--____________________________________________________Vista de Formulario -->
+      <record model="ir.ui.view" id="kemas_set_points_step2_wizard_form_view">
+         <field name="name">kemas.set.points.step2.wizard.form</field>
+         <field name="model">kemas.set.points.step2.wizard</field>
+         <field name="type">form</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="INCREASE / DECREASE POINTS" version="7.0">
+               <header>
+                  <field name="state" widget="statusbar" statusbar_visible="step1,step2,step3,step4,step5,step6" statusbar_colors='{"step1":"green","step2":"green","step3":"green","step4":"green","step5":"green","step6":"green"}' />
+               </header>
+               <br />
+               <div align="center" class="box_tip">
+                  <img src="/web/static/src/img/icons/gtk-info.png" />
+                  <i>
+                     <label string="It is advisable to write a clear description to indicate the reason for modification points." />
+                  </i>
+               </div>
+               <field name="type" invisible="1" />
+               <separator string="REMOVE POINTS" colspan="4" attrs="{'invisible':[('type','=','increase')]}" />
+               <separator string="ADD POINTS" colspan="4" attrs="{'invisible':[('type','=','decrease')]}" />
+               <group>
+                  <field name="new_points" placeholder="# points" required="1" />
+                  <field name="description" placeholder="Type a clear description" required="1" />
+               </group>
+               <footer>
+                  <button string="Guardar" name="save" type="object" class="oe_highlight" confirm="Are you dure to save the changes now?" />
+                  <b> ó </b>
+                  <button string="Cancelar" class="oe_link" special="cancel" />
+               </footer>
+            </form>
+         </field>
+      </record>
+   </data>
+</openerp>

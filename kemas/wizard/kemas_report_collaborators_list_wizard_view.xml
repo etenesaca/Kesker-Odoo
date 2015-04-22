@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+   <data>
+      <!--
+         ====================
+         REPORT COLLABORATORS LIST
+         ====================
+      -->
+      <!--____________________________________________________Vista de Formulario -->
+      <record model="ir.ui.view" id="kemas_report_collaborators_list_wizard_form_view">
+         <field name="name">kemas.report.collaborators.list.wizard.form</field>
+         <field name="model">kemas.report.collaborators.list.wizard</field>
+         <field name="type">form</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="Collaborator list" version="7.0">
+               <div align="center" class="box_tip">
+                  <img src="/web/static/src/img/icons/gtk-info.png" />
+                  <i>
+                     <label string="Here you can get a list of collaborators registered in the system. You can choose the information to be printed on the report by checking the fields." />
+                  </i>
+               </div>
+               <group colspan="4" col="10">
+                  <group colspan="1">
+                     <img src="/kemas/static/src/img/icons/report.png" />
+                  </group>
+                  <group colspan="9" col="20">
+                     <group colspan="20">
+                        <group colspan="4" col="4">
+                           <field name="type_collaborators_to_select" colspan="2" required="1" />
+                           <field name="team_id" colspan="2" attrs="{'invisible':[('type_collaborators','!=','collaborators')]}" widget="selection" />
+                           <group colspan="2" />
+                        </group>
+                        <separator string="Campos a incluir en el reporte" colspan="20" />
+                        <group colspan="4" expand="1" col="6">
+                           <group colspan="2" expand="1" col="4">
+                              <field name="fl_code" colspan="4" />
+                              <field name="fl_name" colspan="4" />
+                              <field name="fl_mobile" colspan="4" />
+                              <field name="fl_phone" colspan="4" />
+                              <field name="fl_birth" colspan="4" />
+                           </group>
+                           <group colspan="2" expand="1" col="4">
+                              <field name="fl_age" colspan="4" />
+                              <field name="fl_email" colspan="4" />
+                              <field name="fl_address" colspan="4" />
+                           </group>
+                           <group colspan="2" expand="1" col="4" attrs="{'invisible':[('type_collaborators','!=','collaborators')]}">
+                              <field name="fl_join_date" colspan="4" />
+                              <field name="fl_age_in_ministry" colspan="4" />
+                              <field name="fl_points" colspan="4" />
+                              <field name="fl_team" colspan="4" />
+                              <field name="fl_level" colspan="4" />
+                              <field name="fl_state" colspan="4" />
+                           </group>
+                        </group>
+                     </group>
+                  </group>
+               </group>
+               <footer>
+                  <button string="Print report" name="call_report" type="object" class="oe_highlight" icon="STOCK_PRINT" confirm="Are you sure you print the report now?" />
+                  <label string="o" />
+                  <button string="Cancelar" class="oe_link" special="cancel" />
+               </footer>
+            </form>
+         </field>
+      </record>
+   </data>
+</openerp>
