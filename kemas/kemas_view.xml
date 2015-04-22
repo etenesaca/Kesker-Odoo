@@ -4323,7 +4323,8 @@
             <form string="Attendance" version="7.0" edit="0" create="0" delete="0">
                <sheet string="Attendance">
                   <group colspan="4" expand="1" col="10">
-                     <field name="register_type" />
+                     <field name="register_type" colspan="7" />
+                     <field name="card_use" colspan="3" />
                      <newline />
                      <field name="collaborator_id" colspan="7" readonly="1" />
                      <field name="user_id" colspan="3" readonly="1" />

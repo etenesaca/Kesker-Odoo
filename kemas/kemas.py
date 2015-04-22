@@ -39,6 +39,7 @@ from openerp.addons.kemas import kemas_extras as extras
 from openerp.api import Environment
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
+from reportlab.platypus.flowables import cdeepcopy
 
 
 _logger = logging.getLogger(__name__)
@@ -5944,40 +5945,58 @@ class kemas_attendance(osv.osv):
                 args.remove(item)
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
     
-    def register_attendance(self, cr, uid, username, password, context={}):
-        from openerp.service import security
+    def _register_attendance(self, cr, uid, collaborator_id, username, context={}):
         '''
         r_1    Error en logeo
         r_2    Logueo correcto pero este Usuario no pertenece a un Colaborador
         r_3    El colaborador no esta asignado para este evento
         r_4    No hay eventos para registrar la asistencia
+        r_5    Ya se registro al entrada
+        r_6    Ya se registro la salida
+        r_7    Codigo Inexistente
         '''
+        vals = {'collaborator_id': collaborator_id}
+        context['with_register_type'] = True
+        res = self.create(cr, uid, vals, context)
+        if res == 'no event':
+            _logger.warn("'%s'. No hay Eventos registrar asistencias. %s" % (username, "REGISTRO DE ASISTENCIA"))
+            return 'r_4'
+        elif res == 'no envolved':
+            _logger.warn("'%s' no esta registrado en este Evento. %s" % (username, "REGISTRO DE ASISTENCIA"))
+            return 'r_3'
+        elif res == 'already register':
+            _logger.warn("'%s' Ya marco un registro de Entrada. %s" % (username, "REGISTRO DE ASISTENCIA"))
+            return 'r_5'
+        elif res == 'already checkout':
+            _logger.warn("'%s' Ya marco un registro de Salida. %s" % (username, "REGISTRO DE ASISTENCIA"))
+            return 'r_6'
+        else:
+            if res['register_type'] == 'checkin':
+                _logger.info("'%s' Marco ENTRADA. %s" % (username, "REGISTRO DE ASISTENCIA"))
+            else:
+                _logger.info("'%s' marco SALIDA. %s" % (username, "REGISTRO DE ASISTENCIA"))
+            return res
+        return res
+    
+    def register_attendance_with_card(self, cr, uid, code, context={}):
+        collaborator_obj = self.pool['kemas.collaborator']
+        collaborator_ids = collaborator_obj.search(cr, uid, [('code', '=', code)], limit=1)
+        if collaborator_ids:
+            username = collaborator_obj.read(cr, uid, collaborator_ids[0], ['username'])['username']
+            context['card_use'] = True
+            return self._register_attendance(cr, uid, collaborator_ids[0], username, context)
+        else:
+            _logger.warning("'%s' Incorrect CODE. %s" % (code, "REGISTER ATTENDANCE"))
+            return 'r_7'
+    
+    def register_attendance(self, cr, uid, username, password, context={}):
+        from openerp.service import security
         collaborator_obj = self.pool.get('kemas.collaborator')
         user_id = security.login(cr.dbname, username, password)
         if user_id:
-            collaborator_ids = super(collaborator_obj.__class__, collaborator_obj).search(cr, uid, [('user_id', '=', user_id), ('state', '=', 'Active')])
+            collaborator_ids = super(collaborator_obj.__class__, collaborator_obj).search(cr, uid, [('user_id', '=', user_id), ('state', '=', 'Active')], limit=1)
             if collaborator_ids:
-                vals = {'collaborator_id': collaborator_ids[0]}
-                context['with_register_type'] = True
-                res = self.create(cr, uid, vals, context)
-                if res == 'no event':
-                    _logger.warn("'%s'. No hay Eventos registrar asistencias. %s" % (username, "REGISTRO DE ASISTENCIA"))
-                    return 'r_4'
-                elif res == 'no envolved':
-                    _logger.warn("'%s' no esta registrado en este Evento. %s" % (username, "REGISTRO DE ASISTENCIA"))
-                    return 'r_3'
-                elif res == 'already register':
-                    _logger.warn("'%s' Ya marco un registro de Entrada. %s" % (username, "REGISTRO DE ASISTENCIA"))
-                    return 'r_5'
-                elif res == 'already checkout':
-                    _logger.warn("'%s' Ya marco un registro de Salida. %s" % (username, "REGISTRO DE ASISTENCIA"))
-                    return 'r_6'
-                else:
-                    if res['register_type'] == 'checkin':
-                        _logger.info("'%s' Marco ENTRADA. %s" % (username, "REGISTRO DE ASISTENCIA"))
-                    else:
-                        _logger.info("'%s' marco SALIDA. %s" % (username, "REGISTRO DE ASISTENCIA"))
-                    return res
+                return self._register_attendance(cr, uid, collaborator_ids[0], username, context)
             else:
                 return 'r_2'
         else:
@@ -6002,6 +6021,7 @@ class kemas_attendance(osv.osv):
         vals['user_id'] = uid
         vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
         vals['event_id'] = current_event['current_event_id']
+        vals['card_use'] = context.get('card_use', False)
         
         preferences = config_obj.read(cr, uid, config_obj.get_correct_config(cr, uid), ['allow_checkout_registers'])
         
@@ -6135,6 +6155,7 @@ class kemas_attendance(osv.osv):
         
         'checkin_id':fields.many2one('kemas.attendance', 'Registro de Entrada', help=''),
         'checkout_id':fields.many2one('kemas.attendance', 'Registro de Salida', help=''),
+        'card_use':fields.boolean('Registro con tarjeta', required=False),
         }
     _sql_constraints = [
         ('uattendance_collaborator', 'unique (collaborator_id,event_id,register_type)', 'This collaborator has registered their attendance at this event!'),
