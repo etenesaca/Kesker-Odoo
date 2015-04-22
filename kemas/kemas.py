@@ -39,7 +39,6 @@ from openerp.addons.kemas import kemas_extras as extras
 from openerp.api import Environment
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
-from reportlab.platypus.flowables import cdeepcopy
 
 
 _logger = logging.getLogger(__name__)
