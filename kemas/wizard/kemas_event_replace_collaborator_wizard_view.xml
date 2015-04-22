@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+   <data>
+      <!--
+         ====================
+         WIZARD EVENT REPLACE COLLABORATOR
+         ====================
+      -->
+      <!--____________________________________________________Vista de Formulario -->
+      <record model="ir.ui.view" id="kemas_event_replace_collaborator_wizard_form_view">
+         <field name="name">kemas.event_replace_collaborator.wizard.form</field>
+         <field name="model">kemas.event_replace_collaborator.wizard</field>
+         <field name="type">form</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="event_replace COLLABORATORS" version="7.0">
+               <div align="center" class="box_tip">
+                  <img src="/web/static/src/img/icons/gtk-info.png" />
+                  <i>
+                     <label string="Here you can replace one or more collaborators of an event that is on going, remember that colaboradores have a monthly limit replacements." />
+                  </i>
+               </div>
+               <separator string="REPLACE COLLABORATORS" colspan="4" />
+               <group colspan="4" col="10">
+                  <field name="event_id" colspan="7" default_focus="1" domain="[('state','=','on_going')]" context="{'search_view_ref' : 'kemas.kemas_event_search_view2','tree_view_ref' : 'kemas.kemas_event_tree_view3'}" options='{"no_create": True}' placeholder="Evento" />
+                  <button name="load_collaborators" colspan="3" type="object" string="Load Collaborators" icon="gtk-execute" class="oe_highlight" />
+               </group>
+               <field name="line_ids" nolabel="1" colspan="4" />
+               <footer>
+                  <button string="Guardar" name="save" type="object" class="oe_highlight" confirm="Are you sure you save now these replacements now?" />
+                  <b> ó </b>
+                  <button string="Aceptar" class="oe_link" special="cancel" />
+               </footer>
+            </form>
+         </field>
+      </record>
+      <!--
+         ====================
+         WIZARD LINE
+         ====================
+      -->
+      <!--____________________________________________________Vista de Formulario -->
+      <record model="ir.ui.view" id="kemas_event_replace_collaborator_wizard_line_tree_view_form_view">
+         <field name="name">kemas.event_replace_collaborator.wizard.line.form</field>
+         <field name="model">kemas.event_replace_collaborator.wizard.line</field>
+         <field name="type">form</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="Collaborator">
+               <field name="collaborator_id" readonly="1" />
+               <field name="replacements" readonly="1" />
+               <field name="collaborator_replacement_id" />
+            </form>
+         </field>
+      </record>
+      <!--____________________________________________________Vista de Arbol -->
+      <record model="ir.ui.view" id="kemas_event_replace_collaborator_wizard_line_tree_view_tree_view">
+         <field name="name">kemas.event_replace_collaborator.wizard.line.tree</field>
+         <field name="model">kemas.event_replace_collaborator.wizard.line</field>
+         <field name="type">tree</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <tree string="" editable="bottom" colors="gray:replaced==True" delete="0" create="0">
+               <field name="except_ids" invisible="1" />
+               <field name="replaced" invisible="1" />
+               <field name="collaborator_id" readonly="1" colspan="0" />
+               <field name="replacements" readonly="1" colspan="0" />
+               <field name="collaborator_replacement_id" required="1" domain="[('state','=','Active')]" options='{"no_create": True}' context="{
+														'except_ids' : except_ids,							      
+										      			'event_collaborator_line_ids' : [],
+														'search_view_ref' : 'kemas.kemas_collaborator_search_view2',
+														'tree_view_ref' : 'kemas.kemas_collaborator_tree_view6',
+														}" attrs="{'readonly':['|',('replacements','=',0),('replaced','=',True)]}" colspan="4" />
+               <field name="description" required="1" attrs="{'readonly':['|',('replacements','=',0),('replaced','=',True)]}" />
+            </tree>
+         </field>
+      </record>
+   </data>
+</openerp>

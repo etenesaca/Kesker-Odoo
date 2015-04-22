@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+   <data>
+      <!--
+         ====================
+         CATEGORIAS DE PARTNER
+         ====================
+      -->
+      <!--____________________________________________________Vista de Formulario -->
+      <record model="ir.ui.view" id="res_partner_category_form">
+         <field name="name">res.partner.category.form</field>
+         <field name="model">res.partner.category</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="Categoría" version="7.0">
+               <sheet string="Categoría">
+                  <div class="oe_title">
+                     <div class="oe_edit_only">
+                        <label for="name" />
+                     </div>
+                     <h1>
+                        <field name="name" default_focus="1" placeholder="Nombre" />
+                     </h1>
+                  </div>
+                  <group>
+                     <group>
+                        <field name="active" />
+                        <field name="parent_id" placeholder="Categoría padre" />
+                     </group>
+                     <group />
+                  </group>
+               </sheet>
+            </form>
+         </field>
+      </record>
+      <!--____________________________________________________Personas -->
+      <record model="ir.actions.act_window" id="res_partner_action">
+         <field name="name">Personas</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">res.partner</field>
+         <field name="view_mode">kanban,tree,form</field>
+         <field name="domain">[('is_company','=',False)]</field>
+         <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+               De click aquí para agregar una Nueva Persona.
+            </p>
+            <p>
+
+            </p>
+         </field>
+      </record>
+      <!--____________________________________________________Categorias -->
+      <record model="ir.actions.act_window" id="res_partner_category_action">
+         <field name="name">Categorías</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">res.partner.category</field>
+         <field name="view_mode">tree,form</field>
+         <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+               De click aquí para agregar una Nueva Categoría de Personas.
+            </p>
+            <p>
+
+            </p>
+         </field>
+      </record>
+
+      <!--
+         >>>>>>>>>>>>>>>>>>>>>>>>>>Gestión de personas
+      -->
+      <menuitem id="menu_kemas_persons" name="Gestión de personas" parent="menu_kemas_manager_root" sequence="4" />
+      <!-- Personas -->
+      <menuitem action="res_partner_action" id="res_partner_menu" parent="menu_kemas_persons" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
+      <!-- Categorías de personas -->
+      <menuitem action="res_partner_category_action" id="res_partner_category_menu" parent="menu_kemas_persons" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
+   </data>
+</openerp>
