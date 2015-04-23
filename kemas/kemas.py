@@ -4411,6 +4411,17 @@ class kemas_service(osv.osv):
         ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
         return self.name_get(cr, uid, ids, context)
     
+    def copy(self, cr, uid, record_id, default=None, context={}):
+        if default is None or not default or not isinstance(default, (dict)): default = {}
+        if context is None or not context or not isinstance(context, (dict)): context = {}
+        
+        record_base = self.read(cr, uid, record_id, ['name'])
+        dict_update = {
+                       'name': record_base['name'] + ' (Copia)',
+                       }
+        default.update(dict_update)
+        return super(kemas_service, self).copy(cr, uid, record_id, default, context=context)
+    
     def write(self, cr, uid, ids, vals, context={}):
         if super(osv.osv, self).write(cr, uid, ids, vals, context):
             event_obj = self.pool.get('kemas.event')
