@@ -73,7 +73,7 @@ access_kemas_collaborator_web_site_kemas_collaborator,kemas.collaborator.web.sit
 access_kemas_collaborator_logbook_kemas_collaborator,kemas.collaborator.logbook,kemas.model_kemas_collaborator_logbook,group_kemas_collaborator,1,0,1,0
 access_kemas_suspension_kemas_collaborator,kemas.suspension,kemas.model_kemas_suspension,group_kemas_collaborator,1,0,0,0
 access_kemas_skill_kemas_collaborator,kemas.skill,kemas.model_kemas_skill,group_kemas_collaborator,1,0,0,0
-access_kemas_skill_line_kemas_collaborator,kemas.skill.line,kemas.model_kemas_skill_line,group_kemas_collaborator,1,0,0,0
+access_kemas_skill_line_kemas_collaborator,kemas.skill.line,kemas.model_kemas_skill_line,group_kemas_collaborator,1,1,1,1
 access_kemas_team_kemas_collaborator,kemas.team,kemas.model_kemas_team,group_kemas_collaborator,1,0,0,0
 access_kemas_collaborator_logbook_login_kemas_collaborator,kemas.collaborator.logbook.login,kemas.model_kemas_collaborator_logbook_login,group_kemas_collaborator,1,0,1,0
 ,,,,,,,
