@@ -2462,26 +2462,29 @@ class kemas_suspension(osv.osv):
         from datetime import datetime
         db = pooler.get_db(db_name)
         cr = db.cursor()
-        suspension_ids = self.search(cr, uid, [('state', '=', 'on_going')])
-        suspensions = self.read(cr, uid, suspension_ids, ['date_end', 'collaborator_id'])
-        count = 0
-        for suspension in suspensions:
-            tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
-            now = datetime.strptime(extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz), '%Y-%m-%d %H:%M:%S')
-            end_suspension = datetime.strptime(suspension['date_end'], '%Y-%m-%d %H:%M:%S')
-            date_start = now.date().__str__()
-            date_end = end_suspension.date().__str__()         
-            date_start = DateTime.strptime(date_start, '%Y-%m-%d')
-            date_end = DateTime.strptime(date_end, '%Y-%m-%d')
-            res = DateTime.Age (date_end, date_start)
-            if res.days < 1:
-                self.lift_by_collaborator(cr, uid, suspension['collaborator_id'][0])
-                count += 1
-        print """\n
-                 -------------------------------------------------------------------------------------------------------------------------
-                 ***************************************************[%d] Suspensions lifted**********************************************
-                 -------------------------------------------------------------------------------------------------------------------------\n""" % (count)
-        cr.commit()
+        
+        with Environment.manage():
+            suspension_ids = self.search(cr, uid, [('state', '=', 'on_going')])
+            suspensions = self.read(cr, uid, suspension_ids, ['date_end', 'collaborator_id'])
+            count = 0
+            for suspension in suspensions:
+                tz = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
+                now = datetime.strptime(extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), tz), '%Y-%m-%d %H:%M:%S')
+                end_suspension = datetime.strptime(suspension['date_end'], '%Y-%m-%d %H:%M:%S')
+                date_start = now.date().__str__()
+                date_end = end_suspension.date().__str__()         
+                date_start = DateTime.strptime(date_start, '%Y-%m-%d')
+                date_end = DateTime.strptime(date_end, '%Y-%m-%d')
+                res = DateTime.Age (date_end, date_start)
+                if res.days < 1:
+                    self.lift_by_collaborator(cr, uid, suspension['collaborator_id'][0])
+                    count += 1
+            if count:
+                print """\n
+                         -------------------------------------------------------------------------------------------------------------------------
+                         ***************************************************[%d] Suspensions lifted**********************************************
+                         -------------------------------------------------------------------------------------------------------------------------\n""" % (count)
+            cr.commit()
     
     def _get_days_remaining(self, cr, uid, ids, name, arg, context={}): 
         def get_days_remaining(collaborator):
