@@ -2221,7 +2221,7 @@ class kemas_level(osv.osv):
         'logo_medium': fields.binary('Medium Logo'),
         'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='Name of this level.'),
-        'previous_id': fields.many2one('kemas.level', 'Previous Level', help='Level that precedes this.'),
+        'previous_id': fields.many2one('kemas.level', 'Previous Level', required=False, ondelete='restrict', help='Level that precedes this.'),
         'points': fields.integer('Points', help="Number of points required to reach this level."),
         'first_level': fields.boolean('Is first level?', help="This box must be checked if this is the first level."),
         'collaborator_ids': fields.one2many('kemas.collaborator', 'level_id', 'Levels', help='Collaborators found at this level'),
@@ -4009,7 +4009,7 @@ class kemas_collaborator(osv.osv):
         'user_id': fields.many2one('res.users', 'User', help='Nombre de Usuario asignado con el que se conecta al sistema'),
         'login': fields.related('user_id', 'login', type='char', store=True, string='Username', readonly=1, help="Usuario asignado con el que se conecta al sistema"),
         'points': fields.integer('Points', help="Puntos que tiene actualmente"),
-        'level_id': fields.many2one('kemas.level', 'Level', help='Nivel en el que se encuantra por los puntos acumulados.'),
+        'level_id': fields.many2one('kemas.level', 'Nivel', required=False, ondelete='restrict', help='Nivel en el que se encuantra por los puntos acumulados.'),
         'notified': fields.selection([
             ('notified', 'Notified'),
             ('no_notified', 'No notified'),
