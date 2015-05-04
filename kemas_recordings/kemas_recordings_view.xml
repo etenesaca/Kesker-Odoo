@@ -614,21 +614,6 @@
          ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::ACTIONS::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       -->
-      <!--____________________________________________________Expositor -->
-      <record model="ir.actions.act_window" id="res_partner_expositor_form_action">
-         <field name="name">Expositors</field>
-         <field name="type">ir.actions.act_window</field>
-         <field name="res_model">res.partner</field>
-         <field name="view_mode">kanban,tree,form</field>
-         <field name="help" type="html">
-            <p class="oe_view_nocontent_create">
-               Click to register a Expositor.
-            </p>
-            <p>
-               The exhibitors are the emcees for the event.
-            </p>
-         </field>
-      </record>
       <!--____________________________________________________Etiquetas -->
       <record model="ir.actions.act_window" id="kemas_recording_tags_action">
          <field name="name">Etiquetas</field>
@@ -637,7 +622,7 @@
          <field name="view_mode">tree,form</field>
          <field name="help" type="html">
             <p class="oe_view_nocontent_create">
-               De click aquí para agregar una Nueva Etiqueta para poder buscar grabaciones.
+               De click aquí para agregar una Nueva Etiqueta para poder buscar Grabaciones.
             </p>
             <p>
 
