@@ -13,7 +13,7 @@
             <search string="Buscar Personas">
                <field name="name" filter_domain="['|','|',('display_name','ilike',self),('ref','=',self),('email','ilike',self)]" />
                <separator />
-               <filter string="Expositores" name="expositors" domain="[('category_id','ilike', 'Expositores')]" />
+               <filter string="Expositores" name="expositors" domain="[('category_id.name','=', 'Expositor')]" />
                <separator />
                <field name="user_id" />
                <field name="parent_id" domain="[('is_company','=',1)]" operator="child_of" />

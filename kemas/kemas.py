@@ -328,39 +328,9 @@ class kemas_massive_email(osv.osv):
         return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
     
     def _send_email(self, db_name, uid, message_id, email_list, collaborator_ids, message, subject, context={}):
-        def send_IMs():
-            def send_IM(collaborator):
-                try:
-                    body = config_obj.build_incorporation_string(cr, uid, unicode(preferences['Message_information_massive_email']), collaborator['id'])
-                    address = collaborator['im_account']
-                    if address == False:
-                        return None
-                    attachments_to_send = attachments
-                    if preferences['use_attachments_in_im'] == False:
-                        attachments_to_send = []
-                    subject_to_send = ""
-                    message = server_obj.build_email(preferences['reply_email'], [address], subject_to_send, body, [], None, preferences['reply_email'], attachments_to_send, None, None, False, 'plain')
-                    try:
-                        if server_obj.send_email(cr, uid, message): 
-                            _logger.info('Massive IM mail successfully sent to: %s', address)
-                            return True
-                        else:
-                            _logger.warning('Massive IM Failed to send email to: %s', address)
-                            return False
-                    except:
-                        _logger.warning('Massive IM Failed to send email to: %s', address)
-                        return False
-                except:
-                    return False
-                    
-            if preferences['send_IM_massive_email'] == False:return None
-            collaborator_obj = self.pool.get('kemas.collaborator')
-            collaborators = collaborator_obj.read(cr, uid, collaborator_ids, ['id', 'im_account'])
-            for collaborator in collaborators:
-                send_IM(collaborator)
-            
         db = pooler.get_db(db_name)
         cr = db.cursor()
+        
         #--------------------------------------------------------------------------------------------
         server_obj = self.pool.get('ir.mail_server')
         config_obj = self.pool.get('kemas.config')
@@ -400,9 +370,6 @@ class kemas_massive_email(osv.osv):
                     _logger.warning('Massive email Failed to send email to: %s', email)
             except:
                 _logger.warning('Massive email Failed to send email to: %s', email)
-        
-        # Por ahora ya no ve van a mandar los mensaje instantaneaos ya que facebook ya no los permite
-        # send_IMs()
         
     def send_email(self, cr, uid, ids, context={}):
         line_obj = self.pool.get('kemas.massive.email.line')
@@ -670,38 +637,9 @@ class kemas_config(osv.osv):
             except:
                 _logger.warning('Manual change points Notify Failed to send email to: %s', address)
                 return False
-        def send_IM():
-            try:
-                if type == 'add' or type == 'increase':
-                    if preferences['use_message_im_add_points'] == False:return None
-                    body = self.build_add_remove_points_string(cr, uid, preferences['Message_im_add_points'], collaborator_id, description, points)
-                else:
-                    if preferences['use_message_im_remove_points'] == False:return None
-                    body = self.build_add_remove_points_string(cr, uid, preferences['Message_im_remove_points'], collaborator_id, description, points)
-                address = collaborator['im_account']
-                if address == False:
-                    return None
-                subject_to_send = subject
-                if preferences['use_subject_in_im'] == False:
-                    subject_to_send = ""
-                message = server_obj.build_email(preferences['reply_email'], [], subject_to_send, body, [address], None, preferences['reply_email'], None, None, None, False, 'html')
-                try:
-                    if server_obj.send_email(cr, uid, message): 
-                        _logger.info('Manual change points Notify mail successfully sent to: %s', address)
-                        return True
-                    else:
-                        _logger.warning('Manual change points Notify Failed to send email to: %s', address)
-                        return False
-                except:
-                    _logger.warning('Manual change points Notify Failed to send email to: %s', address)
-                    return False
-            except: 
-                _logger.warning('Manual change points Notify Failed to send email to: %s', address)
-                return False
-            
-        server_obj = self.pool.get('ir.mail_server')
+
         collaborator_obj = self.pool.get('kemas.collaborator')
-        collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email', 'im_account'])
+        collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email'])
         #------------------------------------------------------------------------------------
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
@@ -713,8 +651,6 @@ class kemas_config(osv.osv):
         #------------------------------------------------------------------------------------
         subject = self.build_incorporation_string(cr, uid, preferences['Message_add_remove_points_subject'], collaborator_id)
         res_send_email = send_email()
-        # if res_send_email:
-        #    send_IM()
         return res_send_email
     
     def build_incorporation_string(self, cr, uid, message, collaborator_id):
@@ -781,36 +717,9 @@ class kemas_config(osv.osv):
             except:
                 _logger.warning('Incorporation Notify Failed to send email to: %s', address)
                 return False
-        def send_IM():
-            try:
-                if preferences['use_message_im_incorporation'] == False:return None
-                body = self.build_incorporation_string(cr, uid, unicode(preferences['Message_im_information_incorporation']), collaborator_id)
-                address = collaborator['im_account']
-                if address == False:
-                    return None
-                attachments_to_send = attachments
-                if preferences['use_attachments_in_im'] == False:
-                    attachments_to_send = []
-                subject_to_send = subject
-                if preferences['use_subject_in_im'] == False:
-                    subject_to_send = ""
-                message = server_obj.build_email(preferences['reply_email'], [address], subject_to_send, body, [], None, preferences['reply_email'], attachments_to_send, None, None, False, 'plain')
-                try:
-                    if server_obj.send_email(cr, uid, message): 
-                        _logger.info('Incorporation Notify mail successfully sent to: %s', address)
-                        return True
-                    else:
-                        _logger.warning('Incorporation Notify Failed to send email to: %s', address)
-                        return False
-                except:
-                    _logger.warning('Incorporation Notify Failed to send email to: %s', address)
-                    return False
-            except: 
-                _logger.warning('Incorporation Notify Failed to send email to: %s', address)
-                return False
-        server_obj = self.pool.get('ir.mail_server')
+
         collaborator_obj = self.pool.get('kemas.collaborator')
-        collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email', 'im_account'])
+        collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email'])
         #------------------------------------------------------------------------------------
         config_obj = self.pool.get('kemas.config')
         config_id = config_obj.get_correct_config(cr, uid)
@@ -826,8 +735,6 @@ class kemas_config(osv.osv):
         #------------------------------------------------------------------------------------
         subject = self.build_incorporation_string(cr, uid, preferences['Message_information_incorporation_subject'], collaborator_id)
         res_send_email = send_email()
-        # if res_send_email:
-        #    send_IM()
         return res_send_email
     
     def _build_event_completed_string(self, cr, uid, preferences, message, event_id, service_id, collaborator_id, type_attend):
@@ -1032,46 +939,19 @@ class kemas_config(osv.osv):
             except:
                 _logger.warning('Event completed Notify Failed to send email to: %s', address)
                 return False
-        def send_IM():
-            try:
-                if preferences['use_im_event_completion'] == False:return None
-                body = self.build_event_completed_string(cr, uid, preferences, event_id, service_id, collaborator_id, type_attend, True)
-                address = collaborator['im_account']
-                if address == False:
-                    return None
-                subject_to_send = subject
-                if preferences['use_subject_in_im'] == False:
-                    subject_to_send = ""
-                message = server_obj.build_email(preferences['reply_email'], [], subject_to_send, body, [address], None, preferences['reply_email'], None, None, None, False, 'plain')
-                try:
-                    if server_obj.send_email(cr, uid, message): 
-                        _logger.info('Event completed mail successfully sent to: %s', address)
-                        return True
-                    else:
-                        _logger.warning('Event completed Notify Failed to send email to: %s', address)
-                        return False
-                except:
-                    _logger.warning('Event completed Notify Failed to send email to: %s', address)
-                    return False
-            except: 
-                _logger.warning('Event completed Notify Failed to send email to: %s', address)
-                return False
         
+        config_obj = self.pool.get('kemas.config')
+        collaborator_obj = self.pool.get('kemas.collaborator')
         with Environment.manage():
-            server_obj = self.pool.get('ir.mail_server')
-            config_obj = self.pool.get('kemas.config')
-            collaborator_obj = self.pool.get('kemas.collaborator')
-            collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email', 'im_account'])
-            #------------------------------------------------------------------------------------
+            collaborator = collaborator_obj.read(cr, uid, collaborator_id, ['email'])
             config_id = config_obj.get_correct_config(cr, uid)
             preferences = config_obj.read(cr, uid, config_id, [])
             if preferences['mailing'] == False:
                 return False
-            #------------------------------------------------------------------------------------
+            
             subject = self._build_event_completed_string(cr, uid, preferences, preferences['message_event_completon_subject'], event_id, service_id, collaborator_id, type_attend)
             res_send_email = send_email()
-            # if res_send_email:
-            #    send_IM()
+
         return res_send_email
     
     def send_email_event(self, cr, uid, line_id, context={}):
@@ -1104,48 +984,20 @@ class kemas_config(osv.osv):
             except:
                 _logger.warning('New Event Notify Failed to send email to: %s', address)
                 return False
-        def send_IM():
-            try:
-                if preferences['use_message_im_event'] == False:return None
-                body = self.build_event_string(cr, uid, preferences['Message_im_information_event'], line_id)
-                address = collaborator['im_account']
-                if address == False:
-                    return None
-                subject_to_send = subject
-                if preferences['use_subject_in_im'] == False:
-                    subject_to_send = ""
-                message = server_obj.build_email(preferences['reply_email'], [], subject_to_send, body, [address], None, preferences['reply_email'], None, None, None, False, 'html')
-                try:
-                    if server_obj.send_email(cr, uid, message): 
-                        _logger.info('New Event Notify mail successfully sent to: %s', address)
-                        return True
-                    else:
-                        _logger.warning('New Event Notify Failed to send email to: %s', address)
-                        return False
-                except:
-                    _logger.warning('New Event Notify Failed to send email to: %s', address)
-                    return False
-            except: 
-                _logger.warning('New Event Notify Failed to send email to: %s', address)
-                return False
         
+        config_obj = self.pool.get('kemas.config')
+        collaborator_obj = self.pool.get('kemas.collaborator')
+        line_obj = self.pool.get('kemas.event.collaborator.line')
         with Environment.manage():
-            server_obj = self.pool.get('ir.mail_server')
-            config_obj = self.pool.get('kemas.config')
-            collaborator_obj = self.pool.get('kemas.collaborator')
-            line_obj = self.pool.get('kemas.event.collaborator.line')
             line = line_obj.read(cr, uid, line_id, ['collaborator_id', 'activity_ids', 'event_id'])
-            collaborator = collaborator_obj.read(cr, uid, line['collaborator_id'][0], ['email', 'im_account'])
-            #------------------------------------------------------------------------------------
+            collaborator = collaborator_obj.read(cr, uid, line['collaborator_id'][0], ['email'])
             config_id = config_obj.get_correct_config(cr, uid)
             preferences = config_obj.read(cr, uid, config_id, [])
             if preferences['mailing'] == False:
                 return False
-            #------------------------------------------------------------------------------------
+            
             subject = self.build_event_string(cr, uid, preferences['Message_information_event_subject'], line_id)
             res_send_email = send_email()
-            # if res_send_email:
-            #    send_IM()
             return res_send_email
             
     def get_correct_config(self, cr, uid, fields_to_read=False):
@@ -3287,15 +3139,16 @@ class kemas_collaborator(osv.osv):
     def _send_notification(self, db_name, uid, collaborator_id):
         db = pooler.get_db(db_name)
         cr = db.cursor()
-        config_obj = self.pool.get('kemas.config')
-        if config_obj.send_email_incoporation(cr, uid, collaborator_id):
-            vals = {'notified':'notified'}
-            cr.commit()
-            super(osv.osv, self).write(cr, uid, [collaborator_id], vals)
-        else:
-            vals = {'notified':'no_notified'}
-            cr.commit()
-            super(osv.osv, self).write(cr, uid, [collaborator_id], vals)
+        with Environment.manage():
+            config_obj = self.pool.get('kemas.config')
+            if config_obj.send_email_incoporation(cr, uid, collaborator_id):
+                vals = {'notified':'notified'}
+                cr.commit()
+                super(osv.osv, self).write(cr, uid, [collaborator_id], vals)
+            else:
+                vals = {'notified':'no_notified'}
+                cr.commit()
+                super(osv.osv, self).write(cr, uid, [collaborator_id], vals)
         cr.commit()
         
     def send_notification(self, cr, uid, collaborator_id, context={}):
@@ -3303,9 +3156,6 @@ class kemas_collaborator(osv.osv):
         threaded_sending.start()
     
     def create(self, cr, uid, vals, context={}):
-        if vals.has_key('points'):
-            return super(kemas_collaborator, self).create(cr, uid, vals, context)
-        
         md_obj = self.pool['ir.model.data']
         partner_obj = self.pool['res.partner']
         md_ids = md_obj.search(cr, uid, [('name', '=', 'res_partner_category_collaborator')])
@@ -3319,8 +3169,8 @@ class kemas_collaborator(osv.osv):
         vals['name'] = "%s %s" % (vals['first_names'], vals['last_names'],)
         
         vals['email'] = vals['email'] and unicode(vals['email']).lower().replace(' ', '') or ''
-        vals['points'] = self.get_initial_points(cr, uid)
-        vals['level_id'] = self.get_corresponding_level(cr, uid, self.get_initial_points(cr, uid))
+        vals['points'] = vals.get('points', self.get_initial_points(cr, uid))
+        vals['level_id'] = self.get_corresponding_level(cr, uid, vals['points'])
         
         # Crear un partner
         if not vals.get('partner_id'):
@@ -3334,10 +3184,10 @@ class kemas_collaborator(osv.osv):
                              'state_id': vals.get('state_id', False),
                              'country_id': vals.get('country_id', False),
                              'email': vals.get('email', False),
+                             'birthdate': vals.get('birth', False),
                              'phone': vals.get('phone', False),
                              'fax': vals.get('fax', False),
                              'mobile': vals.get('mobile', False),
-                             'personal_id': vals.get('personal_id'),
                              'category_id': [(6, 0, [cat_collaborator_id])]
                              }
             vals['partner_id'] = partner_obj.create(cr, uid, vals_partner)
@@ -3359,21 +3209,20 @@ class kemas_collaborator(osv.osv):
         apellido = unicode(extras.do_dic(vals['last_names'])[0]).title()
         name = u'''%s %s''' % (nick_name, apellido)
         vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, vals['email'], vals['code'], groups_ids[0], False, vals['partner_id'])['user_id']
-        vals['state'] = 'Active'
+        vals['state'] = vals.get('state', 'Active')
 
         res_id = super(kemas_collaborator, self).create(cr, uid, vals, context)
         # Escribir el historial de puntos
         history_points_obj = self.pool.get('kemas.history.points')
         description = 'Se inicializa el registro.'
-        points = vals['points']
-        summary = '+' + str(points) + ' Puntos.'
+        summary = '+' + str(vals['points']) + ' Puntos.'
         history_points_obj.create(cr, uid, {
                     'date': str(time.strftime("%Y-%m-%d %H:%M:%S")),
                     'collaborator_id': res_id,
                     'type': 'init',
                     'description': description,
                     'summary': summary,
-                    'points': points,
+                    'points': vals['points'],
                     })
         cr.commit()
         self.send_notification(cr, uid, res_id)
@@ -3957,7 +3806,7 @@ class kemas_collaborator(osv.osv):
     
     _name = 'kemas.collaborator'
     _columns = {
-        'partner_id':fields.many2one('res.partner', 'Partner relacionado', required=True, ondelete='cascade'),
+        'partner_id':fields.many2one('res.partner', 'Partner relacionado', required=False, ondelete='cascade'),
         'mailing': fields.function(mailing, type='boolean', string='Enviando Correos'),
         'code': fields.char('Code', size=32, help="Código que se le asigna a cada colaborador"),
         'personal_id' : fields.char('CI/PASS', size=15, help=u"Número de cédula o pasaporte",),
@@ -3972,7 +3821,7 @@ class kemas_collaborator(osv.osv):
         'name': fields.function(_get_name, fnct_inv=_get_name_inv, string="Nombres", type="char", store=_name_store_triggers, required=True, help="Nombres completos del Colaborador"),
         'nick_name': fields.char('Nick name', size=32, required=True, help="Nombre por el que le gusta ser llamado."),
         'name_with_nick_name': fields.function(_get_nick_name, type='char', string='Name'),
-        'birth': fields.date('Birth', help="Fecha de nacimiento"),
+        'birth': fields.related('partner_id', 'birthdate', type='date', string='Fecha de nacimiento', store=False),
         'birthday_date': fields.function(_get_birthday, type='char', string='Name'),
         'birthday': fields.function(_cal_birthday, type='datetime', string='Name'),
         'age' : fields.function(_ff_age, type='char', string='Edad', help="Edad del colaborador"),
