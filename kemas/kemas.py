@@ -111,6 +111,14 @@ class kemas_collaborator_logbook_login(osv.osv):
         }
     
 class kemas_func(osv.AbstractModel):
+    def get_id_by_ext_id(self, cr, uid, ext_id):
+        result = False
+        md_obj = self.pool['ir.model.data']
+        md_ids = md_obj.search(cr, uid, [('name', '=', ext_id)])
+        if md_ids:
+            result = md_obj.read(cr, uid, md_ids[0], ['res_id'])['res_id']
+        return result
+        
     def is_in_this_groups(self, cr, uid, group_ext_ids, user_id=False):
         user_obj = self.pool['res.users']
         md_obj = self.pool['ir.model.data']
@@ -266,20 +274,23 @@ class kemas_func(osv.AbstractModel):
         user_obj = self.pool.get('res.users')
         groups_obj = self.pool.get('res.groups')
         vals = {
-                'image' : photo,
-                'name': name,
                 'login': username,
                 'company_id': 1,
-                'user_email' : email,
                 'password': unicode(password).lower(),
                 'partner_id': partner_id,
-                'tz' : self.get_tz_by_uid(cr, uid)
                 }
-        user_id = user_obj.create(cr, uid, vals) 
+        if not partner_id:
+            vals['image'] = photo
+            vals['name'] = name
+            vals['email'] = email
+            vals['tz'] = self.get_tz_by_uid(cr, uid)
+        user_id = user_obj.create(cr, uid, vals, {'mail_create_nolog': True}) 
+        
         #--Borrar los grupos---------------------------
         groups_ids = groups_obj.search(cr, uid, [])
         vals_01 = {'groups_id':[(5, groups_ids)]}
         # --Asginar Roles correspondientes
+        
         user_obj.write(cr, uid, [user_id], vals_01)
         list_groups = [group]
         groups_obj = self.pool.get('res.groups')
@@ -2334,7 +2345,7 @@ class kemas_suspension(osv.osv):
             if count:
                 print """\n
                          -------------------------------------------------------------------------------------------------------------------------
-                         ***************************************************[%d] Suspensions lifted**********************************************
+                         ***************************************************[%d] Suspensiones Levantadas**********************************************
                          -------------------------------------------------------------------------------------------------------------------------\n""" % (count)
             cr.commit()
     
@@ -3156,12 +3167,12 @@ class kemas_collaborator(osv.osv):
         threaded_sending.start()
     
     def create(self, cr, uid, vals, context={}):
-        md_obj = self.pool['ir.model.data']
         partner_obj = self.pool['res.partner']
-        md_ids = md_obj.search(cr, uid, [('name', '=', 'res_partner_category_collaborator')])
-        if not md_ids:
+        f_obj = self.pool['kemas.func']
+        
+        cat_collaborator_id = f_obj.get_id_by_ext_id(cr, uid, 'res_partner_category_collaborator')
+        if not cat_collaborator_id:
             raise osv.except_osv(u'¡Operación no válida!', u"No hay una categoria de partner para Colaborador.")
-        cat_collaborator_id = md_obj.read(cr, uid, md_ids[0], ['res_id'])['res_id']
         
         # Procesar Nombre
         vals['first_names'] = extras.elimina_tildes(vals['first_names']).title()
@@ -3202,15 +3213,16 @@ class kemas_collaborator(osv.osv):
         vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
         
         # Asignar un usuario al colaborador
-        groups_obj = self.pool.get('res.groups')
-        groups_ids = groups_obj.search(cr, uid, [('name', '=', 'Kemas / Collaborator'), ])
+        collaborator_group_id = f_obj.get_id_by_ext_id(cr, uid, 'group_kemas_collaborator')
+        if not collaborator_group_id:
+            raise osv.except_osv(u'¡Operación no válida!', u"No hay un Grupo Colaborador definido.")
         
         nick_name = unicode(vals['nick_name']).title()
         apellido = unicode(extras.do_dic(vals['last_names'])[0]).title()
         name = u'''%s %s''' % (nick_name, apellido)
-        vals['user_id'] = self.pool.get('kemas.func').create_user(cr, uid, name, vals['email'], vals['code'], groups_ids[0], False, vals['partner_id'])['user_id']
+        vals['user_id'] = f_obj.create_user(cr, uid, name, vals['email'], vals['code'], collaborator_group_id, False, vals['partner_id'])['user_id']
         vals['state'] = vals.get('state', 'Active')
-
+        
         res_id = super(kemas_collaborator, self).create(cr, uid, vals, context)
         # Escribir el historial de puntos
         history_points_obj = self.pool.get('kemas.history.points')
@@ -3224,8 +3236,6 @@ class kemas_collaborator(osv.osv):
                     'summary': summary,
                     'points': vals['points'],
                     })
-        cr.commit()
-        self.send_notification(cr, uid, res_id)
         
         # Escribir una linea en la bitacora del Colaborador
         vals = {
