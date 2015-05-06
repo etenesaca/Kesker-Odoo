@@ -20,7 +20,7 @@
 #
 ##############################################################################
 {
-    'name': u'Modulo de Gestion de Grabaciones',
+    'name': u'Kesker - Modulo de Gestion de Grabaciones',
     'description': """.""",
     'version':'1.0',
     'author': 'EdgarSoft',

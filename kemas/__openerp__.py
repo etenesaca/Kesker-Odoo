@@ -20,7 +20,7 @@
 #
 ##############################################################################
 {
-    'name': 'Control de Asistencias, Tareas y Personal',
+    'name': 'Kesker - Control de Asistencias y Personal',
     'description': """Management Kemas Ministry that covers:
     Register Collaborators
     Recording Registry

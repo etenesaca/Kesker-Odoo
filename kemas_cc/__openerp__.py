@@ -20,9 +20,9 @@
 #
 ##############################################################################
 {
-    'name': u'Ke+ Centro Cristiano',
+    'name': u'Kesker - Centro Cristiano',
     'description': """
-    Este modulo contiene todas las personalizacion que se han hecho especificamente para el centro cristiano de cuenca
+    Este modulo contiene todas las personalizacion que se han hecho especificamente para el Centro Cristiano de Cuenca
     """,
     'version':'1.0',
     'author': 'EdgarSoft',
@@ -32,8 +32,7 @@
     ],
     'category':'Accounting & Finance',
     'init_xml': [],
-    'update_xml': [
-        'security/kemas_cc_security.xml',
+    'data': [
         'security/ir.model.access.csv',
         'kemas_cc_view.xml',
         ],

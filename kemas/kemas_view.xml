@@ -2385,7 +2385,7 @@
                            <field name="login" colspan="2" readonly="1" states="Active,Inactive" />
                            <field name="replacements" colspan="2" readonly="1" states="Active,Inactive" />
                         </group>
-                        <div>
+                        <div id="last_connection">
                            <br />
                            <label for="last_connection" />
                            <div>
@@ -2587,7 +2587,7 @@
                            <field name="login" colspan="2" readonly="1" states="Active,Inactive" />
                            <field name="replacements" colspan="2" readonly="1" states="Active,Inactive" />
                         </group>
-                        <div>
+                        <div id="last_connection">
                            <br />
                            <label for="last_connection" />
                            <div>

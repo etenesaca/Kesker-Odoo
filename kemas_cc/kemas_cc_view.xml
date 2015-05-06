@@ -11,36 +11,25 @@
          <field name="model">kemas.collaborator</field>
          <field name="inherit_id" ref="kemas.kemas_collaborator_form_view" />
          <field name="arch" type="xml">
-            <page id="status_info" position="replace">
-               <page id="kemas_info" string="Datos ke+" attrs="{'invisible':[('type','=','Others')]}">
-                  <group colspan="4" col="6">
-                     <field name="last_connection" string="Última conexión" colspan="6" readonly="1" />
-                     <separator string="Ministry datas" colspan="6" />
-                     <field name="team_id" colspan="2" />
-                     <field name="join_date" colspan="2" on_change="on_change_join_date(join_date)" attrs="{'required':[('type','=','Collaborator')]}" />
-                     <field name="end_service" readonly="1" widget="char" states="Inactive" colspan="2" />
-                     <field name="age_in_ministry" string="Time in the ministry" colspan="2" attrs="{'required':[('type','=','Collaborator')],'invisible':[('join_date','=',False)]}" readonly="1" />
-                     <newline />
-                     <field name="points" colspan="2" readonly="1" states="Active,Inactive" />
-                     <field name="level_id" colspan="2" readonly="1" states="Active,Inactive" />
-                     <newline />
-                     <field name="login" colspan="2" readonly="1" states="Active,Inactive" />
-                     <field name="replacements" colspan="2" readonly="1" states="Active,Inactive" />
-                  </group>
-                  <separator string="Ministerios" colspan="4" />
-                  <field name="ministry_ids" colspan="4" widget="many2many_tags" placeholder="Agregue aquí los minsiterios a los que pertenece el colaborador..." />
-                  <separator string="Cursos" colspan="4" />
-                  <field name="specialization_course_ids" colspan="4">
-                     <tree editable="bottom">
-                        <field name="course_id" options='{"no_open": True}' />
-                        <field name="level_id" options='{"no_open": True}' domain="[('course_id','=',course_id),]" />
-                     </tree>
-                  </field>
-                  <group colspan="4" col="4">
-                     <field name="mission" colspan="4" placeholder="The mission of the Collaborator" />
-                     <field name="vision" colspan="4" placeholder="The vision of the collaborator" />
-                  </group>
-               </page>
+            <div id="last_connection" position="before">
+               <separator string="Ministerios" colspan="4" />
+               <field name="ministry_ids" colspan="4" widget="many2many_tags" placeholder="Agregue aquí los ministerios a los que pertenece el colaborador..." options='{"no_create": True}' />
+               <separator string="Cursos" colspan="4" />
+               <field name="specialization_course_ids" colspan="4">
+                  <tree editable="bottom">
+                     <field name="course_id" options='{"no_create": True}' />
+                     <field name="level_id" options='{"no_open": True, "no_create": True}' domain="[('course_id','=',course_id),]" />
+                  </tree>
+               </field>
+               <group>
+                  <label for="mission" />
+                  <field name="mission" colspan="4" nolabel="1" placeholder="Misión" />
+                  <label for="vision" />
+                  <field name="vision" colspan="4" nolabel="1" placeholder="Visión" />
+               </group>
+            </div>
+            <page id="status_info" position="attributes">
+               <attribute name="string">Datos Ke+</attribute>
             </page>
          </field>
       </record>
@@ -55,35 +44,25 @@
          <field name="model">kemas.collaborator</field>
          <field name="inherit_id" ref="kemas.kemas_collaborator_form_view_me" />
          <field name="arch" type="xml">
-            <page id="status_info" position="replace">
-               <page id="kemas_info" string="Datos ke+" attrs="{'invisible':[('type','=','Others')]}">
-                  <group colspan="4" col="6">
-                     <separator string="Ministry datas" colspan="6" />
-                     <field name="team_id" colspan="2" />
-                     <field name="join_date" colspan="2" on_change="on_change_join_date(join_date)" attrs="{'required':[('type','=','Collaborator')]}" />
-                     <field name="end_service" readonly="1" widget="char" states="Inactive" colspan="2" />
-                     <field name="age_in_ministry" string="Time in the ministry" colspan="2" attrs="{'required':[('type','=','Collaborator')],'invisible':[('join_date','=',False)]}" readonly="1" />
-                     <newline />
-                     <field name="points" colspan="2" readonly="1" states="Active,Inactive" />
-                     <field name="level_id" colspan="2" readonly="1" states="Active,Inactive" options='{"no_open": True}' />
-                     <newline />
-                     <field name="login" colspan="2" readonly="1" states="Active,Inactive" />
-                     <field name="replacements" colspan="2" readonly="1" states="Active,Inactive" />
-                  </group>
-                  <separator string="Ministerios" colspan="4" />
-                  <field name="ministry_ids" colspan="4" widget="many2many_tags" placeholder="Agregue aquí los minsiterios a los que pertenece el colaborador..." />
-                  <separator string="Cursos" colspan="4" />
-                  <field name="specialization_course_ids" colspan="4">
-                     <tree editable="bottom">
-                        <field name="course_id" options='{"no_open": True}' />
-                        <field name="level_id" options='{"no_open": True}' domain="[('course_id','=',course_id),]" />
-                     </tree>
-                  </field>
-                  <group colspan="4" col="4">
-                     <field name="mission" colspan="4" placeholder="The mission of the Collaborator" />
-                     <field name="vision" colspan="4" placeholder="The vision of the collaborator" />
-                  </group>
-               </page>
+            <div id="last_connection" position="before">
+               <separator string="Ministerios" colspan="4" />
+               <field name="ministry_ids" colspan="4" widget="many2many_tags" placeholder="Agregue aquí los ministerios a los que pertenece..." options='{"no_create": True}' />
+               <separator string="Cursos" colspan="4" />
+               <field name="specialization_course_ids" colspan="4">
+                  <tree editable="bottom">
+                     <field name="course_id" options='{"no_create": True}' />
+                     <field name="level_id" options='{"no_open": True, "no_create": True}' domain="[('course_id','=',course_id),]" />
+                  </tree>
+               </field>
+               <group>
+                  <label for="mission" />
+                  <field name="mission" colspan="4" nolabel="1" placeholder="Misión" />
+                  <label for="vision" />
+                  <field name="vision" colspan="4" nolabel="1" placeholder="Visión" />
+               </group>
+            </div>
+            <page id="status_info" position="attributes">
+               <attribute name="string">Datos Ke+</attribute>
             </page>
          </field>
       </record>
@@ -401,8 +380,8 @@
       -->
 
       <!-- Ministerios -->
-      <menuitem action="kemas_ministry_action" id="menu_kemas_ministry" parent="kemas.menu_kemas_config_form_action" />
+      <menuitem action="kemas_ministry_action" id="menu_kemas_ministry" parent="kemas.menu_kemas_configurations" />
       <!-- Cursos -->
-      <menuitem action="kemas_specialization_course_action" id="menu_kemas_specialization_course" parent="kemas.menu_kemas_config_form_action" />
+      <menuitem action="kemas_specialization_course_action" id="menu_kemas_specialization_course" parent="kemas.menu_kemas_configurations" />
    </data>
 </openerp>
