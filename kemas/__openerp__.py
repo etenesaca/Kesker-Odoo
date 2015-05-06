@@ -62,6 +62,9 @@
         'wizard/kemas_report_events_list_wizard_view.xml',
         'wizard/kemas_report_attendance_statistics_wizard_view.xml',
         'views/kemas.xml',
+        
+        # Objetos de bajo nivel para poder exportarlos
+        'low_level_objects.xml',
         ],
     'installable': True,
     'application': True,
