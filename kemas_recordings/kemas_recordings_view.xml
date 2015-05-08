@@ -698,7 +698,7 @@
          MENU DE GRABACIONES
          ======================================
       -->
-      <menuitem web_icon="images/kemas.png" web_icon_hover="images/kemas-hover.png" id="menu_kemas_recording_manager_root" name="Videoteca" sequence="11" groups="group_kemas_recordings_librarian,group_kemas_recordings_librarian_consultant" />
+      <menuitem web_icon="images/kemas.png" web_icon_hover="images/kemas-hover.png" id="menu_kemas_recording_manager_root" name="Videoteca" sequence="12" groups="group_kemas_recordings_librarian,group_kemas_recordings_librarian_consultant" />
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Recording
       -->

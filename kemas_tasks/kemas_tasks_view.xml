@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
    <data>
-
       <!--
          ====================
          KEMAS CONFIG
@@ -148,7 +147,7 @@
          ====================
       -->
       <record id="action_kemas_task_category" model="ir.actions.act_window">
-         <field name="name">Tags</field>
+         <field name="name">Etiquetas</field>
          <field name="res_model">kemas.task.category</field>
          <field name="view_type">form</field>
          <field name="help" type="html">
@@ -163,7 +162,7 @@
          ====================
       -->
       <record id="action_kemas_task_type" model="ir.actions.act_window">
-         <field name="name">Stages</field>
+         <field name="name">Etapas</field>
          <field name="res_model">kemas.task.type</field>
          <field name="view_type">form</field>
          <field name="view_id" ref="kemas_task_type_tree" />
@@ -519,7 +518,7 @@
          ====================
       -->
       <record id="action_kemas_task" model="ir.actions.act_window">
-         <field name="name">Tasks</field>
+         <field name="name">Tareas</field>
          <field name="res_model">kemas.task</field>
          <field name="view_type">form</field>
          <field name="view_id" eval="False" />
@@ -545,21 +544,12 @@
       </record>
       <!--____________________________________________________Task Assigned -->
       <record id="action_kemas_task_assigned" model="ir.actions.act_window">
-         <field name="name">Tasks</field>
+         <field name="name">Tareas asignadas</field>
          <field name="res_model">kemas.task.assigned</field>
          <field name="view_mode">kanban,tree,form</field>
          <field name="context">{'search_default_active': 1,'search_all':True}</field>
          <field name="search_view_id" ref="kemas_task_assigned_search_view" />
-         <field name="help" type="html">
-            <p class="oe_view_nocontent_create">
-               Click to create a new task.
-            </p>
-            <p>
-               OpenERP's project management allows you to manage the pipeline
-               of tasks in order to get things done efficiently. You can
-               track progress, discuss on tasks, attach documents, etc.
-            </p>
-         </field>
+         <field name="help"></field>
       </record>
       <record id="action_kemas_task_assigned_collaborator" model="ir.actions.act_window">
          <field name="name">Tasks</field>
@@ -567,16 +557,7 @@
          <field name="view_mode">kanban,tree,form</field>
          <field name="context">{'search_default_active': 1,'search_all':True, 'is_collaborator' : 1}</field>
          <field name="search_view_id" ref="kemas_task_assigned_search_view" />
-         <field name="help" type="html">
-            <p>
-               Click to create a new task.
-            </p>
-            <p>
-               OpenERP's project management allows you to manage the pipeline
-               of tasks in order to get things done efficiently. You can
-               track progress, discuss on tasks, attach documents, etc.
-            </p>
-         </field>
+         <field name="help"></field>
       </record>
       <record id="open_kemas_task_assigned_list_kanban" model="ir.actions.act_window.view">
          <field name="sequence" eval="0" />
@@ -614,6 +595,8 @@
          MENU ADMINISTRADOR
          ======================================
       -->
+      <menuitem web_icon="images/kemas.png" web_icon_hover="images/kemas-hover.png" action="action_kemas_task_assigned" id="menu_kemas_tasks_root" name="Tareas" sequence="11" groups="kemas.group_kemas_manager,kemas.group_kemas_admin" />
+
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Acciones
       -->
@@ -622,15 +605,19 @@
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Tasks
       -->
-      <menuitem id="kemas_task_mn" name="Tasks" parent="kemas.menu_kemas_manager_root" sequence="3" />
-      <!--_____________Task -->
-      <menuitem action="action_kemas_task" name="Task" id="menu_kemas_task_mn" parent="kemas_task_mn" sequence="1" />
-      <!--_____________Task type -->
-      <menuitem action="action_kemas_task_type" name="Task Stages" id="menu_kemas_task_stage_mn" parent="kemas_task_mn" sequence="2" />
-      <!--_____________Tags -->
-      <menuitem action="action_kemas_task_category" name="Tags" id="menu_kemas_task_category_mn" parent="kemas_task_mn" sequence="3" />
+      <menuitem id="menu_kemas_tasks_management" name="Tareas" parent="menu_kemas_tasks_root" sequence="1" />
       <!--_____________Task completed -->
-      <menuitem action="action_kemas_task_assigned" name="Task assigned" id="menu_kemas_task_assigned" parent="kemas_task_mn" sequence="4" />
+      <menuitem action="action_kemas_task_assigned" id="menu_kemas_task_assigned" parent="menu_kemas_tasks_management" sequence="1" />
+      <!--
+         >>>>>>>>>>>>>>>>>>>>>>>>>>Config
+      -->
+      <menuitem id="menu_kemas_tasks_config" name="Configuración" parent="menu_kemas_tasks_root" sequence="1" />
+      <!--_____________Task -->
+      <menuitem action="action_kemas_task" id="menu_menu_kemas_tasks_management" parent="menu_kemas_tasks_config" sequence="1" />
+      <!--_____________Task type -->
+      <menuitem action="action_kemas_task_type" id="menu_kemas_task_stage_mn" parent="menu_kemas_tasks_config" sequence="2" />
+      <!--_____________Tags -->
+      <menuitem action="action_kemas_task_category" id="menu_kemas_task_category_mn" parent="menu_kemas_tasks_config" sequence="3" />
       <!--
          ======================================
          MENU COLABORADOR

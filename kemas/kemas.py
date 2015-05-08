@@ -4056,6 +4056,24 @@ class kemas_history_points(osv.osv):
         ]
     
 class kemas_place(osv.osv):
+    def rebuild_import_data(self, cr, uid, ids, context={}):
+        # Reprocesar miembros de los eventos
+        event_obj = self.pool['kemas.event']
+        event_obj.build_members(cr, uid, event_obj.search(cr, uid, []), {'rebuild_import_data': True})
+        
+        
+        # Reprocesar usuario de las tareas asignadas
+        """
+        task_assigned_obj = self.pool['kemas.task.assigned']
+        collaborator_obj = self.pool['kemas.collaborator']
+
+        tasks = task_assigned_obj.read(cr, uid, task_assigned_obj.search(cr, uid, []), ['collaborator_id'])
+        for task in tasks:
+            user_id = collaborator_obj.read(cr, uid, task['collaborator_id'][0], ['user_id'])['user_id'][0]
+            task_assigned_obj.write(cr, uid, [task['id']], {'user_id': user_id})
+        """
+        return True
+    
     def do_activate(self, cr, uid, ids, context={}):
         super(osv.osv, self).write(cr, uid, ids, {'active' : True})
         return True
@@ -4941,6 +4959,24 @@ class kemas_event(osv.osv):
             else:
                 result = event['id']
         return result
+    
+    def build_members(self, cr, uid, ids, context={}):
+        line_obj = self.pool['kemas.event.collaborator.line']
+        c_obj = self.pool['kemas.collaborator']
+        events = self.read(cr, uid, ids, ['event_collaborator_line_ids'])
+        count = 0
+        for event in events:
+            lines = line_obj.read(cr, uid, event['event_collaborator_line_ids'], ['collaborator_id'])
+            members = [c_obj.read(cr, uid, x['collaborator_id'][0], ['user_id'])['user_id'][0] for x in lines]
+            vals = {'members' : [(6, 0, members)]}
+            if context.get('rebuild_import_data'):
+                # Para Importa Colaboradores
+                users = self.pool['res.users'].read(cr, uid, members, ['partner_id'])
+                vals ['message_follower_ids'] = [(6, 0, [x['partner_id'][0] for x in users])]
+                count += 1
+                _logger.info("Reprocesando Eventos: %d de %d" % (count, len(ids)))
+            super(kemas_event, self).write(cr, uid, ids, vals, context)
+        return True
  
     def write(self, cr, uid, ids, vals, context={}):
         if type(ids[0]).__name__ == 'dict':
@@ -5020,20 +5056,9 @@ class kemas_event(osv.osv):
         vals['date_stop'] = dates_dic['date_stop']
         vals['date_init'] = dates_dic['date_init']
         
-        super(osv.osv, self).write(cr, uid, ids, vals, context)
-        lines_obj = self.pool.get('kemas.event.collaborator.line')
-        collaborator_line_ids = self.read(cr, uid, ids, ['event_collaborator_line_ids'])
-        line_ids = []
-        for line in collaborator_line_ids:
-            line_ids += line['event_collaborator_line_ids']
-        lines = lines_obj.read(cr, uid, line_ids, ['collaborator_id'])
-        members = []
-        for line in lines:
-            collaborator_id = line['collaborator_id'][0]
-            user_id = super(kemas_collaborator, self.pool.get('kemas.collaborator')).read(cr, uid, collaborator_id, ['user_id'])['user_id'][0]
-            members.append(user_id)
-        vals = {'members' : [(6, 0, members)]}
-        return super(kemas_event, self).write(cr, uid, ids, vals, context)
+        result = super(kemas_event, self).write(cr, uid, ids, vals, context)
+        self.build_members(cr, uid, ids, context)
+        return result
          
     def replace_collaborators(self, cr, uid, event_id, replaceds, context={}):
         collaborator_obj = self.pool.get('kemas.collaborator')
@@ -5877,7 +5902,7 @@ class kemas_attendance(osv.osv):
     def create(self, cr, uid, vals, context={}):
         seq_obj = self.pool.get('ir.sequence')
         if vals.get('code'):
-        	#Esto se agrego para permitir importar datos
+        	# Esto se agrego para permitir importar datos
             seq_id = seq_obj.search(cr, uid, [('name', '=', 'Kemas Attendance'), ])[0]
             vals['code'] = str(seq_obj.get_id(cr, uid, seq_id))
             return  super(kemas_attendance, self).create(cr, uid, vals, context)
