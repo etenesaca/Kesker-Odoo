@@ -30,9 +30,7 @@ class res_partner(osv.osv):
         
         res = super(res_partner, self).default_get(cr, uid, fields, context=context)
         if context.has_key('is_expositor'):
-            md_obj = self.pool['ir.model.data']
-            md_ids = md_obj.search(cr, uid, [('name', '=', 'res_partner_category_expositor')])
-            cat_id = md_obj.read(cr, uid, md_ids[0], ['res_id'])['res_id']
+            cat_id = self.pool['kemas.func'].get_id_by_ext_id(cr, uid, 'res_partner_category_expositor')
             res.update({'category_id': [(6, 0, [cat_id])]})
         return res
     

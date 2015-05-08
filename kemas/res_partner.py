@@ -54,7 +54,8 @@ class res_partner(osv.osv):
     def write(self, cr, uid, ids, vals, context={}):
         if vals.get('name'):
             vals['name'] = extras.elimina_tildes(vals['name'])
-        if vals.get('image'):
+        
+        if vals.get('image') and 1 not in ids:
             try:
                 vals['image'] = extras.crop_image(vals['image'], 256)
             except:
