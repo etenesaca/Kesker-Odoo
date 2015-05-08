@@ -64,7 +64,7 @@
         'views/kemas.xml',
         
         # Objetos de bajo nivel para poder exportarlos
-        'low_level_objects.xml',
+        #'low_level_objects.xml',
         ],
     'installable': True,
     'application': True,
