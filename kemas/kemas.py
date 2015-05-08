@@ -90,7 +90,7 @@ class kemas_collaborator_logbook_login(osv.osv):
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
     
     def create(self, cr, uid, vals, context={}):
-        vals['datetime'] = time.strftime("%Y-%m-%d %H:%M:%S")
+        vals['datetime'] = vals.get('datetime', time.strftime("%Y-%m-%d %H:%M:%S"))
         return super(osv.osv, self).create(cr, uid, vals, context)
     
     _order = 'datetime DESC'
@@ -2415,8 +2415,8 @@ class kemas_suspension(osv.osv):
         return super(osv.osv, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
     
     def create(self, cr, uid, vals, *args, **kwargs):
-        vals['state'] = 'on_going'
-        vals['date_create'] = time.strftime("%Y-%m-%d %H:%M:%S")
+        vals['state'] = vals.get('state', 'on_going')
+        vals['date_create'] = vals.get('date_create', time.strftime("%Y-%m-%d %H:%M:%S")) 
         vals['user_create_id'] = uid
         return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
      
@@ -2546,7 +2546,7 @@ class kemas_collaborator_web_site(osv.osv):
     
 class kemas_collaborator_logbook(osv.osv):
     def create(self, cr, uid, vals, *args, **kwargs):
-        vals['date'] = time.strftime("%Y-%m-%d %H:%M:%S")
+        vals['date'] = vals.get('date', time.strftime("%Y-%m-%d %H:%M:%S"))
         vals['user_id'] = uid
         return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
      
@@ -5102,12 +5102,11 @@ class kemas_event(osv.osv):
     def create(self, cr, uid, vals, context={}):
         if context is None or not context or not isinstance(context, (dict)): context = {}
         
-        service_obj = self.pool.get('kemas.service')
-        vals['date_create'] = str(time.strftime("%Y-%m-%d %H:%M:%S"))
-        vals['state'] = 'draft'
+        vals['date_create'] = vals.get('date_create', str(time.strftime("%Y-%m-%d %H:%M:%S")))
+        vals['state'] = vals.get('state', 'draft')
         vals['count'] = 1
         #--Crear Date start y date stop---------------------------------------------------------------------------------------------
-        service = service_obj.read(cr, uid, vals['service_id'], [])
+        service = self.pool['kemas.service'].read(cr, uid, vals['service_id'], [])
         if not context['tz']:
             context['tz'] = self.pool.get('kemas.func').get_tz_by_uid(cr, uid)
         
@@ -5120,12 +5119,11 @@ class kemas_event(osv.osv):
         
         context['mail_create_nolog'] = True
         res_id = super(kemas_event, self).create(cr, uid, vals, context)
-        lines_obj = self.pool.get('kemas.event.collaborator.line')
         collaborator_line_ids = self.read(cr, uid, [res_id], ['event_collaborator_line_ids'])
         line_ids = []
         for line in collaborator_line_ids:
             line_ids += line['event_collaborator_line_ids']
-        lines = lines_obj.read(cr, uid, line_ids, ['collaborator_id'])
+        lines = self.pool['kemas.event.collaborator.line'].read(cr, uid, line_ids, ['collaborator_id'])
         members = []
         for line in lines:
             collaborator_id = line['collaborator_id'][0]
@@ -5735,6 +5733,7 @@ class kemas_event(osv.osv):
         'color': 6,
         'collaborators_loaded': True,
         'min_points': 1,
+        'count': 1,
         }
 
     def _read_group_stage_id(self, cr, uid, ids, domain, read_group_order=None, access_rights_uid=None, context={}):
@@ -5876,6 +5875,13 @@ class kemas_attendance(osv.osv):
             return 'r_1'
     
     def create(self, cr, uid, vals, context={}):
+        seq_obj = self.pool.get('ir.sequence')
+        if vals.get('code'):
+        	#Esto se agrego para permitir importar datos
+            seq_id = seq_obj.search(cr, uid, [('name', '=', 'Kemas Attendance'), ])[0]
+            vals['code'] = str(seq_obj.get_id(cr, uid, seq_id))
+            return  super(kemas_attendance, self).create(cr, uid, vals, context)
+            
         event_obj = self.pool.get('kemas.event')
         event_collaborator_line_obj = self.pool.get('kemas.event.collaborator.line')
         kemas_event_collaborator_line_obj = self.pool.get('kemas.event.collaborator.line')
@@ -5883,7 +5889,6 @@ class kemas_attendance(osv.osv):
         history_points_obj = self.pool.get('kemas.history.points')
         service_obj = self.pool.get('kemas.service')
         config_obj = self.pool.get('kemas.config')
-        seq_obj = self.pool.get('ir.sequence')
         
         current_event = event_obj.get_current_event(cr, uid, extra_info=True)
         if not current_event: 
@@ -6131,7 +6136,7 @@ class kemas_event_replacement(osv.osv):
         return res
     
     def create(self, cr, uid, vals, *args, **kwargs):
-        vals['datetime'] = time.strftime("%Y-%m-%d %H:%M:%S")
+        vals['datetime'] = vals.get('datetime', time.strftime("%Y-%m-%d %H:%M:%S"))
         vals['user_id'] = uid
         return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
 
