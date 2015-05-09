@@ -20,7 +20,7 @@
 #
 ##############################################################################
 {
-    'name': u'Modulo de Gestion de Grabaciones',
+    'name': u'Kesker - Videoteca',
     'description': """.""",
     'version':'1.0',
     'author': 'EdgarSoft',
@@ -30,9 +30,11 @@
     ],
     'category':'Accounting & Finance',
     'init_xml': [],
-    'update_xml': [
+    'data': [
+        'data/res_partner_category.xml',
         'security/kemas_recordings_security.xml',
         'security/ir.model.access.csv',
+        'res_partner_view.xml',
         'kemas_recordings_view.xml',
         ],
     'installable': True,

@@ -20,8 +20,10 @@
 #
 ##############################################################################
 {
-    'name': u'Kesker - Gestión de Tareas',
-    'description': """""",
+    'name': u'Kesker - Centro Cristiano',
+    'description': """
+    Este modulo contiene todas las personalizacion que se han hecho especificamente para el Centro Cristiano de Cuenca
+    """,
     'version':'1.0',
     'author': 'EdgarSoft',
     'website': '',
@@ -31,10 +33,10 @@
     'category':'Accounting & Finance',
     'init_xml': [],
     'data': [
-        'data/kemas_task_stage.xml',
         'security/ir.model.access.csv',
-        'wizard/kemas_set_points_task_wizard_view.xml',
-        'kemas_tasks_view.xml',
+        'kemas_cc_view.xml',
+        # Objetos de bajo nivel para poder exportarlos
+        #'low_level_objects.xml',
         ],
     'installable': True,
     'application': True,

@@ -20,7 +20,7 @@
 #
 ##############################################################################
 {
-    'name': u'Inferfaz para Conexión desde dispositivos moviles',
+    'name': u'Kesker - Inferfaz para Conexión desde dispositivos moviles',
     'description': """provee una interfaz para que un cliente movil para que pueda conectarse al OpenERP kemas.""",
     'version':'1.0',
     'author': 'EdgarSoft',

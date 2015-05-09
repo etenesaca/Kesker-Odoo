@@ -476,11 +476,8 @@
                   <notebook colspan="4">
                      <page string="Emails and notifications">
                         <group colspan="4" expand="1" col="10">
-                           <field name="mailing" colspan="4" />
-                           <field name="use_attachments_in_im" colspan="4" attrs="{'invisible':[('mailing','=',False)]}" />
-                           <group colspan="2" />
-                           <field name="use_subject_in_im" colspan="2" attrs="{'invisible':[('mailing','=',False)]}" />
-                           <group colspan="8" />
+                           <field name="mailing" colspan="5" />
+                           <group colspan="5" />
                         </group>
                         <group colspan="4" attrs="{'invisible':[('mailing','=',False)]}">
                            <notebook colspan="4">
@@ -1356,9 +1353,11 @@
                         </notebook>
                      </page>
                      <page id="collaborators" string="Collaborators">
-                        <div align="center">
+                        <!--
+                           <div align="center">
                            <button string="Cortar fotos y logos" name="crop_photo" type="object" icon="gtk-cut" />
-                        </div>
+                           </div>
+                        -->
                         <group colspan="4" col="6">
                            <field name="default_points" colspan="2" />
                            <field name="number_replacements" colspan="2" />
@@ -2386,7 +2385,7 @@
                            <field name="login" colspan="2" readonly="1" states="Active,Inactive" />
                            <field name="replacements" colspan="2" readonly="1" states="Active,Inactive" />
                         </group>
-                        <div>
+                        <div id="last_connection">
                            <br />
                            <label for="last_connection" />
                            <div>
@@ -2449,6 +2448,196 @@
          <field name="priority" eval="10" />
          <field name="arch" type="xml">
             <form string="Collaborator" version="7.0" delete="0" create="0">
+               <field name="notified" invisible="1" />
+               <field name="user_id" invisible="1" />
+               <field name="name" invisible="1" />
+               <header>
+                  <div>
+                     <field name="state" widget="statusbar" statusbar_visible="Active" />
+                  </div>
+               </header>
+               <sheet string="Collaborator">
+                  <div align="center" class="box_tip oe_edit_only">
+                     <img src="/web/static/src/img/icons/gtk-info.png" />
+                     <i>
+                        <label string="Si decides realizar algún cambio de tu información recuerda hacerlo con responsabilidad." />
+                     </i>
+                  </div>
+                  <br />
+                  <div class="box_red" states="Suspended">
+                     <table>
+                        <tr>
+                           <td style="font-size: 25px;font-weight: bold">Suspendido</td>
+                           <td style="width: 10px" />
+                           <td style="vertical-align: text-center;">
+                              <div style="font-size: 22px;vertical-align: bottom; padding: 2px 2px 2px 0px">
+                                 <span>(</span>
+                              </div>
+                           </td>
+                           <td>
+                              <div style="font-size: 22px;vertical-align: bottom">
+                                 <field name="day_remaining_suspension" readonly="1" />
+                              </div>
+                           </td>
+                           <td>
+                              <div style="font-size: 22px;vertical-align: bottom; padding: 2px 2px 2px 1px">
+                                 <span>días restantes)</span>
+                              </div>
+                           </td>
+                        </tr>
+                     </table>
+                  </div>
+                  <div states="Suspended">
+                     <br />
+                  </div>
+                  <field name="photo" widget='image' class="oe_left oe_avatar" options='{"size": [100, 100]}' />
+                  <div class="oe_left oe_title">
+                     <label for="first_names" class="oe_edit_only" />
+                     <h1>
+                        <field name="first_names" default_focus="1" placeholder="Nombres" on_change="on_change_first_names(first_names,last_names)" />
+                     </h1>
+                     <label for="last_names" class="oe_edit_only" />
+                     <h1>
+                        <field name="last_names" placeholder="Apellidos" on_change="on_change_last_names(first_names,last_names)" />
+                     </h1>
+                     <label for="nick_name" class="oe_edit_only" />
+                     <span>
+                        <field name="nick_name" on_change="on_change_nick_name(first_names,nick_name)" colspan="2" nolabel="1" placeholder="Nickname" />
+                     </span>
+                     <label for="area_ids" class="oe_edit_only" />
+                     <field name="area_ids" widget="many2many_tags" placeholder="Áreas" options='{"no_open": True, "no_create": True}' readonly="1" />
+                  </div>
+                  <div align="center" attrs="{'invisible':['|',('code','!=',False),('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
+                     <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
+                     <font color="red">
+                        <b>
+                           <label string="Este colaborador no tiene un Codigo Asignado" />
+                        </b>
+                     </font>
+                  </div>
+                  <div align="center" attrs="{'invisible':['|',('user_id','!=',False),('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
+                     <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
+                     <font color="red">
+                        <b>
+                           <label string="Este colaborador no tiene cuenta de usuario" />
+                        </b>
+                     </font>
+                  </div>
+                  <div align="center" attrs="{'invisible':['|',('notified','=','notified'),('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
+                     <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
+                     <font color="red">
+                        <b>
+                           <label string="Este colaborador no fue notificado son sus credenciales de Usuario" />
+                        </b>
+                     </font>
+                  </div>
+                  <notebook colspan="4">
+                     <page id="personal_info" string="Personal Information">
+                        <group style="margin-bottom: -8px">
+                           <group>
+                              <field name="code" readonly="1" />
+                              <field name="marital_status" required="1" />
+                              <field name="personal_id" on_change="on_change_personal_id(personal_id)" placeholder="CI/PASS" />
+                           </group>
+                           <group>
+                              <field name="birth" on_change="on_change_birth(birth)" required="1" placeholder="Fecha" />
+                              <field name="age" required="1" readonly="1" />
+                              <field name="gender" required="1" placeholder=" -- " />
+                           </group>
+                           <group>
+                              <label for="street" string="Dirección" />
+                              <div>
+                                 <field name="street" placeholder="Calle..." />
+                                 <field name="street2" />
+                                 <field name="country_id" placeholder="Country" class="oe_no_button" options='{"no_open": True}' />
+                                 <div class="address_format">
+                                    <field name="state_id" domain="[('country_id','=',country_id)]" on_change="on_change_state_id(country_id,state_id)" class="oe_no_button" placeholder="Provincia" style="width: 50%%" options='{"no_open": True}' />
+                                    <field name="city" placeholder="City" style="width: 50%%" />
+                                 </div>
+                              </div>
+                           </group>
+                           <group>
+                              <field name="phone" placeholder="Ejemplo. 074612753" />
+                              <field name="mobile" placeholder="Ejemplo. 0891457846" />
+                              <field name="fax" />
+                              <field name="email" widget="email" on_change="on_change_email(email)" placeholder="Correo electrónico" />
+                           </group>
+                           <group style="margin-top: -15px">
+                              <separator string="Információn de procedencia" colspan="4" />
+                              <field name="born_country" required="1" string="País" placeholder="Born Country" options='{"no_open": True}' />
+                              <field name="born_state" required="1" string="Provincia" on_change="on_change_born_state(born_country,born_state)" placeholder="Born State" domain="[('country_id','=',born_country)]" options='{"no_open": True}' />
+                              <field name="born_city" required="1" string="Ciudad" placeholder="Born City" />
+                           </group>
+                           <group />
+                        </group>
+                     </page>
+                     <page id="skills" string="Habilidades">
+                        <field name="skill_line_ids" />
+                     </page>
+                     <page id="status_info" string="Estado">
+                        <group colspan="4" col="6">
+                           <field name="team_id" colspan="2" placeholder="Equipo" options='{"no_create": True}' readonly="1" />
+                           <field name="join_date" colspan="2" on_change="on_change_join_date(join_date)" required="True" placeholder="Fecha de ingreso" />
+                           <field name="end_service" readonly="1" widget="char" states="Inactive" colspan="2" />
+                           <field name="age_in_ministry" string="Tiempo de colaboración" required="True" colspan="2" attrs="{'invisible':[('join_date','=',False)]}" readonly="1" />
+                           <newline />
+                           <field name="points" colspan="2" readonly="1" states="Active,Inactive" />
+                           <field name="level_id" colspan="2" readonly="1" states="Active,Inactive" options='{"no_open": True}' />
+                           <newline />
+                           <field name="login" colspan="2" readonly="1" states="Active,Inactive" />
+                           <field name="replacements" colspan="2" readonly="1" states="Active,Inactive" />
+                        </group>
+                        <div id="last_connection">
+                           <br />
+                           <label for="last_connection" />
+                           <div>
+                              <field name="last_connection" string="Última conexión" readonly="1" />
+                           </div>
+                        </div>
+                     </page>
+                     <page string="Web Sites">
+                        <table>
+                           <tr height="24px">
+                              <td background="/kemas/static/src/img/social/facebook_.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/twitter_.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/youtube.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/linkedin.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/myspace.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/blogger.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/feed.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/reddit.png" width="24px" />
+                              <td width="4px" />
+                              <td background="/kemas/static/src/img/social/github.png" width="23px" />
+                              <td width="4px" />
+                           </tr>
+                        </table>
+                        <field name="web_site_ids">
+                           <form>
+                              <field name="allow_get_avatar" invisible="1" />
+                              <group col="4">
+                                 <field name="web_site_id" on_change="on_change_web_site_id(web_site_id)" default_focus="1" options='{"no_open": True}' colspan="2" />
+                                 <group colspan="2" />
+                                 <field name="get_avatar_from_website" attrs="{'invisible':[('allow_get_avatar','=',False)]}" colspan="4" />
+                                 <field name="url" widget="url" colspan="4" string="URL o E-mail" />
+                              </group>
+                           </form>
+                           <tree>
+                              <field name="web_site_id" default_focus="1" />
+                              <field name="url" widget="url" string="URL o E-mail" />
+                              <field name="get_avatar_from_website" />
+                              <button string="Actualizar" name="reload_info" type="object" icon="gtk-refresh" attrs="{'invisible':[('get_avatar_from_website','=',False)]}" />
+                           </tree>
+                        </field>
+                     </page>
+                  </notebook>
+               </sheet>
             </form>
          </field>
       </record>
@@ -2747,6 +2936,7 @@
          <field name="arch" type="xml">
             <tree string="Collaborators">
                <field name="name" />
+               <field name="code" />
                <field name="points" />
                <field name="level_id" />
                <field name="progress" widget="progressbar" />
@@ -2933,15 +3123,12 @@
                <field name="name" default_focus="1" />
                <field name="level_id" widget="selection" />
                <group string="Agrupar por...">
-                  <filter string="Gender" icon="terp-personal" domain="[]" context="{'group_by':'gender'}" />
-                  <filter string="Marital Status" icon="terp-partner" domain="[]" context="{'group_by':'marital_status'}" />
+                  <filter string="Género" icon="terp-personal" domain="[]" context="{'group_by':'gender'}" />
+                  <filter string="Estado Civíl" icon="terp-partner" domain="[]" context="{'group_by':'marital_status'}" />
                   <separator />
-                  <filter string="Country" icon="gtk-home" domain="[]" context="{'group_by':'born_country'}" />
-                  <filter string="Country State" icon="gtk-home" domain="[]" context="{'group_by':'born_state'}" />
-                  <filter string="City" icon="gtk-home" domain="[]" context="{'group_by':'born_city'}" />
-                  <separator />
-                  <filter string="Points" icon="star-on" domain="[]" context="{'group_by':'points'}" />
-                  <filter string="Level" icon="star-on" domain="[]" context="{'group_by':'level_id'}" />
+                  <filter string="País de nacimiento" icon="gtk-home" domain="[]" context="{'group_by':'born_country'}" />
+                  <filter string="Provincia de nacimiento" icon="gtk-home" domain="[]" context="{'group_by':'born_state'}" />
+                  <filter string="Ciudad de nacimiento" icon="gtk-home" domain="[]" context="{'group_by':'born_city'}" />
                </group>
             </search>
          </field>
@@ -2966,7 +3153,7 @@
          <field name="model">kemas.history.points</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
-            <form string="History Points" version="7.0" create="0" edit="0">
+            <form string="History Points" version="7.0" create="0" edit="0" delete="0">
                <sheet>
                   <group>
                      <field name="collaborator_id" />
@@ -2990,7 +3177,7 @@
          <field name="model">kemas.history.points</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
-            <form string="History Points" version="7.0" create="0" edit="0">
+            <form string="History Points" version="7.0" create="0" edit="0" delete="0">
                <sheet>
                   <group>
                      <field name="description" />
@@ -3014,7 +3201,7 @@
          <field name="model">kemas.history.points</field>
          <field name="priority" eval="1" />
          <field name="arch" type="xml">
-            <tree string="" colors="red:type=='decrease';green:type=='init'" fonts="bold:message_unread==True" create="0" edit="0">
+            <tree string="" colors="red:type=='decrease';green:type=='init'" fonts="bold:message_unread==True" create="0" edit="0" delete="0">
                <field name="message_unread" invisible="1" />
                <field name="code" />
                <field name="date" />
@@ -3031,7 +3218,7 @@
          <field name="model">kemas.history.points</field>
          <field name="priority" eval="2" />
          <field name="arch" type="xml">
-            <tree string="" colors="red:type=='decrease';green:type=='init'" fonts="bold:message_unread==True" create="0" edit="0">
+            <tree string="" colors="red:type=='decrease';green:type=='init'" fonts="bold:message_unread==True" create="0" edit="0" delete="0">
                <field name="message_unread" invisible="1" />
                <field name="code" />
                <field name="date" />
@@ -3220,6 +3407,7 @@
                   <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('active','=',False)]}" groups="kemas.group_kemas_manager" />
                </header>
                <sheet string="Level">
+                  <button string="rebuild_import_data" name="rebuild_import_data" type="object" groups="base.no_one"/>
                   <field name="photo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' />
                   <div class="oe_title">
                      <div class="oe_edit_only">
@@ -4834,9 +5022,10 @@
          <field name="name">Collaborators</field>
          <field name="type">ir.actions.act_window</field>
          <field name="res_model">kemas.collaborator</field>
-         <field name="view_mode">kanban,tree,form</field>
+         <field name="view_mode">kanban</field>
          <field name="domain">[('state','=','Active')]</field>
-         <field name="context">{'all_collaborators':1,'search_default_active': 1,'search_default_collaborator': 1,'no_name_get':True,'search_view_ref':'kemas.kemas_collaborator_search_view3','kanban_view_ref':'kemas.kemas_collaborator_kanban_view3'}</field>
+         <field name="search_view_id" ref="kemas.kemas_collaborator_search_view3" />
+         <field name="context">{'all_collaborators':1,'search_default_active': 1,'search_default_collaborator': 1,'no_name_get':True,'kanban_view_ref':'kemas.kemas_collaborator_kanban_view3'}</field>
          <field name="help">All collaborators who are actively involved in ministry.</field>
       </record>
       <record model="ir.actions.act_window" id="kemas_collaborator_form_action_me">
@@ -4845,7 +5034,8 @@
          <field name="res_model">kemas.collaborator</field>
          <field name="view_mode">tree,form</field>
          <field name="domain">[('user_id','=',uid)]</field>
-         <field name="context">{'is_collaborator':1,'no_name_get':True,'search_view_ref':'kemas.kemas_collaborator_search_view_me','form_view_ref':'kemas.kemas_collaborator_form_view_me'}</field>
+         <field name="search_view_id" ref="kemas.kemas_collaborator_search_view_me" />
+         <field name="context">{'is_collaborator':1,'no_name_get':True,'form_view_ref':'kemas.kemas_collaborator_form_view_me'}</field>
       </record>
 
       <record model="ir.actions.act_window" id="kemas_history_points_form_action">

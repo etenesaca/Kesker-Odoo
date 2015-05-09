@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution    
+#    OpenERP, Open Source Management Solution	
 #    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>). All Rights Reserved
 #    $Id$
 #
@@ -19,25 +19,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-{
-    'name': u'Kesker - Gestión de Tareas',
-    'description': """""",
-    'version':'1.0',
-    'author': 'EdgarSoft',
-    'website': '',
-    'depends': [
-        'kemas',
-    ],
-    'category':'Accounting & Finance',
-    'init_xml': [],
-    'data': [
-        'data/kemas_task_stage.xml',
-        'security/ir.model.access.csv',
-        'wizard/kemas_set_points_task_wizard_view.xml',
-        'kemas_tasks_view.xml',
-        ],
-    'installable': True,
-    'application': True,
-    }
+import kemas_cc
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

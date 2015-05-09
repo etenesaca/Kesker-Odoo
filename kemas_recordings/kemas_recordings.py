@@ -61,22 +61,18 @@ class kemas_recording_series(osv.osv):
         result = super(kemas_recording_series, self).write(cr, uid, ids, vals, context)
         for record_id in ids:
             if vals.get('logo', False):
-                path = addons.__path__[0] + '/web/static/src/img/logo' + 'recording_series'
                 vals_write = {}
-                vals_write['logo_large'] = extras.crop_image(vals['logo'], path, 128)
-                vals_write['logo_medium'] = extras.crop_image(vals['logo'], path, 64)
-                vals_write['logo_small'] = extras.crop_image(vals['logo'], path, 48)
-                super(kemas_recording_series, self).write(cr, uid, [record_id], vals_write, context)
+                vals_write['logo'] = extras.crop_image(vals['logo'], 192)
+                vals_write['logo_medium'] = extras.crop_image(vals['logo'], 64)
+                vals_write['logo_small'] = extras.crop_image(vals['logo'], 48)
+                super(kemas_recording_series, self).write(cr, uid, [record_id['id']], vals_write, context)
         return result
     
     def create(self, cr, uid, vals, *args, **kwargs):
-        seq_id = self.pool.get('ir.sequence').search(cr, uid, [('name', '=', 'Kemas Series'), ])[0]
-        vals['code'] = str(self.pool.get('ir.sequence').get_id(cr, uid, seq_id))
         if vals.get('logo', False):
-            path = addons.__path__[0] + '/web/static/src/img/logo' + 'recording_series'
-            vals['logo_large'] = extras.crop_image(vals['logo'], path, 128)
-            vals['logo_medium'] = extras.crop_image(vals['logo'], path, 64)
-            vals['logo_small'] = extras.crop_image(vals['logo'], path, 48)
+            vals['logo'] = extras.crop_image(vals['logo'], 192)
+            vals['logo_medium'] = extras.crop_image(vals['logo'], 64)
+            vals['logo_small'] = extras.crop_image(vals['logo'], 48)
         return super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
 
     _order = 'name'
@@ -84,7 +80,6 @@ class kemas_recording_series(osv.osv):
     _columns = {
         'code': fields.char('Code', size=32, help="Code that is assigned to each series."),
         'logo': fields.binary('Logo', help='The Logo of the serie'),
-        'logo_large': fields.binary('Large Logo'),
         'logo_medium': fields.binary('Medium Logo'),
         'logo_small': fields.binary('Small Logo'),
         'name': fields.char('Name', size=64, required=True, help='The name of the recording type'),
@@ -208,24 +203,18 @@ class kemas_recording(osv.osv):
         result = super(kemas_recording, self).write(cr, uid, ids, vals, context)
         for record_id in ids:
             if vals.get('logo', False):
-                path = addons.__path__[0] + '/web/static/src/img/logo' + 'recording'
                 vals_write = {}
-                vals_write['logo_large'] = extras.crop_image(vals['logo'], path, 128)
-                vals_write['logo_medium'] = extras.crop_image(vals['logo'], path, 64)
-                vals_write['logo_small'] = extras.crop_image(vals['logo'], path, 48)
-                vals_write['logo_landscape'] = extras.crop_image_with_size(vals['logo'], path, 112, 64)
+                vals_write['logo'] = extras.crop_image(vals['logo'], 160)
+                vals_write['logo_landscape'] = extras.resize_image(vals['logo'], 112)
                 super(kemas_recording, self).write(cr, uid, [record_id], vals_write, context)
         return result
     
     def create(self, cr, uid, vals, *args, **kwargs):
-        vals['registration_date'] = time.strftime("%Y-%m-%d %H:%M:%S")
+        vals['registration_date'] = vals.get('registration_date', time.strftime("%Y-%m-%d %H:%M:%S"))
         vals['create_user_id'] = uid
         if vals.get('logo', False):
-            path = addons.__path__[0] + '/web/static/src/img/logo' + 'recording'
-            vals['logo_large'] = extras.crop_image(vals['logo'], path, 128)
-            vals['logo_medium'] = extras.crop_image(vals['logo'], path, 64)
-            vals['logo_small'] = extras.crop_image(vals['logo'], path, 48)
-            vals['logo_landscape'] = extras.crop_image_with_size(vals['logo'], path, 112, 64)
+            vals['logo_landscape'] = extras.resize_image(vals['logo'], 112)
+            vals['logo'] = extras.resize_image(vals['logo'], 160)
         res_id = super(osv.osv, self).create(cr, uid, vals, *args, **kwargs)
         # Escribir log
         self.write_log_create(cr, uid, res_id)
@@ -286,9 +275,6 @@ class kemas_recording(osv.osv):
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _columns = {
         'logo': fields.binary('Portada', help='Portada de la grabación.'),
-        'logo_large': fields.binary('Large Logo'),
-        'logo_medium': fields.binary('Medium Logo'),
-        'logo_small': fields.binary('Small Logo'),
         'logo_landscape': fields.binary('Logo apaisado'),
         'theme': fields.char('Theme', size=64, help='The theme of the recording', required=True, states={'done':[('readonly', True)]}),
         'date': fields.datetime('Date', help="Date on which the recording was done", states={'done':[('readonly', True)]}),
