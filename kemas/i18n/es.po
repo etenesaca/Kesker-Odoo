@@ -3651,7 +3651,7 @@ msgstr "Jun"
 #. module: kemas
 #: model:ir.module.category,name:kemas.module_category_kemas_management
 msgid "Ke+"
-msgstr "Kesker"
+msgstr "kèsher"
 
 #. module: kemas
 #: model:res.groups,name:kemas.group_kemas_admin
@@ -3676,8 +3676,8 @@ msgstr "Kemas / Register Attendance"
 #. module: kemas
 #: model:ir.ui.menu,name:kemas.menu_kemas_collaborator_root
 #: model:ir.ui.menu,name:kemas.menu_kemas_manager_root
-msgid "Kesker"
-msgstr "Kesker"
+msgid "kèsher"
+msgstr "kèsher"
 
 #. module: kemas
 #: help:kemas.repository,url:0
