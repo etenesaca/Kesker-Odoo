@@ -3407,7 +3407,9 @@
                   <button name="do_inactivate" string="Inactivar" type="object" icon="gtk-no" attrs="{'invisible':[('active','=',False)]}" groups="kemas.group_kemas_manager" />
                </header>
                <sheet string="Level">
-                  <button string="rebuild_import_data" name="rebuild_import_data" type="object" groups="base.no_one"/>
+                  <!--
+                     <button string="rebuild_import_data" name="rebuild_import_data" type="object"/>
+                  -->
                   <field name="photo" widget='image' class="oe_left oe_avatar" options='{"size": [90, 90]}' />
                   <div class="oe_title">
                      <div class="oe_edit_only">
