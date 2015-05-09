@@ -20,7 +20,7 @@
 #
 ##############################################################################
 {
-    'name': u'Kesker - Videoteca',
+    'name': u'kèsher - Videoteca',
     'description': """.""",
     'version':'1.0',
     'author': 'EdgarSoft',

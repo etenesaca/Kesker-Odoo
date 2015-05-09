@@ -20,7 +20,7 @@
 #
 ##############################################################################
 {
-    'name': u'Kesker - Centro Cristiano',
+    'name': u'kèsher - Centro Cristiano',
     'description': """
     Este modulo contiene todas las personalizacion que se han hecho especificamente para el Centro Cristiano de Cuenca
     """,
