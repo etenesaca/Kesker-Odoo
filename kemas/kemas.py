@@ -4059,7 +4059,7 @@ class kemas_place(osv.osv):
     def rebuild_import_data(self, cr, uid, ids, context={}):
         # Reprocesar miembros de los eventos
         event_obj = self.pool['kemas.event']
-        event_obj.build_members(cr, uid, super(event_obj.__class__, event_obj).search(cr, uid, [('members', '=', False)]), limit=20, {'rebuild_import_data': True})
+        event_obj.build_members(cr, uid, super(event_obj.__class__, event_obj).search(cr, uid, [('members', '=', False)],limit=20), {'rebuild_import_data': True})
         
         
         # Reprocesar usuario de las tareas asignadas
