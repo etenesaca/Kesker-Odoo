@@ -17,11 +17,14 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from openerp.osv import fields, osv
-from openerp import pooler
 import logging
 import threading
-    
+
+from openerp import pooler
+from openerp.api import Environment
+from openerp.osv import osv
+
+
 _logger = logging.getLogger(__name__)
 
 class res_users(osv.osv):
@@ -32,7 +35,9 @@ class res_users(osv.osv):
     def _register_login(self, db_name, user_id, user_agent_env):
         db = pooler.get_db(db_name)
         cr = db.cursor()
-        if user_id:
+        if not user_id:
+            return
+        with Environment.manage():
             collaborator_obj = self.pool.get('kemas.collaborator')
             collaborator_ids = collaborator_obj.search(cr, user_id, [('user_id', '=', user_id)])
             if collaborator_ids:
