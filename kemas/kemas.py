@@ -5129,7 +5129,7 @@ class kemas_event(osv.osv):
         if context is None or not context or not isinstance(context, (dict)): context = {}
         
         vals['date_create'] = vals.get('date_create', str(time.strftime("%Y-%m-%d %H:%M:%S")))
-        vals['state'] = vals.get('state', 'draft')
+        vals['state'] = 'draft' #vals.get('state', 'draft')
         vals['count'] = 1
         #--Crear Date start y date stop---------------------------------------------------------------------------------------------
         service = self.pool['kemas.service'].read(cr, uid, vals['service_id'], [])
