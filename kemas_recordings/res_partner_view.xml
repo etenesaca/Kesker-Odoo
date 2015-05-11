@@ -13,7 +13,7 @@
             <search string="Buscar Personas">
                <field name="name" filter_domain="['|','|',('display_name','ilike',self),('ref','=',self),('email','ilike',self)]" />
                <separator />
-               <filter string="Expositores" name="expositors" domain="[('category_id.name','=', 'Expositor')]" />
+               <filter string="Expositores" name="expositors" domain="[('is_company','=',False),('category_id.name','=', 'Expositor')]" />
                <separator />
                <field name="user_id" />
                <field name="parent_id" domain="[('is_company','=',1)]" operator="child_of" />
@@ -22,6 +22,53 @@
                   <filter string="Provincia" context="{'group_by': 'state_id'}" />
                </group>
             </search>
+         </field>
+      </record>
+      <!--____________________________________________________Vista de Kanban para las grabaciones -->
+      <record model="ir.ui.view" id="res_partner_expositor_recording_kanban">
+         <field name="name">res.partner.expositor.recording.kanban</field>
+         <field name="model">res.partner</field>
+         <field name="priority" eval="999" />
+         <field name="arch" type="xml">
+            <kanban quick_create="false" create="true">
+               <field name="name" />
+               <templates>
+                  <t t-name="kanban-box">
+                     <div style="position: relative">
+                        <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block">
+                           <img src="/kemas/static/src/img/icons/delete_red.png" alt="Eliminar" />
+                        </a>
+                        <div class="oe_module_vignette">
+                           <a type="open">
+                              <img t-att-src="kanban_image('res.partner', 'image_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                           </a>
+                           <div class="oe_module_desc">
+                              <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
+                                 <table class="oe_kanban_table">
+                                    <tr>
+                                       <td class="oe_kanban_title1" align="left" valign="middle">
+                                          <h4>
+                                             <a type="open">
+                                                <field name="name" />
+                                             </a>
+                                          </h4>
+                                          <div t-if="record.name.raw_value">
+                                             <a t-if="record.email.raw_value" title="Mail" t-att-href="'mailto:'+record.email.value">
+                                                <i>
+                                                   <field name="email" />
+                                                </i>
+                                             </a>
+                                          </div>
+                                       </td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </t>
+               </templates>
+            </kanban>
          </field>
       </record>
       <!--
