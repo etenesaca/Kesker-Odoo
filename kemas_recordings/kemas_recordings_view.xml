@@ -252,47 +252,7 @@
                      </group>
                      <div colspan="2">
                         <b>Expositores:</b>
-                        <field name="expositor_ids" widget="many2many_kanban" nolabel="1">
-                           <kanban quick_create="false" create="true">
-                              <field name="name" />
-                              <templates>
-                                 <t t-name="kanban-box">
-                                    <div style="position: relative">
-                                       <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block">
-                                          <img src="/kemas/static/src/img/icons/delete_red.png" alt="Eliminar" />
-                                       </a>
-                                       <div class="oe_module_vignette">
-                                          <a type="open">
-                                             <img t-att-src="kanban_image('res.partner', 'photo_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
-                                          </a>
-                                          <div class="oe_module_desc">
-                                             <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
-                                                <table class="oe_kanban_table">
-                                                   <tr>
-                                                      <td class="oe_kanban_title1" align="left" valign="middle">
-                                                         <h4>
-                                                            <a type="open">
-                                                               <field name="name" />
-                                                            </a>
-                                                         </h4>
-                                                         <div t-if="record.name.raw_value">
-                                                            <a t-if="record.email.raw_value" title="Mail" t-att-href="'mailto:'+record.email.value">
-                                                               <i>
-                                                                  <field name="email" />
-                                                               </i>
-                                                            </a>
-                                                         </div>
-                                                      </td>
-                                                   </tr>
-                                                </table>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </t>
-                              </templates>
-                           </kanban>
-                        </field>
+                        <field name="expositor_ids" widget="many2many_kanban" domain="[('is_company','=',False)]" context="{'search_default_expositors': 1, 'search_view_ref': 'kemas_recordings.res_partner_search_kemas_recordings' , 'kanban_view_ref': 'kemas_recordings.res_partner_expositor_recording_kanban'}" nolabel="1" />
                      </div>
                   </group>
                   <group col="4" colspan="4" string="Lugar y otros">
@@ -318,7 +278,7 @@
                                        </a>
                                        <div class="oe_module_vignette">
                                           <a type="open">
-                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                                             <img t-att-src="kanban_image('kemas.collaborator', 'image_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
                                           </a>
                                           <div class="oe_module_desc">
                                              <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
@@ -396,7 +356,7 @@
                                        </a>
                                        <div class="oe_module_vignette">
                                           <a type="open">
-                                             <img t-att-src="kanban_image('res.partner', 'photo_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                                             <img t-att-src="kanban_image('res.partner', 'image_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
                                           </a>
                                           <div class="oe_module_desc">
                                              <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
@@ -451,7 +411,7 @@
                                        </a>
                                        <div class="oe_module_vignette">
                                           <a type="open">
-                                             <img t-att-src="kanban_image('kemas.collaborator', 'photo_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
+                                             <img t-att-src="kanban_image('kemas.collaborator', 'image_medium', record.id.value)" class="oe_kanban_image oe_kanban_avatar_smallbox" />
                                           </a>
                                           <div class="oe_module_desc">
                                              <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
