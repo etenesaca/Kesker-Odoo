@@ -5693,14 +5693,6 @@
       -->
       <menuitem id="menu_kemas_extras_menu" name="Extras" parent="menu_kemas_manager_root" sequence="7" />
       <!--
-         >>>>>>>>>>>>GESTION DOCUMENTAL
-      -->
-      <menuitem id="menu_kemas_documentos_menu" name="Documentos" parent="menu_kemas_extras_menu" sequence="1" />
-      <!--_____________Tags -->
-      <menuitem action="action_repository_category_form" name="Etiquetas" id="menu_kemas_repository_category" parent="menu_kemas_documentos_menu" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
-      <!--_____________Files -->
-      <menuitem action="action_kemas_repository_form" name="Documentos" id="menu_kemas_repository" parent="menu_kemas_documentos_menu" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
-      <!--
          >>>>>>>>>>>>MASSIVE E-MAIL
       -->
       <!--_____________Masive Mail -->
