@@ -5531,8 +5531,6 @@
       <menuitem action="kemas_collaborator_form_action2" name="Collaborators" id="menu_kemas_collaborator_menu_collaborator" parent="menu_kemas_collaborator_menu_form_action" sequence="1" />
       <!--_____________Yo -->
       <menuitem action="kemas_collaborator_form_action_me" name="Me" id="menu_kemas_collaborator_form_action_me" parent="menu_kemas_collaborator_menu_form_action" sequence="2" />
-      <!--_____________Repository -->
-      <menuitem action="action_kemas_repository_form_collaborator" name="Documentos" id="menu_kemas_repository_menu_collaborator" parent="menu_kemas_collaborator_menu_form_action" sequence="3" />
       <!--_____________Attendance -->
       <menuitem action="kemas_attendance_form_action2" name="Attendance Record" id="menu_kemas_attendance_menu_collaborator" parent="menu_kemas_collaborator_menu_form_action" sequence="4" />
       <!--_____________History Points -->
@@ -5680,14 +5678,6 @@
       <menuitem id="menu_kemas_reports_menu" name="Reports" parent="menu_kemas_manager_root" sequence="6" />
       <!--_____________Collaborator Statisitics -->
       <menuitem action="kemas_event_collaborator_line_form_action" name="Estadisticas de Colaboración" id="menu_kemas_event_collaborator_line" parent="menu_kemas_reports_menu" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
-      <!--_____________Listado de Colaboradores -->
-      <menuitem action="kemas_report_collaborators_list_wizard_form_action" name="List of collaborators" id="menu_kemas_report_collaborators_list" parent="menu_kemas_reports_menu" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
-      <!--_____________Listado de Eventos -->
-      <menuitem action="kemas_report_events_list_wizard_form_action" name="List of events" id="menu_kemas_report_events_list" parent="menu_kemas_reports_menu" sequence="3" groups="group_kemas_manager,group_kemas_admin" />
-      <!--_____________Estadisticas de Colaboración -->
-      <menuitem action="kemas_report_attendance_statistics_wizard_action" name="Colaboración" id="kemas_report_attendance_statistic_wizard_menu" parent="menu_kemas_reports_menu" sequence="4" groups="group_kemas_manager,group_kemas_admin" />
-      <!-- Inicios de Sesión -->
-      <menuitem action="kemas_collaborator_logbook_login_action" id="menu_kemas_collaborator_logbook_login" parent="menu_kemas_reports_menu" sequence="5" groups="group_kemas_manager,group_kemas_admin" />
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Extras
       -->
@@ -5717,9 +5707,6 @@
          ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::LANZADORES:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       -->
-      <!-- VER CODIGO DE BARRAS -->
-      <act_window name="Ver Código de Barras" res_model="kemas.show.barcode.wizard" src_model="kemas.collaborator" view_mode="form" target="new" key2="client_action_multi" context="{'collaborator_id':context['active_id']}" id="kemas_show_bar_code_act_window" />
-
       <!-- REEMPLAZAR COLABORADOR -->
       <act_window name="Replace Collaborator" groups="kemas.group_kemas_collaborator" res_model="kemas.replace.collaborator.wizard" src_model="kemas.event" view_mode="form" target="new" key2="client_action_multi" context="{'event_id':context['active_id']}" id="kemas_replace_collaborator_act_window" />
 
@@ -5728,15 +5715,6 @@
 
       <!-- INACTIVAR COLABORADOR -->
       <act_window name="Inactivate Collaborator" groups="kemas.group_kemas_manager" res_model="kemas.collaborator.inactive.wizard" src_model="kemas.collaborator" view_mode="form" target="new" key2="client_action_multi" context="{'collaborator_id':context['active_id']}" id="kemas_collaborator_inactivate_act_window" />
-
-      <!-- CREAR USUARIO -->
-      <act_window name="Assign Code" groups="kemas.group_kemas_manager" res_model="kemas.collaborator.assing.code.wizard" src_model="kemas.collaborator" view_mode="form" target="new" key2="client_action_multi" context="{'collaborator_id':context['active_id']}" id="kemas_collaborator_assing_code_act_window" />
-
-      <!-- CREAR USUARIO -->
-      <act_window name="Assign User Account" groups="kemas.group_kemas_manager" res_model="kemas.collaborator.assing.user.account.wizard" src_model="kemas.collaborator" view_mode="form" target="new" key2="client_action_multi" context="{'collaborator_id':context['active_id']}" id="kemas_collaborator_assing_user_account_act_window" />
-
-      <!-- RENOTIFICAR CREACION DE CUENTA -->
-      <act_window name="Notify creating account" groups="kemas.group_kemas_manager" res_model="kemas.notify.incorporation.wizard" src_model="kemas.collaborator" view_mode="form" target="new" key2="client_action_multi" context="{'collaborator_id':context['active_id']}" id="kemas_collaborator_notify_incorporation_act_window" />
       <!--
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
          ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::ENLACES::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
