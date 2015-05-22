@@ -5535,8 +5535,6 @@
       <menuitem action="kemas_attendance_form_action2" name="Attendance Record" id="menu_kemas_attendance_menu_collaborator" parent="menu_kemas_collaborator_menu_form_action" sequence="4" />
       <!--_____________History Points -->
       <menuitem action="kemas_history_points_form_action2" name="History Points" id="menu_kemas_history_points_menu_collaborator" parent="menu_kemas_collaborator_menu_form_action" sequence="5" />
-      <!--_____________Suspensions -->
-      <menuitem action="kemas_suspension_form_action2" name="Suspensions" id="menu_kemas_suspension_menu_collaborator" parent="menu_kemas_collaborator_menu_form_action" sequence="6" />
       <!--_____________Event -->
       <menuitem action="kemas_event_form_action2" name="Events" id="menu_kemas_event_menu_collaborator" parent="menu_kemas_collaborator_menu_form_action" sequence="7" />
       <!--_____________Replacements -->
@@ -5631,8 +5629,6 @@
       <menuitem action="action_kemas_team" name="Teams" id="menu_kemas_team" parent="menu_kemas_collaborator_management" sequence="3" groups="group_kemas_manager,group_kemas_admin" />
       <!--_____________History Points -->
       <menuitem action="kemas_history_points_form_action" name="History Points" id="menu_kemas_history_points_mn" parent="menu_kemas_collaborator_management" sequence="4" groups="group_kemas_manager,group_kemas_admin" />
-      <!--_____________Suspensions -->
-      <menuitem action="action_kemas_suspension" name="Suspensions" id="menu_kemas_suspension" parent="menu_kemas_collaborator_management" sequence="5" groups="group_kemas_manager,group_kemas_admin" />
 
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Calendar
@@ -5653,8 +5649,6 @@
          >>>>>>>>>>>>>>>>>>>>>>>>>>Acciones
       -->
       <menuitem id="menu_kemas_actions_menu" name="Acciones" parent="menu_kemas_manager_root" sequence="5" />
-      <!--_____________Suspend collaborator -->
-      <menuitem action="kemas_suspend_collaborator_step1_wizard_form_action" name="Suspend Collaborator" id="menu_kemas_suspend_collaborator" parent="menu_kemas_actions_menu" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
       <!--
          History Points
       -->
