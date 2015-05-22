@@ -2297,9 +2297,6 @@
                      <button type="action" icon=" fa-clock-o" class="oe_stat_button oe_read_only" name="%(action_kemas_attendance_collaborator)d" help="Ver los registros de asistencias">
                         <field name="attendance_count" widget="statinfo" string="Asistencias" />
                      </button>
-                     <button type="action" icon="fa-arrow-right" class="oe_stat_button oe_read_only" name="%(action_kemas_collaborator_logbook_login)d" help="Ver todos las veces que se ha conectado al sistema">
-                        <field name="logbook_count" widget="statinfo" string="Logins" />
-                     </button>
                   </div>
                   <div align="center" attrs="{'invisible':['|',('code','!=',False),('state','in',['creating','Suspended','Locked','Inactive'])]}" colspan="10">
                      <img src="/web/static/src/img/icons/gtk-dialog-warning.png" />
