@@ -5522,7 +5522,7 @@
             </p>
          </field>
       </record>
-      <menuitem web_icon="images/kemas.png" web_icon_hover="images/kemas-hover.png" id="menu_kemas_collaborator_root" action="kemas_collaborator_dashboard_form_action" name="kèsher" sequence="10" groups="group_kemas_collaborator" />
+      <menuitem web_icon="images/kemas.png" web_icon_hover="images/kemas-hover.png" id="menu_kemas_collaborator_root" action="kemas_collaborator_dashboard_form_action" name="Ke+TV" sequence="10" groups="group_kemas_collaborator" />
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Menu
       -->
@@ -5618,7 +5618,7 @@
          <field name="view_id" ref="kemas_manager_dashboard_form" />
       </record>
 
-      <menuitem web_icon="images/kemas.png" web_icon_hover="images/kemas-hover.png" id="menu_kemas_manager_root" action="kemas_manager_dashboard_form_action" name="kèsher" sequence="10" groups="group_kemas_manager,group_kemas_admin,group_kemas_register_attedance" />
+      <menuitem web_icon="images/kemas.png" web_icon_hover="images/kemas-hover.png" id="menu_kemas_manager_root" action="kemas_manager_dashboard_form_action" name="Ke+TV" sequence="10" groups="group_kemas_manager,group_kemas_admin,group_kemas_register_attedance" />
       <!--
          >>>>>>>>>>>>>>>>>>>>>>>>>>Collaborator
       -->
