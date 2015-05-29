@@ -203,9 +203,9 @@ class kemas_collaborator(osv.osv):
                 
         sql = """
             SELECT 
-                Cl.id, Cl.personal_id, CL.code,CL.name,Cl.nick_name,Cl.birth,Cl.marital_status,Cl.address,
-                Cl.kemas_mobile,Cl.telef1,Cl.telef2,Cl.email,Cl.im_account,
-                Cl.join_date,CL.points,LV.name as level, CL.team_id, Cl.genre
+                Cl.id, Cl.personal_id, CL.code,CL.name,Cl.nick_name,P.birthdate as birth,Cl.marital_status,P.street as address,
+                P.mobile,P.phone,P.phone,P.email,P.email,
+                Cl.join_date,CL.points,LV.name as level, CL.team_id, Cl.gender
             FROM kemas_collaborator as CL
             JOIN res_users as U on (Cl.user_id = U.id)
             JOIN res_partner as P on (U.partner_id = P.id)
@@ -238,11 +238,11 @@ class kemas_collaborator(osv.osv):
             collaborator.pop('team_id')
             
             # Poner en español el estado civil
-            lgenre = {'Male': 'o', 'Female': 'a'}
+            lgender = {'Male': 'o', 'Female': 'a'}
             if collaborator['marital_status'] == 'single':
-                collaborator['marital_status'] = 'Soleter' + lgenre[collaborator['genre']]
+                collaborator['marital_status'] = 'Soleter' + lgender[collaborator['gender']]
             else:
-                collaborator['marital_status'] = 'Casad' + lgenre[collaborator['genre']]
+                collaborator['marital_status'] = 'Casad' + lgender[collaborator['gender']]
                     
             # Calcular la edad
             collaborator['age'] = extras.calcular_edad(collaborator['birth'])
@@ -270,6 +270,7 @@ class kemas_collaborator(osv.osv):
                 except: None
             return result
         
+        result = {}
         sql = """
             SELECT P.name,CL.photo_medium as image, CL.team_id
             FROM kemas_collaborator as CL
@@ -303,9 +304,7 @@ class kemas_collaborator(osv.osv):
             config = cr.dictfetchall()[0]
             config['mobile_background'] = build_image(config['mobile_background'])
             result.update(config)
-            return result
-        else:
-            return False
+        return result
         
     _inherit = 'kemas.collaborator' 
     
