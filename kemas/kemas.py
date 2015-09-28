@@ -5088,7 +5088,7 @@ class kemas_event(osv.osv):
         
         result = True
         if not context.get('tz'):
-            context['tz'] = self.pool.get('kema.func').get_tz_by_uid(cr, uid)
+            context['tz'] = self.pool['kemas.func'].get_tz_by_uid(cr, uid)
         now = extras.convert_to_tz(time.strftime("%Y-%m-%d %H:%M:%S"), context['tz'])
         if now > date_start:
             result = False
