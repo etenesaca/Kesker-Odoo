@@ -2000,7 +2000,7 @@ class kemas_area(osv.osv):
     
 class kemas_level(osv.osv):
     def get_next_level(self, cr, uid, level_id):
-        level_ids = self.search(cr, uid, [('previous_id', '=', level_id)])
+        level_ids = self.search(cr, uid, [('previous_id', '=', level_id),('first_level', '=', False),('id', 'not in', [level_id])])
         if level_ids:
             return level_ids[0]
             
