@@ -3318,7 +3318,7 @@
                   <group col="10">
                      <field name="first_level" colspan="2" />
                      <newline />
-                     <field name="previous_id" colspan="6" context="{'points_of_level' : True}" attrs="{'required':[('first_level','=',False)], 'invisible':[('first_level','=',True)]}" />
+                     <field name="previous_id" colspan="6" context="{'points_of_level': True, 'ignore_id': active_id}" attrs="{'required':[('first_level','=',False)], 'invisible':[('first_level','=',True)]}" />
                      <newline />
                      <field name="points" colspan="2" attrs="{'required':[('first_level','=',False)], 'invisible':[('first_level','=',True)]}" />
                   </group>
@@ -3344,6 +3344,8 @@
          <field name="arch" type="xml">
             <tree string="Levels">
                <field name="name" />
+               <field name="previous_id" />
+               <field name="first_level" />
                <field name="points" />
             </tree>
          </field>
@@ -5380,6 +5382,14 @@
          <field name="target">new</field>
          <field name="help">Here you can send emails to Collaborators with their registration data for some reason were not sent to the Collaborator when added to the system.</field>
       </record>
+      <!--____________________________________________________Actualizar niveles -->
+      <record model="ir.actions.act_window" id="kemas_collaborator_update_level_wizard_action">
+         <field name="name">Actualizar niveles</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">kemas.collaborator.update.level.wizard</field>
+         <field name="view_mode">form</field>
+         <field name="target">new</field>
+      </record>
       <!--
          ====================
          REPORTES
@@ -5655,12 +5665,18 @@
          >>>>>>>>>>>>>>>>>>>>>>>>>>Acciones
       -->
       <menuitem id="menu_kemas_actions_menu" name="Acciones" parent="menu_kemas_manager_root" sequence="5" />
+      <!--
+         Colaboradores
+      -->
+      <menuitem id="kemas_actions_collaborators_mn" name="Colaboradores" parent="menu_kemas_actions_menu" sequence="1" />
       <!--_____________Suspend collaborator -->
-      <menuitem action="kemas_suspend_collaborator_step1_wizard_form_action" name="Suspend Collaborator" id="menu_kemas_suspend_collaborator" parent="menu_kemas_actions_menu" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
+      <menuitem action="kemas_suspend_collaborator_step1_wizard_form_action" name="Suspend Collaborator" id="menu_kemas_suspend_collaborator" parent="kemas_actions_collaborators_mn" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
+      <!-- Actualizar niveles -->
+      <menuitem action="kemas_collaborator_update_level_wizard_action" id="kemas_collaborator_update_level_wizard_menu" parent="kemas_actions_collaborators_mn" sequence="2" groups="group_kemas_manager,group_kemas_admin" />
       <!--
          History Points
       -->
-      <menuitem id="kemas_actions_points_mn" name="Puntos" parent="menu_kemas_actions_menu" sequence="3" />
+      <menuitem id="kemas_actions_points_mn" name="Puntos" parent="menu_kemas_actions_menu" sequence="2" />
       <!--_____________Set Points -->
       <menuitem action="kemas_set_points_step1_wizard_form_action" name="Increase / Decrease Points" id="menu_kemas_set_points_wizard_mn" parent="kemas_actions_points_mn" sequence="1" groups="group_kemas_manager,group_kemas_admin" />
       <!--
