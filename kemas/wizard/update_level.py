@@ -19,27 +19,14 @@
 #
 ##############################################################################
 
-from openerp import addons
+from openerp.osv import osv
 
-import kemas_message_wizard     
-import kemas_collaborator_active_wizard
-import kemas_collaborator_inactive_wizard  
-import kemas_set_points_wizard
-import kemas_suspend_collaborator_wizard
-import kemas_register_attendance_wizard
-import kemas_send_notification_event_wizard
-import kemas_close_past_events_wizard
-import kemas_collaborator_send_notifications_wizard
-import kemas_event_replace_collaborator_wizard
-import kemas_collaborator_assing_code_wizard
-import kemas_collaborator_assing_user_account_wizard
-import kemas_collaborator_notify_incorporation_wizard
-import kemas_replace_collaborator_wizard
-import kemas_show_barcode_wizard
-import update_level
-#Reports
-import kemas_report_collaborators_list_wizard
-import kemas_report_events_list_wizard
-import kemas_report_attendance_statistics_wizard
+
+class kemas_collaborator_update_level_wizard(osv.osv_memory):
+    def process(self, cr, uid, ids, context=None):
+        self.pool.get('kemas.collaborator')._update_collaborators_level(cr.dbname , uid)
+        return {}
+    _name = 'kemas.collaborator.update.level.wizard'
+    
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

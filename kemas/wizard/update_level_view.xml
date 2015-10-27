@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+   <data>
+      <!--
+         ====================
+         ACTUALIZAR NIVELES DE LOS NIVELES DE LOS COLABORADORES
+         ====================
+      -->
+      <!--____________________________________________________Vista de Formulario -->
+      <record model="ir.ui.view" id="kemas_collaborator_update_level_wizard_form">
+         <field name="name">kemas.collaborator.update.level.wizard.form</field>
+         <field name="model">kemas.collaborator.update.level.wizard</field>
+         <field name="priority" eval="1" />
+         <field name="arch" type="xml">
+            <form string="Actualizar niveles" version="7.0">
+               <group>
+                  <div>
+                     Este asistente actualizará los niveles de los colaboradores
+                  </div>
+               </group>
+               <footer>
+                  <button name="process" string="Actualizar niveles" type="object" icon="STOCK_EXECUTE" class="oe_highlight" />
+                  <label string="o" />
+                  <button string="Cancel" class="oe_link" special="cancel" />
+               </footer>
+            </form>
+         </field>
+      </record>
+   </data>
+</openerp>

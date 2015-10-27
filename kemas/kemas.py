@@ -2000,7 +2000,7 @@ class kemas_area(osv.osv):
     
 class kemas_level(osv.osv):
     def get_next_level(self, cr, uid, level_id):
-        level_ids = self.search(cr, uid, [('previous_id', '=', level_id),('first_level', '=', False),('id', 'not in', [level_id])])
+        level_ids = self.search(cr, uid, [('previous_id', '=', level_id), ('first_level', '=', False), ('id', 'not in', [level_id])])
         if level_ids:
             return level_ids[0]
             
@@ -2076,6 +2076,17 @@ class kemas_level(osv.osv):
         res_id = super(kemas_level, self).create(cr, uid, vals, context)
         self.pool.get('kemas.collaborator').update_collaborators_level(cr, uid)        
         return res_id
+    
+    def name_search(self, cr, uid, name, args=[], operator='ilike', context={}, limit=100):
+        ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
+        return self.name_get(cr, uid, ids, context)
+        
+    def search(self, cr, uid, args, offset=0, limit=None, order=None, context={}, count=False):
+        if context is None or not context or not isinstance(context, (dict)): context = {}
+        
+        if context.get('ignore_id'):
+            args.append(('id', 'not in', [context['ignore_id']]))
+        return super(kemas_level, self).search(cr, uid, args, offset, limit, order, context=context, count=count)
      
     _order = 'points'
     _name = 'kemas.level'
@@ -5129,7 +5140,7 @@ class kemas_event(osv.osv):
         if context is None or not context or not isinstance(context, (dict)): context = {}
         
         vals['date_create'] = vals.get('date_create', str(time.strftime("%Y-%m-%d %H:%M:%S")))
-        vals['state'] = 'draft' #vals.get('state', 'draft')
+        vals['state'] = 'draft'  # vals.get('state', 'draft')
         vals['count'] = 1
         #--Crear Date start y date stop---------------------------------------------------------------------------------------------
         service = self.pool['kemas.service'].read(cr, uid, vals['service_id'], [])

@@ -57,6 +57,7 @@
         'wizard/kemas_close_past_events_wizard_view.xml',
         'wizard/kemas_suspend_collaborator_wizard_view.xml',
         'wizard/kemas_event_replace_collaborator_wizard_view.xml',
+        'wizard/update_level_view.xml',
         # Reportes
         'wizard/kemas_report_collaborators_list_wizard_view.xml',
         'wizard/kemas_report_events_list_wizard_view.xml',
